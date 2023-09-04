@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingHorizontal="32dp">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.12338425" />
+
+    <LinearLayout
+        android:id="@+id/tilte_container"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@id/guideline_vertical"
+        app:layout_constraintEnd_toStartOf="@id/guideline_vertical"
+        app:layout_constraintTop_toBottomOf="@id/guideline_top">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="45dp"
+            android:layout_height="57dp"
+            android:padding="14sp"
+            app:srcCompat="@drawable/propertio_logo"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+
+            android:text="Propertio Register"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutContainerGreeting"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical"
+        app:layout_constraintStart_toStartOf="@+id/guideline_vertical"
+        app:layout_constraintTop_toBottomOf="@+id/tilte_container">
+
+        <TextView
+            android:id="@+id/hello_developer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Hello Developer"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+
+        <TextView
+            android:id="@+id/welcome_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Welcome to Propertio"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+    <Space
+        android:id="@+id/spacer"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutContainerGreeting" />
+
+    <TextView
+        android:id="@+id/title_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Username"
+        android:fontFamily="@font/Poppins_Medium"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/spacer"
+        app:layout_constraintTop_toBottomOf="@+id/spacer" />
+
+    <EditText
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:hint="Create username"
+        android:fontFamily="@font/Poppins_Medium"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/title_username"
+        app:layout_constraintTop_toBottomOf="@+id/title_username"
+        android:imeOptions="actionNext">
+
+    </EditText>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
