@@ -6,243 +6,262 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingHorizontal="32dp">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_vertical"
-        android:layout_width="wrap_content"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_top"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.12338425" />
-
-    <LinearLayout
-        android:id="@+id/tilte_container"
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="@id/guideline_vertical"
-        app:layout_constraintEnd_toStartOf="@id/guideline_vertical"
-        app:layout_constraintTop_toBottomOf="@id/guideline_top">
-
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="45dp"
-            android:layout_height="57dp"
-            android:padding="14sp"
-            app:srcCompat="@drawable/propertio_logo"/>
-
-        <TextView
-            android:id="@+id/title"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-
-            android:text="Propertio Register"
-            android:textSize="14sp"
-            android:fontFamily="@font/Poppins_Bold"
-            android:textStyle="bold"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayoutContainerGreeting"
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical"
-        app:layout_constraintStart_toStartOf="@+id/guideline_vertical"
-        app:layout_constraintTop_toBottomOf="@+id/tilte_container">
-
-        <TextView
-            android:id="@+id/hello_developer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text="Hello Developer"
-            android:fontFamily="@font/Poppins_Bold"
-            android:textSize="30sp"
-            android:textStyle="bold" />
-
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
 
         <Space
+            android:id="@+id/topSpace"
             android:layout_width="match_parent"
-            android:layout_height="30dp" />
+            android:layout_height="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/tilte_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@id/guideline_vertical"
+            app:layout_constraintStart_toStartOf="@id/guideline_vertical"
+            app:layout_constraintTop_toBottomOf="@id/topSpace">
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="45dp"
+                android:layout_height="57dp"
+                android:padding="14sp"
+                app:srcCompat="@drawable/propertio_logo" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+
+                android:fontFamily="@font/poppins_bold"
+                android:text="Propertio Register"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutContainerGreeting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxWidth="320dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tilte_container">
+
+            <TextView
+                android:id="@+id/hello_developer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:fontFamily="@font/poppins_bold"
+                android:text="Hello Developer"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+
+            <TextView
+                android:id="@+id/welcome_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:fontFamily="@font/poppins_bold"
+                android:text="Welcome to Propertio"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+        <Space
+            android:id="@+id/spacer"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutContainerGreeting" />
 
         <TextView
-            android:id="@+id/welcome_back"
+            android:id="@+id/title_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:text="Welcome to Propertio"
-            android:textSize="18sp"
-            android:fontFamily="@font/Poppins_Bold"
-            android:textStyle="bold" />
-
-
-    </LinearLayout>
-
-    <Space
-        android:id="@+id/spacer"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutContainerGreeting" />
-
-    <TextView
-        android:id="@+id/title_username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Username"
-        android:fontFamily="@font/Poppins_Medium"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/spacer"
-        app:layout_constraintTop_toBottomOf="@+id/spacer" />
-
-    <EditText
-        android:id="@+id/username_input"
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:padding="14dp"
-        android:hint="Create username"
-        android:fontFamily="@font/Poppins_Medium"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/title_username"
-        app:layout_constraintTop_toBottomOf="@+id/title_username"
-        android:background="@drawable/edit_text_login_background"
-        android:imeOptions="actionNext">
-
-    </EditText>
-
-
-    <TextView
-        android:id="@+id/title_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/Poppins_Medium"
-        android:layout_marginTop="8dp"
-        android:text="Email"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/username_input"
-        app:layout_constraintTop_toBottomOf="@+id/username_input" />
-
-    <EditText
-        android:id="@+id/email_input"
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/edit_text_login_background"
-        android:ems="10"
-        android:hint="Enter your email "
-        android:imeOptions="actionNext"
-        android:inputType="textEmailAddress"
-        android:padding="14dp"
-        app:layout_constraintEnd_toEndOf="@+id/username_input"
-        app:layout_constraintStart_toStartOf="@+id/title_email"
-        app:layout_constraintTop_toBottomOf="@+id/title_email" />
-
-    <TextView
-        android:id="@+id/title_password_create"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/Poppins_Medium"
-        android:layout_marginTop="8dp"
-        android:text="Create password"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/email_input"
-        app:layout_constraintTop_toBottomOf="@+id/email_input" />
-
-    <EditText
-        android:id="@+id/password_create"
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/edit_text_login_background"
-        android:ems="10"
-        android:padding="14dp"
-        android:hint="Enter your password "
-        android:inputType="textPassword"
-        app:layout_constraintStart_toStartOf="@+id/title_password_create"
-        app:layout_constraintTop_toBottomOf="@+id/title_password_create"
-        android:imeOptions="actionNext"/>
-
-    <TextView
-        android:id="@+id/title_password_confirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/Poppins_Medium"
-        android:layout_marginTop="8dp"
-        android:text="Confirm password"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/password_create"
-        app:layout_constraintTop_toBottomOf="@+id/password_create" />
-
-    <EditText
-        android:id="@+id/password_confirm"
-        android:layout_width="320dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/edit_text_login_background"
-        android:ems="10"
-        android:padding="14dp"
-        android:hint="Confirm your password "
-        android:inputType="textPassword"
-        app:layout_constraintStart_toStartOf="@+id/title_password_confirm"
-        app:layout_constraintTop_toBottomOf="@+id/title_password_confirm"
-        android:imeOptions="actionNext"/>
-
-
-    <FrameLayout
-        android:id="@+id/container_button_register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:paddingTop="14dp"
-        android:paddingBottom="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical"
-        app:layout_constraintHorizontal_bias="0.428"
-        app:layout_constraintStart_toStartOf="@+id/title_username"
-        app:layout_constraintTop_toBottomOf="@+id/password_confirm"
-        app:layout_constraintVertical_bias="0.359">
-
-        <Button
-            android:id="@+id/button_register"
-            android:layout_width="167dp"
-            android:layout_height="30dp"
-
-            android:background="@drawable/register_button_background"
-            android:fontFamily="@font/Poppins_Medium"
-            android:padding="0dp"
-            android:text="Register"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:paddingTop="2dp"
-        android:paddingBottom="29dp"
-        app:layout_constraintStart_toStartOf="@+id/container_button_register"
-        app:layout_constraintTop_toBottomOf="@+id/container_button_register">
-        <TextView
-            android:id="@+id/have_acn_acc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="Have an account? Login here"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Username"
             android:textSize="14sp"
-            android:textColor="@color/slight_black"
-            />
+            app:layout_constraintStart_toStartOf="@+id/spacer"
+            app:layout_constraintTop_toBottomOf="@+id/spacer" />
 
-    </FrameLayout>
+        <EditText
+            android:id="@+id/username_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edit_text_login_background"
+            android:fontFamily="@font/poppins_medium"
+            android:hint="Create username"
+            android:imeOptions="actionNext"
+            android:padding="14dp"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/title_username"
+            app:layout_constraintTop_toBottomOf="@+id/title_username">
+
+        </EditText>
+
+
+        <TextView
+            android:id="@+id/title_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Email"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/username_input"
+            app:layout_constraintTop_toBottomOf="@+id/username_input" />
+
+        <EditText
+            android:id="@+id/email_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_login_background"
+            android:ems="10"
+            android:hint="Enter your email "
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            android:padding="14dp"
+            app:layout_constraintEnd_toEndOf="@+id/username_input"
+            app:layout_constraintStart_toStartOf="@+id/title_email"
+            app:layout_constraintTop_toBottomOf="@+id/title_email" />
+
+        <TextView
+            android:id="@+id/title_password_create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Create password"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/email_input"
+            app:layout_constraintTop_toBottomOf="@+id/email_input" />
+
+        <EditText
+            android:id="@+id/password_create"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_login_background"
+            android:ems="10"
+            android:hint="Enter your password "
+            android:imeOptions="actionNext"
+            android:inputType="textPassword"
+            android:padding="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/title_password_create"
+            app:layout_constraintTop_toBottomOf="@+id/title_password_create" />
+
+        <TextView
+            android:id="@+id/title_password_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Confirm password"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/password_create"
+            app:layout_constraintTop_toBottomOf="@+id/password_create" />
+
+        <EditText
+            android:id="@+id/password_confirm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_login_background"
+            android:ems="10"
+            android:hint="Confirm your password "
+            android:imeOptions="actionNext"
+            android:inputType="textPassword"
+            android:padding="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/title_password_confirm"
+            app:layout_constraintTop_toBottomOf="@+id/title_password_confirm" />
+
+
+        <FrameLayout
+            android:id="@+id/container_button_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingTop="14dp"
+            android:paddingBottom="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_vertical"
+            app:layout_constraintHorizontal_bias="0.428"
+            app:layout_constraintStart_toStartOf="@+id/title_username"
+            app:layout_constraintTop_toBottomOf="@+id/password_confirm"
+            app:layout_constraintVertical_bias="0.359">
+
+            <Button
+                android:id="@+id/button_register"
+                android:layout_width="167dp"
+                android:layout_height="30dp"
+
+                android:background="@drawable/register_button_background"
+                android:fontFamily="@font/poppins_medium"
+                android:padding="0dp"
+                android:text="Register"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingTop="2dp"
+
+            app:layout_constraintStart_toStartOf="@+id/container_button_register"
+            app:layout_constraintTop_toBottomOf="@+id/container_button_register">
+
+            <TextView
+                android:id="@+id/have_acn_acc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Have an account? Login here"
+                android:textColor="@color/slight_black"
+                android:textSize="14sp" />
+
+        </FrameLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
 
