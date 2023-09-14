@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/dashboard"
+        android:title="Dashboard"
+        android:icon="@drawable/ic_round_dashboard"/>
+    <item android:id="@+id/project"
+        android:title="Project"
+        android:icon="@drawable/ant_design_project_filled"/>
+    <item android:id="@+id/message"
+        android:title="Message"
+        android:icon="@drawable/ic_round_chat"/>
+    <item android:id="@+id/profile_setting"
+        android:title="Profile Settings"
+        android:icon="@drawable/icon_picture_filled"/>
+</menu>
