@@ -42,10 +42,11 @@ android {
 dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.recyclerview:recyclerview:1.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
     val nav_version = "2.7.2"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
-
+    implementation("io.coil-kt:coil:2.4.0")
     implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
 
