@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.propertio.developer"
-    compileSdk = 34
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "com.propertio.developer"
@@ -49,7 +49,7 @@ dependencies {
     implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
 
-    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")

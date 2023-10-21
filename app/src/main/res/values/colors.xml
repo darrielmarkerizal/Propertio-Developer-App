@@ -3,4 +3,32 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="slight_black">#1E1E1E</color>
+
+    <!-- Design System Color Button -->
+    <color name="button_primary">#07C0EB</color>
+    <color name="button_primary_pressed">#0E6E90</color>
+    <color name="button_primary_disabled">#E2E2E2</color>
+    <color name="button_secondary">#1F1F1F</color>
+    <color name="button_secondary_pressed">#545454</color>
+    <color name="button_secondary_disabled">#E2E2E2</color>
+    <color name="button_white">#FFFFFF</color>
+
+    <!-- Design System Color Text -->
+    <color name="text_black">#1D1B20</color>
+    <color name="text_black_placeholder">#49454F</color>
+
+    <!-- Design System Textfield -->
+    <color name="textfield_border">#79747E</color>
+    <color name="textfield_border_focused">#1D1B20</color>
+
+    <!-- Design Palette   -->
+    <color name="grey_50">#F6F6F6</color>
+    <color name="grey_200">#E2E2E2</color>
+
+
+    <color name="blue_600">#0689FF</color>
+
+
+
+
 </resources>

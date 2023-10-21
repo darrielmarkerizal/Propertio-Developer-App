@@ -4,267 +4,406 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingHorizontal="32dp"
+    android:background="@color/white"
     tools:context=".RegisterPage">
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
-
-        <Space
-            android:id="@+id/topSpace"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <LinearLayout
-            android:id="@+id/tilte_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toStartOf="@id/guideline_vertical"
-            app:layout_constraintStart_toStartOf="@id/guideline_vertical"
-            app:layout_constraintTop_toBottomOf="@id/topSpace">
-
-            <ImageView
-                android:id="@+id/logo"
-                android:layout_width="45dp"
-                android:layout_height="57dp"
-                android:padding="14sp"
-                app:srcCompat="@drawable/propertio_logo" />
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-
-                android:fontFamily="@font/poppins_bold"
-                android:text="Propertio Register"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayoutContainerGreeting"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:maxWidth="320dp"
             android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tilte_container">
-
-            <TextView
-                android:id="@+id/hello_developer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:fontFamily="@font/poppins_bold"
-                android:text="Hello Developer"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+            android:paddingHorizontal="32dp">
 
 
-            <Space
+
+            <include
+                layout="@layout/propertio_logo_icon_text"
                 android:layout_width="match_parent"
-                android:layout_height="30dp" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="80dp"
+                />
 
             <TextView
-                android:id="@+id/welcome_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Halo Developer"
+                android:layout_marginTop="5dp"
+                style="@style/title.large"/>
 
-                android:fontFamily="@font/poppins_bold"
-                android:text="Welcome to Propertio"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="32dp"
+                android:text="Segera Bergabung"
+                style="@style/title.medium"/>
+
+
+            <!-- Start: Formulir Registrasi   -->
+
+            <LinearLayout
+                android:id="@+id/container_input_nama_depan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:visibility="visible"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nama Depan"
+                    style="@style/paragraph"/>
+
+                <EditText
+                    android:id="@+id/text_field_nama_depan"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:paddingHorizontal="14.5dp"
+                    android:maxLines="1"
+                    android:hint="Masukkan Nama Depan Anda"
+                    android:textColorHint="@color/text_black_placeholder"
+                    android:textColor="@color/text_black"
+                    style="@style/paragraph"
+                    android:inputType="textPersonName"
+                    android:background="@drawable/edit_text_rounded_rectangle"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container_input_nama_belakang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:visibility="visible"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nama Belakang"
+                    style="@style/paragraph"/>
+
+                <EditText
+                    android:id="@+id/text_field_nama_belakang"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:paddingHorizontal="14.5dp"
+                    android:maxLines="1"
+                    android:hint="Masukkan Nama Belakang Anda"
+                    android:textColorHint="@color/text_black_placeholder"
+                    android:textColor="@color/text_black"
+                    style="@style/paragraph"
+                    android:inputType="textPersonName"
+                    android:background="@drawable/edit_text_rounded_rectangle"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container_input_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:visibility="visible"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email"
+                    style="@style/paragraph"/>
+
+                <EditText
+                    android:id="@+id/text_field_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:paddingHorizontal="14.5dp"
+                    android:maxLines="1"
+                    android:hint="Masukkan Email Anda"
+                    android:textColorHint="@color/text_black_placeholder"
+                    android:textColor="@color/text_black"
+                    style="@style/paragraph"
+                    android:inputType="textEmailAddress"
+                    android:background="@drawable/edit_text_rounded_rectangle"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/container_input_nomor_telepon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:visibility="visible"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nomor Telepon"
+                    style="@style/paragraph"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+                    android:background="@drawable/edit_text_rounded_rectangle">
+
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:paddingStart="14.5dp"
+                        style="@style/paragraph"/>
+
+                    <EditText
+                        android:id="@+id/text_field_nomor_telepon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingHorizontal="14.5dp"
+                        android:layout_weight="4"
+                        android:maxLines="1"
+                        android:hint="8123456789"
+                        android:textColorHint="@color/text_black_placeholder"
+                        android:textColor="@color/text_black"
+                        style="@style/paragraph"
+                        android:inputType="textEmailAddress"
+                        android:background="@android:color/transparent"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container_input_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:visibility="visible"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Password"
+                    style="@style/paragraph"/>
+
+                <EditText
+                    android:id="@+id/text_field_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:paddingHorizontal="14.5dp"
+                    android:maxLines="1"
+                    android:hint="Buat Kata Sandi Anda"
+                    android:textColorHint="@color/text_black_placeholder"
+                    android:textColor="@color/text_black"
+                    style="@style/paragraph"
+                    android:inputType="textPassword"
+                    android:background="@drawable/edit_text_rounded_rectangle"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container_input_password_confirmation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:visibility="visible"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Konfirmasi Password"
+                    style="@style/paragraph"/>
+
+                <EditText
+                    android:id="@+id/text_field_password_confirmation"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:paddingHorizontal="14.5dp"
+                    android:maxLines="1"
+                    android:hint="Konfirmasi Kata Sandi Anda"
+                    android:textColorHint="@color/text_black_placeholder"
+                    android:textColor="@color/text_black"
+                    style="@style/paragraph"
+                    android:inputType="textPassword"
+                    android:background="@drawable/edit_text_rounded_rectangle"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/container_input_provinsi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:visibility="visible"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Provinsi"
+                    style="@style/paragraph"/>
+
+                <Spinner
+                    android:id="@+id/spinner_provinsi"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:paddingHorizontal="14.5dp"
+                    android:textColor="@color/text_black"
+                    style="@style/paragraph"
+                    android:pointerIcon="arrow"
+                    android:background="@drawable/edit_text_rounded_rectangle"
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/container_input_kota"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:visibility="visible"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kota"
+                    style="@style/paragraph"/>
+
+                <Spinner
+                    android:id="@+id/spinner_kota"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:paddingHorizontal="14.5dp"
+                    android:textColor="@color/text_black"
+                    style="@style/paragraph"
+                    android:pointerIcon="arrow"
+                    android:background="@drawable/edit_text_rounded_rectangle"
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/container_input_alamat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:visibility="visible"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Alamat"
+                    style="@style/paragraph"/>
+
+                <EditText
+                    android:id="@+id/text_field_alamat"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:paddingHorizontal="14.5dp"
+                    android:textColorHint="@color/text_black_placeholder"
+                    android:textColor="@color/text_black"
+                    style="@style/paragraph"
+                    android:inputType="text"
+                    android:background="@drawable/edit_text_rounded_rectangle"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/container_input_tambah_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:visibility="visible"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/paragraph"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tambahkan Foto Profil" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/tambah_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tambahkan"
+                    style="@style/button.add"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container_registrasi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:visibility="visible"
+                android:orientation="vertical">
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/button_registrasi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Bergabung Sekarang"
+                    style="@style/button.primary.l"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginBottom="100dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sudah Bergabung? "
+                    style="@style/paragraph.small"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Masuk Sekarang?"
+                    android:textColor="@color/blue_600"
+                    style="@style/paragraph.small"/>
+
+            </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+            <!-- End: Formulir Registrasi   -->
 
 
         </LinearLayout>
 
-        <Space
-            android:id="@+id/spacer"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayoutContainerGreeting" />
-
-        <TextView
-            android:id="@+id/title_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_medium"
-            android:text="Username"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/spacer"
-            app:layout_constraintTop_toBottomOf="@+id/spacer" />
-
-        <EditText
-            android:id="@+id/username_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/edit_text_login_background"
-            android:fontFamily="@font/poppins_medium"
-            android:hint="Create username"
-            android:imeOptions="actionNext"
-            android:padding="14dp"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/title_username"
-            app:layout_constraintTop_toBottomOf="@+id/title_username">
-
-        </EditText>
-
-
-        <TextView
-            android:id="@+id/title_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/poppins_medium"
-            android:text="Email"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/username_input"
-            app:layout_constraintTop_toBottomOf="@+id/username_input" />
-
-        <EditText
-            android:id="@+id/email_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_login_background"
-            android:ems="10"
-            android:hint="Enter your email "
-            android:imeOptions="actionNext"
-            android:inputType="textEmailAddress"
-            android:padding="14dp"
-            app:layout_constraintEnd_toEndOf="@+id/username_input"
-            app:layout_constraintStart_toStartOf="@+id/title_email"
-            app:layout_constraintTop_toBottomOf="@+id/title_email" />
-
-        <TextView
-            android:id="@+id/title_password_create"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/poppins_medium"
-            android:text="Create password"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/email_input"
-            app:layout_constraintTop_toBottomOf="@+id/email_input" />
-
-        <EditText
-            android:id="@+id/password_create"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_login_background"
-            android:ems="10"
-            android:hint="Enter your password "
-            android:imeOptions="actionNext"
-            android:inputType="textPassword"
-            android:padding="14dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/title_password_create"
-            app:layout_constraintTop_toBottomOf="@+id/title_password_create" />
-
-        <TextView
-            android:id="@+id/title_password_confirm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/poppins_medium"
-            android:text="Confirm password"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/password_create"
-            app:layout_constraintTop_toBottomOf="@+id/password_create" />
-
-        <EditText
-            android:id="@+id/password_confirm"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_login_background"
-            android:ems="10"
-            android:hint="Confirm your password "
-            android:imeOptions="actionNext"
-            android:inputType="textPassword"
-            android:padding="14dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/title_password_confirm"
-            app:layout_constraintTop_toBottomOf="@+id/title_password_confirm" />
-
-
-        <FrameLayout
-            android:id="@+id/container_button_register"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:paddingTop="14dp"
-            android:paddingBottom="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline_vertical"
-            app:layout_constraintHorizontal_bias="0.428"
-            app:layout_constraintStart_toStartOf="@+id/title_username"
-            app:layout_constraintTop_toBottomOf="@+id/password_confirm"
-            app:layout_constraintVertical_bias="0.359">
-
-            <Button
-                android:id="@+id/button_register"
-                android:layout_width="167dp"
-                android:layout_height="30dp"
-
-                android:background="@drawable/register_button_background"
-                android:fontFamily="@font/poppins_medium"
-                android:padding="0dp"
-                android:text="Register"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:paddingTop="2dp"
-
-            app:layout_constraintStart_toStartOf="@+id/container_button_register"
-            app:layout_constraintTop_toBottomOf="@+id/container_button_register">
-
-            <TextView
-                android:id="@+id/have_acn_acc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="Have an account? Login here"
-                android:textColor="@color/slight_black"
-                android:textSize="14sp" />
-
-        </FrameLayout>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
