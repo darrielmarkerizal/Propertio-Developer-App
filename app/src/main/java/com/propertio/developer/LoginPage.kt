@@ -11,10 +11,7 @@ class LoginPage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        val registerTextLink = binding.registerHere
 
-        registerTextLink.setOnClickListener {
-            
-        }
+
     }
 }

@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.propertio.developer"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.propertio.developer"

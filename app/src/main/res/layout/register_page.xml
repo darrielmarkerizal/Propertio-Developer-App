@@ -177,7 +177,7 @@
                         android:textColorHint="@color/text_black_placeholder"
                         android:textColor="@color/text_black"
                         style="@style/paragraph"
-                        android:inputType="textEmailAddress"
+                        android:inputType="phone"
                         android:background="@android:color/transparent"
                         />
                 </LinearLayout>
@@ -315,12 +315,14 @@
                 <EditText
                     android:id="@+id/text_field_alamat"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:paddingHorizontal="14.5dp"
+                    android:paddingVertical="14dp"
                     android:textColorHint="@color/text_black_placeholder"
                     android:textColor="@color/text_black"
                     style="@style/paragraph"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
+                    android:layout_gravity="top"
                     android:background="@drawable/edit_text_rounded_rectangle"/>
 
             </LinearLayout>
