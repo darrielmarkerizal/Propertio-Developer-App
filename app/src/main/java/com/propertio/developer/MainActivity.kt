@@ -3,7 +3,11 @@ package com.propertio.developer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.propertio.developer.dasbor.DashboardFragment
 import com.propertio.developer.databinding.ActivityMainBinding
+import com.propertio.developer.pesan.ChatFragment
+import com.propertio.developer.profile.ProfileFragment
+import com.propertio.developer.project.ProjectFragment
 
 class MainActivity : AppCompatActivity() {
 

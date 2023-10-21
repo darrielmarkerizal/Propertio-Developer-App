@@ -92,4 +92,31 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="greeting_text">Halo Developer</string>
+    <string name="register_title_caption">Segera Bergabung</string>
+    <string name="first_name">Nama Depan</string>
+    <string name="first_name_hint">Masukkan Nama Depan Anda</string>
+    <string name="last_name">Nama Belakang</string>
+    <string name="last_name_hint">Masukkan Nama Belakang Anda</string>
+    <string name="email">Email</string>
+    <string name="email_hint">Masukkan Email Anda</string>
+    <string name="telephone_number">Nomor Telepon</string>
+    <string name="telephone_number_hint">8123456789</string>
+    <string name="password">Kata Sandi</string>
+    <string name="password_hint">Buat Kata Sandi Anda</string>
+    <string name="password_confirmation">Konfirmasi Kata Sandi</string>
+    <string name="password_confirmation_hint">Konfirmasi Kata Sandi Anda</string>
+    <string name="province">Provinsi</string>
+    <string name="city">Kota</string>
+    <string name="address">Alamat</string>
+    <string name="add_profile_picture">Tambahkan Foto Profil</string>
+    <string name="add">Tambahkan</string>
+    <string name="register_text">Bergabung Sekarang</string>
+    <string name="question_to_login">Sudah Bergabung?</string>
+    <string name="link_to_login_text">Masuk Sekarang?</string>
+    <string name="login_title_caption">Selamat Datang Kembali</string>
+    <string name="forget_password_caption">Tidak dapat mengingat kata sandi anda?</string>
+    <string name="forget_password_link_text">Klik Disini</string>
+    <string name="create_account_caption">Belum memiliki akun?</string>
+    <string name="create_account_link_text">Daftar Sekarang</string>
 </resources>

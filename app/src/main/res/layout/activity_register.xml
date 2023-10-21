@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    tools:context=".RegisterPage">
-
+    tools:context=".auth.RegisterActivity">
 
     <ScrollView
         android:layout_width="0dp"
@@ -36,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Halo Developer"
+                android:text="@string/greeting_text"
                 android:layout_marginTop="5dp"
                 style="@style/title.large"/>
 
@@ -45,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="32dp"
-                android:text="Segera Bergabung"
+                android:text="@string/register_title_caption"
                 style="@style/title.medium"/>
 
 
@@ -62,16 +61,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nama Depan"
+                    android:text="@string/first_name"
                     style="@style/paragraph"/>
 
                 <EditText
-                    android:id="@+id/text_field_nama_depan"
+                    android:id="@+id/edit_text_nama_depan"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:paddingHorizontal="14.5dp"
                     android:maxLines="1"
-                    android:hint="Masukkan Nama Depan Anda"
+                    android:hint="@string/first_name_hint"
                     android:textColorHint="@color/text_black_placeholder"
                     android:textColor="@color/text_black"
                     style="@style/paragraph"
@@ -91,16 +90,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nama Belakang"
+                    android:text="@string/last_name"
                     style="@style/paragraph"/>
 
                 <EditText
-                    android:id="@+id/text_field_nama_belakang"
+                    android:id="@+id/nama_belakang"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:paddingHorizontal="14.5dp"
                     android:maxLines="1"
-                    android:hint="Masukkan Nama Belakang Anda"
+                    android:hint="@string/last_name_hint"
                     android:textColorHint="@color/text_black_placeholder"
                     android:textColor="@color/text_black"
                     style="@style/paragraph"
@@ -120,16 +119,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Email"
+                    android:text="@string/email"
                     style="@style/paragraph"/>
 
                 <EditText
-                    android:id="@+id/text_field_email"
+                    android:id="@+id/edit_text_email"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:paddingHorizontal="14.5dp"
                     android:maxLines="1"
-                    android:hint="Masukkan Email Anda"
+                    android:hint="@string/email_hint"
                     android:textColorHint="@color/text_black_placeholder"
                     android:textColor="@color/text_black"
                     style="@style/paragraph"
@@ -150,7 +149,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nomor Telepon"
+                    android:text="@string/telephone_number"
                     style="@style/paragraph"/>
 
                 <LinearLayout
@@ -167,13 +166,13 @@
                         style="@style/paragraph"/>
 
                     <EditText
-                        android:id="@+id/text_field_nomor_telepon"
+                        android:id="@+id/edit_text_nomor_telepon"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:paddingHorizontal="14.5dp"
                         android:layout_weight="4"
                         android:maxLines="1"
-                        android:hint="8123456789"
+                        android:hint="@string/telephone_number_hint"
                         android:textColorHint="@color/text_black_placeholder"
                         android:textColor="@color/text_black"
                         style="@style/paragraph"
@@ -194,21 +193,31 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Password"
+                    android:text="@string/password"
                     style="@style/paragraph"/>
 
-                <EditText
-                    android:id="@+id/text_field_password"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:paddingHorizontal="14.5dp"
-                    android:maxLines="1"
-                    android:hint="Buat Kata Sandi Anda"
-                    android:textColorHint="@color/text_black_placeholder"
-                    android:textColor="@color/text_black"
-                    style="@style/paragraph"
-                    android:inputType="textPassword"
-                    android:background="@drawable/edit_text_rounded_rectangle"/>
+                    android:layout_height="wrap_content"
+                    app:endIconMode="password_toggle"
+                    app:hintEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_text_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingHorizontal="14.5dp"
+                        android:maxLines="1"
+                        android:hint="@string/password_hint"
+                        android:textColorHint="@color/text_black_placeholder"
+                        android:textColor="@color/text_black"
+                        style="@style/paragraph"
+                        android:inputType="textPassword"
+                        android:background="@drawable/edit_text_rounded_rectangle"/>
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
 
             </LinearLayout>
 
@@ -223,21 +232,30 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Konfirmasi Password"
+                    android:text="@string/password_confirmation"
                     style="@style/paragraph"/>
 
-                <EditText
-                    android:id="@+id/text_field_password_confirmation"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:paddingHorizontal="14.5dp"
-                    android:maxLines="1"
-                    android:hint="Konfirmasi Kata Sandi Anda"
-                    android:textColorHint="@color/text_black_placeholder"
-                    android:textColor="@color/text_black"
-                    style="@style/paragraph"
-                    android:inputType="textPassword"
-                    android:background="@drawable/edit_text_rounded_rectangle"/>
+                    android:layout_height="wrap_content"
+                    app:endIconMode="password_toggle"
+                    app:hintEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_text_password_confirmation"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingHorizontal="14.5dp"
+                        android:maxLines="1"
+                        android:hint="@string/password_confirmation_hint"
+                        android:textColorHint="@color/text_black_placeholder"
+                        android:textColor="@color/text_black"
+                        style="@style/paragraph"
+                        android:inputType="textPassword"
+                        android:background="@drawable/edit_text_rounded_rectangle"/>
+
+
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -253,7 +271,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Provinsi"
+                    android:text="@string/province"
                     style="@style/paragraph"/>
 
                 <Spinner
@@ -281,7 +299,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Kota"
+                    android:text="@string/city"
                     style="@style/paragraph"/>
 
                 <Spinner
@@ -309,11 +327,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Alamat"
+                    android:text="@string/address"
                     style="@style/paragraph"/>
 
                 <EditText
-                    android:id="@+id/text_field_alamat"
+                    android:id="@+id/edit_text_alamat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="14.5dp"
@@ -328,48 +346,40 @@
             </LinearLayout>
 
 
-            <LinearLayout
-                android:id="@+id/container_input_tambah_profile"
+
+
+            <TextView
+                style="@style/paragraph"
+                android:visibility="visible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_profile_picture" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/tambah_profile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
                 android:visibility="visible"
-                android:orientation="vertical">
+                android:text="@string/add"
+                style="@style/button.add"
+                />
 
-                <TextView
-                    style="@style/paragraph"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tambahkan Foto Profil" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/tambah_profile"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Tambahkan"
-                    style="@style/button.add"
-                    />
 
-            </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/container_registrasi"
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_registrasi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:visibility="visible"
-                android:orientation="vertical">
+                android:text="@string/register_text"
+                style="@style/button.primary.l"
+                />
 
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/button_registrasi"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Bergabung Sekarang"
-                    style="@style/button.primary.l"
-                    />
-
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -380,23 +390,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sudah Bergabung? "
+                    android:text="@string/question_to_login"
                     style="@style/paragraph.small"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Masuk Sekarang?"
+                    android:text="@string/link_to_login_text"
                     android:textColor="@color/blue_600"
                     style="@style/paragraph.small"/>
 
             </LinearLayout>
-
-
-
-
-
-
-
 
 
 
@@ -406,6 +409,5 @@
         </LinearLayout>
 
     </ScrollView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
