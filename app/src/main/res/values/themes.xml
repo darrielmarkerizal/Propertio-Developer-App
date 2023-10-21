@@ -6,4 +6,148 @@
     </style>
 
     <style name="Theme.PropertioDeveloperApp" parent="Base.Theme.PropertioDeveloperApp" />
+
+
+    <!--  START : button design system  -->
+    <style name="Base.Theme.button" parent="Widget.AppCompat.Button">
+        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <!-- Primary   -->
+    <style name="button.primary" parent="Base.Theme.button">
+        <item name="android:background">@drawable/button_primary_rounded_rectangle</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="button.primary.xl" parent="button.primary">
+        <item name="android:height">56dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="button.primary.l" parent="button.primary">
+        <item name="android:height">48dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="button.primary.m" parent="Base.Theme.button">
+        <item name="android:background">@drawable/button_primary_rounded</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:height">40dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="button.primary.s" parent="Base.Theme.button">
+        <item name="android:background">@drawable/button_primary_rounded</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:height">32dp</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- Secondary   -->
+    <style name="button.secondary" parent="Base.Theme.button">
+        <item name="android:background">@drawable/button_secondary_rounded_rectangle</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="button.secondary.xl" parent="button.secondary">
+        <item name="android:height">56dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="button.secondary.l" parent="button.secondary">
+        <item name="android:height">48dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="button.secondary.m" parent="Base.Theme.button">
+        <item name="android:background">@drawable/button_secondary_rounded</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:height">40dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="button.secondary.s" parent="Base.Theme.button">
+        <item name="android:background">@drawable/button_secondary_rounded</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:height">32dp</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- Tertiary   -->
+    <style name="button.tertiary" parent="Base.Theme.button">
+        <item name="android:background">@drawable/button_tertiary_rounded_rectangle</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="button.tertiary.xl" parent="button.tertiary">
+        <item name="android:height">56dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="button.tertiary.l" parent="button.tertiary">
+        <item name="android:height">48dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="button.tertiary.m" parent="Base.Theme.button">
+        <item name="android:background">@drawable/button_tertiary_rounded</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:height">40dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="button.tertiary.s" parent="Base.Theme.button">
+        <item name="android:background">@drawable/button_tertiary_rounded</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:height">32dp</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!--  END : button design system  -->
+
+
+    <!-- START : Custom add Button   -->
+    <style name="button.add" parent="Base.Theme.button">
+        <item name="android:background">@drawable/button_add_rounded_rectangle</item>
+        <item name="drawableStartCompat">@drawable/baseline_add_circle_outline_24</item>
+        <item name="drawableTint">@color/text_black_placeholder</item>
+        <item name="android:textColor">@color/text_black_placeholder</item>
+    </style>
+
+    <!-- END   : Custom add Button   -->
+
+
+
+    <!--  START : textfield -->
+
+
+    <!--  END : textfield -->
+
+
+
+    <!--  START : text design system  -->
+    <style name="title.large" parent="TextAppearance.AppCompat.Title">
+        <item name="fontFamily">@font/poppins_bold</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="title.medium" parent="TextAppearance.AppCompat.Title">
+        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="paragraph" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">@font/poppins</item>
+        <item name="android:textSize">14.5sp</item>
+        <item name="android:textColor">@color/text_black</item>
+    </style>
+
+    <style name="paragraph.small" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">@font/poppins</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/text_black</item>
+    </style>
+
+    <!--  END : text design system  -->
+
+
+
+    
 </resources>
