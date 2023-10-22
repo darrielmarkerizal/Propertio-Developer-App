@@ -6,22 +6,22 @@
     app:startDestination="@id/dashboardFragment">
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="com.propertio.developer.DashboardFragment"
+        android:name="com.propertio.developer.dasbor.DashboardFragment"
         android:label="fragment_dashboard"
         tools:layout="@layout/fragment_dashboard" />
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.propertio.developer.ChatFragment"
+        android:name="com.propertio.developer.pesan.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat" />
     <fragment
         android:id="@+id/projectFragment"
-        android:name="com.propertio.developer.ProjectFragment"
+        android:name="com.propertio.developer.project.ProjectFragment"
         android:label="fragment_project_list"
         tools:layout="@layout/fragment_project_list" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.propertio.developer.ProfileFragment"
+        android:name="com.propertio.developer.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>
