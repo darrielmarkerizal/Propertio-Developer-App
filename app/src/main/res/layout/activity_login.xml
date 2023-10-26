@@ -146,8 +146,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/paragraph.small"
+            android:layout_marginEnd="5dp"
             android:text="@string/forget_password_caption" />
+
         <TextView
+            android:id="@+id/link_to_forget_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/blue_600"
@@ -188,9 +191,11 @@
             style="@style/paragraph.small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/create_account_caption" />
+            android:text="@string/create_account_caption"
+            android:layout_marginEnd="5dp"/>
 
         <TextView
+            android:id="@+id/link_to_create_account"
             style="@style/paragraph.small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
