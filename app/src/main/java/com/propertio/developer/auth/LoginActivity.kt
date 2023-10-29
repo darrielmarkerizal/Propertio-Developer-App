@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.propertio.developer.MainActivity
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.auth.UserApi
@@ -26,7 +27,30 @@ class LoginActivity : AppCompatActivity() {
         with(binding) {
 
             buttonLogin.setOnClickListener {
+                if (editTextEmail.text.toString().isEmpty()) {
+                    editTextEmail.error = "Email is required"
+                    return@setOnClickListener
+                }
+                if (editTextPassword.text.toString().isEmpty()) {
+                    editTextPassword.error = "Password is required"
+                    return@setOnClickListener
+                }
+
                 login()
+            }
+
+            linkToCreateAccount.setOnClickListener {
+                Toast.makeText(this@LoginActivity, "Fitur Pendaftaran masih dalam tahap pengembangan", Toast.LENGTH_SHORT).show()
+
+                TODO("Create Register Activity and link it here")
+                val intentToRegisterActivity = Intent(this@LoginActivity, RegisterActivity::class.java)
+                startActivity(intentToRegisterActivity)
+            }
+
+            linkToForgetPassword.setOnClickListener {
+                Toast.makeText(this@LoginActivity, "Fitur Lupa Kata Sandi masih dalam tahap pengembangan", Toast.LENGTH_SHORT).show()
+
+                TODO("Membuat Forget Password")
             }
 
 
@@ -45,15 +69,22 @@ class LoginActivity : AppCompatActivity() {
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
                 val user = response.body()
 
-                Log.d("LoginActivity", "Token: ${user?.data?.token}")
+                Log.d("LoginActivity", "Response: ${user?.message}")
 
-                val sharedPreferences = getSharedPreferences("account_data", MODE_PRIVATE)
-                with(sharedPreferences.edit()) {
-                    putString("token", user?.data?.token)
+                if (user?.data?.token != null) {
+                    val sharedPreferences = getSharedPreferences("account_data", MODE_PRIVATE)
+                    with(sharedPreferences.edit()) {
+                        putString("token", user?.data?.token)
+                    }
+
+                    val intentToMainActivity = Intent(this@LoginActivity, MainActivity::class.java)
+                    startActivity(intentToMainActivity)
+                }
+                else {
+                    Log.e("LoginActivity", "Error: ${user?.message}")
                 }
 
-                val intentToMainActivity = Intent(this@LoginActivity, MainActivity::class.java)
-                startActivity(intentToMainActivity)
+
 
             }
 
