@@ -123,32 +123,130 @@
 
 
     <!--  START : text design system  -->
-    <style name="title.large" parent="TextAppearance.AppCompat.Title">
+    <style name="Base.Text.Bold" parent="TextAppearance.AppCompat.Title">
         <item name="fontFamily">@font/poppins_bold</item>
-        <item name="android:textSize">30sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/black</item>
     </style>
-    <style name="title.medium" parent="TextAppearance.AppCompat.Title">
-        <item name="fontFamily">@font/poppins_medium</item>
-        <item name="android:textSize">16sp</item>
+    <style name="Base.Text.SemiBold" parent="TextAppearance.AppCompat.Title">
+        <item name="fontFamily">@font/poppins_semibold</item>
         <item name="android:textColor">@color/black</item>
     </style>
-
-    <style name="paragraph" parent="Widget.AppCompat.TextView">
+    <style name="Base.Text.Medium" parent="TextAppearance.AppCompat.Title">
+        <item name="fontFamily">@font/poppins_medium</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="Base.Text.Regular" parent="Widget.AppCompat.TextView">
         <item name="fontFamily">@font/poppins</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    <style name="text.bold" parent="Base.Text.Bold"/>
+    <style name="text.semibold" parent="Base.Text.SemiBold"/>
+    <style name="text.medium" parent="Base.Text.Medium"/>
+    <style name="text.regular" parent="Base.Text.Regular"/>
+
+
+    <style name="title.large" parent="Base.Text.Bold">
+        <item name="android:textSize">30sp</item>
+    </style>
+    <style name="title.medium" parent="Base.Text.Medium">
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="title.small" parent="Base.Text.Medium">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="paragraph" parent="Base.Text.Regular">
         <item name="android:textSize">14.5sp</item>
         <item name="android:textColor">@color/text_black</item>
     </style>
 
-    <style name="paragraph.small" parent="Widget.AppCompat.TextView">
-        <item name="fontFamily">@font/poppins</item>
+    <style name="paragraph.large" parent="paragraph">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="paragraph.small" parent="paragraph">
         <item name="android:textSize">10sp</item>
-        <item name="android:textColor">@color/text_black</item>
     </style>
 
     <!--  END : text design system  -->
 
+
+
+    <!--  START : card design system  -->
+
+    <style name="card" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/white</item>
+        <item name="cardCornerRadius">8dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="contentPadding">8dp</item>
+    </style>
+
+    <style name="card.dashboard" parent="card">
+        <item name="android:layout_width">280dp</item>
+        <item name="android:layout_height">140dp</item>
+        <item name="android:layout_marginStart">12dp</item>
+        <item name="android:layout_marginEnd">12dp</item>
+
+    </style>
+
+    <style name="card.dashboard.icon_start" parent="image.rectangle.20">
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+    <style name="card.dashboard.icon_end" parent="image.rectangle.20">
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="tint">@color/grey_300</item>
+        <item name="android:src">@drawable/outline_info_24</item>
+    </style>
+    <style name="card.dashboard.text_title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAppearance">@style/text.semibold</item>
+    </style>
+    <style name="card.dashboard.number">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">4dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textAlignment">textEnd</item>
+        <item name="android:textAppearance">@style/text.medium</item>
+        <item name="android:textSize">36sp</item>
+    </style>
+    <style name="card.dashboard.type">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textAppearance">@style/text.regular</item>
+    </style>
+
+
+    <!--  END : card design system  -->
+
+
+
+    <!--  START : Icon Translation  -->
+    <style name="Base.image.scalefit" parent="TextAppearance.AppCompat">
+        <item name="android:scaleType">fitXY</item>
+    </style>
+
+    <style name="image.rectangle.24" parent="Base.image.scalefit">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+    </style>
+
+    <style name="image.rectangle.20" parent="Base.image.scalefit">
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_height">20dp</item>
+    </style>
+
+    <!--  START : Icon Translation  -->
 
 
     

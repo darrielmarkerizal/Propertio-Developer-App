@@ -55,7 +55,20 @@ class LoginActivity : AppCompatActivity() {
 
 
 
+            //TODO: Hapus kode developer dibawah ini ketika selesai
+            developerSkipButton.setOnClickListener {
+                loginPassDeveloperTesting()
+            }
+
         }
+    }
+
+    private fun loginPassDeveloperTesting() {
+        //TODO: Hapus kode developer  ini ketika selesai
+        val intentToMainActivity = Intent(this@LoginActivity, MainActivity::class.java)
+        intentToMainActivity.putExtra("toastMessage", "Berhasil Login")
+        startActivity(intentToMainActivity)
+        finish()
     }
 
 
@@ -78,6 +91,7 @@ class LoginActivity : AppCompatActivity() {
                     }
 
                     val intentToMainActivity = Intent(this@LoginActivity, MainActivity::class.java)
+                    intentToMainActivity.putExtra("toastMessage", "Berhasil Login")
                     startActivity(intentToMainActivity)
                 }
                 else {

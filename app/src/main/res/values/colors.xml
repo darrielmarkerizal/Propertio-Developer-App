@@ -24,6 +24,7 @@
     <!-- Design Palette   -->
     <color name="grey_50">#F6F6F6</color>
     <color name="grey_200">#E2E2E2</color>
+    <color name="grey_300">#CBCBCB</color>
 
 
     <color name="blue_600">#0689FF</color>
