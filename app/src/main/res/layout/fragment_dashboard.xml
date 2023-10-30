@@ -1,20 +1,462 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".dasbor.DashboardFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dashboard"
-        android:fontFamily="@font/poppins_bold"
-        android:textSize="34sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="72dp"
+            android:paddingBottom="40dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dashboard"
+                android:layout_marginStart="32dp"
+                android:textAppearance="@style/text.semibold"
+                android:textSize="18sp"/>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingVertical="16dp"
+                    android:paddingHorizontal="20dp"
+                    android:orientation="horizontal">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_view_jumlah_listing_proyek"
+                        style="@style/card.dashboard">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/image_view_box_icon"
+                                style="@style/card.dashboard.icon_start"
+                                android:src="@drawable/outline_box_cube_icon"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/nn_tv_jumlah_listing_proyek"
+                                style="@style/card.dashboard.text_title"
+                                android:text="Jumlah listing proyek"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintBottom_toBottomOf="@+id/image_view_box_icon"
+                                app:layout_constraintEnd_toStartOf="@+id/icon_informational_jumlah_listing_proyek"
+                                app:layout_constraintStart_toEndOf="@+id/image_view_box_icon"
+                                app:layout_constraintTop_toTopOf="@+id/image_view_box_icon" />
+
+                            <ImageView
+                                android:id="@+id/icon_informational_jumlah_listing_proyek"
+                                style="@style/card.dashboard.icon_end"
+                                app:layout_constraintBottom_toBottomOf="@+id/image_view_box_icon"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/image_view_box_icon" />
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:background="@android:color/transparent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/nn_tv_jumlah_listing_proyek">
+
+                                <TextView
+                                    android:id="@+id/text_view_number_jumlah_listing_proyek"
+                                    style="@style/card.dashboard.number"
+                                    android:text="Nan"
+                                    />
+
+                                <TextView
+                                    android:id="@+id/text_view_tipe_jumlah_listing_proyek"
+                                    style="@style/card.dashboard.type"
+                                    android:text="Proyek"
+                                     />
+
+
+                            </LinearLayout>
+
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_view_jumlah_tipe_unit"
+                        style="@style/card.dashboard">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/image_view_jumlah_tipe_unit"
+                                style="@style/card.dashboard.icon_start"
+                                android:src="@drawable/baseline_apartment_24"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/nn_tv_jumlah_tipe_unit"
+                                style="@style/card.dashboard.text_title"
+                                android:text="Jumlah tipe unit"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintBottom_toBottomOf="@+id/image_view_jumlah_tipe_unit"
+                                app:layout_constraintEnd_toStartOf="@+id/icon_informational_jumlah_tipe_unit"
+                                app:layout_constraintStart_toEndOf="@+id/image_view_jumlah_tipe_unit"
+                                app:layout_constraintTop_toTopOf="@+id/image_view_jumlah_tipe_unit" />
+
+                            <ImageView
+                                android:id="@+id/icon_informational_jumlah_tipe_unit"
+                                style="@style/card.dashboard.icon_end"
+                                app:layout_constraintBottom_toBottomOf="@+id/image_view_jumlah_tipe_unit"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/image_view_jumlah_tipe_unit" />
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/nn_tv_jumlah_tipe_unit">
+
+                                <TextView
+                                    android:id="@+id/text_view_number_jumlah_tipe_unit"
+                                    style="@style/card.dashboard.number"
+                                    android:text="Nan"
+                                    />
+
+                                <TextView
+                                    android:id="@+id/text_view_tipe_jumlah_tipe_unit"
+                                    style="@style/card.dashboard.type"
+                                    android:text="Tipe unit"
+                                    />
+
+                            </LinearLayout>
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_view_jumlah_melihat_listing"
+                        style="@style/card.dashboard">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/image_view_jumlah_melihat_listing"
+                                style="@style/card.dashboard.icon_start"
+                                android:src="@drawable/baseline_remove_red_eye_24"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/nn_tv_jumlah_melihat_listing"
+                                style="@style/card.dashboard.text_title"
+                                android:text="Jumlah melihat listing"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintBottom_toBottomOf="@+id/image_view_jumlah_melihat_listing"
+                                app:layout_constraintEnd_toStartOf="@+id/icon_informational_jumlah_melihat_listing"
+                                app:layout_constraintStart_toEndOf="@+id/image_view_jumlah_melihat_listing"
+                                app:layout_constraintTop_toTopOf="@+id/image_view_jumlah_melihat_listing" />
+
+                            <ImageView
+                                android:id="@+id/icon_informational_jumlah_melihat_listing"
+                                style="@style/card.dashboard.icon_end"
+                                app:layout_constraintBottom_toBottomOf="@+id/image_view_jumlah_melihat_listing"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/image_view_jumlah_melihat_listing" />
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/nn_tv_jumlah_melihat_listing">
+
+                                <TextView
+                                    android:id="@+id/text_view_number_jumlah_melihat_listing"
+                                    style="@style/card.dashboard.number"
+                                    android:text="Nan"
+                                    />
+
+                                <TextView
+                                    android:id="@+id/text_view_tipe_jumlah_melihat_listing"
+                                    style="@style/card.dashboard.type"
+                                    android:text="Melihat"
+                                    />
+
+                            </LinearLayout>
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_view_jumlah_tertarik"
+                        style="@style/card.dashboard">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/image_view_jumlah_tertarik"
+                                style="@style/card.dashboard.icon_start"
+                                android:src="@drawable/baseline_people_24"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/nn_tv_jumlah_tertarik"
+                                style="@style/card.dashboard.text_title"
+                                android:text="Jumlah tertarik"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintBottom_toBottomOf="@+id/image_view_jumlah_tertarik"
+                                app:layout_constraintEnd_toStartOf="@+id/icon_informational_jumlah_tertarik"
+                                app:layout_constraintStart_toEndOf="@+id/image_view_jumlah_tertarik"
+                                app:layout_constraintTop_toTopOf="@+id/image_view_jumlah_tertarik" />
+
+                            <ImageView
+                                android:id="@+id/icon_informational_jumlah_tertarik"
+                                style="@style/card.dashboard.icon_end"
+                                app:layout_constraintBottom_toBottomOf="@+id/image_view_jumlah_tertarik"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/image_view_jumlah_tertarik" />
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/nn_tv_jumlah_tertarik">
+
+                                <TextView
+                                    android:id="@+id/text_view_number_jumlah_tertarik"
+                                    style="@style/card.dashboard.number"
+                                    android:text="Nan"
+                                    />
+
+                                <TextView
+                                    android:id="@+id/text_view_tipe_jumlah_tertarik"
+                                    style="@style/card.dashboard.type"
+                                    android:text="Tertarik"
+                                    />
+
+                            </LinearLayout>
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_view_jumlah_pesan_masuk"
+                        style="@style/card.dashboard">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/image_view_jumlah_pesan_masuk"
+                                style="@style/card.dashboard.icon_start"
+                                android:src="@drawable/ic_round_chat"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/nn_tv_jumlah_pesan_masuk"
+                                style="@style/card.dashboard.text_title"
+                                android:text="Jumlah pesan masuk"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintBottom_toBottomOf="@+id/image_view_jumlah_pesan_masuk"
+                                app:layout_constraintEnd_toStartOf="@+id/icon_informational_jumlah_pesan_masuk"
+                                app:layout_constraintStart_toEndOf="@+id/image_view_jumlah_pesan_masuk"
+                                app:layout_constraintTop_toTopOf="@+id/image_view_jumlah_pesan_masuk" />
+
+                            <ImageView
+                                android:id="@+id/icon_informational_jumlah_pesan_masuk"
+                                style="@style/card.dashboard.icon_end"
+                                app:layout_constraintBottom_toBottomOf="@+id/image_view_jumlah_pesan_masuk"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/image_view_jumlah_pesan_masuk" />
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/nn_tv_jumlah_pesan_masuk">
+
+                                <TextView
+                                    android:id="@+id/text_view_number_jumlah_pesan_masuk"
+                                    style="@style/card.dashboard.number"
+                                    android:text="Nan"
+                                    />
+
+                                <TextView
+                                    android:id="@+id/text_view_tipe_jumlah_pesan_masuk"
+                                    style="@style/card.dashboard.type"
+                                    android:text="Pesan"
+                                    />
+
+                            </LinearLayout>
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="32dp"
+                android:padding="8dp"
+                style="@style/card">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+
+                    <TextView
+                        android:id="@+id/nn_tv_card_title_proyek_dilihat"
+                        style="@style/text.semibold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:text="Proyek dilihat"
+                        android:textAlignment="center"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:src="@drawable/dasbor_timeseries_mockup"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/nn_tv_card_title_proyek_dilihat" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="32dp"
+                android:padding="8dp"
+                style="@style/card">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+
+                    <TextView
+                        android:id="@+id/nn_tv_card_title_jumlah_orang_tertarik"
+                        style="@style/text.semibold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:text="Jumlah Orang Tertarik"
+                        android:textAlignment="center"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:src="@drawable/dasbor_timeseries_mockup"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/nn_tv_card_title_jumlah_orang_tertarik" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+
+</FrameLayout>
