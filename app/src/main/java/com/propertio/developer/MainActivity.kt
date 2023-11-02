@@ -2,6 +2,7 @@ package com.propertio.developer
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.propertio.developer.dasbor.DashboardFragment
@@ -17,6 +18,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        val sharedPreferences = getSharedPreferences("account_data", MODE_PRIVATE)
+        val token = sharedPreferences.getString("token", null)
+        Log.d("MainActivity", "Token from prefs: $token")
+
         replaceFragment(DashboardFragment())
 
         toastMessage = intent.getStringExtra("toastMessage")

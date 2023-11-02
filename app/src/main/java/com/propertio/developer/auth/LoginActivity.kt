@@ -42,15 +42,15 @@ class LoginActivity : AppCompatActivity() {
             linkToCreateAccount.setOnClickListener {
                 Toast.makeText(this@LoginActivity, "Fitur Pendaftaran masih dalam tahap pengembangan", Toast.LENGTH_SHORT).show()
 
-                TODO("Create Register Activity and link it here")
-                val intentToRegisterActivity = Intent(this@LoginActivity, RegisterActivity::class.java)
-                startActivity(intentToRegisterActivity)
+                //TODO: "Create Register Activity and link it here"
+//                val intentToRegisterActivity = Intent(this@LoginActivity, RegisterActivity::class.java)
+//                startActivity(intentToRegisterActivity)
             }
 
             linkToForgetPassword.setOnClickListener {
                 Toast.makeText(this@LoginActivity, "Fitur Lupa Kata Sandi masih dalam tahap pengembangan", Toast.LENGTH_SHORT).show()
 
-                TODO("Membuat Forget Password")
+                //TODO: "Membuat Forget Password"
             }
 
 
@@ -77,7 +77,7 @@ class LoginActivity : AppCompatActivity() {
         request.email = binding.editTextEmail.text.toString()
         request.password = binding.editTextPassword.text.toString()
 
-        val retro = Retro().getRetroClientInstance().create(UserApi::class.java)
+        val retro = Retro(null).getRetroClientInstance().create(UserApi::class.java)
         retro.login(request).enqueue(object: Callback<UserResponse>{
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
                 val user = response.body()
@@ -87,12 +87,17 @@ class LoginActivity : AppCompatActivity() {
                 if (user?.data?.token != null) {
                     val sharedPreferences = getSharedPreferences("account_data", MODE_PRIVATE)
                     with(sharedPreferences.edit()) {
-                        putString("token", user?.data?.token)
+                        putString("token", user.data!!.token)
+                        commit()
                     }
+
+                    val tokenFromPrefs = sharedPreferences.getString("token", null)
+                    Log.d("LoginActivity", "Token from prefs: $tokenFromPrefs")
 
                     val intentToMainActivity = Intent(this@LoginActivity, MainActivity::class.java)
                     intentToMainActivity.putExtra("toastMessage", "Berhasil Login")
                     startActivity(intentToMainActivity)
+                    finish()
                 }
                 else {
                     Log.e("LoginActivity", "Error: ${user?.message}")
