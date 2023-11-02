@@ -145,6 +145,35 @@
     <style name="text.medium" parent="Base.Text.Medium"/>
     <style name="text.regular" parent="Base.Text.Regular"/>
 
+    <!--  TextSize 14  -->
+    <style name="text.bold.size14" parent="text.bold">
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="text.semi_bold.size14" parent="text.semibold">
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="text.medium.size14" parent="text.medium">
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="text.regular.size14" parent="text.regular">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!--  TextSize 12  -->
+    <style name="text.bold.size12" parent="text.bold">
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="text.semi_bold.size12" parent="text.semibold">
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="text.medium.size12" parent="text.medium">
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="text.regular.size12" parent="text.regular">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+
 
     <style name="title.large" parent="Base.Text.Bold">
         <item name="android:textSize">30sp</item>
