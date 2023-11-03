@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".pesan.DetailChatActivity">
+
+    <include
+        android:id="@+id/toolbar_container"
+        layout="@layout/toolbar_top_navigation_center"
+        />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_container">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_view_subject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="33dp"
+                style="@style/text.bold.size17"
+                android:text="Propertio Detail Message, This is Subject of the Message"/>
+
+            <TextView
+                android:id="@+id/text_view_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="33dp"
+                android:textColor="@color/grey_500"
+                android:textAlignment="textEnd"
+                style="@style/text.bold.size12"
+                android:text="1 Januari 1970, jam 00:00"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/grey_100"
+                android:paddingHorizontal="28dp"
+                android:paddingVertical="30dp"
+                >
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="100dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/image_view_profile_picture"
+                        android:layout_width="126dp"
+                        android:layout_height="126dp"
+                        android:layout_margin="1dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/default_profile_picture" />
+
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/text_view_name"
+                    style="@style/text.bold.size14"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Nama Pengirim"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/cardView"
+                    app:layout_constraintTop_toTopOf="@+id/cardView" />
+
+
+                <TextView
+                    android:id="@+id/text_view_email"
+                    style="@style/text.regular.size12"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="examplemail@mail.com"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/text_view_name"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_name" />
+
+                <TextView
+                    android:id="@+id/text_view_phone"
+                    style="@style/text.regular.size12"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="+62 12345678"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/text_view_name"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_email" />
+
+                <ImageButton
+                    android:id="@+id/button_whatsapp"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/button_secondary_rounded_rectangle"
+                    android:padding="16dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/whatsapp_digital_inline_white"
+                    app:layout_constraintBottom_toBottomOf="@+id/cardView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/text_view_name"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_phone"
+                    app:layout_constraintVertical_bias="0.97" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/text_view_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="33dp"
+                android:paddingBottom="70dp"
+                android:paddingTop="12dp"
+                android:text="@string/lorem_ipsum"
+                style="@style/text.regular.size14"
+                />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,6 +14,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import androidx.lifecycle.map
 
+@WorkerThread
 class ChatViewModel(token: String?) : ViewModel() {
     private val retro = Retro(token).getRetroClientInstance().create(MessageApi::class.java)
     private val _messageList = MutableLiveData<List<MessageResponse.Data>>()
@@ -25,6 +26,7 @@ class ChatViewModel(token: String?) : ViewModel() {
                 name = message.name,
                 email = message.email,
                 phone = message.phone,
+                message = message.message,
                 read = message.read,
                 subject = message.subject,
                 time = message.createAt,

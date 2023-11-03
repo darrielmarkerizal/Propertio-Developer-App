@@ -1,12 +1,15 @@
 package com.propertio.developer.pesan
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +18,8 @@ import com.propertio.developer.databinding.FragmentChatBinding
 
 class ChatFragment : Fragment() {
     private lateinit var binding : FragmentChatBinding
+    private val launcher = registerForActivityResult(ActivityResultContracts.
+    StartActivityForResult()){}
 
 
 
@@ -47,8 +52,15 @@ class ChatFragment : Fragment() {
                 context = requireContext(),
                 chatList = emptyList(),
                 onClickChat = {
-                    // TODO: Implement To Detail Chat
-                    Toast.makeText(requireContext(), it.name, Toast.LENGTH_SHORT).show()
+                    val intentToDetailChat = Intent(activity, DetailChatActivity::class.java)
+                    intentToDetailChat.putExtra(DetailChatActivity.EXTRA_NAME, it.name)
+                    intentToDetailChat.putExtra(DetailChatActivity.EXTRA_EMAIL, it.email)
+                    intentToDetailChat.putExtra(DetailChatActivity.EXTRA_PHONE, it.phone)
+                    intentToDetailChat.putExtra(DetailChatActivity.EXTRA_SUBJECT, it.subject)
+                    intentToDetailChat.putExtra(DetailChatActivity.EXTRA_MESSAGE, it.message)
+                    intentToDetailChat.putExtra(DetailChatActivity.EXTRA_TIME, it.time)
+                    intentToDetailChat.putExtra(DetailChatActivity.EXTRA_ID, it.id)
+                    launcher.launch(intentToDetailChat)
                 }
             )
 
