@@ -119,4 +119,23 @@
     <string name="forget_password_link_text">Klik Disini</string>
     <string name="create_account_caption">Belum memiliki akun?</string>
     <string name="create_account_link_text">Daftar Sekarang</string>
+
+
+    <string-array name="list_of_months">
+        <item>Jan</item>
+        <item>Feb</item>
+        <item>Mar</item>
+        <item>Apr</item>
+        <item>Mei</item>
+        <item>Jun</item>
+        <item>Jul</item>
+        <item>Agu</item>
+        <item>Sep</item>
+        <item>Okt</item>
+        <item>Nov</item>
+        <item>Des</item>
+    </string-array>
+
+    <string name="hours">jam</string>
+
 </resources>

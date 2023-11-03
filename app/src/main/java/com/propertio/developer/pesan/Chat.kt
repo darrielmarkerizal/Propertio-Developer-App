@@ -16,13 +16,4 @@ data class Chat(
     val time: String? = null,
     val updateAt: String? = null
 //    val pictureURL: String
-) {
-
-    val formattedTime: String?
-        get() {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-            val outputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-            val date = inputFormat.parse(time)
-            return if (date != null) outputFormat.format(date) else time
-        }
-}
+)

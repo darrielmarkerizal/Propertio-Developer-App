@@ -23,14 +23,20 @@
 
     <!-- Design Palette   -->
     <color name="grey_50">#F6F6F6</color>
+    <color name="grey_100">#EEEEEE</color>
     <color name="grey_200">#E2E2E2</color>
     <color name="grey_300">#CBCBCB</color>
+    <color name="grey_400">#AFAFAF</color>
+    <color name="grey_500">#757575</color>
 
 
     <color name="blue_600">#0689FF</color>
 
     <!--  Red Badges  -->
     <color name="red_badges">#B71C1C</color>
+
+    <!--  Error  -->
+    <color name="text_error">#B3261E</color>
 
 
 

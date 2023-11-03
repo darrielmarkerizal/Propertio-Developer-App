@@ -145,6 +145,34 @@
     <style name="text.medium" parent="Base.Text.Medium"/>
     <style name="text.regular" parent="Base.Text.Regular"/>
 
+    <!--  TextSize 22  -->
+    <style name="text.bold.size22" parent="text.bold">
+        <item name="android:textSize">22sp</item>
+    </style>
+    <style name="text.semi_bold.size22" parent="text.semibold">
+        <item name="android:textSize">22sp</item>
+    </style>
+    <style name="text.medium.size22" parent="text.medium">
+        <item name="android:textSize">22sp</item>
+    </style>
+    <style name="text.regular.size22" parent="text.regular">
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <!--  TextSize 17  -->
+    <style name="text.bold.size17" parent="text.bold">
+        <item name="android:textSize">17sp</item>
+    </style>
+    <style name="text.semi_bold.size17" parent="text.semibold">
+        <item name="android:textSize">17sp</item>
+    </style>
+    <style name="text.medium.size17" parent="text.medium">
+        <item name="android:textSize">17sp</item>
+    </style>
+    <style name="text.regular.size17" parent="text.regular">
+        <item name="android:textSize">17sp</item>
+    </style>
+
     <!--  TextSize 14  -->
     <style name="text.bold.size14" parent="text.bold">
         <item name="android:textSize">14sp</item>
@@ -257,6 +285,33 @@
 
 
     <!--  END : card design system  -->
+
+
+    <!--  START : top navigation bar  -->
+    <style name="toolbar.top.navigation.center" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.ActionBar</item>
+        <item name="contentInsetStart">0dp</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="titleTextAppearance">@style/text.semi_bold.size22</item>
+        <item name="titleTextColor">@color/black</item>
+    </style>
+
+    <style name="toolbar.button" parent="Widget.AppCompat.ImageButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:background">@drawable/toolbar_button</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+    </style>
+
+
+
+    <!--  END : top navigation bar  -->
 
 
 
