@@ -13,6 +13,6 @@ interface MessageApi {
 
 
     @GET("v1/message/{id}")
-    fun getDetailMessage(@Path("id") id : Int) : Call<MessageResponse>
+    fun getDetailMessage(@Path("id") id : Int) : Call<MessageDetailResponse>
 
 }

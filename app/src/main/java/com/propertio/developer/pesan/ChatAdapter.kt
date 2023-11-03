@@ -4,15 +4,22 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.WorkerThread
 import androidx.recyclerview.widget.RecyclerView
 import com.propertio.developer.R
+import com.propertio.developer.api.Retro
+import com.propertio.developer.api.common.message.MessageApi
+import com.propertio.developer.api.common.message.MessageDetailResponse
 import com.propertio.developer.databinding.ItemChatContainerBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 typealias onClickChat = (Chat) -> Unit
 class ChatAdapter(
     private val context: Context,
-    var chatList: List<Chat>,
+    var chatList: MutableList<Chat>,
     private val onClickChat: onClickChat
 ) : RecyclerView.Adapter<ChatAdapter.ItemChatViewHolder>()
 {
@@ -37,6 +44,7 @@ class ChatAdapter(
 
 
                 itemView.setOnClickListener {
+                    updateChat(data, bindingAdapterPosition)
                     onClickChat(data)
                 }
 
@@ -101,4 +109,40 @@ class ChatAdapter(
 
         return "${dateString[2]} ${months[dateString[1].toInt() - 1]}"
     }
+
+    @WorkerThread
+    fun updateChat(data: Chat, bindingAdapterPosition: Int) {
+        Log.d("ChatAdapter", "updateChat: ${data.id}")
+
+        // API
+        val sharedPreferences = context.getSharedPreferences("account_data", Context.MODE_PRIVATE)
+        val token = sharedPreferences.getString("token", null)
+        val retro = Retro(token).getRetroClientInstance().create(MessageApi::class.java)
+
+        if (data.id != null) {
+            retro.getDetailMessage(data.id).enqueue(object : Callback<MessageDetailResponse> {
+
+                override fun onResponse(
+                    call: Call<MessageDetailResponse>,
+                    response: Response<MessageDetailResponse>
+                ) {
+                    val updatedChat = response.body()
+                    if (updatedChat != null) {
+                        // Update the chat
+                        data.read = updatedChat.data?.read
+                        // Notify the adapter about the change
+                        notifyItemChanged(bindingAdapterPosition)
+                    }
+                }
+
+                override fun onFailure(
+                    call: Call<MessageDetailResponse>,
+                    t: Throwable
+                ) {
+                    // Handle failure
+                }
+            })
+        }
+    }
 }
+

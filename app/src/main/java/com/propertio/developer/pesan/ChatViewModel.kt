@@ -14,12 +14,13 @@ import retrofit2.Callback
 import retrofit2.Response
 import androidx.lifecycle.map
 
+
 @WorkerThread
 class ChatViewModel(token: String?) : ViewModel() {
     private val retro = Retro(token).getRetroClientInstance().create(MessageApi::class.java)
-    private val _messageList = MutableLiveData<List<MessageResponse.Data>>()
+    private val _messageList = MutableLiveData<List<MessageResponse.Data>?>()
     val chatList: LiveData<List<Chat>> = _messageList.map { messageList ->
-        messageList.map { message ->
+        messageList?.map { message ->
             Chat(
                 id = message.id,
                 developerId = message.developerId,
@@ -32,23 +33,53 @@ class ChatViewModel(token: String?) : ViewModel() {
                 time = message.createAt,
                 updateAt = message.updateAt
             )
-        }
+        } ?: emptyList()
     }
 
     @WorkerThread
     fun getAllMessage() {
+        if (_messageList.value.isNullOrEmpty()) {
+            retro.getAllMessage().enqueue(object : Callback<MessageResponse> {
+                override fun onResponse(
+                    call: Call<MessageResponse>,
+                    response: Response<MessageResponse>
+                ) {
+                    val messageResponse = response.body()
+                    _messageList.value = messageResponse?.data
+                }
+
+                override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
+                    //TODO: Handle failure
+                    Log.e("ChatViewModel", "onFailure: ${t.message}")
+                }
+            })
+        }
+
+    }
+
+    val _isRefreshing = MutableLiveData<Boolean>()
+    val isRefreshing: LiveData<Boolean> = _isRefreshing
+    fun fetchNewData() {
+        _isRefreshing.postValue(true)
         retro.getAllMessage().enqueue(object : Callback<MessageResponse> {
             override fun onResponse(
                 call: Call<MessageResponse>,
                 response: Response<MessageResponse>
             ) {
                 val messageResponse = response.body()
-                _messageList.value = messageResponse?.data
+                val newData = messageResponse?.data
+                if (_messageList.value != newData) {
+                    _messageList.postValue(newData)
+                }
+                // Signal that the refresh has finished
+                _isRefreshing.postValue(false)
             }
 
             override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
-                //TODO: Handle failure
+                // Handle failure
                 Log.e("ChatViewModel", "onFailure: ${t.message}")
+                // Signal that the refresh has finished
+                _isRefreshing.postValue(false)
             }
         })
     }

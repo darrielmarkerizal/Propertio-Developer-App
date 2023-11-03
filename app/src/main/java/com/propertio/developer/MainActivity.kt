@@ -14,6 +14,11 @@ import com.propertio.developer.project.ProjectFragment
 class MainActivity : AppCompatActivity() {
     private var toastMessage : String? = null
 
+    private val dashboardFragment = DashboardFragment()
+    private val projectFragment = ProjectFragment()
+    private val chatFragment = ChatFragment()
+    private val profileFragment = ProfileFragment()
+
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,10 +34,24 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigation.setOnItemSelectedListener {
             when(it.itemId) {
-                R.id.dashboard -> replaceFragment(DashboardFragment())
-                R.id.project -> replaceFragment(ProjectFragment())
-                R.id.message -> replaceFragment(ChatFragment())
-                R.id.profile_setting -> replaceFragment(ProfileFragment())
+                R.id.dashboard -> replaceFragment(dashboardFragment)
+                R.id.project -> replaceFragment(projectFragment)
+                R.id.message -> {
+                    val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
+                    val fragment = supportFragmentManager.findFragmentByTag("ChatFragment")
+                    if (fragment == null) {
+                        supportFragmentManager.beginTransaction()
+                            .hide(currentFragment!!)
+                            .add(R.id.frame_layout, chatFragment, "ChatFragment")
+                            .commit()
+                    } else {
+                        supportFragmentManager.beginTransaction()
+                            .hide(currentFragment!!)
+                            .show(fragment)
+                            .commit()
+                    }
+                }
+                R.id.profile_setting -> replaceFragment(profileFragment)
 
                 else -> {
 

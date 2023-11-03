@@ -18,6 +18,7 @@ import com.propertio.developer.databinding.FragmentChatBinding
 
 class ChatFragment : Fragment() {
     private lateinit var binding : FragmentChatBinding
+    val listChat by lazy { mutableListOf<Chat>() }
     private val launcher = registerForActivityResult(ActivityResultContracts.
     StartActivityForResult()){}
 
@@ -50,7 +51,7 @@ class ChatFragment : Fragment() {
             recyclerViewChat.layoutManager = LinearLayoutManager(requireContext())
             recyclerViewChat.adapter = ChatAdapter(
                 context = requireContext(),
-                chatList = emptyList(),
+                chatList = listChat,
                 onClickChat = {
                     val intentToDetailChat = Intent(activity, DetailChatActivity::class.java)
                     intentToDetailChat.putExtra(DetailChatActivity.EXTRA_NAME, it.name)
@@ -65,16 +66,26 @@ class ChatFragment : Fragment() {
             )
 
 
-            viewModel?.chatList?.observe(viewLifecycleOwner, Observer { listChat ->
-                (recyclerViewChat.adapter as ChatAdapter).apply {
-                    chatList = listChat?.toList() ?: emptyList()
-                    notifyDataSetChanged()
-                }
+            viewModel?.chatList?.observe(viewLifecycleOwner, Observer { newChatList ->
+                listChat.clear()
+                listChat.addAll(newChatList ?: emptyList())
+                (recyclerViewChat.adapter as? ChatAdapter)?.notifyDataSetChanged()
             })
 
             viewModel?.getAllMessage()
+
+            chatSwipeRefreshLayout.setOnRefreshListener {
+                viewModel?.fetchNewData()
+            }
+
+            viewModel?.isRefreshing?.observe(viewLifecycleOwner, Observer { isRefreshing ->
+                binding.chatSwipeRefreshLayout.isRefreshing = isRefreshing
+            })
+
         }
     }
+
+
 
 
 
