@@ -20,5 +20,14 @@ class ProjectFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        with(binding.toolbarContainer) {
+            textViewTitle.text = "Proyek Saya"
+        }
+    }
+
 
 }

@@ -15,7 +15,7 @@ import retrofit2.Response
 import androidx.lifecycle.map
 
 
-@WorkerThread
+
 class ChatViewModel(token: String?) : ViewModel() {
     private val retro = Retro(token).getRetroClientInstance().create(MessageApi::class.java)
     private val _messageList = MutableLiveData<List<MessageResponse.Data>?>()
@@ -36,7 +36,6 @@ class ChatViewModel(token: String?) : ViewModel() {
         } ?: emptyList()
     }
 
-    @WorkerThread
     fun getAllMessage() {
         if (_messageList.value.isNullOrEmpty()) {
             retro.getAllMessage().enqueue(object : Callback<MessageResponse> {

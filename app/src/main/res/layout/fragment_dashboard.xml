@@ -16,7 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="72dp"
+            android:paddingTop="24dp"
             android:paddingBottom="40dp"
             android:orientation="vertical">
 
@@ -25,8 +25,7 @@
                 android:layout_height="wrap_content"
                 android:text="Dashboard"
                 android:layout_marginStart="32dp"
-                android:textAppearance="@style/text.semibold"
-                android:textSize="18sp"/>
+                android:textAppearance="@style/text.bold.size18"/>
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
