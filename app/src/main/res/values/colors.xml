@@ -4,6 +4,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="slight_black">#1E1E1E</color>
 
+    <!--  Design Color Style  -->
+    <color name="primary">#07C0EB</color>
+
     <!-- Design System Color Button -->
     <color name="button_primary">#07C0EB</color>
     <color name="button_primary_pressed">#0E6E90</color>
