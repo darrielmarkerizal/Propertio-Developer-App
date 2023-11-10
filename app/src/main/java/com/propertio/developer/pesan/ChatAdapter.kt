@@ -14,6 +14,7 @@ import com.propertio.developer.databinding.ItemChatContainerBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDateTime
 
 
 typealias onClickChat = (Chat) -> Unit
@@ -29,7 +30,7 @@ class ChatAdapter(
     {
         fun bind(data: Chat) {
             with(binding) {
-                val date = dateFormat(data.time!!)
+                val date = dateFormat(data.time ?: "1970-01-01T05:18:39.000000Z")
 
                 textSubject.text = data.subject
                 textName.text = data.name
@@ -126,13 +127,16 @@ class ChatAdapter(
                     call: Call<MessageDetailResponse>,
                     response: Response<MessageDetailResponse>
                 ) {
-                    val updatedChat = response.body()
-                    if (updatedChat != null) {
-                        // Update the chat
-                        data.read = updatedChat.data?.read
-                        // Notify the adapter about the change
-                        notifyItemChanged(bindingAdapterPosition)
+                    if (response.isSuccessful) {
+                        val updatedChat = response.body()
+                        if (updatedChat != null) {
+                            // Update the chat
+                            data.read = updatedChat.data?.read
+                            // Notify the adapter about the change
+                            notifyItemChanged(bindingAdapterPosition)
+                        }
                     }
+
                 }
 
                 override fun onFailure(

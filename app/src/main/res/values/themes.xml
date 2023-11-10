@@ -9,6 +9,10 @@
 
     <style name="Theme.PropertioDeveloperApp" parent="Base.Theme.PropertioDeveloperApp" />
 
+    <style name="Theme.PropertioDeveloperApp.Transparant">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
 
     <!--  START : button design system  -->
     <style name="Base.Theme.button" parent="Widget.AppCompat.Button">
@@ -114,6 +118,15 @@
     <!-- END   : Custom add Button   -->
 
 
+    <!--  START : Floating Action Button  -->
+    <style name="floating.action.button" parent="ThemeOverlay.Material3.FloatingActionButton.Primary">
+        <item name="backgroundTint">@color/primary</item>
+        <item name="android:src">@drawable/baseline_add_24_white</item>
+        <item name="tint">@color/white</item>
+    </style>
+    <!--  END : Floating Action Button  -->
+
+
 
     <!--  START : textfield -->
 
@@ -159,6 +172,34 @@
         <item name="android:textSize">22sp</item>
     </style>
 
+    <!--  TextSize 20  -->
+    <style name="text.bold.size20" parent="text.bold">
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="text.semi_bold.size20" parent="text.semibold">
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="text.medium.size20" parent="text.medium">
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="text.regular.size20" parent="text.regular">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <!--  TextSize 18  -->
+    <style name="text.bold.size18" parent="text.bold">
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="text.semi_bold.size18" parent="text.semibold">
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="text.medium.size18" parent="text.medium">
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="text.regular.size18" parent="text.regular">
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <!--  TextSize 17  -->
     <style name="text.bold.size17" parent="text.bold">
         <item name="android:textSize">17sp</item>
@@ -171,6 +212,20 @@
     </style>
     <style name="text.regular.size17" parent="text.regular">
         <item name="android:textSize">17sp</item>
+    </style>
+
+    <!--  TextSize 16  -->
+    <style name="text.bold.size16" parent="text.bold">
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="text.semi_bold.size16" parent="text.semibold">
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="text.medium.size16" parent="text.medium">
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="text.regular.size16" parent="text.regular">
+        <item name="android:textSize">16sp</item>
     </style>
 
     <!--  TextSize 14  -->
@@ -199,6 +254,20 @@
     </style>
     <style name="text.regular.size12" parent="text.regular">
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- TextSize 11   -->
+    <style name="text.bold.size11" parent="text.bold">
+        <item name="android:textSize">11sp</item>
+    </style>
+    <style name="text.semi_bold.size11" parent="text.semibold">
+        <item name="android:textSize">11sp</item>
+    </style>
+    <style name="text.medium.size11" parent="text.medium">
+        <item name="android:textSize">11sp</item>
+    </style>
+    <style name="text.regular.size11" parent="text.regular">
+        <item name="android:textSize">11sp</item>
     </style>
 
 
