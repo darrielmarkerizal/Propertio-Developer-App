@@ -2,15 +2,9 @@ package com.propertio.developer.api.auth
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.propertio.developer.api.models.DefaultResponse
 
-class UserResponse {
-    @SerializedName("email")
-    @Expose
-    var status: String? = null
-
-    @SerializedName("message")
-    @Expose
-    var message: String? = null
+class UserResponse : DefaultResponse(){
 
     @SerializedName("data")
     @Expose

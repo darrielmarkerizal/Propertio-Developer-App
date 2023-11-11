@@ -104,15 +104,46 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <!--  Ghost  -->
+    <style name="button.ghost" parent="Base.Theme.button">
+        <item name="android:background">@drawable/button_ghost</item>
+        <item name="android:textColor">@color/primary</item>
+    </style>
+    <style name="button.ghost.xl">
+        <item name="android:height">56dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="button.ghost.l">
+        <item name="android:height">48dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="button.ghost.m">
+        <item name="android:height">40dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="button.ghost.s">
+        <item name="android:height">32dp</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <!--  END : button design system  -->
 
 
     <!-- START : Custom add Button   -->
+
+    <!--  Add Button  -->
     <style name="button.add" parent="Base.Theme.button">
         <item name="android:background">@drawable/button_add_rounded_rectangle</item>
         <item name="drawableStartCompat">@drawable/baseline_add_circle_outline_24</item>
         <item name="drawableTint">@color/text_black_placeholder</item>
         <item name="android:textColor">@color/text_black_placeholder</item>
+    </style>
+
+    <!--  Horizontal More Button  -->
+    <style name="button.more.horizontal" parent="Widget.AppCompat.ImageButton">
+        <item name="android:background">@drawable/toolbar_button</item>
+        <item name="android:src">@drawable/baseline_more_horiz_24</item>
+        <item name="android:contentDescription">"@string/tooltips_aksi_lainnya</item>
     </style>
 
     <!-- END   : Custom add Button   -->
@@ -129,7 +160,19 @@
 
 
     <!--  START : textfield -->
+    <style name="DesignSystem.TextInputEditText" parent="ThemeOverlay.Material3.TextInputEditText">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:background">@drawable/edit_text_rounded_rectangle</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingStart">14.5dp</item>
+        <item name="android:paddingEnd">14.5dp</item>
+        <item name="android:textColorHint">@color/text_black_placeholder</item>
+        <item name="android:textSize">14.5sp</item>
+        <item name="android:textColor">@color/text_black</item>
 
+    </style>
 
     <!--  END : textfield -->
 
@@ -301,6 +344,8 @@
 
     <!--  START : card design system  -->
 
+
+    <!--  Dasbor  -->
     <style name="card" parent="Widget.MaterialComponents.CardView">
         <item name="cardBackgroundColor">@color/white</item>
         <item name="cardCornerRadius">8dp</item>
@@ -353,12 +398,28 @@
     </style>
 
 
+    <!--  Proyek/Unit  -->
+    <style name="card.image" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:elevation">0dp</item>
+        <item name="cardCornerRadius">8dp</item>
+    </style>
+    <style name="card.image.imageview" parent="Theme.AppCompat">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/placeholder</item>
+        <item name="layout_constraintDimensionRatio">1.22</item>
+    </style>
+
+
     <!--  END : card design system  -->
 
 
     <!--  START : top navigation bar  -->
     <style name="toolbar.top.navigation.center" parent="Widget.MaterialComponents.Toolbar.Primary">
-        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:background">@color/white</item>
         <item name="android:elevation">4dp</item>
@@ -397,6 +458,11 @@
     <style name="image.rectangle.20" parent="Base.image.scalefit">
         <item name="android:layout_width">20dp</item>
         <item name="android:layout_height">20dp</item>
+    </style>
+
+    <style name="image.rectangle.16" parent="Base.image.scalefit">
+        <item name="android:layout_width">16dp</item>
+        <item name="android:layout_height">16dp</item>
     </style>
 
     <!--  START : Icon Translation  -->

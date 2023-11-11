@@ -1,126 +1,251 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:theme="@style/Theme.PropertioDeveloperApp.Transparant"
+    android:paddingBottom="12dp"
+    android:background="#00FFFFFF"
+    android:clipChildren="false"
     android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="20dp">
+        app:cardCornerRadius="8dp"
+        android:contextClickable="true"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/grey_400"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="0dp"
+        >
 
-        <TextView
-            android:id="@+id/text_view_datetime"
-            style="@style/text.regular.size12"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="5 menit yang lalu"
-            app:layout_constraintBottom_toBottomOf="@+id/appCompatImageButton"
-            app:layout_constraintStart_toStartOf="@+id/imageView3"
-            app:layout_constraintTop_toTopOf="@+id/appCompatImageButton" />
+            android:paddingHorizontal="32dp"
+            android:paddingVertical="28dp">
 
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/appCompatImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/baseline_more_horiz_24"
-            android:background="@drawable/toolbar_button"
-            app:layout_constraintEnd_toEndOf="@+id/imageView3"
-            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/text_view_datetime"
+                style="@style/text.regular.size12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5 menit yang lalu"
+                android:textColor="@color/grey_500"
+                app:layout_constraintBottom_toBottomOf="@+id/button_more_horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/button_more_horizontal" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/imageView3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
-            app:cardCornerRadius="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_datetime">
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/button_more_horizontal"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                style="@style/button.more.horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_thumbnail"
+                android:layout_marginTop="8dp"
+                style="@style/card.image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_more_horizontal">
+
+                <ImageView
+                    android:id="@+id/image_view_thumbnail"
+                    style="@style/card.image.imageview" />
+
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/text_view_title"
+                style="@style/text.bold.size16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Judul Proyek"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/card_view_thumbnail" />
 
             <ImageView
+                android:id="@+id/ic_views"
+                android:src="@drawable/baseline_remove_red_eye_24"
+                style="@style/image.rectangle.16"
+                app:layout_constraintBottom_toBottomOf="@+id/text_view_views"
+                app:layout_constraintStart_toStartOf="@+id/text_view_title"
+                app:layout_constraintTop_toTopOf="@+id/text_view_views" />
 
+            <TextView
+                android:id="@+id/text_view_views"
+                style="@style/text.medium.size11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="276 ribu"
+                app:layout_constraintStart_toEndOf="@+id/ic_views"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_title" />
+
+            <TextView
+                android:id="@+id/text_label_view_views"
+                style="@style/text.medium.size11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="dilihat"
+                app:layout_constraintBottom_toBottomOf="@+id/text_view_views"
+                app:layout_constraintStart_toEndOf="@+id/text_view_views"
+                app:layout_constraintTop_toTopOf="@+id/text_view_views" />
+
+            <ImageView
+                android:id="@+id/ic_leads"
+                style="@style/image.rectangle.16"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/baseline_favorite_24"
+                app:layout_constraintBottom_toBottomOf="@+id/text_view_leads"
+                app:layout_constraintStart_toEndOf="@+id/text_label_view_views"
+                app:layout_constraintTop_toTopOf="@+id/text_view_leads"
+                app:tint="#F44336" />
+
+            <TextView
+                android:id="@+id/text_view_leads"
+                style="@style/text.medium.size11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="276 ribu tertarik"
+                app:layout_constraintBottom_toBottomOf="@+id/text_view_views"
+                app:layout_constraintStart_toEndOf="@+id/ic_leads"
+                app:layout_constraintTop_toTopOf="@+id/text_view_views" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_views" />
+
+            <TextView
+                android:id="@+id/text_view_address"
+                style="@style/text.medium.size11"
+                android:textColor="@color/grey_500"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Jl. Pandega, Tegal Brat, Tegal, Jawa Tengah"
+                app:layout_constraintStart_toStartOf="@+id/ic_views"
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+            <TextView
+                android:id="@+id/text_view_price"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Rp100 Juta"
+                android:textAppearance="@style/text.medium.size11"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_address" />
+
+            <ImageView
+                android:id="@+id/ic_property_type"
+                style="@style/image.rectangle.24"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_price"
+                app:srcCompat="@drawable/home" />
+
+            <TextView
+                android:id="@+id/text_view_property_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="Rumah"
+                android:textAppearance="@style/text.medium.size11"
+                app:layout_constraintBottom_toBottomOf="@+id/ic_property_type"
+                app:layout_constraintStart_toEndOf="@+id/ic_property_type"
+                app:layout_constraintTop_toTopOf="@+id/ic_property_type" />
+
+            <TextView
+                android:id="@+id/text_view_count_unit_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Jumlah Unit :"
+                android:textAppearance="@style/text.medium.size11"
+                app:layout_constraintBottom_toBottomOf="@+id/text_view_property_type"
+                app:layout_constraintStart_toEndOf="@+id/text_view_property_type"
+                app:layout_constraintTop_toTopOf="@+id/text_view_property_type" />
+
+            <TextView
+                android:id="@+id/text_view_count_unit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="8"
+                android:textAppearance="@style/text.medium.size11"
+                app:layout_constraintBottom_toBottomOf="@+id/text_view_count_unit_label"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/text_view_count_unit_label"
+                app:layout_constraintTop_toTopOf="@+id/text_view_count_unit_label" />
+
+            <TextView
+                android:id="@+id/text_view_label_project_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Kode :"
+                android:textAppearance="@style/text.semi_bold.size11"
+                android:textColor="@color/grey_500"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ic_property_type" />
+
+            <TextView
+                android:id="@+id/text_view_project_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="PY-Rumah-9384039409"
+                android:textAppearance="@style/text.semi_bold.size11"
+                android:textColor="@color/grey_500"
+                app:layout_constraintBottom_toBottomOf="@+id/text_view_label_project_code"
+                app:layout_constraintStart_toEndOf="@+id/text_view_label_project_code"
+                app:layout_constraintTop_toTopOf="@+id/text_view_label_project_code" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_repost"
+                style="@style/button.primary.l"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:src="@drawable/placeholder"
-                app:layout_constraintDimensionRatio="1.22" />
+                android:layout_marginTop="16dp"
+                android:text="Repost"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_label_project_code" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_rincian"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Rincian"
+                style="@style/button.ghost.l"
+                app:layout_constraintTop_toBottomOf="@+id/button_repost"
+                tools:layout_editor_absoluteX="32dp" />
 
 
-        </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:id="@+id/textView7"
-            style="@style/text.bold.size16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Judul Proyek"
-            app:layout_constraintStart_toStartOf="@+id/imageView3"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/textView8"
-            app:layout_constraintStart_toStartOf="@+id/textView7"
-            app:layout_constraintTop_toBottomOf="@+id/textView7"
-            android:src="@drawable/baseline_remove_red_eye_24" />
-
-        <TextView
-            android:id="@+id/textView8"
-            style="@style/text.medium.size11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="276 ribu dilihat"
-            app:layout_constraintStart_toEndOf="@+id/imageView4"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
-
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/baseline_favorite_24"
-            app:layout_constraintBottom_toBottomOf="@+id/textView8"
-            app:layout_constraintStart_toEndOf="@+id/textView8"
-            app:layout_constraintTop_toBottomOf="@+id/textView7"
-            app:tint="#F44336" />
-
-        <TextView
-            android:id="@+id/textView9"
-            style="@style/text.medium.size11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="276 ribu tertarik"
-            app:layout_constraintStart_toEndOf="@+id/imageView5"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
-
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="397dp"
-            android:layout_height="1dp"
-            android:layout_marginEnd="2dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8" />
-
-        <TextView
-            android:id="@+id/textView10"
-            style="@style/text.medium.size11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Jl. Pandega, Tegal Brat, Tegal, Jawa Tengah"
-            app:layout_constraintStart_toStartOf="@+id/imageView4"
-            app:layout_constraintTop_toBottomOf="@+id/divider2" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
 
 
 

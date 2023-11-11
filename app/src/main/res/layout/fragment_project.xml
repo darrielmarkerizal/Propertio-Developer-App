@@ -7,21 +7,15 @@
     android:background="@color/white"
     android:orientation="horizontal">
 
-    <include
-        android:id="@+id/toolbar_container"
-        layout="@layout/toolbar_top_navigation_center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_container">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,22 +24,24 @@
             android:paddingHorizontal="32dp">
 
             <TextView
-                android:id="@+id/textView4"
                 style="@style/text.bold.size18"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:text="Proyek" />
 
             <TextView
-                android:id="@+id/textView5"
                 style="@style/text.regular.size12"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:text="Monitor Proyek Anda Disini" />
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp">
 
@@ -107,43 +103,73 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusBottomEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                android:clipToOutline="true"
-                >
+                app:endIconMode="clear_text"
+                app:hintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    style="@style/DesignSystem.TextInputEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:backgroundTint="@color/grey_50"
                     android:drawableStart="@drawable/baseline_search_24"
-                    android:textAppearance="@style/text.regular.size14"
                     android:hint="Cari Proyek" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <FrameLayout
+                android:id="@+id/frameLayout_belum_ada_proyek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="100dp"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_simple_line_docs" />
+
+                    <TextView
+                        style="@style/text.medium.size14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="38dp"
+                        android:text="Belum ada proyek" />
+
+
+                </LinearLayout>
+
+            </FrameLayout>
 
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:itemCount="2"
-                tools:listitem="@layout/template_card_project"/>
+                tools:listitem="@layout/template_card_project" />
 
         </LinearLayout>
-
-
 
 
     </androidx.core.widget.NestedScrollView>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_project"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="29dp"

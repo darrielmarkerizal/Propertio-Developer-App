@@ -4,6 +4,8 @@ package com.propertio.developer.auth
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
 import com.propertio.developer.MainActivity
@@ -26,13 +28,25 @@ class LoginActivity : AppCompatActivity() {
 
         with(binding) {
 
+            editTextPassword.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {}
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    editTextPassword.error = null
+                    editTextPasswordLayout.isEndIconVisible = true
+                }
+            })
+
             buttonLogin.setOnClickListener {
                 if (editTextEmail.text.toString().isEmpty()) {
-                    editTextEmail.error = "Email is required"
+                    editTextEmail.error = "Mohon isi email"
                     return@setOnClickListener
                 }
                 if (editTextPassword.text.toString().isEmpty()) {
-                    editTextPassword.error = "Password is required"
+                    editTextPasswordLayout.isEndIconVisible = false
+                    editTextPassword.error = "Mohon isi password"
                     return@setOnClickListener
                 }
 
@@ -65,17 +79,14 @@ class LoginActivity : AppCompatActivity() {
 
     private fun loginPassDeveloperTesting() {
         //TODO: Hapus kode developer  ini ketika selesai
-        val intentToMainActivity = Intent(this@LoginActivity, MainActivity::class.java)
-        intentToMainActivity.putExtra("toastMessage", "Berhasil Login")
-        startActivity(intentToMainActivity)
-        finish()
+        login("developer@mail.com", "11111111")
     }
 
 
-    private fun login() {
+    private fun login(email: String? = null, password: String? = null) {
         val request = UserRequest()
-        request.email = binding.editTextEmail.text.toString()
-        request.password = binding.editTextPassword.text.toString()
+        request.email = email ?: binding.editTextEmail.text.toString()
+        request.password = password ?: binding.editTextPassword.text.toString()
 
         val retro = Retro(null).getRetroClientInstance().create(UserApi::class.java)
         retro.login(request).enqueue(object: Callback<UserResponse>{
@@ -84,23 +95,32 @@ class LoginActivity : AppCompatActivity() {
 
                 Log.d("LoginActivity", "Response: ${user?.message}")
 
-                if (user?.data?.token != null) {
-                    val sharedPreferences = getSharedPreferences("account_data", MODE_PRIVATE)
-                    with(sharedPreferences.edit()) {
-                        putString("token", user.data!!.token)
-                        commit()
+                if (response.isSuccessful) {
+                    if (user?.data?.token == null) {
+                        Log.e("LoginActivity", "Error: ${user?.message}")
+                        return
                     }
+                    if (user.data!!.user!!.role == "developer") {
+                        val sharedPreferences = getSharedPreferences("account_data", MODE_PRIVATE)
+                        with(sharedPreferences.edit()) {
+                            putString("token", user.data!!.token)
+                            commit()
+                        }
 
-                    val tokenFromPrefs = sharedPreferences.getString("token", null)
-                    Log.d("LoginActivity", "Token from prefs: $tokenFromPrefs")
+                        val tokenFromPrefs = sharedPreferences.getString("token", null)
+                        Log.d("LoginActivity", "Token from prefs: $tokenFromPrefs")
 
-                    val intentToMainActivity = Intent(this@LoginActivity, MainActivity::class.java)
-                    intentToMainActivity.putExtra("toastMessage", "Berhasil Login")
-                    startActivity(intentToMainActivity)
-                    finish()
+                        val intentToMainActivity = Intent(this@LoginActivity, MainActivity::class.java)
+                        intentToMainActivity.putExtra("toastMessage", "Berhasil Login")
+                        startActivity(intentToMainActivity)
+                        finish()
+                    }
+                    else {
+                        Toast.makeText(this@LoginActivity, "Email yang Anda gunakan bukan akun developer", Toast.LENGTH_SHORT).show()
+                    }
                 }
-                else {
-                    Log.e("LoginActivity", "Error: ${user?.message}")
+                else if (response.code() == 401) {
+                    Toast.makeText(this@LoginActivity, "Email atau password salah", Toast.LENGTH_SHORT).show()
                 }
 
 
