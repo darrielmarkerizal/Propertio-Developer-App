@@ -2,15 +2,9 @@ package com.propertio.developer.api.common.dashboard
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.propertio.developer.api.models.DefaultResponse
 
-class DashboardResponse {
-    @SerializedName("status")
-    @Expose
-    var status: String? = null
-
-    @SerializedName("message")
-    @Expose
-    var message: String? = null
+class DashboardResponse : DefaultResponse()  {
 
     @SerializedName("data")
     @Expose

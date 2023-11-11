@@ -47,9 +47,9 @@ class ChatFragment : Fragment() {
             ViewModelProvider(this@ChatFragment, it)
         }?.get(ChatViewModel::class.java)
 
-        with(binding.toolbarContainer) {
-            textViewTitle.text = "Pesan"
-        }
+//        with(binding.toolbarContainer) {
+//            textViewTitle.text = "Pesan"
+//        }
 
         with(binding) {
             recyclerViewChat.layoutManager = LinearLayoutManager(requireContext())

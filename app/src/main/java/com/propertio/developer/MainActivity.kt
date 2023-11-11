@@ -1,8 +1,10 @@
 package com.propertio.developer
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.propertio.developer.dasbor.DashboardFragment
@@ -24,9 +26,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        // Token
         val sharedPreferences = getSharedPreferences("account_data", MODE_PRIVATE)
         val token = sharedPreferences.getString("token", null)
         Log.d("MainActivity", "Token from prefs: $token")
+
+        // Toolbar
+        val toolbar = binding.toolbarContainer
+        val theToolbar = binding.toolbarContainer.root
 
         replaceFragment(DashboardFragment())
 
@@ -34,9 +41,22 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigation.setOnItemSelectedListener {
             when(it.itemId) {
-                R.id.dashboard -> replaceFragment(dashboardFragment)
-                R.id.project -> replaceFragment(projectFragment)
+                R.id.dashboard -> {
+                    theToolbar.visibility = View.GONE
+
+
+                    replaceFragment(dashboardFragment)
+                }
+                R.id.project -> {
+                    theToolbar.visibility = View.VISIBLE
+                    toolbar.textViewTitle.text = "Proyek Saya"
+
+                    replaceFragment(projectFragment)
+                }
                 R.id.message -> {
+                    theToolbar.visibility = View.VISIBLE
+                    toolbar.textViewTitle.text = "Pesan"
+
                     val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
                     val fragment = supportFragmentManager.findFragmentByTag("ChatFragment")
                     if (fragment == null) {
@@ -51,7 +71,11 @@ class MainActivity : AppCompatActivity() {
                             .commit()
                     }
                 }
-                R.id.profile_setting -> replaceFragment(profileFragment)
+                R.id.profile_setting -> {
+                    theToolbar.visibility = View.GONE
+
+                    replaceFragment(profileFragment)
+                }
 
                 else -> {
 

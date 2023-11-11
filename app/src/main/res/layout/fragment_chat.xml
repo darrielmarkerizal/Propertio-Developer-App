@@ -1,35 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:id="@+id/chat_swipe_refresh_layout"
     tools:context=".pesan.ChatFragment"
     android:orientation="vertical">
 
-    <include
-        android:id="@+id/toolbar_container"
-        layout="@layout/toolbar_top_navigation_center"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_chat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:itemCount="10"
+        tools:listitem="@layout/item_chat_container"
         />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:layout_below="@+id/toolbar_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:id="@+id/chat_swipe_refresh_layout">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_chat"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:itemCount="10"
-            tools:listitem="@layout/item_chat_container"
-            />
-
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-
-
-
-</RelativeLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
