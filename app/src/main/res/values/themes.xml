@@ -9,6 +9,10 @@
 
     <style name="Theme.PropertioDeveloperApp" parent="Base.Theme.PropertioDeveloperApp" />
 
+    <style name="Theme.PropertioDeveloperApp.Transparant">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
 
     <!--  START : button design system  -->
     <style name="Base.Theme.button" parent="Widget.AppCompat.Button">
@@ -100,10 +104,34 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <!--  Ghost  -->
+    <style name="button.ghost" parent="Base.Theme.button">
+        <item name="android:background">@drawable/button_ghost</item>
+        <item name="android:textColor">@color/primary</item>
+    </style>
+    <style name="button.ghost.xl">
+        <item name="android:height">56dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="button.ghost.l">
+        <item name="android:height">48dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="button.ghost.m">
+        <item name="android:height">40dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="button.ghost.s">
+        <item name="android:height">32dp</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <!--  END : button design system  -->
 
 
     <!-- START : Custom add Button   -->
+
+    <!--  Add Button  -->
     <style name="button.add" parent="Base.Theme.button">
         <item name="android:background">@drawable/button_add_rounded_rectangle</item>
         <item name="drawableStartCompat">@drawable/baseline_add_circle_outline_24</item>
@@ -111,12 +139,40 @@
         <item name="android:textColor">@color/text_black_placeholder</item>
     </style>
 
+    <!--  Horizontal More Button  -->
+    <style name="button.more.horizontal" parent="Widget.AppCompat.ImageButton">
+        <item name="android:background">@drawable/toolbar_button</item>
+        <item name="android:src">@drawable/baseline_more_horiz_24</item>
+        <item name="android:contentDescription">"@string/tooltips_aksi_lainnya</item>
+    </style>
+
     <!-- END   : Custom add Button   -->
+
+
+    <!--  START : Floating Action Button  -->
+    <style name="floating.action.button" parent="ThemeOverlay.Material3.FloatingActionButton.Primary">
+        <item name="backgroundTint">@color/primary</item>
+        <item name="android:src">@drawable/baseline_add_24_white</item>
+        <item name="tint">@color/white</item>
+    </style>
+    <!--  END : Floating Action Button  -->
 
 
 
     <!--  START : textfield -->
+    <style name="DesignSystem.TextInputEditText" parent="ThemeOverlay.Material3.TextInputEditText">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:background">@drawable/edit_text_rounded_rectangle</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingStart">14.5dp</item>
+        <item name="android:paddingEnd">14.5dp</item>
+        <item name="android:textColorHint">@color/text_black_placeholder</item>
+        <item name="android:textSize">14.5sp</item>
+        <item name="android:textColor">@color/text_black</item>
 
+    </style>
 
     <!--  END : textfield -->
 
@@ -159,6 +215,34 @@
         <item name="android:textSize">22sp</item>
     </style>
 
+    <!--  TextSize 20  -->
+    <style name="text.bold.size20" parent="text.bold">
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="text.semi_bold.size20" parent="text.semibold">
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="text.medium.size20" parent="text.medium">
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="text.regular.size20" parent="text.regular">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <!--  TextSize 18  -->
+    <style name="text.bold.size18" parent="text.bold">
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="text.semi_bold.size18" parent="text.semibold">
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="text.medium.size18" parent="text.medium">
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="text.regular.size18" parent="text.regular">
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <!--  TextSize 17  -->
     <style name="text.bold.size17" parent="text.bold">
         <item name="android:textSize">17sp</item>
@@ -171,6 +255,20 @@
     </style>
     <style name="text.regular.size17" parent="text.regular">
         <item name="android:textSize">17sp</item>
+    </style>
+
+    <!--  TextSize 16  -->
+    <style name="text.bold.size16" parent="text.bold">
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="text.semi_bold.size16" parent="text.semibold">
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="text.medium.size16" parent="text.medium">
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="text.regular.size16" parent="text.regular">
+        <item name="android:textSize">16sp</item>
     </style>
 
     <!--  TextSize 14  -->
@@ -199,6 +297,20 @@
     </style>
     <style name="text.regular.size12" parent="text.regular">
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- TextSize 11   -->
+    <style name="text.bold.size11" parent="text.bold">
+        <item name="android:textSize">11sp</item>
+    </style>
+    <style name="text.semi_bold.size11" parent="text.semibold">
+        <item name="android:textSize">11sp</item>
+    </style>
+    <style name="text.medium.size11" parent="text.medium">
+        <item name="android:textSize">11sp</item>
+    </style>
+    <style name="text.regular.size11" parent="text.regular">
+        <item name="android:textSize">11sp</item>
     </style>
 
 
@@ -232,6 +344,8 @@
 
     <!--  START : card design system  -->
 
+
+    <!--  Dasbor  -->
     <style name="card" parent="Widget.MaterialComponents.CardView">
         <item name="cardBackgroundColor">@color/white</item>
         <item name="cardCornerRadius">8dp</item>
@@ -284,12 +398,28 @@
     </style>
 
 
+    <!--  Proyek/Unit  -->
+    <style name="card.image" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:elevation">0dp</item>
+        <item name="cardCornerRadius">8dp</item>
+    </style>
+    <style name="card.image.imageview" parent="Theme.AppCompat">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/placeholder</item>
+        <item name="layout_constraintDimensionRatio">1.22</item>
+    </style>
+
+
     <!--  END : card design system  -->
 
 
     <!--  START : top navigation bar  -->
     <style name="toolbar.top.navigation.center" parent="Widget.MaterialComponents.Toolbar.Primary">
-        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:background">@color/white</item>
         <item name="android:elevation">4dp</item>
@@ -328,6 +458,11 @@
     <style name="image.rectangle.20" parent="Base.image.scalefit">
         <item name="android:layout_width">20dp</item>
         <item name="android:layout_height">20dp</item>
+    </style>
+
+    <style name="image.rectangle.16" parent="Base.image.scalefit">
+        <item name="android:layout_width">16dp</item>
+        <item name="android:layout_height">16dp</item>
     </style>
 
     <!--  START : Icon Translation  -->

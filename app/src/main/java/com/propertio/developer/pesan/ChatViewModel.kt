@@ -15,7 +15,7 @@ import retrofit2.Response
 import androidx.lifecycle.map
 
 
-@WorkerThread
+
 class ChatViewModel(token: String?) : ViewModel() {
     private val retro = Retro(token).getRetroClientInstance().create(MessageApi::class.java)
     private val _messageList = MutableLiveData<List<MessageResponse.Data>?>()
@@ -36,7 +36,6 @@ class ChatViewModel(token: String?) : ViewModel() {
         } ?: emptyList()
     }
 
-    @WorkerThread
     fun getAllMessage() {
         if (_messageList.value.isNullOrEmpty()) {
             retro.getAllMessage().enqueue(object : Callback<MessageResponse> {
@@ -44,8 +43,10 @@ class ChatViewModel(token: String?) : ViewModel() {
                     call: Call<MessageResponse>,
                     response: Response<MessageResponse>
                 ) {
-                    val messageResponse = response.body()
-                    _messageList.value = messageResponse?.data
+                    if(response.isSuccessful){
+                        val messageResponse = response.body()
+                        _messageList.value = messageResponse?.data
+                    }
                 }
 
                 override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
@@ -66,11 +67,14 @@ class ChatViewModel(token: String?) : ViewModel() {
                 call: Call<MessageResponse>,
                 response: Response<MessageResponse>
             ) {
-                val messageResponse = response.body()
-                val newData = messageResponse?.data
-                if (_messageList.value != newData) {
-                    _messageList.postValue(newData)
+                if (response.isSuccessful) {
+                    val messageResponse = response.body()
+                    val newData = messageResponse?.data
+                    if (_messageList.value != newData) {
+                        _messageList.postValue(newData)
+                    }
                 }
+
                 // Signal that the refresh has finished
                 _isRefreshing.postValue(false)
             }
