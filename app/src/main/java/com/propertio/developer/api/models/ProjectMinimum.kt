@@ -26,7 +26,7 @@ abstract class ProjectMinimum {
 
     @SerializedName("price")
     @Expose
-    var price: Int? = null
+    var price: String? = null
 
     @SerializedName("photo")
     @Expose

@@ -35,6 +35,10 @@ class MainActivity : AppCompatActivity() {
         val toolbar = binding.toolbarContainer
         val theToolbar = binding.toolbarContainer.root
 
+        // Set View Model for Project
+//        projectViewModel = ViewModelProvider(this, ProjectViewModelFactory(token!!))[ProjectViewModel::class.java]
+
+
         replaceFragment(DashboardFragment())
 
         toastMessage = intent.getStringExtra("toastMessage")

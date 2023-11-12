@@ -157,6 +157,7 @@
 
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyler_view_projects"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:itemCount="2"
