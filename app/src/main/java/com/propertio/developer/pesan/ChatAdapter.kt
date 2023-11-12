@@ -11,10 +11,10 @@ import com.propertio.developer.api.Retro
 import com.propertio.developer.api.common.message.MessageApi
 import com.propertio.developer.api.common.message.MessageDetailResponse
 import com.propertio.developer.databinding.ItemChatContainerBinding
+import com.propertio.developer.model.Chat
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.LocalDateTime
 
 
 typealias onClickChat = (Chat) -> Unit

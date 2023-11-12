@@ -1,52 +1,77 @@
 package com.propertio.developer.project
 
+
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.propertio.developer.Database.projectViewModel
 import com.propertio.developer.databinding.FragmentProjectBinding
-import com.propertio.developer.profile.ProfileFragment
+import com.propertio.developer.project.list.ProjectAdapter
 
 
-private const val APPBARTITLE_PROJECT = "param1"
 class ProjectFragment : Fragment() {
-    private var appBarTitle: String? = null
+    val token: String?
+        get() = requireActivity().getSharedPreferences("account_data", Context.MODE_PRIVATE).getString("token", null)
 
-    private lateinit var binding: FragmentProjectBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            appBarTitle = it.getString(APPBARTITLE_PROJECT)
-        }
+    private val binding by lazy {
+        FragmentProjectBinding.inflate(layoutInflater)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentProjectBinding.inflate(inflater)
+    ): View {
         return binding.root
     }
+
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        with(binding.toolbarContainer) {
-//            textViewTitle.text = "Proyek Saya"
-//        }
-    }
-    
-    companion object {
-        @JvmStatic
-        fun newInstance(appBarTitle: String) =
-            ProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(APPBARTITLE_PROJECT, appBarTitle)
-                }
+        projectViewModel = ViewModelProvider(this, ProjectViewModelFactory(token!!))[ProjectViewModel::class.java]
+
+        projectViewModel.fetchProjects(token!!)
+
+        val projectAdapter = ProjectAdapter(requireContext(), mutableListOf())
+
+        with(binding) {
+            recylerViewProjects.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = projectAdapter
             }
+        }
+
+
+        Log.d("Project", "Before observing projectList")
+        projectViewModel.projectList.observe(viewLifecycleOwner) { projects ->
+            // Update the adapter
+            projectAdapter.updateProjects(projects)
+            Log.d("Project", "Project list: $projects")
+
+            if (projects.isEmpty()) {
+                binding.frameLayoutBelumAdaProyek.visibility = View.VISIBLE
+            } else {
+                binding.frameLayoutBelumAdaProyek.visibility = View.GONE
+            }
+        }
+
+
     }
+
+
+
+
+
+
 
 
 }
