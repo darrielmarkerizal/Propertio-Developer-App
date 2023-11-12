@@ -2,10 +2,9 @@
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/toolbar_top_navigation_center"
+    android:id="@+id/toolbar"
     style="@style/toolbar.top.navigation.center"
     android:layout_width="match_parent">
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -29,24 +28,25 @@
             android:layout_height="wrap_content"
             android:ellipsize="middle"
             android:maxLines="1"
+            android:text="Propertio"
             android:textAlignment="center"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_delete"
-            app:layout_constraintStart_toEndOf="@+id/button_back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/button_delete"
+            android:id="@+id/button_more"
             style="@style/toolbar.button"
-            android:src="@drawable/outline_delete_24"
+            android:src="@drawable/baseline_more_horiz_24"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.appcompat.widget.Toolbar>

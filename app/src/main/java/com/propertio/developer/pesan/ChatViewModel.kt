@@ -1,8 +1,6 @@
 package com.propertio.developer.pesan
 
-import android.content.Context
 import android.util.Log
-import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,9 +11,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import androidx.lifecycle.map
+import com.propertio.developer.model.Chat
 
 
-@WorkerThread
 class ChatViewModel(token: String?) : ViewModel() {
     private val retro = Retro(token).getRetroClientInstance().create(MessageApi::class.java)
     private val _messageList = MutableLiveData<List<MessageResponse.Data>?>()
@@ -36,7 +34,6 @@ class ChatViewModel(token: String?) : ViewModel() {
         } ?: emptyList()
     }
 
-    @WorkerThread
     fun getAllMessage() {
         if (_messageList.value.isNullOrEmpty()) {
             retro.getAllMessage().enqueue(object : Callback<MessageResponse> {

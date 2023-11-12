@@ -15,9 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  */
 class Retro(private val token : String?) {
 
-    //TODO: Change this to your API host propertio
-//    private val API_HOST = "http://10.0.2.2:8000/api/"
-    private val API_HOST = "http://beta.propertio.id/api/"
+    private val API_HOST = DomainURL.HOST_API
     fun getRetroClientInstance(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(API_HOST)

@@ -1,4 +1,4 @@
-package com.propertio.developer.pesan
+package com.propertio.developer.model
 
 import android.provider.ContactsContract.CommonDataKinds.Email
 import java.text.SimpleDateFormat
