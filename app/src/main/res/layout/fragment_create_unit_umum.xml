@@ -7,50 +7,38 @@
     android:background="@color/white"
     tools:context=".CreateUnitUmumFragment"
     android:paddingHorizontal="32dp"
+    android:layout_marginTop="14dp"
+    android:layout_marginBottom="35dp"
     >
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_container"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <LinearLayout
-        android:id="@+id/container_membuat_unit"
+    <TextView
+        android:id="@+id/textView1"
+        style="@style/text.bold.size22"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_container">
+        android:text="Membuat Unit"
+        tools:ignore="MissingConstraints"
+        />
 
-        <TextView
-            android:id="@+id/textView4"
-            style="@style/text.bold.size22"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Membuat Unit"/>
-
-        <TextView
-            android:id="@+id/textView5"
-            style="@style/text.medium.size16"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="20dp"
-            android:text="Oakwood" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/textView2"
+        style="@style/text.medium.size16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="20dp"
+        android:text="Oakwood"
+        app:layout_constraintTop_toBottomOf="@id/textView1"/>
 
     <LinearLayout
         android:id="@+id/container_input_nama_unit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:visibility="visible"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/container_membuat_unit"
+        app:layout_constraintTop_toBottomOf="@id/textView2"
         >
 
         <TextView
@@ -170,25 +158,5 @@
             />
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="27dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/baseline_arrow_back_ios_new_24"
-        android:backgroundTint="@color/button_white"
-        />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="27dp"
-        style="@style/button.primary"
-        app:text="Selanjutnya"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

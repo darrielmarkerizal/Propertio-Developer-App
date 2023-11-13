@@ -7,16 +7,8 @@
     android:background="@color/white"
     tools:context=".CreateUnitUmumFragment"
     android:paddingHorizontal="32dp"
+    android:layout_marginTop="20dp"
     >
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_container"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
 
     <TextView
         android:id="@+id/textView1"
@@ -25,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="Tambah Infrastruktur"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_container"
+        tools:ignore="MissingConstraints"
         />
 
     <LinearLayout
@@ -94,7 +86,7 @@
         android:id="@+id/button_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="111dp"
+        android:layout_marginBottom="63dp"
         android:visibility="visible"
         android:text="Simpan"
         style="@style/button.primary.l"
