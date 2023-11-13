@@ -137,5 +137,6 @@
     </string-array>
 
     <string name="hours">jam</string>
+    <string name="tooltips_aksi_lainnya">Aksi Lainnya</string>
 
 </resources>
