@@ -345,9 +345,6 @@
 
             </LinearLayout>
 
-
-
-
             <TextView
                 style="@style/paragraph"
                 android:visibility="visible"
@@ -364,10 +361,6 @@
                 android:text="@string/add"
                 style="@style/button.add"
                 />
-
-
-
-
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_registrasi"
