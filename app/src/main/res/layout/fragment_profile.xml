@@ -340,7 +340,7 @@
                         android:textAllCaps="false"
                         android:textSize="16sp"
                         android:layout_marginBottom="20dp"
-                        android:fontFamily="@font/poppins_semibold"/>
+                        android:fontFamily="@font/poppins_semibold2"/>
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btn_simpan"
                         android:layout_width="match_parent"
@@ -351,17 +351,17 @@
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:layout_marginBottom="20dp"
-                        android:fontFamily="@font/poppins_semibold"/>
+                        android:fontFamily="@font/poppins_semibold2"/>
                 </LinearLayout>
                 <TextView
                     android:id="@+id/btn_logout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Log Out"
+                    android:text="@string/logout_link_text"
                     android:layout_gravity="center_horizontal"
-                    android:fontFamily="@font/poppins_reguler"
+                    android:fontFamily="@font/poppins_semibold2"
                     android:textColor="@color/red_badges"
-                    android:layout_marginBottom="50dp"/>
+                    android:layout_marginBottom="50dp" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
