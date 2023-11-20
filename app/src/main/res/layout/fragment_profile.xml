@@ -338,9 +338,8 @@
                         style="@style/DesignSystem.TextInputEditText"
                         android:text="Ubah Kata Sandi"
                         android:textAllCaps="false"
-                        android:textSize="16sp"
-                        android:layout_marginBottom="20dp"
-                        android:fontFamily="@font/poppins_semibold2"/>
+                        android:textAppearance="@style/text.semi_bold.size16"
+                        android:layout_marginBottom="20dp"/>
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btn_simpan"
                         android:layout_width="match_parent"
@@ -349,9 +348,9 @@
                         android:text="Simpan"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:textSize="16sp"
                         android:layout_marginBottom="20dp"
-                        android:fontFamily="@font/poppins_semibold2"/>
+                        android:textAppearance="@style/text.semi_bold.size16"
+                        />
                 </LinearLayout>
                 <TextView
                     android:id="@+id/btn_logout"
@@ -359,7 +358,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/logout_link_text"
                     android:layout_gravity="center_horizontal"
-                    android:fontFamily="@font/poppins_semibold2"
+                    android:textAppearance="@style/text.semi_bold.size14"
                     android:textColor="@color/red_badges"
                     android:layout_marginBottom="50dp" />
             </LinearLayout>
