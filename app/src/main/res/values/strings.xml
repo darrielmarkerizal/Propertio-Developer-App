@@ -136,6 +136,13 @@
         <item>Des</item>
     </string-array>
 
+    <string-array name="list_of_numerical_unit">
+        <item>Ribu</item>
+        <item>Juta</item>
+        <item>Miliar</item>
+        <item>Triliun</item>
+    </string-array>
+
     <string name="hours">jam</string>
     <string name="tooltips_aksi_lainnya">Aksi Lainnya</string>
 
