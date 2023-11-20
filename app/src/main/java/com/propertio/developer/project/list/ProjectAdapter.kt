@@ -1,20 +1,25 @@
 package com.propertio.developer.project.list
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.annotation.GlideType
+import com.google.gson.Gson
 import com.propertio.developer.api.DomainURL
 import com.propertio.developer.databinding.TemplateCardProjectBinding
 import com.propertio.developer.model.Project
+import com.propertio.developer.project.ProjectDetailActivity
+import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_DATA
 
 
 typealias onClickProject = (Project) -> Unit
 class ProjectAdapter(
     private val context: Context,
-    var projectList : List<Project>
+    private var projectList : List<Project>,
 ) : RecyclerView.Adapter<ProjectAdapter.ItemProjectViewHolder>() {
 
     inner class ItemProjectViewHolder(
@@ -23,7 +28,7 @@ class ProjectAdapter(
         fun bind(data: Project) {
             with(binding) {
                 // Essential
-                textViewTitle.text = data.title
+                textViewProjectTitle.text = data.title
                 textViewViews.text = data.countViews.toString()
                 textViewLeads.text = data.countLeads.toString()
 
@@ -50,6 +55,14 @@ class ProjectAdapter(
                 }
 
 
+                // button
+                buttonRincian.setOnClickListener {
+                    Log.d("ProjectAdapter", "Repost button clicked")
+                    val intentToDetailProject = Intent(context, ProjectDetailActivity::class.java)
+                    val projectJson = Gson().toJson(data)
+                    intentToDetailProject.putExtra(PROJECT_DATA, projectJson)
+                    context.startActivity(intentToDetailProject)
+                }
 
 
                 // Additional

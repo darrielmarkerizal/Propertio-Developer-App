@@ -155,6 +155,21 @@
         <item name="android:src">@drawable/baseline_add_24_white</item>
         <item name="tint">@color/white</item>
     </style>
+
+    <style name="floating.action.TextButton" parent="ThemeOverlay.Material3.FloatingActionButton.Primary">
+        <item name="backgroundTint">@color/primary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_width">180dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/text.medium.size16</item>
+    </style>
+    <style name="floating.action.BackButton" parent="ThemeOverlay.Material3.FloatingActionButton.Primary">
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:src">@drawable/baseline_arrow_back_ios_new_24</item>
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
     <!--  END : Floating Action Button  -->
 
 
@@ -171,7 +186,6 @@
         <item name="android:textColorHint">@color/text_black_placeholder</item>
         <item name="android:textSize">14.5sp</item>
         <item name="android:textColor">@color/text_black</item>
-
     </style>
 
     <!--  END : textfield -->
@@ -197,10 +211,16 @@
         <item name="fontFamily">@font/poppins</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="Base.Text.Light" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">@font/poppins_light</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
     <style name="text.bold" parent="Base.Text.Bold"/>
     <style name="text.semibold" parent="Base.Text.SemiBold"/>
     <style name="text.medium" parent="Base.Text.Medium"/>
     <style name="text.regular" parent="Base.Text.Regular"/>
+    <style name="text.light" parent="Base.Text.Light"/>
+
 
     <!--  TextSize 22  -->
     <style name="text.bold.size22" parent="text.bold">
@@ -215,6 +235,10 @@
     <style name="text.regular.size22" parent="text.regular">
         <item name="android:textSize">22sp</item>
     </style>
+    <style name="text.light.size22" parent="text.light">
+        <item name="android:textSize">22sp</item>
+    </style>
+
 
     <!--  TextSize 20  -->
     <style name="text.bold.size20" parent="text.bold">
@@ -227,6 +251,9 @@
         <item name="android:textSize">20sp</item>
     </style>
     <style name="text.regular.size20" parent="text.regular">
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="text.light.size20" parent="text.light">
         <item name="android:textSize">20sp</item>
     </style>
 
@@ -243,6 +270,10 @@
     <style name="text.regular.size18" parent="text.regular">
         <item name="android:textSize">18sp</item>
     </style>
+    <style name="text.light.size18" parent="text.light">
+        <item name="android:textSize">18sp</item>
+    </style>
+
 
     <!--  TextSize 17  -->
     <style name="text.bold.size17" parent="text.bold">
@@ -255,6 +286,9 @@
         <item name="android:textSize">17sp</item>
     </style>
     <style name="text.regular.size17" parent="text.regular">
+        <item name="android:textSize">17sp</item>
+    </style>
+    <style name="text.light.size17" parent="text.light">
         <item name="android:textSize">17sp</item>
     </style>
 
@@ -271,6 +305,9 @@
     <style name="text.regular.size16" parent="text.regular">
         <item name="android:textSize">16sp</item>
     </style>
+    <style name="text.light.size16" parent="text.light">
+        <item name="android:textSize">16sp</item>
+    </style>
 
     <!--  TextSize 14  -->
     <style name="text.bold.size14" parent="text.bold">
@@ -283,6 +320,9 @@
         <item name="android:textSize">14sp</item>
     </style>
     <style name="text.regular.size14" parent="text.regular">
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="text.light.size14" parent="text.light">
         <item name="android:textSize">14sp</item>
     </style>
 
@@ -299,6 +339,9 @@
     <style name="text.regular.size12" parent="text.regular">
         <item name="android:textSize">12sp</item>
     </style>
+    <style name="text.light.size12" parent="text.light">
+        <item name="android:textSize">12sp</item>
+    </style>
 
     <!-- TextSize 11   -->
     <style name="text.bold.size11" parent="text.bold">
@@ -311,6 +354,9 @@
         <item name="android:textSize">11sp</item>
     </style>
     <style name="text.regular.size11" parent="text.regular">
+        <item name="android:textSize">11sp</item>
+    </style>
+    <style name="text.light.size11" parent="text.light">
         <item name="android:textSize">11sp</item>
     </style>
 
@@ -464,6 +510,11 @@
     <style name="image.rectangle.16" parent="Base.image.scalefit">
         <item name="android:layout_width">16dp</item>
         <item name="android:layout_height">16dp</item>
+    </style>
+
+    <style name="image.rectangle.12" parent="Base.image.scalefit">
+        <item name="android:layout_width">12dp</item>
+        <item name="android:layout_height">12dp</item>
     </style>
 
     <!--  START : Icon Translation  -->
