@@ -17,6 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".profile.ChangePassword"
+            android:exported="false" />
+        <activity
             android:name=".project.ProjectDetailActivity"
             android:exported="false" />
         <activity
