@@ -309,6 +309,23 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <!--  TextSize 15  -->
+    <style name="text.bold.size15" parent="text.bold">
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="text.semi_bold.size15" parent="text.semibold">
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="text.medium.size15" parent="text.medium">
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="text.regular.size15" parent="text.regular">
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="text.light.size15" parent="text.light">
+        <item name="android:textSize">15sp</item>
+    </style>
+
     <!--  TextSize 14  -->
     <style name="text.bold.size14" parent="text.bold">
         <item name="android:textSize">14sp</item>
