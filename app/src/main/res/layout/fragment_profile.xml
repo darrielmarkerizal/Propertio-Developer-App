@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".profile.ProfileFragment">
 
     <ScrollView
@@ -12,6 +13,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:scrollbars="none">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -70,7 +72,7 @@
                     android:layout_marginBottom="5dp"
                     style="@style/text.regular.size16"/>
                 <TextView
-                    id="@+id/txt_id_akun"
+                    android:id="@+id/txt_id_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ID Akun"
@@ -84,6 +86,7 @@
                     android:layout_marginBottom="5dp"
                     style="@style/text.regular.size16"/>
                 <TextView
+                    android:id="@+id/txt_email_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="email@gmail.com"
@@ -106,7 +109,7 @@
                         android:text="*"/>
                 </LinearLayout>
                 <EditText
-                    android:id="@+id/edt_nama_lengkap"
+                    android:id="@+id/edt_nama_lengkap_profil"
                     android:inputType="textEmailAddress"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -151,7 +154,7 @@
                             android:layout_weight="1"
                             android:layout_gravity="center_vertical"/>
                         <TextView
-                            android:id="@+id/txt_country_code"
+                            android:id="@+id/txt_country_code_profile"
                             android:layout_width="0px"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -160,7 +163,7 @@
                             android:layout_gravity="center_vertical"/>
                         <EditText
                             android:layout_weight="3"
-                            android:id="@+id/edt_nomor_telepon"
+                            android:id="@+id/edt_nomor_telepon_profil"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginRight="4dp"
@@ -194,7 +197,7 @@
                                 android:text="*"/>
                         </LinearLayout>
                         <Spinner
-                            android:id="@+id/spinner_provinsi"
+                            android:id="@+id/spinner_provinsi_profile"
                             style="@style/DesignSystem.TextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
@@ -221,7 +224,7 @@
                                 android:text="*"/>
                         </LinearLayout>
                         <Spinner
-                            android:id="@+id/spinner_kota"
+                            android:id="@+id/spinner_kota_profile"
                             style="@style/DesignSystem.TextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
@@ -250,7 +253,10 @@
                                 android:text="*"/>
                         </LinearLayout>
                         <EditText
-                            android:id="@+id/edt_alamat"
+                            android:id="@+id/edt_alamat_profil"
+                            android:hint="Masukkan Alamat Anda"
+                            android:paddingTop="8dp"
+                            android:gravity="top"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textMultiLine"
@@ -271,7 +277,7 @@
                             android:text="Tambah Foto Profil"
                             android:layout_marginBottom="5dp"/>
                         <RelativeLayout
-                            android:id="@+id/button_add_profile_picture"
+                            android:id="@+id/button_add_profile_picture_profil"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:background="@drawable/button_add_rounded_rectangle">
@@ -332,7 +338,7 @@
 <!--                        </RelativeLayout>-->
 <!--                    </LinearLayout>-->
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btn_ubah_kata_sandi"
+                        android:id="@+id/btn_ubah_kata_sandi_profil"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         style="@style/DesignSystem.TextInputEditText"
@@ -341,7 +347,7 @@
                         android:textAppearance="@style/text.semi_bold.size16"
                         android:layout_marginBottom="20dp"/>
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btn_simpan"
+                        android:id="@+id/btn_simpan_profil"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_secondary_rounded_rectangle"
@@ -353,7 +359,7 @@
                         />
                 </LinearLayout>
                 <TextView
-                    android:id="@+id/btn_logout"
+                    android:id="@+id/btn_logout_profil"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/logout_link_text"

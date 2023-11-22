@@ -1,60 +1,67 @@
 package com.propertio.developer.profile
 
+import android.R
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.propertio.developer.R
+import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.propertio.developer.api.profile.ProfileResponse
+import com.propertio.developer.databinding.FragmentProfileBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentProfileBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var profileViewModel: ProfileViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ProfileFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val token = requireActivity().getSharedPreferences("account_data", Context.MODE_PRIVATE).getString("token", null)
+        val viewModelFactory = ProfileViewModelFactory(token!!)
+        profileViewModel = ViewModelProvider(this, viewModelFactory).get(ProfileViewModel::class.java)
+
+        profileViewModel.profileData.observe(viewLifecycleOwner, Observer { data ->
+            updateUI(data)
+        })
+    }
+
+    private fun updateUI(data: ProfileResponse.ProfileData?) {
+        data?.let {
+            val userData = it.userData
+
+            binding.txtIdProfile.text = it.accountId
+            binding.txtEmailProfile.text = it.email
+            binding.edtNamaLengkapProfil.setText(userData?.fullName)
+            binding.edtNomorTeleponProfil.setText(userData?.phone)
+
+            val provinces = listOf(userData?.province)
+            val provinceAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, provinces)
+            provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.spinnerProvinsiProfile.adapter = provinceAdapter
+            val provincePosition = provinces.indexOf(userData?.province)
+            binding.spinnerProvinsiProfile.setSelection(provincePosition)
+
+            val cities = listOf(userData?.city)
+            val cityAdapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, cities)
+            cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.spinnerKotaProfile.adapter = cityAdapter
+            val cityPosition = cities.indexOf(userData?.city)
+            binding.spinnerKotaProfile.setSelection(cityPosition)
+            binding.edtAlamatProfil.setText(userData?.address)
+        }
     }
 }
