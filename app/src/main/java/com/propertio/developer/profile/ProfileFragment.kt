@@ -59,6 +59,27 @@ class ProfileFragment : Fragment() {
             }
         })
 
+        profileViewModel.combinedCityData.observe(viewLifecycleOwner, Observer { combined ->
+            val profileData = combined.first
+            val citiesData = combined.second
+
+            if (profileData != null && citiesData != null) {
+                val cityNames = citiesData.map { it.name }
+                val cityAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cityNames)
+                cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                binding.spinnerKotaProfile.adapter = cityAdapter
+
+                // Set the selected item in the spinner to the user's city
+                val userCity = profileData.userData?.city
+                if (userCity != null) {
+                    val cityPosition = cityNames.indexOf(userCity)
+                    binding.spinnerKotaProfile.setSelection(cityPosition)
+                }
+            }
+
+            updateUI(profileData)
+        })
+
         binding.btnUbahKataSandiProfil.setOnClickListener {
             val intent = Intent(activity, ChangePassword::class.java)
             startActivity(intent)

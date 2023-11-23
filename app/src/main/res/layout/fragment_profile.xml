@@ -50,6 +50,7 @@
                 android:src="@drawable/bg_profil"
                 android:scaleType="fitXY"/>
             <ImageView
+                android:id="@+id/img_profil"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
                 android:background="@drawable/bg_foto_profil"
@@ -201,7 +202,11 @@
                             style="@style/DesignSystem.TextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:paddingHorizontal="15dp"/>
+                            android:dropDownWidth="match_parent"
+                            android:dropDownHeight="200dp"
+                            android:spinnerMode="dialog"
+                            android:paddingHorizontal="15dp"
+                            />
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -228,6 +233,9 @@
                             style="@style/DesignSystem.TextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
+                            android:dropDownWidth="match_parent"
+                            android:dropDownHeight="200dp"
+                            android:spinnerMode="dialog"
                             android:paddingHorizontal="15dp"
                             />
 

@@ -44,6 +44,25 @@ class ProfileViewModel(private val token: String) : ViewModel() {
         }
     }
 
+    val combinedCityData = MediatorLiveData<Pair<ProfileResponse.ProfileData?, List<ProfileResponse.City>?>>().apply {
+        var profileData: ProfileResponse.ProfileData? = null
+        var citiesData: List<ProfileResponse.City>? = null
+
+        addSource(this@ProfileViewModel.profileData) {
+            profileData = it
+            if (profileData != null && citiesData != null) {
+                value = Pair(profileData, citiesData)
+            }
+        }
+
+        addSource(this@ProfileViewModel.cityData) {
+            citiesData = it
+            if (profileData != null && citiesData != null) {
+                value = Pair(profileData, citiesData)
+            }
+        }
+    }
+
     init {
         fetchProfileData()
         fetchProvincesData()
