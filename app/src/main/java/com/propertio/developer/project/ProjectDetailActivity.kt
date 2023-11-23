@@ -9,17 +9,21 @@ import android.util.Log
 import android.webkit.WebView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
-import com.google.gson.Gson
+import com.propertio.developer.PropertioDeveloperApplication
 import com.propertio.developer.R
+import com.propertio.developer.TokenManager
 import com.propertio.developer.api.DomainURL
+import com.propertio.developer.api.Retro
+import com.propertio.developer.api.developer.DeveloperApi
+import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
 import com.propertio.developer.carousel.CarouselAdapter
 import com.propertio.developer.carousel.ImageData
+import com.propertio.developer.database.project.ProjectTable
 import com.propertio.developer.databinding.ActivityProjectDetailBinding
-import com.propertio.developer.model.Project
-import com.propertio.developer.model.ProjectAddress
-import com.propertio.developer.model.ProjectPhoto
-import com.propertio.developer.model.ProjectVideo
+import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 
 class ProjectDetailActivity : AppCompatActivity() {
@@ -32,6 +36,7 @@ class ProjectDetailActivity : AppCompatActivity() {
     private lateinit var carouselAdapter: CarouselAdapter
     private val carouselList = ArrayList<ImageData>()
     private lateinit var dots : ArrayList<TextView>
+    private lateinit var projectViewModel: ProjectViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,64 +45,58 @@ class ProjectDetailActivity : AppCompatActivity() {
         binding.toolbarContainer.textViewTitle.text = "Detail Proyek"
 
 
-
-
-
-
-
         binding.floatingButtonBack.setOnClickListener {
             Log.d("ProjectDetailActivity", "Back button clicked")
             finish()
         }
 
+        val factory = ProjectViewModelFactory(
+            (application as PropertioDeveloperApplication).repository
+        )
+        projectViewModel = ViewModelProvider(this, factory)[ProjectViewModel::class.java]
 
 
+        val idProject = intent.getIntExtra(PROJECT_ID, 0)
 
-        val projectJson = intent.getStringExtra(PROJECT_DATA)
-        val projectData = Gson().fromJson(projectJson, Project::class.java)
-
-        if (projectData == null) {
+        if (idProject == 0) {
             Log.e("ProjectDetailActivity", "projectData is null")
             finishActivity(RESULT_CANCELED)
         }
 
 
-        Log.i("ProjectDetailActivity", projectData.toString())
-        loadTextBasedData(projectData)
-        loadTagsData(projectData)
-        loadVideo(projectData.projectVideos)
-        loadImage(projectData.projectPhotos)
+        lifecycleScope.launch {
+            var projectData =  projectViewModel.getProjectById(idProject)
 
-        if (projectData.projectPhotos.isNullOrEmpty()) {
-            Log.w("ProjectDetailActivity", "projectPhotos is null")
-        } else {
-            binding.viewPagerCarousel.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    selectedDot(position)
-                    super.onPageSelected(position)
+            Log.i("ProjectDetailActivity", projectData.toString())
+
+            loadLocalData(projectData)
+
+            fetchDetailData(projectData.id)
+            // Refresh ProjectData
+
+            projectData =  projectViewModel.getProjectById(idProject)
+
+            if ((projectData.addressLatitude != null) && (projectData.addressLongitude != null)) {
+                binding.buttonOpenMaps.setOnClickListener {
+                    Log.d("ProjectDetailActivity", "Open Maps button clicked")
+
+                    val intentToMaps = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://www.google.com/maps/search/?api=1&query=${projectData.addressLatitude},${projectData.addressLongitude}")
+                    )
+                    Log.d("ProjectDetailActivity", "intentToMaps: ${projectData.addressLatitude}, ${projectData.addressLongitude}")
+                    startActivity(intentToMaps)
+
                 }
-            })
-
-            carouselAdapter = CarouselAdapter(carouselList)
-            binding.viewPagerCarousel.adapter = carouselAdapter
-            dots = ArrayList<TextView>()
-            setIndicator()
-
-        }
-
-
-        binding.buttonOpenMaps.setOnClickListener {
-            Log.d("ProjectDetailActivity", "Open Maps button clicked")
-
-            projectData.address?.let { addressData ->
-                val intentToMaps = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("https://www.google.com/maps/search/?api=1&query=${addressData.addressLatitude},${addressData.addressLongitude}")
-                )
-                Log.d("ProjectDetailActivity", "intentToMaps: $addressData")
-                startActivity(intentToMaps)
+            } else {
+                Log.w("ProjectDetailActivity", "addressLatitude or addressLongitude is null")
             }
         }
+
+
+
+
+        unitRecycler()
 
 
 
@@ -108,7 +107,98 @@ class ProjectDetailActivity : AppCompatActivity() {
 
     }
 
-    private fun loadImage(photos: List<ProjectPhoto>?) {
+
+
+
+    private fun unitRecycler() {
+        // TODO: Buat recycler untuk unit
+    }
+
+
+    private fun loadLocalData(project: ProjectTable) {
+        with(binding) {
+            textViewHeadline.text = project.headline
+            textViewProjectTitle.text = project.title
+            textViewCode.text = project.projectCode
+            textViewDescription.text = project.description
+            textViewAddress.text = addressFormatter(project)
+        }
+    }
+
+    private fun fetchDetailData(id: Int) {
+        Log.d("ProjectDetailActivity", "fetchDetailData: $id")
+        val retro = Retro(TokenManager(this).token!!)
+            .getRetroClientInstance()
+            .create(DeveloperApi::class.java)
+
+        retro.getProjectDetail(id).enqueue(object : retrofit2.Callback<ProjectDetail> {
+            override fun onResponse(
+                call: retrofit2.Call<ProjectDetail>,
+                response: retrofit2.Response<ProjectDetail>
+            ) {
+                if (response.isSuccessful) {
+                    val project = response.body()?.data
+                    if (project != null) {
+                        Log.i("ProjectDetailActivity", "project: $project")
+
+                        loadTextBasedData(project)
+                        loadTagsData(project)
+                        loadVideo(project.projectVideos)
+                        loadImage(project.projectPhotos)
+
+                        updateTable(project)
+
+                        if (project.projectPhotos.isNullOrEmpty()) {
+                            Log.w("ProjectDetailActivity", "projectPhotos is null")
+                        } else {
+                            binding.viewPagerCarousel.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                                override fun onPageSelected(position: Int) {
+                                    selectedDot(position)
+                                    super.onPageSelected(position)
+                                }
+                            })
+
+                            carouselAdapter = CarouselAdapter(carouselList)
+                            binding.viewPagerCarousel.adapter = carouselAdapter
+                            dots = ArrayList<TextView>()
+                            setIndicator()
+
+                        }
+
+                    } else {
+                        Log.w("ProjectDetailActivity", "project is null")
+                    }
+                } else {
+                    Log.w("ProjectDetailActivity", "response is not successful")
+                }
+            }
+
+            override fun onFailure(
+                call: retrofit2.Call<ProjectDetail>,
+                t: Throwable
+            ) {
+                Log.e("ProjectDetailActivity", "onFailure: $t")
+            }
+        })
+    }
+
+    private fun updateTable(project: ProjectDetail.ProjectDeveloper) {
+        Log.w("ProjectDetailActivity", "updateTable: $project")
+        projectViewModel.updateLocalProject(
+            project.id!!,
+            project.headline!!,
+            project.description!!,
+            project.certificate!!,
+            project.address?.postalCode ?: "",
+            project.address!!.latitude!!,
+            project.address!!.longitude!!
+        )
+
+
+    }
+
+
+    private fun loadImage(photos: List<ProjectDetail.ProjectDeveloper.ProjectPhoto>?) {
         if (!photos.isNullOrEmpty()) {
             for (photo in photos) {
                 Log.d("ProjectDetailActivity", "photo: ${photo.filename}")
@@ -135,7 +225,7 @@ class ProjectDetailActivity : AppCompatActivity() {
     }
 
 
-    private fun loadVideo(videos: List<ProjectVideo>?) {
+    private fun loadVideo(videos: List<ProjectDetail.ProjectDeveloper.ProjectVideo>?) {
         if (videos != null) {
             var found = false
             for (video in videos) {
@@ -180,7 +270,7 @@ class ProjectDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadTagsData(project: Project) {
+    private fun loadTagsData(project: ProjectDetail.ProjectDeveloper) {
         with(binding) {
             textViewPropertyType.text = project.propertyType
             textViewCertificateType.text = project.certificate
@@ -190,13 +280,13 @@ class ProjectDetailActivity : AppCompatActivity() {
     }
 
 
-    private fun loadTextBasedData(project: Project) {
+    private fun loadTextBasedData(project: ProjectDetail.ProjectDeveloper) {
         with(binding) {
-            textViewHeadline.text = project.headline
-            textViewProjectTitle.text = project.title
-            textViewCode.text = project.projectCode
-            textViewDescription.text = project.description
-            textViewCompletedAt.text = project.completedAt
+            textViewHeadline.text = project.headline ?: textViewHeadline.text.toString()
+            textViewProjectTitle.text = project.title ?: textViewProjectTitle.text.toString()
+            textViewCode.text = project.projectCode ?: textViewCode.text.toString()
+            textViewDescription.text = project.description ?: textViewDescription.text.toString()
+            textViewCompletedAt.text = project.completedAt ?: textViewCompletedAt.text.toString()
             Log.i("ProjectDetailActivity", "loadTextBasedData Without Formatter Success")
 
             textViewViews.text = viewsFormatter(project.countViews)
@@ -208,13 +298,16 @@ class ProjectDetailActivity : AppCompatActivity() {
 
     }
 
-    private fun addressFormatter(address: ProjectAddress?): String {
+    private fun addressFormatter(address: ProjectDetail.ProjectDeveloper.ProjectAddress?): String {
         return if (address != null) {
-            "${address.addressAddress}, ${address.addressDistrict}, ${address.addressCity}, ${address.addressProvince}"
+            "${address.address}, ${address.district}, ${address.city}, ${address.province}, ${address.postalCode}"
         } else {
             Log.w("ProjectDetailActivity", "address is null")
             "Address not found"
         }
+    }
+    private fun addressFormatter(project: ProjectTable) : String {
+        return "${project.addressAddress}, ${project.addressDistrict}, ${project.addressCity}, ${project.addressProvince}, ${project.addressPostalCode}"
     }
 
     private fun datesFormatter(createDate: String?): String {
@@ -270,7 +363,7 @@ class ProjectDetailActivity : AppCompatActivity() {
 
     companion object {
         // NAME
-        const val PROJECT_DATA = "project_data"
+        const val PROJECT_ID = "project_id"
     }
 
 

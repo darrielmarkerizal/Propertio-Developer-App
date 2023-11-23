@@ -3,7 +3,7 @@
     <style name="Base.Theme.PropertioDeveloperApp" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowFullscreen">true</item>
         <item name="android:statusBarColor">@android:color/white</item>
     </style>
 
