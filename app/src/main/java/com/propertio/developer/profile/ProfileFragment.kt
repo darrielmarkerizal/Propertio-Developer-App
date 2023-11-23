@@ -4,9 +4,11 @@ import android.R
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -61,6 +63,20 @@ class ProfileFragment : Fragment() {
             val intent = Intent(activity, ChangePassword::class.java)
             startActivity(intent)
         }
+
+        binding.spinnerProvinsiProfile.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                val selectedProvince = profileViewModel.provincesData.value?.get(position)
+                if (selectedProvince != null) {
+                    profileViewModel.fetchCityData(selectedProvince.id)
+                    Log.d("ProfileFragment", "Selected province: id = ${selectedProvince.id}, name = ${selectedProvince.name}")
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Do nothing
+            }
+        }
     }
 
     private fun updateUI(data: ProfileResponse.ProfileData?) {
@@ -74,9 +90,12 @@ class ProfileFragment : Fragment() {
                 putString("email", it.email)
                 commit()
             }
+
             binding.edtNamaLengkapProfil.setText(userData?.fullName)
             binding.edtNomorTeleponProfil.setText(userData?.phone)
             binding.edtAlamatProfil.setText(userData?.address)
         }
     }
+
+
 }

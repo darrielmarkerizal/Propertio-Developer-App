@@ -21,6 +21,10 @@ class ProfileViewModel(private val token: String) : ViewModel() {
     private val _provincesData = MutableLiveData<List<ProfileResponse.Province>>()
     val provincesData: LiveData<List<ProfileResponse.Province>> get() = _provincesData
 
+    private val _cityData = MutableLiveData<List<ProfileResponse.City>>()
+    val cityData: LiveData<List<ProfileResponse.City>> get() = _cityData
+
+
     val combinedData = MediatorLiveData<Pair<ProfileResponse.ProfileData?, List<ProfileResponse.Province>?>>().apply {
         var profileData: ProfileResponse.ProfileData? = null
         var provincesData: List<ProfileResponse.Province>? = null
@@ -84,6 +88,30 @@ class ProfileViewModel(private val token: String) : ViewModel() {
                     } else {
                         val errorBody = response.errorBody()?.string()
                         Log.e("ProfileViewModel", "Failed to fetch provinces data: $errorBody")
+                    }
+                }
+            })
+        }
+    }
+
+    fun fetchCityData(provinceId: String) {
+        viewModelScope.launch {
+            val retro = Retro(token)
+            val profileApi = retro.getRetroClientInstance().create(ProfileApi::class.java)
+
+            profileApi.getCities(provinceId).enqueue(object : Callback<List<ProfileResponse.City>> {
+                override fun onFailure(call: Call<List<ProfileResponse.City>>, t: Throwable) {
+                    Log.e("ProfileViewModel", "Failed to fetch city data: ${t.message}")
+                }
+
+                override fun onResponse(call: Call<List<ProfileResponse.City>>, response: Response<List<ProfileResponse.City>>) {
+                    if (response.isSuccessful) {
+                        _cityData.value = response.body()
+                        Log.d("ProfileViewModel", "City data fetched successfully for province id: $provinceId")
+                        Log.d("ProfileViewModel", "City response: ${response.body()}")
+                    } else {
+                        val errorBody = response.errorBody()?.string()
+                        Log.e("ProfileViewModel", "Failed to fetch city data: $errorBody")
                     }
                 }
             })
