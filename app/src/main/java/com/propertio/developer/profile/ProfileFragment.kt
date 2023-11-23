@@ -19,6 +19,8 @@ import com.propertio.developer.api.DomainURL
 import com.propertio.developer.api.DomainURL.DOMAIN
 import com.propertio.developer.api.profile.ProfileResponse
 import com.propertio.developer.databinding.FragmentProfileBinding
+import android.app.AlertDialog
+
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
@@ -61,6 +63,24 @@ class ProfileFragment : Fragment() {
                 updateUI(profileData)
             }
         })
+
+        binding.imgProfil.setOnClickListener {
+            // Create an AlertDialog.Builder
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Pilih Aksi")
+                .setItems(arrayOf("Hapus Foto", "Ganti Foto")) { dialog, which ->
+                    when (which) {
+                        0 -> {
+                            // Handle "Hapus Foto" action
+                        }
+                        1 -> {
+                            // Handle "Ganti Foto" action
+                        }
+                    }
+                }
+            // Create and show the AlertDialog
+            builder.create().show()
+        }
 
         profileViewModel.combinedCityData.observe(viewLifecycleOwner, Observer { combined ->
             val profileData = combined.first
