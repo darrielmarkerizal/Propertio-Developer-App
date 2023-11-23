@@ -32,12 +32,29 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         val viewModelFactory = ProfileViewModelFactory(TokenManager(requireContext()).token!!)
         profileViewModel = ViewModelProvider(this, viewModelFactory).get(ProfileViewModel::class.java)
 
-        profileViewModel.profileData.observe(viewLifecycleOwner, Observer { data ->
-            updateUI(data)
+        profileViewModel.combinedData.observe(viewLifecycleOwner, Observer { combined ->
+            val profileData = combined.first
+            val provincesData = combined.second
+
+            if (profileData != null && provincesData != null) {
+                val provinceNames = provincesData.map { it.name }
+                val provinceAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, provinceNames)
+                provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                binding.spinnerProvinsiProfile.adapter = provinceAdapter
+
+                // Set the selected item in the spinner to the user's province
+                val userProvince = profileData.userData?.province
+                if (userProvince != null) {
+                    val provincePosition = provinceNames.indexOf(userProvince)
+                    binding.spinnerProvinsiProfile.setSelection(provincePosition)
+                }
+
+                // Update the UI with the profile data
+                updateUI(profileData)
+            }
         })
 
         binding.btnUbahKataSandiProfil.setOnClickListener {
@@ -59,20 +76,6 @@ class ProfileFragment : Fragment() {
             }
             binding.edtNamaLengkapProfil.setText(userData?.fullName)
             binding.edtNomorTeleponProfil.setText(userData?.phone)
-
-            val provinces = listOf(userData?.province)
-            val provinceAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, provinces)
-            provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.spinnerProvinsiProfile.adapter = provinceAdapter
-            val provincePosition = provinces.indexOf(userData?.province)
-            binding.spinnerProvinsiProfile.setSelection(provincePosition)
-
-            val cities = listOf(userData?.city)
-            val cityAdapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, cities)
-            cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.spinnerKotaProfile.adapter = cityAdapter
-            val cityPosition = cities.indexOf(userData?.city)
-            binding.spinnerKotaProfile.setSelection(cityPosition)
             binding.edtAlamatProfil.setText(userData?.address)
         }
     }

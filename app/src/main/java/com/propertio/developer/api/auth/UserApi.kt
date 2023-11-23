@@ -16,5 +16,4 @@ interface UserApi {
 
     @POST("/v1/reset-password")
     fun changePassword(@Body request: ChangePasswordRequest): Call<ChangePasswordResponse>
-
 }
