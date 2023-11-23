@@ -51,8 +51,8 @@
                 android:scaleType="fitXY"/>
             <ImageView
                 android:id="@+id/img_profil"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:background="@drawable/bg_foto_profil"
                 app:layout_constraintTop_toTopOf="@id/guide_3"
                 app:layout_constraintBottom_toBottomOf="@id/guide_2"
@@ -270,6 +270,7 @@
                             android:inputType="textMultiLine"
                             android:lines="5"
                             android:maxLines="5"
+                            android:paddingHorizontal="15dp"
                             style="@style/DesignSystem.TextInputEditText"
                             android:scrollbars="vertical" />
                     </LinearLayout>

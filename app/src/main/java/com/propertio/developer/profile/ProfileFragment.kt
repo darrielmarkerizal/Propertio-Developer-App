@@ -13,7 +13,10 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.propertio.developer.TokenManager
+import com.propertio.developer.api.DomainURL
+import com.propertio.developer.api.DomainURL.DOMAIN
 import com.propertio.developer.api.profile.ProfileResponse
 import com.propertio.developer.databinding.FragmentProfileBinding
 
@@ -84,6 +87,14 @@ class ProfileFragment : Fragment() {
             val intent = Intent(activity, ChangePassword::class.java)
             startActivity(intent)
         }
+
+        profileViewModel.profileData.observe(viewLifecycleOwner, Observer { profileData ->
+            val pictureProfileUrl = DomainURL.DOMAIN + profileData?.userData?.pictureProfile
+            Glide.with(requireContext())
+                .load(pictureProfileUrl)
+                .circleCrop()
+                .into(binding.imgProfil)
+        })
 
         binding.spinnerProvinsiProfile.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
