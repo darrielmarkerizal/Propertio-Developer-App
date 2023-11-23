@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".unit.CreateUnitUmumFragment"
+    tools:context=".unit.form.CreateUnitUmumFragment"
     android:paddingHorizontal="32dp"
     android:layout_marginTop="14dp"
     android:layout_marginBottom="35dp"
