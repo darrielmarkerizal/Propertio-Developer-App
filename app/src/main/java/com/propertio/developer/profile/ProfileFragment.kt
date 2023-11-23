@@ -2,6 +2,7 @@ package com.propertio.developer.profile
 
 import android.R
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -38,6 +39,11 @@ class ProfileFragment : Fragment() {
         profileViewModel.profileData.observe(viewLifecycleOwner, Observer { data ->
             updateUI(data)
         })
+
+        binding.btnUbahKataSandiProfil.setOnClickListener {
+            val intent = Intent(activity, ChangePassword::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun updateUI(data: ProfileResponse.ProfileData?) {
@@ -46,6 +52,11 @@ class ProfileFragment : Fragment() {
 
             binding.txtIdProfile.text = it.accountId
             binding.txtEmailProfile.text = it.email
+            val sharedPreferences = requireActivity().getSharedPreferences("account_data", Context.MODE_PRIVATE)
+            with(sharedPreferences.edit()) {
+                putString("email", it.email)
+                commit()
+            }
             binding.edtNamaLengkapProfil.setText(userData?.fullName)
             binding.edtNomorTeleponProfil.setText(userData?.phone)
 
