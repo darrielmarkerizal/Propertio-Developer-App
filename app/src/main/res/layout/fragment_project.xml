@@ -163,6 +163,12 @@
                 tools:itemCount="2"
                 tools:listitem="@layout/template_card_project" />
 
+            <ProgressBar
+                android:id="@+id/progress_bar_project"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"/>
+
         </LinearLayout>
 
 
