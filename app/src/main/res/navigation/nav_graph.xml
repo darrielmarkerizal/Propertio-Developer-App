@@ -24,4 +24,22 @@
         android:name="com.propertio.developer.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/createProjectInformasiUmumFragment"
+        android:name="com.propertio.developer.project.form.CreateProjectInformasiUmumFragment"
+        android:label="fragment_create_project_informasi_umum"
+        tools:layout="@layout/fragment_create_project_informasi_umum" >
+        <action
+            android:id="@+id/action_createProjectInformasiUmumFragment_to_createProjectLokasiFragment"
+            app:destination="@id/createProjectLokasiFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createProjectLokasiFragment"
+        android:name="com.propertio.developer.project.form.CreateProjectLokasiFragment"
+        android:label="fragment_create_project_lokasi"
+        tools:layout="@layout/fragment_create_project_lokasi" >
+        <action
+            android:id="@+id/action_createProjectLokasiFragment_to_createProjectInformasiUmumFragment"
+            app:destination="@id/createProjectInformasiUmumFragment" />
+    </fragment>
 </navigation>

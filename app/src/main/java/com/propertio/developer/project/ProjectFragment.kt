@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.propertio.developer.PropertioDeveloperApplication
 import com.propertio.developer.TokenManager
 import com.propertio.developer.databinding.FragmentProjectBinding
+import com.propertio.developer.project.form.ProjectFormActivity
 import com.propertio.developer.project.list.ProjectAdapter
 
 
@@ -63,6 +64,13 @@ class ProjectFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setRecyclerListProject()
+
+        with(binding) {
+            fabAddProject.setOnClickListener {
+                val intent = Intent(requireContext(), ProjectFormActivity::class.java)
+                launcher.launch(intent)
+            }
+        }
 
 
     }
