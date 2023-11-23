@@ -75,6 +75,9 @@
         <item name="android:height">32dp</item>
         <item name="android:textSize">12sp</item>
     </style>
+    <style name="button.secondary.s.rounded">
+        <item name="android:background">@drawable/button_secondary_rounded_rectangle</item>
+    </style>
 
     <!-- Tertiary   -->
     <style name="button.tertiary" parent="Base.Theme.button">
@@ -137,6 +140,10 @@
         <item name="drawableStartCompat">@drawable/baseline_add_circle_outline_24</item>
         <item name="drawableTint">@color/text_black_placeholder</item>
         <item name="android:textColor">@color/text_black_placeholder</item>
+        <item name="android:paddingStart">14.5dp</item>
+        <item name="android:paddingEnd">14.5dp</item>
+        <item name="android:elevation">0dp</item>
+        <item name="android:textAppearance">@style/text.regular.size14</item>
     </style>
 
     <!--  Horizontal More Button  -->

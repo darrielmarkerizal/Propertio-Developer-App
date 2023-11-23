@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".project.form.CreateProjectMediaFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="32.5dp"
+        android:paddingBottom="150dp"
+        >
+
+        <TextView
+            android:id="@+id/text_title_project_media"
+            style="@style/text.bold.size22"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="32.5dp"
+            android:text="Membuat Proyek"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_view_project_photo_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="32dp"
+            android:text="Foto"
+            android:textAppearance="@style/text.semi_bold.size14"
+            app:layout_constraintEnd_toStartOf="@+id/link_text_view_project_photo_delete"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/text_title_project_media"
+            app:layout_constraintTop_toBottomOf="@+id/text_title_project_media" />
+
+        <TextView
+            android:id="@+id/link_text_view_project_photo_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/text.regular.size14"
+            android:textColor="@color/red_badges"
+            android:text="Hapus semua"
+            app:layout_constraintEnd_toEndOf="@+id/text_title_project_media"
+            app:layout_constraintTop_toTopOf="@+id/text_view_project_photo_label" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_unggah_photo_project"
+            style="@style/button.add"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:elevation="0dp"
+            android:text="Unggah Foto"
+            app:layout_constraintEnd_toEndOf="@+id/text_title_project_media"
+            app:layout_constraintStart_toStartOf="@+id/text_title_project_media"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_project_photo_label" />
+
+        <TextView
+            android:id="@+id/text_view_button_unggah_photo_project_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textAppearance="@style/text.medium.size11"
+            android:text="Gambar yang pada urutan pertama akan menjadi gambar cover."
+            app:layout_constraintEnd_toEndOf="@+id/button_unggah_photo_project"
+            app:layout_constraintStart_toStartOf="@+id/button_unggah_photo_project"
+            app:layout_constraintTop_toBottomOf="@+id/button_unggah_photo_project" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_list_unggah_foto"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingStart="28.5dp"
+            android:scrollbars="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_button_unggah_photo_project_label"
+            tools:itemCount="1"
+            tools:listitem="@layout/item_unggah_photo" />
+
+        <TextView
+            android:id="@+id/text_view_video_title_media_project"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Video"
+            android:textAppearance="@style/text.semi_bold.size14"
+            app:layout_constraintStart_toStartOf="@+id/text_view_project_photo_label"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_view_list_unggah_foto" />
+
+        <TextView
+            android:id="@+id/text_link_video_youtube_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textAppearance="@style/text.regular.size16"
+            android:text="Link Video"
+            app:layout_constraintStart_toStartOf="@+id/text_view_video_title_media_project"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_video_title_media_project" />
+
+        <EditText
+            android:id="@+id/edit_text_link_youtube_media_project"
+            style="@style/DesignSystem.TextInputEditText"
+            android:layout_width="0dp"
+            android:layout_marginTop="8dp"
+            android:inputType="textUri"
+            android:hint="Masukkan link video Youtube"
+            android:maxLines="1"
+            app:layout_constraintEnd_toEndOf="@+id/text_title_project_media"
+            app:layout_constraintStart_toStartOf="@+id/text_link_video_youtube_label"
+            app:layout_constraintTop_toBottomOf="@+id/text_link_video_youtube_label" />
+
+        <TextView
+            android:id="@+id/text_link_video_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textAppearance="@style/text.regular.size11"
+            android:text="Link yang dimasukkan merupakan video dari Youtube, untuk memasukkan dapat melihat :"
+            app:layout_constraintEnd_toEndOf="@+id/edit_text_link_youtube_media_project"
+            app:layout_constraintStart_toStartOf="@+id/edit_text_link_youtube_media_project"
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_link_youtube_media_project" />
+
+        <TextView
+            android:id="@+id/link_text_link_video_tutorial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textAppearance="@style/text.regular.size11"
+            android:textColor="@color/primary"
+            android:text="Tutorial Menambahkan Video"
+            app:layout_constraintStart_toStartOf="@+id/text_link_video_description"
+            app:layout_constraintTop_toBottomOf="@+id/text_link_video_description" />
+
+        <TextView
+            android:id="@+id/text_nama_virtual_tour_proyek_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Nama Virtual Tour"
+            android:textAppearance="@style/text.regular.size16"
+            app:layout_constraintStart_toStartOf="@+id/text_link_virtual_tour_label"
+            app:layout_constraintTop_toBottomOf="@+id/button_hubungi_kami_media_proyek" />
+
+        <EditText
+            android:id="@+id/edit_text_nama_virtual_tour"
+            android:layout_width="0dp"
+            style="@style/DesignSystem.TextInputEditText"
+            android:layout_marginTop="8dp"
+            android:hint="Nama Virtual Tour"
+            app:layout_constraintEnd_toEndOf="@+id/text_title_project_media"
+            app:layout_constraintStart_toStartOf="@+id/text_nama_virtual_tour_proyek_label"
+            app:layout_constraintTop_toBottomOf="@+id/text_nama_virtual_tour_proyek_label" />
+
+        <TextView
+            android:id="@+id/text_link_virtual_tour_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Link Virtual Tour"
+            android:textAppearance="@style/text.regular.size16"
+            app:layout_constraintStart_toStartOf="@+id/text_link_video_youtube_label"
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_nama_virtual_tour" />
+
+        <EditText
+            android:id="@+id/editText"
+            style="@style/DesignSystem.TextInputEditText"
+            android:layout_width="0dp"
+            android:layout_marginTop="8dp"
+            android:hint="Masukkan nama virtual tour"
+            app:layout_constraintEnd_toEndOf="@+id/edit_text_link_youtube_media_project"
+            app:layout_constraintStart_toStartOf="@+id/text_link_virtual_tour_label"
+            app:layout_constraintTop_toBottomOf="@+id/text_link_virtual_tour_label" />
+
+        <TextView
+            android:id="@+id/text_view_virtual_tour_proyek_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Virtual Tour Proyek"
+            android:textAppearance="@style/text.semi_bold.size14"
+            app:layout_constraintStart_toStartOf="@+id/link_text_link_video_tutorial"
+            app:layout_constraintTop_toBottomOf="@+id/link_text_link_video_tutorial" />
+
+        <TextView
+            android:id="@+id/text_view_virtual_tour_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Ingin membuat Virtual Tour? Silahkan klik di sini!"
+            app:layout_constraintEnd_toEndOf="@+id/text_title_project_media"
+            app:layout_constraintStart_toStartOf="@+id/text_view_virtual_tour_proyek_title"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_virtual_tour_proyek_title" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_hubungi_kami_media_proyek"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_tertiary_rounded_rectangle"
+            android:backgroundTint="#0689FF"
+            android:paddingHorizontal="20dp"
+            android:text="Hubungi Kami"
+            android:textAppearance="@style/text.medium.size14"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="@+id/text_view_virtual_tour_description"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_virtual_tour_description" />
+
+        <TextView
+            android:id="@+id/text_view_dokumen_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textAppearance="@style/text.semi_bold.size14"
+            android:text="Dokumen"
+            app:layout_constraintStart_toStartOf="@+id/text_link_virtual_tour_label"
+            app:layout_constraintTop_toBottomOf="@+id/editText" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_tambahkan_dokumen_project"
+            style="@style/button.add"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:elevation="0dp"
+            android:text="Tambahkan"
+            app:layout_constraintEnd_toEndOf="@+id/text_title_project_media"
+            app:layout_constraintStart_toStartOf="@+id/text_view_dokumen_label"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_dokumen_label" />
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</androidx.core.widget.NestedScrollView>
