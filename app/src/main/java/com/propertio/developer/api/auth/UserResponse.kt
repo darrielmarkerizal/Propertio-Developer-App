@@ -35,13 +35,6 @@ class UserResponse : DefaultResponse(){
             @SerializedName("picture_profile_file")
             @Expose
             var pictureProfileFile: String? = null
-
-
-
         }
-
-
     }
-
-
 }

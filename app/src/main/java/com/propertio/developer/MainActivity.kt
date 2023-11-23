@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         fetchProjectListData(token!!)
 
 
-
         // Toolbar
         val toolbar = binding.toolbarContainer
         val theToolbar = binding.toolbarContainer.root

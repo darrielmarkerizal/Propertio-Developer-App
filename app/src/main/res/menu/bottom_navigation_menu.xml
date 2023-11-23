@@ -8,9 +8,9 @@
         android:title="Project"
         android:icon="@drawable/ant_design_project_filled"/>
     <item android:id="@+id/message"
-        android:title="Message"
+        android:title="Pesan"
         android:icon="@drawable/ic_round_chat"/>
     <item android:id="@+id/profile_setting"
-        android:title="Profile Settings"
+        android:title="Profile"
         android:icon="@drawable/icon_picture_filled"/>
 </menu>

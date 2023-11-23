@@ -41,6 +41,11 @@
     <!--  Error  -->
     <color name="text_error">#B3261E</color>
 
+    <color name="navbar_color">#EEEEEE</color>
+
+    <!--  Ripple  -->
+    <color name="transparent">#00000000</color>
+
 
 
 
