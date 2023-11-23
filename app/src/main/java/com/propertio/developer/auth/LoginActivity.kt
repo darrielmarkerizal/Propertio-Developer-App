@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
 import com.propertio.developer.MainActivity
+import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.auth.UserApi
 import com.propertio.developer.api.auth.UserRequest
@@ -20,11 +21,17 @@ import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
     private val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
-
+    private lateinit var tokenManager: TokenManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        tokenManager = TokenManager(this@LoginActivity)
+
+        if (tokenManager.token != null) {
+            goToMainActivity()
+        }
 
         with(binding) {
 
@@ -77,6 +84,13 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun goToMainActivity() {
+        val intentToMainActivity = Intent(this@LoginActivity, MainActivity::class.java)
+        intentToMainActivity.putExtra("toastMessage", "Berhasil Login")
+        startActivity(intentToMainActivity)
+        finish()
+    }
+
     private fun loginPassDeveloperTesting() {
         //TODO: Hapus kode developer  ini ketika selesai
         login("developer@mail.com", "11111111")
@@ -101,19 +115,13 @@ class LoginActivity : AppCompatActivity() {
                         return
                     }
                     if (user.data!!.user!!.role == "developer") {
-                        val sharedPreferences = getSharedPreferences("account_data", MODE_PRIVATE)
-                        with(sharedPreferences.edit()) {
-                            putString("token", user.data!!.token)
-                            commit()
+
+
+                        user.data!!.token?.let {
+                            tokenManager.saveToken(it)
                         }
 
-                        val tokenFromPrefs = sharedPreferences.getString("token", null)
-                        Log.d("LoginActivity", "Token from prefs: $tokenFromPrefs")
-
-                        val intentToMainActivity = Intent(this@LoginActivity, MainActivity::class.java)
-                        intentToMainActivity.putExtra("toastMessage", "Berhasil Login")
-                        startActivity(intentToMainActivity)
-                        finish()
+                        goToMainActivity()
                     }
                     else {
                         Toast.makeText(this@LoginActivity, "Email yang Anda gunakan bukan akun developer", Toast.LENGTH_SHORT).show()

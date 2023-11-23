@@ -5,27 +5,35 @@ import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.annotation.GlideType
-import com.google.gson.Gson
 import com.propertio.developer.api.DomainURL
+import com.propertio.developer.database.project.ProjectTable
 import com.propertio.developer.databinding.TemplateCardProjectBinding
-import com.propertio.developer.model.Project
 import com.propertio.developer.project.ProjectDetailActivity
-import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_DATA
+import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_ID
 
 
-typealias onClickProject = (Project) -> Unit
 class ProjectAdapter(
     private val context: Context,
-    private var projectList : List<Project>,
-) : RecyclerView.Adapter<ProjectAdapter.ItemProjectViewHolder>() {
+) : ListAdapter<ProjectTable, ProjectAdapter.ItemProjectViewHolder>(ProjectDiffCallback()) {
+
+    class ProjectDiffCallback : DiffUtil.ItemCallback<ProjectTable>() {
+        override fun areItemsTheSame(oldItem: ProjectTable, newItem: ProjectTable): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: ProjectTable, newItem: ProjectTable): Boolean {
+            return oldItem == newItem
+        }
+    }
 
     inner class ItemProjectViewHolder(
         private val binding: TemplateCardProjectBinding
     ) : RecyclerView.ViewHolder(binding.root){
-        fun bind(data: Project) {
+        fun bind(data: ProjectTable) {
             with(binding) {
                 // Essential
                 textViewProjectTitle.text = data.title
@@ -33,7 +41,7 @@ class ProjectAdapter(
                 textViewLeads.text = data.countLeads.toString()
 
                 with(data){
-                    val projectAddress = "${this.address?.addressAddress}, ${this.address?.addressDistrict}, ${this.address?.addressCity}, ${this.address?.addressProvince}"
+                    val projectAddress = "${this.addressAddress}, ${this.addressDistrict}, ${this.addressCity}, ${this.addressProvince}"
                     textViewAddress.text = projectAddress
                 }
 
@@ -44,29 +52,25 @@ class ProjectAdapter(
 
 
                 // Image
-                data.projectPhotos?.forEach {
-                    if (it.isCover == "1") {
-                        val imageURL: String = DomainURL.DOMAIN + it.filename
-                        Log.d("ProjectAdapter", "imageURL: $imageURL")
-                        Glide.with(context)
-                            .load(imageURL)
-                            .into(imageViewThumbnail)
-                    }
-                }
+                val imageURL: String = DomainURL.DOMAIN + data.photo
+                Log.d("ProjectAdapter", "imageURL: $imageURL")
+                Glide.with(context)
+                    .load(imageURL)
+                    .into(imageViewThumbnail)
+
 
 
                 // button
                 buttonRincian.setOnClickListener {
                     Log.d("ProjectAdapter", "Repost button clicked")
                     val intentToDetailProject = Intent(context, ProjectDetailActivity::class.java)
-                    val projectJson = Gson().toJson(data)
-                    intentToDetailProject.putExtra(PROJECT_DATA, projectJson)
+                    intentToDetailProject.putExtra(PROJECT_ID, data.id)
                     context.startActivity(intentToDetailProject)
                 }
 
 
                 // Additional
-                textViewDatetime.text = data.updatedAt
+                textViewDatetime.text = data.postedAt
 
 
             }
@@ -84,15 +88,11 @@ class ProjectAdapter(
         return ItemProjectViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = projectList.size
-
     override fun onBindViewHolder(holder: ItemProjectViewHolder, position: Int) {
-        holder.bind(projectList[position])
+        holder.bind(getItem(position))
     }
 
-    fun updateProjects(projects: List<Project>) {
-        projectList = projects
-        notifyDataSetChanged()
-    }
+
+
 
 }

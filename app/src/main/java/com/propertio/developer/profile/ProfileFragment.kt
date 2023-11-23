@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.propertio.developer.TokenManager
 import com.propertio.developer.api.profile.ProfileResponse
 import com.propertio.developer.databinding.FragmentProfileBinding
 
@@ -31,8 +32,8 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val token = requireActivity().getSharedPreferences("account_data", Context.MODE_PRIVATE).getString("token", null)
-        val viewModelFactory = ProfileViewModelFactory(token!!)
+
+        val viewModelFactory = ProfileViewModelFactory(TokenManager(requireContext()).token!!)
         profileViewModel = ViewModelProvider(this, viewModelFactory).get(ProfileViewModel::class.java)
 
         profileViewModel.profileData.observe(viewLifecycleOwner, Observer { data ->
