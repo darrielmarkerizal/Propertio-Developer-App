@@ -5,6 +5,8 @@ import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.WorkerThread
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -53,11 +55,7 @@ class ProjectAdapter(
 
                 // Image
                 val imageURL: String = DomainURL.DOMAIN + data.photo
-                Log.d("ProjectAdapter", "imageURL: $imageURL")
-                Glide.with(context)
-                    .load(imageURL)
-                    .into(imageViewThumbnail)
-
+                loadImage(imageURL)
 
 
                 // button
@@ -75,6 +73,19 @@ class ProjectAdapter(
 
             }
 
+
+        }
+
+
+
+        private fun loadImage(imageURL: String) {
+            with(binding) {
+                Log.d("ProjectAdapter", "imageURL: $imageURL")
+                Glide.with(context)
+                    .load(imageURL)
+                    .thumbnail(0.1f)
+                    .into(imageViewThumbnail)
+            }
 
         }
 

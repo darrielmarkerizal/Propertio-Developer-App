@@ -73,6 +73,7 @@ class ProfileViewModel(private val token: String) : ViewModel() {
 
         addSource(this@ProfileViewModel.provincesData) {
             provincesData = it
+            Log.d("Profil", provincesData.toString())
             if (profileData != null && provincesData != null) {
                 value = Pair(profileData, provincesData)
             }
