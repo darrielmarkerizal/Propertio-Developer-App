@@ -22,6 +22,10 @@ import com.propertio.developer.databinding.FragmentProfileBinding
 import android.app.AlertDialog
 import com.propertio.developer.api.profile.ProfileUpdateRequest
 import android.app.Activity
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import com.propertio.developer.auth.LoginActivity
+import kotlinx.coroutines.launch
 
 
 class ProfileFragment : Fragment() {
@@ -50,6 +54,8 @@ class ProfileFragment : Fragment() {
 
         profileViewModel.combinedData.observe(viewLifecycleOwner, Observer { combined ->
             val profileData = combined.first
+
+            // TODO: Buat suspend atau dibuat cara agar menunggu value datang sebelum membuat dan memasang list
             val provincesData = combined.second
 
             if (profileData != null && provincesData != null) {
@@ -136,6 +142,21 @@ class ProfileFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>) {
                 // Do nothing
             }
+        }
+
+        binding.btnLogoutProfil.setOnClickListener{
+            // TODO: Ubah Stylenya
+            AlertDialog.Builder(requireContext()).apply {
+                setTitle("Logout")
+                setMessage("Are you sure you want to logout?")
+                setPositiveButton("Yes") { _, _ ->
+                    TokenManager(requireContext()).deleteToken()
+                    val intent = Intent(requireContext(), LoginActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
+                setNegativeButton("No", null)
+            }.show()
         }
     }
 

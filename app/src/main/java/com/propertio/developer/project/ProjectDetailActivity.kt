@@ -1,5 +1,6 @@
 package com.propertio.developer.project
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
+import com.propertio.developer.NumericalUnitConverter
 import com.propertio.developer.PropertioDeveloperApplication
 import com.propertio.developer.R
 import com.propertio.developer.TokenManager
@@ -23,20 +25,26 @@ import com.propertio.developer.carousel.CarouselAdapter
 import com.propertio.developer.carousel.ImageData
 import com.propertio.developer.database.project.ProjectTable
 import com.propertio.developer.databinding.ActivityProjectDetailBinding
+import com.propertio.developer.unit.list.UnitAdapter
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.create
 import java.util.regex.Pattern
 
 class ProjectDetailActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityProjectDetailBinding.inflate(layoutInflater)
     }
-    private val listOfNumericalUnit by lazy {resources.getStringArray(R.array.list_of_numerical_unit)}
     private val listOfMonth by lazy {resources.getStringArray(R.array.list_of_months)}
 
     private lateinit var carouselAdapter: CarouselAdapter
     private val carouselList = ArrayList<ImageData>()
     private lateinit var dots : ArrayList<TextView>
     private lateinit var projectViewModel: ProjectViewModel
+
+    private lateinit var unitAdapter: UnitAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,7 +104,8 @@ class ProjectDetailActivity : AppCompatActivity() {
 
 
 
-        unitRecycler()
+
+        unitRecycler(idProject)
 
 
 
@@ -110,8 +119,41 @@ class ProjectDetailActivity : AppCompatActivity() {
 
 
 
-    private fun unitRecycler() {
-        // TODO: Buat recycler untuk unit
+    private fun unitRecycler(id: Int) {
+        val retro = Retro(TokenManager(this).token!!)
+            .getRetroClientInstance()
+            .create(DeveloperApi::class.java)
+
+        retro.getProjectDetail(id).enqueue(object: Callback<ProjectDetail> {
+            override fun onResponse(call: Call<ProjectDetail>, response: Response<ProjectDetail>) {
+                // TODO: Handle Response
+
+                if (response.isSuccessful) {
+                    val project = response.body()?.data
+                    if (project != null) {
+                        setUnitRecycler(project)
+                    }
+                }
+
+
+            }
+
+            override fun onFailure(call: Call<ProjectDetail>, t: Throwable) {
+                // TODO: Handle Failure
+
+
+
+            }
+
+
+        })
+
+
+    }
+
+    private fun setUnitRecycler(project: ProjectDetail.ProjectDeveloper) {
+        //TODO: Set Unit Recycler
+//        unitAdapter = UnitAdapter(this, project.units)
     }
 
 
@@ -288,8 +330,7 @@ class ProjectDetailActivity : AppCompatActivity() {
             textViewDescription.text = project.description ?: textViewDescription.text.toString()
             textViewCompletedAt.text = project.completedAt ?: textViewCompletedAt.text.toString()
             Log.i("ProjectDetailActivity", "loadTextBasedData Without Formatter Success")
-
-            textViewViews.text = viewsFormatter(project.countViews)
+            textViewViews.text = NumericalUnitConverter.unitFormatter(project.countViews ?: 0, false)
             textViewPublished.text = datesFormatter(project.postedAt)
             textViewAddress.text = addressFormatter(project.address)
 
@@ -320,25 +361,6 @@ class ProjectDetailActivity : AppCompatActivity() {
         val day = date[2]
 
         return "$day $month $year"
-
-    }
-
-    private fun viewsFormatter(viewsIntUnSure: Int?) : String {
-        val viewsInt = viewsIntUnSure ?: 0
-        val views = viewsInt.toString()
-        Log.i("ProjectDetailActivity", "views: $views")
-
-        return if (views.length > 12) {
-            views.substring(0, views.length - 12) + listOfNumericalUnit[3]
-        } else if (views.length > 9) {
-            views.substring(0, views.length - 9) + listOfNumericalUnit[2]
-        } else if (views.length > 6) {
-            views.substring(0, views.length - 6) + listOfNumericalUnit[1]
-        } else if (views.length > 3) {
-            views.substring(0, views.length - 3) + listOfNumericalUnit[0]
-        } else {
-            views
-        }
 
     }
 
