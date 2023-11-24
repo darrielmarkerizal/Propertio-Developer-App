@@ -82,18 +82,5 @@
             />
     </LinearLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button_save"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="63dp"
-        android:visibility="visible"
-        android:text="Simpan"
-        style="@style/button.primary.l"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
