@@ -50,8 +50,9 @@
                 android:src="@drawable/bg_profil"
                 android:scaleType="fitXY"/>
             <ImageView
-                android:layout_width="75dp"
-                android:layout_height="75dp"
+                android:id="@+id/img_profil"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:background="@drawable/bg_foto_profil"
                 app:layout_constraintTop_toTopOf="@id/guide_3"
                 app:layout_constraintBottom_toBottomOf="@id/guide_2"
@@ -201,7 +202,11 @@
                             style="@style/DesignSystem.TextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:paddingHorizontal="15dp"/>
+                            android:dropDownWidth="match_parent"
+                            android:dropDownHeight="200dp"
+                            android:spinnerMode="dialog"
+                            android:paddingHorizontal="15dp"
+                            />
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -228,6 +233,9 @@
                             style="@style/DesignSystem.TextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
+                            android:dropDownWidth="match_parent"
+                            android:dropDownHeight="200dp"
+                            android:spinnerMode="dialog"
                             android:paddingHorizontal="15dp"
                             />
 
@@ -262,6 +270,7 @@
                             android:inputType="textMultiLine"
                             android:lines="5"
                             android:maxLines="5"
+                            android:paddingHorizontal="15dp"
                             style="@style/DesignSystem.TextInputEditText"
                             android:scrollbars="vertical" />
                     </LinearLayout>
