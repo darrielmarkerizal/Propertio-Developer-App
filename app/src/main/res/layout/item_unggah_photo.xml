@@ -16,26 +16,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/placeholder" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_text_input_caption_container"
+    <EditText
+        android:id="@+id/edit_text_caption_photo_card"
+        style="@style/DesignSystem.TextInputEditText"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="8dp"
+        android:hint="Caption"
+        android:inputType="textShortMessage"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textAppearance="@style/text.regular.size12"
         app:layout_constraintEnd_toEndOf="@+id/image_view_item_unggah_photo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_view_item_unggah_photo">
+        app:layout_constraintTop_toBottomOf="@+id/image_view_item_unggah_photo" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_text_caption_photo_card"
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:hint="Caption"
-            android:inputType="textShortMessage"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textAppearance="@style/text.regular.size12" />
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_cover_photo_card"
@@ -46,7 +41,7 @@
         android:text="Cover"
         app:layout_constraintEnd_toEndOf="@+id/image_view_item_unggah_photo"
         app:layout_constraintStart_toStartOf="@+id/image_view_item_unggah_photo"
-        app:layout_constraintTop_toBottomOf="@+id/layout_text_input_caption_container" />
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_caption_photo_card" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/button_delete_photo_card"

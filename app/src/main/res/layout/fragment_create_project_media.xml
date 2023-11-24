@@ -78,6 +78,7 @@
             android:layout_marginTop="16dp"
             android:paddingStart="28.5dp"
             android:scrollbars="horizontal"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_view_button_unggah_photo_project_label"
@@ -233,7 +234,6 @@
             app:layout_constraintEnd_toEndOf="@+id/text_title_project_media"
             app:layout_constraintStart_toStartOf="@+id/text_view_dokumen_label"
             app:layout_constraintTop_toBottomOf="@+id/text_view_dokumen_label" />
-
 
 
 

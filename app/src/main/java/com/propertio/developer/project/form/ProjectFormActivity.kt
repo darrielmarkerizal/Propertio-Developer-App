@@ -18,7 +18,8 @@ class ProjectFormActivity : AppCompatActivity() {
     private val formsFragment = listOf(
         CreateProjectInformasiUmumFragment(),
         CreateProjectLokasiFragment(),
-        CreateProjectInfrastrukturFragment(),
+        CreateProjectMediaFragment(),
+        CreateProjectInfrastrukturFragment()
     )
 
     private var currentFragmentIndex : Int = 0
