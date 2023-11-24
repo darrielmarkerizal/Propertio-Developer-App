@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="4dp">
+
+
+    <ImageView
+        android:id="@+id/image_view_item_unggah_photo"
+        android:layout_width="132dp"
+        android:layout_height="132dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/placeholder" />
+
+    <EditText
+        android:id="@+id/edit_text_caption_photo_card"
+        style="@style/DesignSystem.TextInputEditText"
+        android:layout_width="0dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="8dp"
+        android:hint="Caption"
+        android:inputType="textShortMessage"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textAppearance="@style/text.regular.size12"
+        app:layout_constraintEnd_toEndOf="@+id/image_view_item_unggah_photo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_item_unggah_photo" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_cover_photo_card"
+        style="@style/button.secondary.s.rounded"
+        android:layout_width="0dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="8dp"
+        android:text="Cover"
+        app:layout_constraintEnd_toEndOf="@+id/image_view_item_unggah_photo"
+        app:layout_constraintStart_toStartOf="@+id/image_view_item_unggah_photo"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_caption_photo_card" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/button_delete_photo_card"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:scaleType="fitXY"
+        android:padding="2dp"
+        android:background="@drawable/circle_red"
+        android:tint="@color/white"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        app:layout_constraintEnd_toEndOf="@+id/image_view_item_unggah_photo"
+        app:layout_constraintTop_toTopOf="@+id/image_view_item_unggah_photo" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
