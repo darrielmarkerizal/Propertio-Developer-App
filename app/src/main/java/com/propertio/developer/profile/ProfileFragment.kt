@@ -20,6 +20,7 @@ import com.propertio.developer.api.DomainURL.DOMAIN
 import com.propertio.developer.api.profile.ProfileResponse
 import com.propertio.developer.databinding.FragmentProfileBinding
 import android.app.AlertDialog
+import com.propertio.developer.api.profile.ProfileUpdateRequest
 
 
 class ProfileFragment : Fragment() {
@@ -64,24 +65,6 @@ class ProfileFragment : Fragment() {
             }
         })
 
-        binding.imgProfil.setOnClickListener {
-            // Create an AlertDialog.Builder
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("Pilih Aksi")
-                .setItems(arrayOf("Hapus Foto", "Ganti Foto")) { dialog, which ->
-                    when (which) {
-                        0 -> {
-                            // Handle "Hapus Foto" action
-                        }
-                        1 -> {
-                            // Handle "Ganti Foto" action
-                        }
-                    }
-                }
-            // Create and show the AlertDialog
-            builder.create().show()
-        }
-
         profileViewModel.combinedCityData.observe(viewLifecycleOwner, Observer { combined ->
             val profileData = combined.first
             val citiesData = combined.second
@@ -109,11 +92,24 @@ class ProfileFragment : Fragment() {
         }
 
         profileViewModel.profileData.observe(viewLifecycleOwner, Observer { profileData ->
-            val pictureProfileUrl = DomainURL.DOMAIN + profileData?.userData?.pictureProfile
+            val pictureProfileUrl = DOMAIN + profileData?.userData?.pictureProfile
             Glide.with(requireContext())
                 .load(pictureProfileUrl)
                 .circleCrop()
                 .into(binding.imgProfil)
+
+            binding.btnSimpanProfil.setOnClickListener {
+                Log.d("ProfileFragment", "Save button clicked")
+                val fullName = binding.edtNamaLengkapProfil.text.toString()
+                val phone = binding.edtNomorTeleponProfil.text.toString()
+                val address = binding.edtAlamatProfil.text.toString()
+                val city = binding.spinnerKotaProfile.selectedItem.toString()
+                val province = binding.spinnerProvinsiProfile.selectedItem.toString()
+
+                val request = ProfileUpdateRequest(fullName, phone, address, city, province)
+                Log.d("ProfileFragment", "Profile update request: $request")
+                profileViewModel.updateProfile(request)
+            }
         })
 
         binding.spinnerProvinsiProfile.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
