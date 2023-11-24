@@ -119,7 +119,7 @@
     <string name="forget_password_link_text">Klik Disini</string>
     <string name="create_account_caption">Belum memiliki akun?</string>
     <string name="create_account_link_text">Daftar Sekarang</string>
-    <string name="logout_link_text"><u>Log Out</u></string>
+    <string name="logout_link_text"><u>Keluar</u></string>
 
 
     <string-array name="list_of_months">
