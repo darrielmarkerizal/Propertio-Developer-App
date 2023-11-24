@@ -21,6 +21,7 @@ import com.propertio.developer.api.profile.ProfileResponse
 import com.propertio.developer.databinding.FragmentProfileBinding
 import android.app.AlertDialog
 import com.propertio.developer.api.profile.ProfileUpdateRequest
+import android.app.Activity
 
 
 class ProfileFragment : Fragment() {
@@ -28,6 +29,10 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var profileViewModel: ProfileViewModel
+
+    companion object {
+        private const val PICK_IMAGE_REQUEST_CODE = 1
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -106,9 +111,16 @@ class ProfileFragment : Fragment() {
                 val city = binding.spinnerKotaProfile.selectedItem.toString()
                 val province = binding.spinnerProvinsiProfile.selectedItem.toString()
 
+
                 val request = ProfileUpdateRequest(fullName, phone, address, city, province)
                 Log.d("ProfileFragment", "Profile update request: $request")
                 profileViewModel.updateProfile(request)
+            }
+
+            binding.buttonAddProfilePictureProfil.setOnClickListener() {
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.type = "image/*"
+                startActivityForResult(intent, PICK_IMAGE_REQUEST_CODE)
             }
         })
 
@@ -145,5 +157,17 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            val imageUri = data.data
+            Log.d("ProfileFragment", "Image selected with URI: $imageUri")
+            Glide.with(this)
+                .load(imageUri)
+                .circleCrop()
+                .into(binding.imgProfil)
+        }
+    }
 
 }

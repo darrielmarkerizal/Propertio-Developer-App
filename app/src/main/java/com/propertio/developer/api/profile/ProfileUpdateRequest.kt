@@ -8,5 +8,4 @@ data class ProfileUpdateRequest(
     @SerializedName("address") val address: String?,
     @SerializedName("province") val province: String?,
     @SerializedName("city") val city: String?,
-
 )
