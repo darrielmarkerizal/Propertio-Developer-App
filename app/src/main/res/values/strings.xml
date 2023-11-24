@@ -119,6 +119,7 @@
     <string name="forget_password_link_text">Klik Disini</string>
     <string name="create_account_caption">Belum memiliki akun?</string>
     <string name="create_account_link_text">Daftar Sekarang</string>
+    <string name="logout_link_text"><u>Log Out</u></string>
 
 
     <string-array name="list_of_months">
@@ -135,6 +136,139 @@
         <item>Nov</item>
         <item>Des</item>
     </string-array>
+
+    <string-array name="list_of_numerical_unit">
+        <item>Ribu</item>
+        <item>Juta</item>
+        <item>Miliar</item>
+        <item>Triliun</item>
+    </string-array>
+
+    <string-array name="list_of_provinces">
+        <item>Aceh</item>
+        <item>Sumatera Utara</item>
+        <item>Sumatera Barat</item>
+        <item>Riau</item>
+        <item>Jambi</item>
+        <item>Sumatera Selatan</item>
+        <item>Bengkulu</item>
+        <item>Lampung</item>
+        <item>Kepulauan Bangka Belitung</item>
+        <item>Kepulauan Riau</item>
+        <item>DKI Jakarta</item>
+        <item>Jawa Barat</item>
+        <item>Jawa Tengah</item>
+        <item>DI Yogyakarta</item>
+        <item>Jawa Timur</item>
+        <item>Banten</item>
+        <item>Bali</item>
+        <item>Nusa Tenggara Barat</item>
+        <item>Nusa Tenggara Timur</item>
+        <item>Kalimantan Barat</item>
+        <item>Kalimantan Tengah</item>
+        <item>Kalimantan Selatan</item>
+        <item>Kalimantan Timur</item>
+        <item>Kalimantan Utara</item>
+        <item>Gorontalo</item>
+        <item>Sulawesi Utara</item>
+        <item>Sulawesi Tengah</item>
+        <item>Sulawesi Selatan</item>
+        <item>Sulawesi Tenggara</item>
+        <item>Sulawesi Barat</item>
+        <item>Maluku</item>
+        <item>Maluku Utara</item>
+        <item>Papua Barat</item>
+        <item>Papua</item>
+    </string-array>
+
+    <string-array name="list_of_districts_jawatengah">
+        <item>Semarang</item>
+        <item>Surakarta</item>
+        <item>Magelang</item>
+        <item>Wonosobo</item>
+        <item>Boyolali</item>
+        <item>Klaten</item>
+        <item>Sragen</item>
+        <item>Karanganyar</item>
+        <item>Sukoharjo</item>
+        <item>Rembang</item>
+        <item>Blora</item>
+        <item>Pati</item>
+        <item>Kudus</item>
+        <item>Jepara</item>
+        <item>Demak</item>
+        <item>Temanggung</item>
+        <item>Kendal</item>
+        <item>Batang</item>
+        <item>Pekalongan</item>
+        <item>Tegal</item>
+    </string-array>
+
+    <string-array name="list_of_districts_jawabarat">
+        <item>Bandung</item>
+        <item>Bekasi</item>
+        <item>Bogor</item>
+        <item>Ciamis</item>
+        <item>Cianjur</item>
+        <item>Cirebon</item>
+        <item>Garut</item>
+        <item>Indramayu</item>
+        <item>Karawang</item>
+        <item>Kuningan</item>
+        <item>Majalengka</item>
+        <item>Purwakarta</item>
+        <item>Subang</item>
+        <item>Sukabumi</item>
+        <item>Sumedang</item>
+        <item>Tasikmalaya</item>
+    </string-array>
+
+    <string-array name="list_of_districts_dki">
+        <item>Jakarta Barat</item>
+        <item>Jakarta Pusat</item>
+        <item>Jakarta Selatan</item>
+        <item>Jakarta Timur</item>
+        <item>Jakarta Utara</item>
+    </string-array>
+
+    <string-array name="list_of_districts_jawatimur">
+        <item>Surabaya</item>
+        <item>Malang</item>
+        <item>Blitar</item>
+        <item>Kediri</item>
+        <item>Madiun</item>
+        <item>Mojokerto</item>
+        <item>Probolinggo</item>
+        <item>Pasuruan</item>
+        <item>Sidoarjo</item>
+        <item>Jember</item>
+        <item>Banyuwangi</item>
+        <item>Bondowoso</item>
+        <item>Gresik</item>
+        <item>Jombang</item>
+        <item>Lamongan</item>
+        <item>Lumajang</item>
+        <item>Nganjuk</item>
+        <item>Ngawi</item>
+        <item>Pacitan</item>
+        <item>Pamekasan</item>
+        <item>Ponorogo</item>
+        <item>Sampang</item>
+        <item>Sidoarjo</item>
+        <item>Situbondo</item>
+        <item>Trenggalek</item>
+        <item>Tuban</item>
+        <item>Tulungagung</item>
+    </string-array>
+
+    <string-array name="list_of_districts_diy">
+        <item>Bantul</item>
+        <item>Gunung Kidul</item>
+        <item>Kulon Progo</item>
+        <item>Sleman</item>
+        <item>Yogyakarta</item>
+    </string-array>
+
 
     <string name="hours">jam</string>
     <string name="tooltips_aksi_lainnya">Aksi Lainnya</string>

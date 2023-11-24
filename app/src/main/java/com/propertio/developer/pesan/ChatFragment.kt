@@ -1,6 +1,5 @@
 package com.propertio.developer.pesan
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,19 +7,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.propertio.developer.databinding.FragmentChatBinding
+import com.propertio.developer.model.Chat
 
 class ChatFragment : Fragment() {
     private lateinit var binding : FragmentChatBinding
     val listChat by lazy { mutableListOf<Chat>() }
     private val launcher = registerForActivityResult(ActivityResultContracts.
-    StartActivityForResult()){}
+        StartActivityForResult()){}
 
 
 
@@ -47,9 +46,6 @@ class ChatFragment : Fragment() {
             ViewModelProvider(this@ChatFragment, it)
         }?.get(ChatViewModel::class.java)
 
-//        with(binding.toolbarContainer) {
-//            textViewTitle.text = "Pesan"
-//        }
 
         with(binding) {
             recyclerViewChat.layoutManager = LinearLayoutManager(requireContext())

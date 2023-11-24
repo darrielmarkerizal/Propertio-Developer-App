@@ -14,7 +14,7 @@ class ProjectListResponse : DefaultResponse() {
     class ProjectDeveloper : ProjectMinimum() {
         @SerializedName("address")
         @Expose
-        var address: List<ProjectAddress>? = null
+        var address: ProjectAddress? = null
 
         class  ProjectAddress {
             @SerializedName("address")

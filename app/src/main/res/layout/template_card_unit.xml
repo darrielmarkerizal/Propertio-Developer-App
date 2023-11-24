@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp"
+    android:contextClickable="true"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/grey_400"
+    app:cardBackgroundColor="@color/white"
+    app:cardElevation="0dp"
+    android:layout_marginBottom="20dp"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="32dp"
+        android:paddingTop="28dp"
+        android:paddingBottom="50dp"
+        >
+
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/button_more_horizontal"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            style="@style/button.more.horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_thumbnail"
+            android:layout_marginTop="8dp"
+            style="@style/card.image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_more_horizontal">
+
+            <ImageView
+                android:id="@+id/image_view_thumbnail"
+                style="@style/card.image.imageview" />
+
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/text_view_project_title"
+            style="@style/text.bold.size16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Judul Proyek"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_view_thumbnail" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_project_title" />
+
+        <TextView
+            android:id="@+id/text_view_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Rp.100 Juta"
+            style="@style/text.medium.size11"
+            app:layout_constraintStart_toStartOf="@+id/text_view_project_title"
+            app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+        <ImageView
+            android:id="@+id/icon_bedroom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:layout_constraintStart_toStartOf="@+id/text_view_price"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_price"
+            android:src="@drawable/ic_unit_bed" />
+
+        <TextView
+            android:id="@+id/text_view_bedroom_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="999"
+            android:textColor="@color/grey_500"
+            android:textAppearance="@style/text.medium.size11"
+            app:layout_constraintBottom_toBottomOf="@+id/icon_bedroom"
+            app:layout_constraintStart_toEndOf="@+id/icon_bedroom"
+            app:layout_constraintTop_toTopOf="@+id/icon_bedroom" />
+
+        <ImageView
+            android:id="@+id/icon_bathroom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            app:layout_constraintStart_toEndOf="@+id/text_view_bedroom_count"
+            app:layout_constraintTop_toTopOf="@+id/icon_bedroom"
+            app:srcCompat="@drawable/ic_unit_bathroom" />
+
+        <TextView
+            android:id="@+id/text_view_bathroom_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="999"
+            android:textColor="@color/grey_500"
+            android:textAppearance="@style/text.medium.size11"
+            app:layout_constraintBottom_toBottomOf="@+id/icon_bathroom"
+            app:layout_constraintStart_toEndOf="@+id/icon_bathroom"
+            app:layout_constraintTop_toTopOf="@+id/icon_bathroom" />
+
+        <ImageView
+            android:id="@+id/icon_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            app:layout_constraintStart_toEndOf="@+id/text_view_bathroom_count"
+            app:layout_constraintTop_toTopOf="@+id/icon_bedroom"
+            app:srcCompat="@drawable/ic_unit_surface_area" />
+
+        <TextView
+            android:id="@+id/text_view_surface_area_and_building_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="1200 m\u00B2 / 1000 m\u00B2"
+            android:textColor="@color/grey_500"
+            android:textAppearance="@style/text.medium.size11"
+            app:layout_constraintBottom_toBottomOf="@+id/icon_area"
+            app:layout_constraintStart_toEndOf="@+id/icon_area"
+            app:layout_constraintTop_toTopOf="@+id/icon_area" />
+
+        <TextView
+            android:id="@+id/text_view_stock_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Tersedia :"
+            android:textAppearance="@style/text.medium.size11"
+            android:textColor="@color/grey_500"
+            app:layout_constraintStart_toStartOf="@+id/icon_bedroom"
+            app:layout_constraintTop_toBottomOf="@+id/icon_bedroom" />
+
+        <TextView
+            android:id="@+id/text_view_stock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="999"
+            android:textAppearance="@style/text.medium.size11"
+            android:textColor="@color/grey_500"
+            app:layout_constraintStart_toEndOf="@+id/text_view_stock_label"
+            app:layout_constraintTop_toTopOf="@+id/text_view_stock_label" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_unit_laku"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="3dp"
+            style="@style/button.secondary.l"
+            android:text="Unit Laku"
+            android:textAppearance="@style/text.medium.size14"
+            app:layout_constraintStart_toStartOf="@+id/text_view_stock_label"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_stock_label"/>
+
+        <ImageButton
+            android:id="@+id/button_delete"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="16dp"
+            style="@style/toolbar.button"
+            app:layout_constraintBottom_toBottomOf="@+id/button_unit_laku"
+            app:layout_constraintStart_toEndOf="@+id/button_unit_laku"
+            app:layout_constraintTop_toTopOf="@+id/button_unit_laku"
+            app:srcCompat="@drawable/outline_delete_24" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

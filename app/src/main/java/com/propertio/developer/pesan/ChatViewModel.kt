@@ -1,8 +1,6 @@
 package com.propertio.developer.pesan
 
-import android.content.Context
 import android.util.Log
-import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +11,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import androidx.lifecycle.map
-
+import com.propertio.developer.model.Chat
 
 
 class ChatViewModel(token: String?) : ViewModel() {

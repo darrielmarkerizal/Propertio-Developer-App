@@ -1,52 +1,107 @@
 package com.propertio.developer.project
 
+
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.propertio.developer.PropertioDeveloperApplication
+import com.propertio.developer.TokenManager
 import com.propertio.developer.databinding.FragmentProjectBinding
-import com.propertio.developer.profile.ProfileFragment
+import com.propertio.developer.project.form.ProjectFormActivity
+import com.propertio.developer.project.list.ProjectAdapter
 
 
-private const val APPBARTITLE_PROJECT = "param1"
 class ProjectFragment : Fragment() {
-    private var appBarTitle: String? = null
+    private lateinit var projectViewModel: ProjectViewModel
+    private lateinit var projectAdapter: ProjectAdapter
+    private lateinit var launcher: ActivityResultLauncher<Intent>
+    private lateinit var tokenManager: TokenManager
 
-    private lateinit var binding: FragmentProjectBinding
+    private val binding by lazy {
+        FragmentProjectBinding.inflate(layoutInflater)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            appBarTitle = it.getString(APPBARTITLE_PROJECT)
+        tokenManager = TokenManager(requireContext())
+        val factory = ProjectViewModelFactory(
+            (requireActivity().application as PropertioDeveloperApplication).repository
+        )
+        projectViewModel = ViewModelProvider(requireActivity(), factory)[ProjectViewModel::class.java]
+
+        launcher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode == RESULT_OK) {
+                Log.d("ProjectFragment Launcher", "Result OK")
+
+            }
         }
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentProjectBinding.inflate(inflater)
+    ): View {
         return binding.root
     }
+
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        with(binding.toolbarContainer) {
-//            textViewTitle.text = "Proyek Saya"
-//        }
-    }
-    
-    companion object {
-        @JvmStatic
-        fun newInstance(appBarTitle: String) =
-            ProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(APPBARTITLE_PROJECT, appBarTitle)
-                }
+        setRecyclerListProject()
+
+        with(binding) {
+            fabAddProject.setOnClickListener {
+                val intent = Intent(requireContext(), ProjectFormActivity::class.java)
+                launcher.launch(intent)
             }
+        }
+
+
     }
+
+
+
+    private fun setRecyclerListProject() {
+        projectAdapter = ProjectAdapter(requireContext())
+
+        binding.recylerViewProjects.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = projectAdapter
+        }
+
+        projectViewModel.projectList.observe(viewLifecycleOwner) { projects ->
+            if (projects.isEmpty()) {
+                binding.frameLayoutBelumAdaProyek.visibility = View.VISIBLE
+            } else {
+                binding.frameLayoutBelumAdaProyek.visibility = View.GONE
+            }
+
+            // Update the list of projects
+            projectAdapter.submitList(projects)
+        }
+    }
+
+
+
+
+
+
 
 
 }

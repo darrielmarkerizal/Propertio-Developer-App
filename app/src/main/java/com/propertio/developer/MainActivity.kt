@@ -1,17 +1,19 @@
 package com.propertio.developer
 
-import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.dasbor.DashboardFragment
 import com.propertio.developer.databinding.ActivityMainBinding
 import com.propertio.developer.pesan.ChatFragment
 import com.propertio.developer.profile.ProfileFragment
 import com.propertio.developer.project.ProjectFragment
+import com.propertio.developer.project.ProjectViewModel
+import com.propertio.developer.project.ProjectViewModelFactory
 
 class MainActivity : AppCompatActivity() {
     private var toastMessage : String? = null
@@ -20,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     private val projectFragment = ProjectFragment()
     private val chatFragment = ChatFragment()
     private val profileFragment = ProfileFragment()
+
+    private lateinit var projectViewModel: ProjectViewModel
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,13 +35,24 @@ class MainActivity : AppCompatActivity() {
         val token = sharedPreferences.getString("token", null)
         Log.d("MainActivity", "Token from prefs: $token")
 
+
+        // View Model
+        val factory = ProjectViewModelFactory((application as PropertioDeveloperApplication).repository)
+        projectViewModel = ViewModelProvider(this, factory)[ProjectViewModel::class.java]
+        fetchProjectListData(token!!)
+
+
         // Toolbar
         val toolbar = binding.toolbarContainer
         val theToolbar = binding.toolbarContainer.root
 
+
         replaceFragment(DashboardFragment())
 
         toastMessage = intent.getStringExtra("toastMessage")
+
+
+
 
         binding.bottomNavigation.setOnItemSelectedListener {
             when(it.itemId) {
@@ -83,6 +98,10 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+    }
+
+    private fun fetchProjectListData(token: String) {
+        projectViewModel.fetchLiteProject(token)
     }
 
     override fun onResume() {
