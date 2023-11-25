@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".project.form.CreateProjectFasilitasFragment"
+    android:background="@color/white"
+    android:paddingTop="32.5dp"
+    android:paddingBottom="150dp"
+    android:paddingHorizontal="32.5dp"
+    >
+
+    <TextView
+        android:id="@+id/text_title_project_fasilitas"
+        style="@style/text.bold.size22"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Membuat Proyek"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/text_view_project_fasilitas_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
+        android:text="Fasilitas"
+        android:textAppearance="@style/text.semi_bold.size14"
+        app:layout_constraintEnd_toStartOf="@+id/link_text_view_project_fasilitas_reset"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/text_title_project_fasilitas"
+        app:layout_constraintTop_toBottomOf="@+id/text_title_project_fasilitas"
+        />
+
+    <TextView
+        android:id="@+id/link_text_view_project_fasilitas_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/text.regular.size14"
+        android:textColor="@color/red_badges"
+        android:text="Reset Semua"
+        app:layout_constraintEnd_toEndOf="@+id/text_title_project_fasilitas"
+        app:layout_constraintTop_toTopOf="@+id/text_view_project_fasilitas_label"
+        />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_fasilitas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusTopStart="12dp"
+        app:endIconMode="clear_text"
+        app:hintEnabled="false"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_project_fasilitas_label"
+        tools:layout_editor_absoluteX="32dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            style="@style/DesignSystem.TextInputEditText"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="@color/grey_50"
+            android:drawableStart="@drawable/baseline_search_24"
+            android:hint="Cari Fasilitas"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/button_tentang_fasilitas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayout_fasilitas"
+        >
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_fasilitas"
+            style="@style/button.secondary.s.rounded"
+            android:layout_width="93dp"
+            android:layout_height="32dp"
+            android:text="Fasilitas"
+            tools:ignore="MissingConstraints"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_keunggulan"
+            style="@style/button.secondary.s.rounded"
+            android:layout_width="93dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="34dp"
+            android:text="Keunggulan"
+            app:layout_constraintStart_toEndOf="@id/button_fasilitas"
+            tools:ignore="MissingConstraints"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_perabot"
+            style="@style/button.secondary.s.rounded"
+            android:layout_width="93dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="34dp"
+            android:text="Perabot"
+            app:layout_constraintStart_toEndOf="@id/button_keunggulan"
+            tools:ignore="MissingConstraints"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_fasilitas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/button_tentang_fasilitas"
+        android:layout_marginTop="20dp"
+        tools:listitem="@layout/item_fasilitas"
+        />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

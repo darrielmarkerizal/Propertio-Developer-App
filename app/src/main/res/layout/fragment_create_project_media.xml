@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/text.regular.size14"
             android:textColor="@color/red_badges"
-            android:text="Hapus semua"
+            android:text="Hapus Semua"
             app:layout_constraintEnd_toEndOf="@+id/text_title_project_media"
             app:layout_constraintTop_toTopOf="@+id/text_view_project_photo_label" />
 
@@ -75,11 +75,12 @@
             android:id="@+id/recycler_view_list_unggah_foto"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="36dp"
             android:paddingStart="28.5dp"
             android:scrollbars="horizontal"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_view_button_unggah_photo_project_label"
             tools:itemCount="1"

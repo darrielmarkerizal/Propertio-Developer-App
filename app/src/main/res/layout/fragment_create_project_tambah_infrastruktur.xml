@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".project.form.CreateProjectTambahInfrastrukturFragment"
+    android:background="@color/white"
+    android:paddingTop="32.5dp"
+    android:paddingBottom="150dp"
+    android:paddingHorizontal="32.5dp"
+    >
+
+    <TextView
+        android:id="@+id/text_title_project_tambah_infrastruktur"
+        style="@style/text.bold.size22"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Tambah Infrastruktur"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/input_tipe_infrastruktur_project"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_title_project_tambah_infrastruktur">
+
+        <TextView
+            android:id="@+id/txt_tipe_infrastruktur_project"
+            style="@style/text.regular.size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tipe Infrastruktur"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="NotSibling"
+            />
+
+        <TextView
+            android:id="@+id/next_txt_tipe_infrastruktur_project"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:nextFocusLeft="@id/txt_headline_project"
+            android:text="*"
+            android:textColor="@color/red_badges"
+            app:layout_constraintStart_toEndOf="@+id/txt_tipe_infrastruktur_project"
+            app:layout_constraintTop_toTopOf="@+id/txt_tipe_infrastruktur_project"
+            />
+
+        <Spinner
+            android:id="@+id/spin_tipe_infrastruktur_project"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edit_text_rounded_rectangle"
+            android:paddingHorizontal="14.5dp"
+            android:textColor="@color/text_black"
+            android:textColorHint="@color/text_black_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_tipe_infrastruktur_project" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/input_nama_infrastruktur_project"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/input_tipe_infrastruktur_project">
+
+        <TextView
+            android:id="@+id/txt_nama_infrastruktur_project"
+            style="@style/text.regular.size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nama Infrastruktur"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="NotSibling"
+            />
+
+        <TextView
+            android:id="@+id/next_txt_nama_infrastruktur_project"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:nextFocusLeft="@id/txt_headline_project"
+            android:text="*"
+            android:textColor="@color/red_badges"
+            app:layout_constraintStart_toEndOf="@+id/txt_nama_infrastruktur_project"
+            app:layout_constraintTop_toTopOf="@+id/txt_nama_infrastruktur_project" />
+
+        <EditText
+            android:id="@+id/edit_nama_infrastruktur_project"
+            style="@style/DesignSystem.TextInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:paddingHorizontal="14.5dp"
+            android:textColor="@color/text_black"
+            android:textColorHint="@color/text_black_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_nama_infrastruktur_project"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_simpan"
+        style="@style/button.primary.l"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="364dp"
+        android:text="Simpan"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_nama_infrastruktur_project"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
