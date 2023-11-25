@@ -18,7 +18,7 @@
 
     <!-- Design System Color Text -->
     <color name="text_black">#1D1B20</color>
-    <color name="text_black_placeholder">#49454F</color>
+    <color name="text_black_placeholder">#9ca3af</color>
 
     <!-- Design System Textfield -->
     <color name="textfield_border">#79747E</color>
