@@ -1,6 +1,7 @@
 package com.propertio.developer.unit.list
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.propertio.developer.NumericalUnitConverter
 import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
 import com.propertio.developer.databinding.TemplateCardUnitBinding
+import com.propertio.developer.unit.UnitDetailActivity
 
 class UnitAdapter(
     private val context: Context,
@@ -25,10 +27,19 @@ class UnitAdapter(
                 textViewPrice.text = NumericalUnitConverter.unitFormatter(unit.price ?: "0", true)
                 textViewBedroomCount.text = unit.bedroom.toString()
                 textViewBathroomCount.text = unit.bathroom.toString()
-                textViewSurfaceAreaAndBuildingArea.text = "${unit.surfaceArea} m\\u00B2 / ${unit.buildingArea} m\\u00B2"
+                textViewSurfaceAreaAndBuildingArea.text = "${NumericalUnitConverter.meterSquareFormatter(unit.surfaceArea ?: "0")} / ${NumericalUnitConverter.meterSquareFormatter(unit.buildingArea ?: "0")}"
                 textViewStock.text = unit.stock.toString()
 
                 loadImage(unit.photoURL)
+
+                cardViewUnit.setOnClickListener {
+                    Log.d("UnitAdapter", "bind: ${unit.title}")
+                    val intentToDetailUnit = Intent(context, UnitDetailActivity::class.java)
+
+                    //TODO: send data to detail activity
+
+                    context.startActivity(intentToDetailUnit)
+                }
 
 
             }

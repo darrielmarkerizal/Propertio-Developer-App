@@ -10,8 +10,10 @@ import android.util.Log
 import android.webkit.WebView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.propertio.developer.NumericalUnitConverter
 import com.propertio.developer.PropertioDeveloperApplication
@@ -45,6 +47,9 @@ class ProjectDetailActivity : AppCompatActivity() {
     private lateinit var projectViewModel: ProjectViewModel
 
     private lateinit var unitAdapter: UnitAdapter
+    private val unitList : MutableLiveData<List<ProjectDetail.ProjectDeveloper.ProjectUnit>> by lazy {
+        MutableLiveData<List<ProjectDetail.ProjectDeveloper.ProjectUnit>>()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,6 +111,7 @@ class ProjectDetailActivity : AppCompatActivity() {
 
 
         unitRecycler(idProject)
+        observeUnits()
 
 
 
@@ -116,10 +122,17 @@ class ProjectDetailActivity : AppCompatActivity() {
 
     }
 
-
+    private fun observeUnits() {
+        Log.d("ProjectDetailActivity", "observeUnits: $unitList")
+        unitList.observe(this) {
+            val adapter = UnitAdapter(this, unitList)
+            binding.recyclerViewUnit.adapter = adapter
+        }
+    }
 
 
     private fun unitRecycler(id: Int) {
+        Log.d("ProjectDetailActivity", "unitRecycler: $id")
         val retro = Retro(TokenManager(this).token!!)
             .getRetroClientInstance()
             .create(DeveloperApi::class.java)
@@ -131,8 +144,16 @@ class ProjectDetailActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val project = response.body()?.data
                     if (project != null) {
-                        setUnitRecycler(project)
+                        unitList.postValue(project.units)
+                        setUnitRecycler()
+                        Log.i("ProjectDetailActivity", "Success adding unit. Units is not null")
                     }
+                    else {
+                        Log.w("ProjectDetailActivity", "project is null")
+                    }
+                }
+                else {
+                    Log.w("ProjectDetailActivity", "response is not successful")
                 }
 
 
@@ -140,6 +161,7 @@ class ProjectDetailActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<ProjectDetail>, t: Throwable) {
                 // TODO: Handle Failure
+                Log.e("ProjectDetailActivity", "onFailure: $t")
 
 
 
@@ -151,9 +173,13 @@ class ProjectDetailActivity : AppCompatActivity() {
 
     }
 
-    private fun setUnitRecycler(project: ProjectDetail.ProjectDeveloper) {
-        //TODO: Set Unit Recycler
-//        unitAdapter = UnitAdapter(this, project.units)
+    private fun setUnitRecycler() {
+        Log.d("ProjectDetailActivity", "setUnitRecycler: $unitList")
+        unitAdapter = UnitAdapter(this, unitList)
+        binding.recyclerViewUnit.apply {
+            adapter = unitAdapter
+            layoutManager = LinearLayoutManager(this@ProjectDetailActivity)
+        }
     }
 
 
