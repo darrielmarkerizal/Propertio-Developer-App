@@ -189,6 +189,7 @@
                 style="@style/DesignSystem.TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textAppearance="@style/text.regular.size14"
                 android:minHeight="100dp"
                 android:layout_marginTop="8dp"
                 android:padding="14.5dp"
