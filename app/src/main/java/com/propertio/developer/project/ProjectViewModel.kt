@@ -24,9 +24,9 @@ class ProjectViewModel(
 
     val projectList : MutableLiveData<List<ProjectTable>> = projectRepository.listProject.asLiveData() as MutableLiveData<List<ProjectTable>>
 
-    fun allProjectsPaginated(limit: Int, offset: Int): LiveData<List<ProjectTable>> {
+    fun allProjectsPaginated(limit: Int, offset: Int = 0): MutableLiveData<List<ProjectTable>> {
         Log.d("ProjectViewModel", "allProjectsPaginated: from $limit to $offset")
-        return projectRepository.allProjectsPaginated(limit, offset).asLiveData()
+        return projectRepository.allProjectsPaginated(limit, offset).asLiveData() as MutableLiveData<List<ProjectTable>>
     }
 
     suspend fun getProjectById(id: Int): ProjectTable {
