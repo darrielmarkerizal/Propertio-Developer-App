@@ -25,7 +25,7 @@ class UnitAdapter(
                 textViewPrice.text = NumericalUnitConverter.unitFormatter(unit.price ?: "0", true)
                 textViewBedroomCount.text = unit.bedroom.toString()
                 textViewBathroomCount.text = unit.bathroom.toString()
-                textViewSurfaceAreaAndBuildingArea.text = "${unit.surfaceArea} m\\u00B2 / ${unit.buildingArea} m\\u00B2"
+                textViewSurfaceAreaAndBuildingArea.text = "${NumericalUnitConverter.meterSquareFormatter(unit.surfaceArea ?: "0")} / ${NumericalUnitConverter.meterSquareFormatter(unit.buildingArea ?: "0")}"
                 textViewStock.text = unit.stock.toString()
 
                 loadImage(unit.photoURL)
