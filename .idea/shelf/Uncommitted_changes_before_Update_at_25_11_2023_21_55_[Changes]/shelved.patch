@@ -1,0 +1,232 @@
+Index: app/src/main/res/layout/item_infrastruktur.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\">\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/item_infrastruktur.xml b/app/src/main/res/layout/item_infrastruktur.xml
+--- a/app/src/main/res/layout/item_infrastruktur.xml	(revision 6352518a0248a2e45b233cf0f2303cb9747a3d75)
++++ b/app/src/main/res/layout/item_infrastruktur.xml	(date 1700923958374)
+@@ -1,6 +1,48 @@
+-<?xml version="1.0" encoding="utf-8"?>
+ <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+-    android:layout_height="match_parent">
++    android:layout_height="65.26dp"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    android:layout_marginStart="13.6dp"
++    android:layout_marginEnd="13.6dp"
++    >
++
++    <ImageView
++        android:id="@+id/image_view_icon_infrastruktur"
++        android:layout_width="36.26dp"
++        android:layout_height="36.26dp"
++        android:scaleType="fitXY"
++        android:src="@drawable/default_profile_picture"
++        tools:ignore="MissingConstraints"
++        tools:layout_editor_absoluteX="2dp"
++        tools:layout_editor_absoluteY="13dp"
++        />
++
++    <TextView
++        android:id="@+id/text_option_infrastruktur"
++        style="@style/text.regular.size14"
++        android:layout_width="0dp"
++        android:layout_height="wrap_content"
++        android:ellipsize="end"
++        android:maxLines="1"
++        android:text="Option"
++        tools:layout_editor_absoluteX="61dp"
++        tools:layout_editor_absoluteY="23dp"
++        app:layout_constraintStart_toEndOf="@id/image_view_icon_infrastruktur"
++        android:layout_marginStart="10dp"
++        tools:ignore="MissingConstraints"
++        />
++
++    <ImageView
++        android:id="@+id/button__delete_infrastruktur"
++        android:layout_width="28dp"
++        android:layout_height="28dp"
++        android:src="@drawable/baseline_delete_24"
++        tools:ignore="MissingConstraints"
++        tools:layout_editor_absoluteX="340dp"
++        tools:layout_editor_absoluteY="18dp"
++        />
++
++
+ 
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/item_fasilitas.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"60dp\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\">\r\n\r\n\r\n    <FrameLayout\r\n        android:id=\"@+id/frameLayout\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"32dp\"\r\n        android:layout_marginEnd=\"32dp\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        >\r\n\r\n        <androidx.cardview.widget.CardView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            app:cardCornerRadius=\"100dp\"\r\n            app:cardElevation=\"0dp\">\r\n\r\n            <ImageView\r\n                android:id=\"@+id/image_view_fasilitas\"\r\n                android:layout_width=\"30dp\"\r\n                android:layout_height=\"30dp\"\r\n                android:layout_margin=\"1dp\"\r\n                android:scaleType=\"fitXY\"\r\n                android:src=\"@drawable/card_floating_rounded_rectangle\"\r\n                android:backgroundTint=\"@color/black\"\r\n                />\r\n\r\n        </androidx.cardview.widget.CardView>\r\n\r\n    </FrameLayout>\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginStart=\"13dp\"\r\n        android:layout_marginEnd=\"32dp\"\r\n        app:layout_constraintBottom_toBottomOf=\"@+id/frameLayout\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toEndOf=\"@+id/frameLayout\"\r\n        app:layout_constraintTop_toTopOf=\"@+id/frameLayout\"\r\n        >\r\n\r\n\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n    <TextView\r\n        android:id=\"@+id/text_option_fasilitas\"\r\n        style=\"@style/text.regular.size14\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:maxLines=\"1\"\r\n        android:text=\"Option\"\r\n        tools:layout_editor_absoluteX=\"86dp\"\r\n        tools:layout_editor_absoluteY=\"23dp\"\r\n        tools:ignore=\"MissingConstraints\"\r\n        />\r\n\r\n    <CheckBox\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        tools:layout_editor_absoluteX=\"683dp\"\r\n        tools:layout_editor_absoluteY=\"7dp\" />\r\n\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/item_fasilitas.xml b/app/src/main/res/layout/item_fasilitas.xml
+--- a/app/src/main/res/layout/item_fasilitas.xml	(revision 6352518a0248a2e45b233cf0f2303cb9747a3d75)
++++ b/app/src/main/res/layout/item_fasilitas.xml	(date 1700923267556)
+@@ -1,21 +1,19 @@
+-<?xml version="1.0" encoding="utf-8"?>
+ <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+-    android:layout_height="60dp"
+-    xmlns:app="http://schemas.android.com/apk/res-auto">
+-
++    android:layout_height="wrap_content"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    >
+ 
+     <FrameLayout
+         android:id="@+id/frameLayout"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:layout_marginStart="32dp"
+-        android:layout_marginEnd="32dp"
++        android:background="@drawable/card_profile_picture_edge"
++        android:padding="1.2dp"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toTopOf="parent"
+-        >
++        app:layout_constraintTop_toTopOf="parent">
+ 
+         <androidx.cardview.widget.CardView
+             android:layout_width="wrap_content"
+@@ -24,50 +22,51 @@
+             app:cardElevation="0dp">
+ 
+             <ImageView
+-                android:id="@+id/image_view_fasilitas"
+-                android:layout_width="30dp"
+-                android:layout_height="30dp"
+-                android:layout_margin="1dp"
++                android:id="@+id/image_view_icon_fasilitas"
++                android:layout_width="40dp"
++                android:layout_height="40dp"
++                android:layout_marginTop="14.5dp"
++                android:layout_marginBottom="14.5dp"
+                 android:scaleType="fitXY"
+-                android:src="@drawable/card_floating_rounded_rectangle"
+-                android:backgroundTint="@color/black"
+-                />
++                android:src="@drawable/default_profile_picture" />
+ 
+         </androidx.cardview.widget.CardView>
+ 
++
+     </FrameLayout>
+ 
+     <androidx.constraintlayout.widget.ConstraintLayout
+-        android:layout_width="wrap_content"
++        android:layout_width="0dp"
+         android:layout_height="wrap_content"
+-        android:layout_marginStart="13dp"
++        android:layout_marginStart="18dp"
+         android:layout_marginEnd="32dp"
+         app:layout_constraintBottom_toBottomOf="@+id/frameLayout"
+-        app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toEndOf="@+id/frameLayout"
+-        app:layout_constraintTop_toTopOf="@+id/frameLayout"
+-        >
++        app:layout_constraintTop_toTopOf="@+id/frameLayout">
+ 
+-
+-    </androidx.constraintlayout.widget.ConstraintLayout>
+ 
+-    <TextView
+-        android:id="@+id/text_option_fasilitas"
+-        style="@style/text.regular.size14"
+-        android:layout_width="0dp"
+-        android:layout_height="wrap_content"
+-        android:maxLines="1"
+-        android:text="Option"
+-        tools:layout_editor_absoluteX="86dp"
+-        tools:layout_editor_absoluteY="23dp"
+-        tools:ignore="MissingConstraints"
+-        />
++        <TextView
++            android:id="@+id/text_option_fasilitas"
++            style="@style/text.regular.size14"
++            android:layout_width="0dp"
++            android:layout_height="wrap_content"
++            android:layout_marginTop="4dp"
++            android:ellipsize="end"
++            android:maxLines="1"
++            android:text="Option"
++            app:layout_constraintStart_toStartOf="parent"
++            app:layout_constraintTop_toTopOf="parent" />
++
++
++    </androidx.constraintlayout.widget.ConstraintLayout>
+ 
+     <CheckBox
++        android:id="@+id/checkbox_fasilitas"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        tools:layout_editor_absoluteX="683dp"
+-        tools:layout_editor_absoluteY="7dp" />
+-
++        android:visibility="visible"
++        tools:ignore="MissingConstraints"
++        tools:layout_editor_absoluteX="687dp"
++        tools:layout_editor_absoluteY="6dp" />
+ 
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_create_project_fasilitas.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    tools:context=\".project.form.CreateProjectFasilitasFragment\"\r\n    android:background=\"@color/white\"\r\n    android:paddingTop=\"32.5dp\"\r\n    android:paddingBottom=\"150dp\"\r\n    android:paddingHorizontal=\"32.5dp\"\r\n    >\r\n\r\n    <TextView\r\n        android:id=\"@+id/text_title_project_fasilitas\"\r\n        style=\"@style/text.bold.size22\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Membuat Proyek\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        />\r\n\r\n    <TextView\r\n        android:id=\"@+id/text_view_project_fasilitas_label\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"20dp\"\r\n        android:layout_marginEnd=\"32dp\"\r\n        android:text=\"Fasilitas\"\r\n        android:textAppearance=\"@style/text.semi_bold.size14\"\r\n        app:layout_constraintEnd_toStartOf=\"@+id/link_text_view_project_fasilitas_reset\"\r\n        app:layout_constraintHorizontal_bias=\"0.0\"\r\n        app:layout_constraintStart_toStartOf=\"@+id/text_title_project_fasilitas\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/text_title_project_fasilitas\"\r\n        />\r\n\r\n    <TextView\r\n        android:id=\"@+id/link_text_view_project_fasilitas_reset\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:textAppearance=\"@style/text.regular.size14\"\r\n        android:textColor=\"@color/red_badges\"\r\n        android:text=\"Reset Semua\"\r\n        app:layout_constraintEnd_toEndOf=\"@+id/text_title_project_fasilitas\"\r\n        app:layout_constraintTop_toTopOf=\"@+id/text_view_project_fasilitas_label\"\r\n        />\r\n\r\n\r\n    <com.google.android.material.textfield.TextInputLayout\r\n        android:id=\"@+id/textInputLayout_fasilitas\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"20dp\"\r\n        app:boxCornerRadiusBottomEnd=\"12dp\"\r\n        app:boxCornerRadiusBottomStart=\"12dp\"\r\n        app:boxCornerRadiusTopEnd=\"12dp\"\r\n        app:boxCornerRadiusTopStart=\"12dp\"\r\n        app:endIconMode=\"clear_text\"\r\n        app:hintEnabled=\"false\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/text_view_project_fasilitas_label\"\r\n        tools:layout_editor_absoluteX=\"32dp\">\r\n\r\n        <com.google.android.material.textfield.TextInputEditText\r\n            style=\"@style/DesignSystem.TextInputEditText\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_marginBottom=\"8dp\"\r\n            android:backgroundTint=\"@color/grey_50\"\r\n            android:drawableStart=\"@drawable/baseline_search_24\"\r\n            android:hint=\"Cari Fasilitas\"\r\n            />\r\n\r\n    </com.google.android.material.textfield.TextInputLayout>\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        android:id=\"@+id/button_tentang_fasilitas\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginTop=\"20dp\"\r\n        app:layout_constraintTop_toBottomOf=\"@id/textInputLayout_fasilitas\"\r\n        >\r\n\r\n        <androidx.appcompat.widget.AppCompatButton\r\n            android:id=\"@+id/button_fasilitas\"\r\n            style=\"@style/button.secondary.s.rounded\"\r\n            android:layout_width=\"93dp\"\r\n            android:layout_height=\"32dp\"\r\n            android:text=\"Fasilitas\"\r\n            tools:ignore=\"MissingConstraints\"\r\n            />\r\n\r\n        <androidx.appcompat.widget.AppCompatButton\r\n            android:id=\"@+id/button_keunggulan\"\r\n            style=\"@style/button.secondary.s.rounded\"\r\n            android:layout_width=\"93dp\"\r\n            android:layout_height=\"32dp\"\r\n            android:layout_marginStart=\"34dp\"\r\n            android:text=\"Keunggulan\"\r\n            app:layout_constraintStart_toEndOf=\"@id/button_fasilitas\"\r\n            tools:ignore=\"MissingConstraints\"\r\n            />\r\n\r\n        <androidx.appcompat.widget.AppCompatButton\r\n            android:id=\"@+id/button_perabot\"\r\n            style=\"@style/button.secondary.s.rounded\"\r\n            android:layout_width=\"93dp\"\r\n            android:layout_height=\"32dp\"\r\n            android:layout_marginStart=\"34dp\"\r\n            android:text=\"Perabot\"\r\n            app:layout_constraintStart_toEndOf=\"@id/button_keunggulan\"\r\n            tools:ignore=\"MissingConstraints\"\r\n            />\r\n\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n    <androidx.recyclerview.widget.RecyclerView\r\n        android:id=\"@+id/rv_fasilitas\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        app:layout_constraintTop_toBottomOf=\"@id/button_tentang_fasilitas\"\r\n        android:layout_marginTop=\"20dp\"\r\n        tools:listitem=\"@layout/item_fasilitas\"\r\n        />\r\n\r\n\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_create_project_fasilitas.xml b/app/src/main/res/layout/fragment_create_project_fasilitas.xml
+--- a/app/src/main/res/layout/fragment_create_project_fasilitas.xml	(revision 6352518a0248a2e45b233cf0f2303cb9747a3d75)
++++ b/app/src/main/res/layout/fragment_create_project_fasilitas.xml	(date 1700910213665)
+@@ -74,7 +74,7 @@
+     </com.google.android.material.textfield.TextInputLayout>
+ 
+     <androidx.constraintlayout.widget.ConstraintLayout
+-        android:id="@+id/button_tentang_fasilitas"
++        android:id="@+id/button_about_fasilitas"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="20dp"
+@@ -118,11 +118,10 @@
+         android:id="@+id/rv_fasilitas"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+-        app:layout_constraintTop_toBottomOf="@id/button_tentang_fasilitas"
++        app:layout_constraintTop_toBottomOf="@id/button_about_fasilitas"
+         android:layout_marginTop="20dp"
+         tools:listitem="@layout/item_fasilitas"
+         />
+ 
+ 
+-
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/values/themes.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources xmlns:tools=\"http://schemas.android.com/tools\">\r\n    <!-- Base application theme. -->\r\n    <style name=\"Base.Theme.PropertioDeveloperApp\" parent=\"Theme.Material3.Light.NoActionBar\">\r\n        <!-- Customize your light theme here. -->\r\n        <!-- <item name=\"colorPrimary\">@color/my_light_primary</item> -->\r\n        <item name=\"android:windowFullscreen\">true</item>\r\n        <item name=\"android:statusBarColor\">@android:color/white</item>\r\n    </style>\r\n\r\n    <style name=\"Theme.PropertioDeveloperApp\" parent=\"Base.Theme.PropertioDeveloperApp\" />\r\n\r\n    <style name=\"Theme.PropertioDeveloperApp.Transparant\">\r\n        <item name=\"android:background\">@android:color/transparent</item>\r\n    </style>\r\n\r\n\r\n    <!--  START : button design system  -->\r\n    <style name=\"Base.Theme.button\" parent=\"Widget.AppCompat.Button\">\r\n        <item name=\"fontFamily\">@font/poppins_medium</item>\r\n        <item name=\"textAllCaps\">false</item>\r\n    </style>\r\n\r\n    <!-- Primary   -->\r\n    <style name=\"button.primary\" parent=\"Base.Theme.button\">\r\n        <item name=\"android:background\">@drawable/button_primary_rounded_rectangle</item>\r\n        <item name=\"android:textColor\">@color/white</item>\r\n    </style>\r\n\r\n    <style name=\"button.primary.xl\" parent=\"button.primary\">\r\n        <item name=\"android:height\">56dp</item>\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n    <style name=\"button.primary.l\" parent=\"button.primary\">\r\n        <item name=\"android:height\">48dp</item>\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n\r\n    <style name=\"button.primary.m\" parent=\"Base.Theme.button\">\r\n        <item name=\"android:background\">@drawable/button_primary_rounded</item>\r\n        <item name=\"android:textColor\">@color/white</item>\r\n        <item name=\"android:height\">40dp</item>\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n    <style name=\"button.primary.s\" parent=\"Base.Theme.button\">\r\n        <item name=\"android:background\">@drawable/button_primary_rounded</item>\r\n        <item name=\"android:textColor\">@color/white</item>\r\n        <item name=\"android:height\">32dp</item>\r\n        <item name=\"android:textSize\">12sp</item>\r\n    </style>\r\n\r\n    <!-- Secondary   -->\r\n    <style name=\"button.secondary\" parent=\"Base.Theme.button\">\r\n        <item name=\"android:background\">@drawable/button_secondary_rounded_rectangle</item>\r\n        <item name=\"android:textColor\">@color/white</item>\r\n    </style>\r\n\r\n    <style name=\"button.secondary.xl\" parent=\"button.secondary\">\r\n        <item name=\"android:height\">56dp</item>\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n    <style name=\"button.secondary.l\" parent=\"button.secondary\">\r\n        <item name=\"android:height\">48dp</item>\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n\r\n    <style name=\"button.secondary.m\" parent=\"Base.Theme.button\">\r\n        <item name=\"android:background\">@drawable/button_secondary_rounded</item>\r\n        <item name=\"android:textColor\">@color/white</item>\r\n        <item name=\"android:height\">40dp</item>\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n    <style name=\"button.secondary.s\" parent=\"Base.Theme.button\">\r\n        <item name=\"android:background\">@drawable/button_secondary_rounded</item>\r\n        <item name=\"android:textColor\">@color/white</item>\r\n        <item name=\"android:height\">32dp</item>\r\n        <item name=\"android:textSize\">12sp</item>\r\n    </style>\r\n    <style name=\"button.secondary.s.rounded\">\r\n        <item name=\"android:background\">@drawable/button_secondary_rounded_rectangle</item>\r\n    </style>\r\n\r\n    <!-- Tertiary   -->\r\n    <style name=\"button.tertiary\" parent=\"Base.Theme.button\">\r\n        <item name=\"android:background\">@drawable/button_tertiary_rounded_rectangle</item>\r\n        <item name=\"android:textColor\">@color/black</item>\r\n    </style>\r\n\r\n    <style name=\"button.tertiary.xl\" parent=\"button.tertiary\">\r\n        <item name=\"android:height\">56dp</item>\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n    <style name=\"button.tertiary.l\" parent=\"button.tertiary\">\r\n        <item name=\"android:height\">48dp</item>\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n\r\n    <style name=\"button.tertiary.m\" parent=\"Base.Theme.button\">\r\n        <item name=\"android:background\">@drawable/button_tertiary_rounded</item>\r\n        <item name=\"android:textColor\">@color/black</item>\r\n        <item name=\"android:height\">40dp</item>\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n    <style name=\"button.tertiary.s\" parent=\"Base.Theme.button\">\r\n        <item name=\"android:background\">@drawable/button_tertiary_rounded</item>\r\n        <item name=\"android:textColor\">@color/black</item>\r\n        <item name=\"android:height\">32dp</item>\r\n        <item name=\"android:textSize\">12sp</item>\r\n    </style>\r\n\r\n    <!--  Ghost  -->\r\n    <style name=\"button.ghost\" parent=\"Base.Theme.button\">\r\n        <item name=\"android:background\">@drawable/button_ghost</item>\r\n        <item name=\"android:textColor\">@color/primary</item>\r\n    </style>\r\n    <style name=\"button.ghost.xl\">\r\n        <item name=\"android:height\">56dp</item>\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n    <style name=\"button.ghost.l\">\r\n        <item name=\"android:height\">48dp</item>\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n    <style name=\"button.ghost.m\">\r\n        <item name=\"android:height\">40dp</item>\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n    <style name=\"button.ghost.s\">\r\n        <item name=\"android:height\">32dp</item>\r\n        <item name=\"android:textSize\">12sp</item>\r\n    </style>\r\n\r\n    <!--  END : button design system  -->\r\n\r\n\r\n    <!-- START : Custom add Button   -->\r\n\r\n    <!--  Add Button  -->\r\n    <style name=\"button.add\" parent=\"Base.Theme.button\">\r\n        <item name=\"android:background\">@drawable/button_add_rounded_rectangle</item>\r\n        <item name=\"drawableStartCompat\">@drawable/baseline_add_circle_outline_24</item>\r\n        <item name=\"drawableTint\">@color/text_black_placeholder</item>\r\n        <item name=\"android:textColor\">@color/text_black_placeholder</item>\r\n        <item name=\"android:paddingStart\">14.5dp</item>\r\n        <item name=\"android:paddingEnd\">14.5dp</item>\r\n        <item name=\"android:elevation\">0dp</item>\r\n        <item name=\"android:textAppearance\">@style/text.regular.size14</item>\r\n    </style>\r\n\r\n    <!--  Horizontal More Button  -->\r\n    <style name=\"button.more.horizontal\" parent=\"Widget.AppCompat.ImageButton\">\r\n        <item name=\"android:background\">@drawable/toolbar_button</item>\r\n        <item name=\"android:src\">@drawable/baseline_more_horiz_24</item>\r\n        <item name=\"android:contentDescription\">\"@string/tooltips_aksi_lainnya</item>\r\n    </style>\r\n\r\n    <!-- END   : Custom add Button   -->\r\n\r\n\r\n    <!--  START : Floating Action Button  -->\r\n    <style name=\"floating.action.button\" parent=\"ThemeOverlay.Material3.FloatingActionButton.Primary\">\r\n        <item name=\"backgroundTint\">@color/primary</item>\r\n        <item name=\"android:src\">@drawable/baseline_add_24_white</item>\r\n        <item name=\"tint\">@color/white</item>\r\n    </style>\r\n\r\n    <style name=\"floating.action.TextButton\" parent=\"ThemeOverlay.Material3.FloatingActionButton.Primary\">\r\n        <item name=\"backgroundTint\">@color/primary</item>\r\n        <item name=\"android:textColor\">@color/white</item>\r\n        <item name=\"android:layout_width\">180dp</item>\r\n        <item name=\"android:layout_height\">wrap_content</item>\r\n        <item name=\"android:textAppearance\">@style/text.medium.size16</item>\r\n    </style>\r\n    <style name=\"floating.action.BackButton\" parent=\"ThemeOverlay.Material3.FloatingActionButton.Primary\">\r\n        <item name=\"backgroundTint\">@color/white</item>\r\n        <item name=\"android:layout_width\">wrap_content</item>\r\n        <item name=\"android:layout_height\">wrap_content</item>\r\n        <item name=\"android:src\">@drawable/baseline_arrow_back_ios_new_24</item>\r\n        <item name=\"android:backgroundTint\">@color/white</item>\r\n    </style>\r\n    <!--  END : Floating Action Button  -->\r\n\r\n\r\n\r\n    <!--  START : textfield -->\r\n    <style name=\"DesignSystem.TextInputEditText\" parent=\"ThemeOverlay.Material3.TextInputEditText\">\r\n        <item name=\"android:layout_height\">50dp</item>\r\n        <item name=\"android:paddingTop\">0dp</item>\r\n        <item name=\"android:paddingBottom\">0dp</item>\r\n        <item name=\"android:background\">@drawable/edit_text_rounded_rectangle</item>\r\n        <item name=\"android:maxLines\">1</item>\r\n        <item name=\"android:paddingStart\">14.5dp</item>\r\n        <item name=\"android:paddingEnd\">14.5dp</item>\r\n        <item name=\"android:textColorHint\">@color/text_black_placeholder</item>\r\n        <item name=\"android:textSize\">14.5sp</item>\r\n        <item name=\"android:textColor\">@color/text_black</item>\r\n        <item name=\"android:textAppearance\">@style/text.regular.size14</item>\r\n    </style>\r\n\r\n    <!--  END : textfield -->\r\n\r\n<!--    START : dropdown -->\r\n\r\n\r\n    <!--  START : text design system  -->\r\n    <style name=\"Base.Text.Bold\" parent=\"TextAppearance.AppCompat.Title\">\r\n        <item name=\"fontFamily\">@font/poppins_bold</item>\r\n        <item name=\"android:textStyle\">bold</item>\r\n        <item name=\"android:textColor\">@color/black</item>\r\n    </style>\r\n    <style name=\"Base.Text.SemiBold\" parent=\"TextAppearance.AppCompat.Title\">\r\n        <item name=\"fontFamily\">@font/poppins_semibold</item>\r\n        <item name=\"android:textColor\">@color/black</item>\r\n    </style>\r\n    <style name=\"Base.Text.Medium\" parent=\"TextAppearance.AppCompat.Title\">\r\n        <item name=\"fontFamily\">@font/poppins_medium</item>\r\n        <item name=\"android:textColor\">@color/black</item>\r\n    </style>\r\n    <style name=\"Base.Text.Regular\" parent=\"Widget.AppCompat.TextView\">\r\n        <item name=\"fontFamily\">@font/poppins</item>\r\n        <item name=\"android:textColor\">@color/black</item>\r\n    </style>\r\n    <style name=\"Base.Text.Light\" parent=\"Widget.AppCompat.TextView\">\r\n        <item name=\"fontFamily\">@font/poppins_light</item>\r\n        <item name=\"android:textColor\">@color/black</item>\r\n    </style>\r\n    <style name=\"text.bold\" parent=\"Base.Text.Bold\"/>\r\n    <style name=\"text.semibold\" parent=\"Base.Text.SemiBold\"/>\r\n    <style name=\"text.medium\" parent=\"Base.Text.Medium\"/>\r\n    <style name=\"text.regular\" parent=\"Base.Text.Regular\"/>\r\n    <style name=\"text.light\" parent=\"Base.Text.Light\"/>\r\n\r\n\r\n    <!--  TextSize 22  -->\r\n    <style name=\"text.bold.size22\" parent=\"text.bold\">\r\n        <item name=\"android:textSize\">22sp</item>\r\n    </style>\r\n    <style name=\"text.semi_bold.size22\" parent=\"text.semibold\">\r\n        <item name=\"android:textSize\">22sp</item>\r\n    </style>\r\n    <style name=\"text.medium.size22\" parent=\"text.medium\">\r\n        <item name=\"android:textSize\">22sp</item>\r\n    </style>\r\n    <style name=\"text.regular.size22\" parent=\"text.regular\">\r\n        <item name=\"android:textSize\">22sp</item>\r\n    </style>\r\n    <style name=\"text.light.size22\" parent=\"text.light\">\r\n        <item name=\"android:textSize\">22sp</item>\r\n    </style>\r\n\r\n\r\n    <!--  TextSize 20  -->\r\n    <style name=\"text.bold.size20\" parent=\"text.bold\">\r\n        <item name=\"android:textSize\">20sp</item>\r\n    </style>\r\n    <style name=\"text.semi_bold.size20\" parent=\"text.semibold\">\r\n        <item name=\"android:textSize\">20sp</item>\r\n    </style>\r\n    <style name=\"text.medium.size20\" parent=\"text.medium\">\r\n        <item name=\"android:textSize\">20sp</item>\r\n    </style>\r\n    <style name=\"text.regular.size20\" parent=\"text.regular\">\r\n        <item name=\"android:textSize\">20sp</item>\r\n    </style>\r\n    <style name=\"text.light.size20\" parent=\"text.light\">\r\n        <item name=\"android:textSize\">20sp</item>\r\n    </style>\r\n\r\n    <!--  TextSize 18  -->\r\n    <style name=\"text.bold.size18\" parent=\"text.bold\">\r\n        <item name=\"android:textSize\">18sp</item>\r\n    </style>\r\n    <style name=\"text.semi_bold.size18\" parent=\"text.semibold\">\r\n        <item name=\"android:textSize\">18sp</item>\r\n    </style>\r\n    <style name=\"text.medium.size18\" parent=\"text.medium\">\r\n        <item name=\"android:textSize\">18sp</item>\r\n    </style>\r\n    <style name=\"text.regular.size18\" parent=\"text.regular\">\r\n        <item name=\"android:textSize\">18sp</item>\r\n    </style>\r\n    <style name=\"text.light.size18\" parent=\"text.light\">\r\n        <item name=\"android:textSize\">18sp</item>\r\n    </style>\r\n\r\n\r\n    <!--  TextSize 17  -->\r\n    <style name=\"text.bold.size17\" parent=\"text.bold\">\r\n        <item name=\"android:textSize\">17sp</item>\r\n    </style>\r\n    <style name=\"text.semi_bold.size17\" parent=\"text.semibold\">\r\n        <item name=\"android:textSize\">17sp</item>\r\n    </style>\r\n    <style name=\"text.medium.size17\" parent=\"text.medium\">\r\n        <item name=\"android:textSize\">17sp</item>\r\n    </style>\r\n    <style name=\"text.regular.size17\" parent=\"text.regular\">\r\n        <item name=\"android:textSize\">17sp</item>\r\n    </style>\r\n    <style name=\"text.light.size17\" parent=\"text.light\">\r\n        <item name=\"android:textSize\">17sp</item>\r\n    </style>\r\n\r\n    <!--  TextSize 16  -->\r\n    <style name=\"text.bold.size16\" parent=\"text.bold\">\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n    <style name=\"text.semi_bold.size16\" parent=\"text.semibold\">\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n    <style name=\"text.medium.size16\" parent=\"text.medium\">\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n    <style name=\"text.regular.size16\" parent=\"text.regular\">\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n    <style name=\"text.light.size16\" parent=\"text.light\">\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n\r\n    <!--  TextSize 15  -->\r\n    <style name=\"text.bold.size15\" parent=\"text.bold\">\r\n        <item name=\"android:textSize\">15sp</item>\r\n    </style>\r\n    <style name=\"text.semi_bold.size15\" parent=\"text.semibold\">\r\n        <item name=\"android:textSize\">15sp</item>\r\n    </style>\r\n    <style name=\"text.medium.size15\" parent=\"text.medium\">\r\n        <item name=\"android:textSize\">15sp</item>\r\n    </style>\r\n    <style name=\"text.regular.size15\" parent=\"text.regular\">\r\n        <item name=\"android:textSize\">15sp</item>\r\n    </style>\r\n    <style name=\"text.light.size15\" parent=\"text.light\">\r\n        <item name=\"android:textSize\">15sp</item>\r\n    </style>\r\n\r\n    <!--  TextSize 14  -->\r\n    <style name=\"text.bold.size14\" parent=\"text.bold\">\r\n        <item name=\"android:textSize\">14sp</item>\r\n    </style>\r\n    <style name=\"text.semi_bold.size14\" parent=\"text.semibold\">\r\n        <item name=\"android:textSize\">14sp</item>\r\n    </style>\r\n    <style name=\"text.medium.size14\" parent=\"text.medium\">\r\n        <item name=\"android:textSize\">14sp</item>\r\n    </style>\r\n    <style name=\"text.regular.size14\" parent=\"text.regular\">\r\n        <item name=\"android:textSize\">14sp</item>\r\n    </style>\r\n    <style name=\"text.light.size14\" parent=\"text.light\">\r\n        <item name=\"android:textSize\">14sp</item>\r\n    </style>\r\n\r\n    <!--  TextSize 12  -->\r\n    <style name=\"text.bold.size12\" parent=\"text.bold\">\r\n        <item name=\"android:textSize\">12sp</item>\r\n    </style>\r\n    <style name=\"text.semi_bold.size12\" parent=\"text.semibold\">\r\n        <item name=\"android:textSize\">12sp</item>\r\n    </style>\r\n    <style name=\"text.medium.size12\" parent=\"text.medium\">\r\n        <item name=\"android:textSize\">12sp</item>\r\n    </style>\r\n    <style name=\"text.regular.size12\" parent=\"text.regular\">\r\n        <item name=\"android:textSize\">12sp</item>\r\n    </style>\r\n    <style name=\"text.light.size12\" parent=\"text.light\">\r\n        <item name=\"android:textSize\">12sp</item>\r\n    </style>\r\n\r\n    <!-- TextSize 11   -->\r\n    <style name=\"text.bold.size11\" parent=\"text.bold\">\r\n        <item name=\"android:textSize\">11sp</item>\r\n    </style>\r\n    <style name=\"text.semi_bold.size11\" parent=\"text.semibold\">\r\n        <item name=\"android:textSize\">11sp</item>\r\n    </style>\r\n    <style name=\"text.medium.size11\" parent=\"text.medium\">\r\n        <item name=\"android:textSize\">11sp</item>\r\n    </style>\r\n    <style name=\"text.regular.size11\" parent=\"text.regular\">\r\n        <item name=\"android:textSize\">11sp</item>\r\n    </style>\r\n    <style name=\"text.light.size11\" parent=\"text.light\">\r\n        <item name=\"android:textSize\">11sp</item>\r\n    </style>\r\n\r\n\r\n\r\n    <style name=\"title.large\" parent=\"Base.Text.Bold\">\r\n        <item name=\"android:textSize\">30sp</item>\r\n    </style>\r\n    <style name=\"title.medium\" parent=\"Base.Text.Medium\">\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n    <style name=\"title.small\" parent=\"Base.Text.Medium\">\r\n        <item name=\"android:textSize\">12sp</item>\r\n    </style>\r\n\r\n    <style name=\"paragraph\" parent=\"Base.Text.Regular\">\r\n        <item name=\"android:textSize\">14.5sp</item>\r\n        <item name=\"android:textColor\">@color/text_black</item>\r\n    </style>\r\n\r\n    <style name=\"paragraph.large\" parent=\"paragraph\">\r\n        <item name=\"android:textSize\">16sp</item>\r\n    </style>\r\n\r\n    <style name=\"paragraph.small\" parent=\"paragraph\">\r\n        <item name=\"android:textSize\">10sp</item>\r\n    </style>\r\n\r\n    <!--  END : text design system  -->\r\n\r\n\r\n\r\n    <!--  START : card design system  -->\r\n\r\n\r\n    <!--  Dasbor  -->\r\n    <style name=\"card\" parent=\"Widget.MaterialComponents.CardView\">\r\n        <item name=\"cardBackgroundColor\">@color/white</item>\r\n        <item name=\"cardCornerRadius\">8dp</item>\r\n        <item name=\"cardElevation\">4dp</item>\r\n        <item name=\"contentPadding\">8dp</item>\r\n    </style>\r\n\r\n    <style name=\"card.dashboard\" parent=\"card\">\r\n        <item name=\"android:layout_width\">280dp</item>\r\n        <item name=\"android:layout_height\">140dp</item>\r\n        <item name=\"android:layout_marginStart\">12dp</item>\r\n        <item name=\"android:layout_marginEnd\">12dp</item>\r\n\r\n    </style>\r\n\r\n    <style name=\"card.dashboard.icon_start\" parent=\"image.rectangle.20\">\r\n        <item name=\"android:layout_marginStart\">8dp</item>\r\n        <item name=\"android:layout_marginTop\">8dp</item>\r\n    </style>\r\n    <style name=\"card.dashboard.icon_end\" parent=\"image.rectangle.20\">\r\n        <item name=\"android:layout_marginEnd\">8dp</item>\r\n        <item name=\"tint\">@color/grey_300</item>\r\n        <item name=\"android:src\">@drawable/outline_info_24</item>\r\n    </style>\r\n    <style name=\"card.dashboard.text_title\">\r\n        <item name=\"android:layout_width\">wrap_content</item>\r\n        <item name=\"android:layout_height\">wrap_content</item>\r\n        <item name=\"android:layout_marginStart\">8dp</item>\r\n        <item name=\"android:layout_marginEnd\">8dp</item>\r\n        <item name=\"android:textSize\">12sp</item>\r\n        <item name=\"android:textAppearance\">@style/text.semibold</item>\r\n    </style>\r\n    <style name=\"card.dashboard.number\">\r\n        <item name=\"android:layout_width\">match_parent</item>\r\n        <item name=\"android:layout_height\">wrap_content</item>\r\n        <item name=\"android:layout_marginEnd\">4dp</item>\r\n        <item name=\"android:layout_weight\">1</item>\r\n        <item name=\"android:textAlignment\">textEnd</item>\r\n        <item name=\"android:textAppearance\">@style/text.medium</item>\r\n        <item name=\"android:textSize\">36sp</item>\r\n    </style>\r\n    <style name=\"card.dashboard.type\">\r\n        <item name=\"android:layout_width\">match_parent</item>\r\n        <item name=\"android:layout_height\">wrap_content</item>\r\n        <item name=\"android:layout_marginStart\">4dp</item>\r\n        <item name=\"android:layout_weight\">1</item>\r\n        <item name=\"android:textAlignment\">textStart</item>\r\n        <item name=\"android:textSize\">16sp</item>\r\n        <item name=\"android:textAppearance\">@style/text.regular</item>\r\n    </style>\r\n\r\n\r\n    <!--  Proyek/Unit  -->\r\n    <style name=\"card.image\" parent=\"Widget.MaterialComponents.CardView\">\r\n        <item name=\"android:layout_width\">match_parent</item>\r\n        <item name=\"android:layout_height\">wrap_content</item>\r\n        <item name=\"android:elevation\">0dp</item>\r\n        <item name=\"cardCornerRadius\">8dp</item>\r\n    </style>\r\n    <style name=\"card.image.imageview\" parent=\"Theme.AppCompat\">\r\n        <item name=\"android:layout_width\">match_parent</item>\r\n        <item name=\"android:layout_height\">300dp</item>\r\n        <item name=\"android:scaleType\">centerCrop</item>\r\n        <item name=\"android:src\">@drawable/placeholder</item>\r\n        <item name=\"layout_constraintDimensionRatio\">1.22</item>\r\n    </style>\r\n\r\n\r\n    <!--  END : card design system  -->\r\n\r\n\r\n    <!--  START : top navigation bar  -->\r\n    <style name=\"toolbar.top.navigation.center\" parent=\"Widget.MaterialComponents.Toolbar.Primary\">\r\n        <item name=\"android:layout_width\">match_parent</item>\r\n        <item name=\"android:layout_height\">?attr/actionBarSize</item>\r\n        <item name=\"android:background\">@color/white</item>\r\n        <item name=\"android:elevation\">4dp</item>\r\n        <item name=\"android:textAlignment\">center</item>\r\n        <item name=\"android:theme\">@style/ThemeOverlay.AppCompat.ActionBar</item>\r\n        <item name=\"contentInsetStart\">0dp</item>\r\n        <item name=\"popupTheme\">@style/ThemeOverlay.AppCompat.Light</item>\r\n        <item name=\"titleTextAppearance\">@style/text.semi_bold.size22</item>\r\n        <item name=\"titleTextColor\">@color/black</item>\r\n    </style>\r\n\r\n    <style name=\"toolbar.button\" parent=\"Widget.AppCompat.ImageButton\">\r\n        <item name=\"android:layout_width\">wrap_content</item>\r\n        <item name=\"android:layout_height\">0dp</item>\r\n        <item name=\"android:background\">@drawable/toolbar_button</item>\r\n        <item name=\"android:paddingStart\">24dp</item>\r\n        <item name=\"android:paddingEnd\">24dp</item>\r\n    </style>\r\n\r\n\r\n\r\n    <!--  END : top navigation bar  -->\r\n\r\n\r\n\r\n    <!--  START : Icon Translation  -->\r\n    <style name=\"Base.image.scalefit\" parent=\"TextAppearance.AppCompat\">\r\n        <item name=\"android:scaleType\">fitXY</item>\r\n    </style>\r\n\r\n    <style name=\"image.rectangle.24\" parent=\"Base.image.scalefit\">\r\n        <item name=\"android:layout_width\">24dp</item>\r\n        <item name=\"android:layout_height\">24dp</item>\r\n    </style>\r\n\r\n    <style name=\"image.rectangle.20\" parent=\"Base.image.scalefit\">\r\n        <item name=\"android:layout_width\">20dp</item>\r\n        <item name=\"android:layout_height\">20dp</item>\r\n    </style>\r\n\r\n    <style name=\"image.rectangle.16\" parent=\"Base.image.scalefit\">\r\n        <item name=\"android:layout_width\">16dp</item>\r\n        <item name=\"android:layout_height\">16dp</item>\r\n    </style>\r\n\r\n    <style name=\"image.rectangle.12\" parent=\"Base.image.scalefit\">\r\n        <item name=\"android:layout_width\">12dp</item>\r\n        <item name=\"android:layout_height\">12dp</item>\r\n    </style>\r\n\r\n    <!--  START : Icon Translation  -->\r\n\r\n\r\n    \r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/themes.xml b/app/src/main/res/values/themes.xml
+--- a/app/src/main/res/values/themes.xml	(revision 6352518a0248a2e45b233cf0f2303cb9747a3d75)
++++ b/app/src/main/res/values/themes.xml	(date 1700884305900)
+@@ -75,6 +75,7 @@
+         <item name="android:height">32dp</item>
+         <item name="android:textSize">12sp</item>
+     </style>
++
+     <style name="button.secondary.s.rounded">
+         <item name="android:background">@drawable/button_secondary_rounded_rectangle</item>
+     </style>

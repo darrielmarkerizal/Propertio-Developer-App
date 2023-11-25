@@ -22,9 +22,10 @@
             app:cardElevation="0dp">
 
             <ImageView
-                android:id="@+id/image_view_icon_fasilitas"
+                android:id="@+id/image_view_icon_tipe_infrastruktur"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_marginStart="13dp"
                 android:layout_marginTop="14.5dp"
                 android:layout_marginBottom="14.5dp"
                 android:scaleType="fitXY"
@@ -46,7 +47,7 @@
 
 
         <TextView
-            android:id="@+id/text_option_fasilitas"
+            android:id="@+id/text_option_tipe_infrastruktur"
             style="@style/text.regular.size14"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -60,13 +61,13 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <CheckBox
-        android:id="@+id/checkbox_fasilitas"
+    <RadioButton
+        android:id="@+id/radiobutton_tipe_infrastruktur"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="687dp"
-        tools:layout_editor_absoluteY="6dp" />
+        tools:layout_editor_absoluteX="297dp"
+        tools:layout_editor_absoluteY="11dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

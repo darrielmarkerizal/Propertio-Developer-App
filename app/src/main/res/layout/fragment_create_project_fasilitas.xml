@@ -74,7 +74,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/button_tentang_fasilitas"
+        android:id="@+id/button_about_fasilitas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -118,11 +118,10 @@
         android:id="@+id/rv_fasilitas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/button_tentang_fasilitas"
+        app:layout_constraintTop_toBottomOf="@id/button_about_fasilitas"
         android:layout_marginTop="20dp"
         tools:listitem="@layout/item_fasilitas"
         />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

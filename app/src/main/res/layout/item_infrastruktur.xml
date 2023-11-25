@@ -1,6 +1,48 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="65.26dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginStart="13.6dp"
+    android:layout_marginEnd="13.6dp"
+    >
+
+    <ImageView
+        android:id="@+id/image_view_icon_infrastruktur"
+        android:layout_width="36.26dp"
+        android:layout_height="36.26dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/default_profile_picture"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="2dp"
+        tools:layout_editor_absoluteY="13dp"
+        />
+
+    <TextView
+        android:id="@+id/text_option_infrastruktur"
+        style="@style/text.regular.size14"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Option"
+        tools:layout_editor_absoluteX="61dp"
+        tools:layout_editor_absoluteY="23dp"
+        app:layout_constraintStart_toEndOf="@id/image_view_icon_infrastruktur"
+        android:layout_marginStart="10dp"
+        tools:ignore="MissingConstraints"
+        />
+
+    <ImageView
+        android:id="@+id/button__delete_infrastruktur"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:src="@drawable/baseline_delete_24"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="340dp"
+        tools:layout_editor_absoluteY="18dp"
+        />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
