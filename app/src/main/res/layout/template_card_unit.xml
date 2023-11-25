@@ -11,6 +11,7 @@
     app:cardBackgroundColor="@color/white"
     app:cardElevation="0dp"
     android:layout_marginBottom="20dp"
+    android:id="@+id/card_view_unit"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
