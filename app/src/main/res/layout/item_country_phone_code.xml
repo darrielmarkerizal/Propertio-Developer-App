@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_marginBottom="13dp"
+    app:cardBackgroundColor="@color/grey_50"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="0dp"
+    android:id="@+id/card_view_country_phone_code"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/text_view_emoji_country_phone_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:text="🇮🇩"
+            android:textAppearance="@style/text.regular.size14"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_view_country_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Country Selection"
+            android:textAppearance="@style/text.regular.size14"
+            app:layout_constraintBottom_toBottomOf="@+id/text_view_emoji_country_phone_code"
+            app:layout_constraintEnd_toStartOf="@+id/text_view_country_phone_code"
+            app:layout_constraintStart_toEndOf="@+id/text_view_emoji_country_phone_code"
+            app:layout_constraintTop_toTopOf="@+id/text_view_emoji_country_phone_code" />
+
+        <TextView
+            android:id="@+id/text_view_country_phone_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="13dp"
+            android:text="+00"
+            android:textAlignment="textEnd"
+            android:textAppearance="@style/text.regular.size14"
+            app:layout_constraintBottom_toBottomOf="@+id/text_view_country_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/text_view_country_name" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+</com.google.android.material.card.MaterialCardView>

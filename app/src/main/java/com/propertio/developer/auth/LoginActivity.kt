@@ -61,11 +61,8 @@ class LoginActivity : AppCompatActivity() {
             }
 
             linkToCreateAccount.setOnClickListener {
-                Toast.makeText(this@LoginActivity, "Fitur Pendaftaran masih dalam tahap pengembangan", Toast.LENGTH_SHORT).show()
-
-                //TODO: "Create Register Activity and link it here"
-//                val intentToRegisterActivity = Intent(this@LoginActivity, RegisterActivity::class.java)
-//                startActivity(intentToRegisterActivity)
+                val intentToRegisterActivity = Intent(this@LoginActivity, RegisterActivity::class.java)
+                startActivity(intentToRegisterActivity)
             }
 
             linkToForgetPassword.setOnClickListener {
