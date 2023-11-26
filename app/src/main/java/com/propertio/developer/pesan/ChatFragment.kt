@@ -1,9 +1,7 @@
 package com.propertio.developer.pesan
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +9,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.propertio.developer.TokenManager
 import com.propertio.developer.databinding.FragmentChatBinding
 import com.propertio.developer.model.Chat
+import kotlinx.coroutines.launch
 
 class ChatFragment : Fragment() {
     private lateinit var binding : FragmentChatBinding
@@ -35,13 +36,17 @@ class ChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sharedPreferences = requireActivity().getSharedPreferences("account_data", Context.MODE_PRIVATE)
-        val token = sharedPreferences.getString("token", null)
-        Log.d("ChatFragment", "Token from prefs: $token")
-
-        val viewModelFactory = token?.let {
-            ChatViewModelFactory(it)
+        lifecycleScope.launch {
+            val viewModelFactory = TokenManager(requireContext()).token?.let {
+                ChatViewModelFactory(it)
+            }
+            loadMessage(viewModelFactory)
         }
+
+
+    }
+
+    private fun loadMessage(viewModelFactory: ChatViewModelFactory?) {
         val viewModel = viewModelFactory?.let {
             ViewModelProvider(this@ChatFragment, it)
         }?.get(ChatViewModel::class.java)
@@ -84,9 +89,6 @@ class ChatFragment : Fragment() {
 
         }
     }
-
-
-
 
 
 }

@@ -10,14 +10,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.WorkerThread
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.propertio.developer.PropertioDeveloperApplication
 import com.propertio.developer.TokenManager
+import com.propertio.developer.database.project.ProjectTable
 import com.propertio.developer.databinding.FragmentProjectBinding
+import com.propertio.developer.model.Project
 import com.propertio.developer.project.form.ProjectFormActivity
 import com.propertio.developer.project.list.ProjectAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class ProjectFragment : Fragment() {
@@ -25,6 +36,15 @@ class ProjectFragment : Fragment() {
     private lateinit var projectAdapter: ProjectAdapter
     private lateinit var launcher: ActivityResultLauncher<Intent>
     private lateinit var tokenManager: TokenManager
+
+    private var visibleThreshold : Int = 5
+    val cardHeight = 500
+    val cardsToLoadMore = 2
+    val loadHeighThreshold = cardHeight * cardsToLoadMore
+
+    private var _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
 
     private val binding by lazy {
         FragmentProjectBinding.inflate(layoutInflater)
@@ -62,14 +82,26 @@ class ProjectFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setRecyclerListProject()
+        visibleThreshold = 5
+        _isLoading.value = true
 
         with(binding) {
             fabAddProject.setOnClickListener {
                 val intent = Intent(requireContext(), ProjectFormActivity::class.java)
                 launcher.launch(intent)
             }
+
+            if (isLoading.value == true) {
+                progressBarProject.visibility = View.VISIBLE
+            } else {
+                progressBarProject.visibility = View.GONE
+            }
+
+
+        }
+
+        lifecycleScope.launch {
+            setRecyclerListProject()
         }
 
 
@@ -83,9 +115,43 @@ class ProjectFragment : Fragment() {
         binding.recylerViewProjects.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = projectAdapter
+
+            lifecycleScope.launch {
+                loadProjects()
+            }
+
         }
 
-        projectViewModel.projectList.observe(viewLifecycleOwner) { projects ->
+        binding.nestedScrollViewProjectFragment.setOnScrollChangeListener(
+            NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+
+                val isAtBottom = scrollY >= (v.getChildAt(0).measuredHeight - v.measuredHeight)
+                val isNearBottom = scrollY >= (v.getChildAt(0).measuredHeight - v.measuredHeight - loadHeighThreshold)
+
+                if (!v.canScrollVertically(1) && isAtBottom || isNearBottom) {
+                    Log.d("ProjectFragment", "onViewCreated: isAtBottom: $isAtBottom , isNearBottom: $isNearBottom")
+                    if (!isLoading.value!!) {
+                        Log.d("ProjectFragment", "onViewCreated: isLoading: ${isLoading.value}")
+                        _isLoading.value = true
+                        visibleThreshold += 3
+
+                        lifecycleScope.launch {
+                            loadProjects()
+                        }
+                    }
+                }
+
+            })
+
+    }
+
+
+    private suspend fun loadProjects() {
+        Log.d("ProjectFragment", "loadProjects: visibleThreshold: $visibleThreshold")
+        val projects = withContext(Dispatchers.IO) {
+            projectViewModel.allProjectsPaginated(visibleThreshold, 0)
+        }
+        projects.observe(viewLifecycleOwner) { projects ->
             if (projects.isEmpty()) {
                 binding.frameLayoutBelumAdaProyek.visibility = View.VISIBLE
             } else {
@@ -94,14 +160,10 @@ class ProjectFragment : Fragment() {
 
             // Update the list of projects
             projectAdapter.submitList(projects)
+
+            _isLoading.value = false
         }
     }
-
-
-
-
-
-
 
 
 }

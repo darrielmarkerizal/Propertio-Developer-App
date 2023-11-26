@@ -7,7 +7,7 @@
     android:background="@color/white"
     tools:context=".auth.RegisterActivity">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -94,7 +94,7 @@
                     style="@style/paragraph"/>
 
                 <EditText
-                    android:id="@+id/nama_belakang"
+                    android:id="@+id/edit_text_nama_belakang"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:paddingHorizontal="14.5dp"
@@ -158,18 +158,34 @@
                     android:orientation="horizontal"
                     android:background="@drawable/edit_text_rounded_rectangle">
 
-                    <Spinner
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/spinner_nomor_telepon_prefix"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:paddingStart="14.5dp"
+                        android:text="🇮🇩 ID"
+                        android:drawableEnd="@drawable/chevron_down"
+                        android:background="@android:color/transparent"
+                        android:paddingHorizontal="14.5dp"
                         style="@style/paragraph"/>
+
+                    <TextView
+                        android:id="@+id/text_view_nomor_telepon_prefix"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="+62"
+                        android:layout_marginRight="5dp"
+                        android:maxLines="1"
+                        android:textColor="@color/text_black"
+                        android:textAppearance="@style/paragraph"
+                        />
 
                     <EditText
                         android:id="@+id/edit_text_nomor_telepon"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:paddingHorizontal="14.5dp"
+                        android:paddingRight="14.5dp"
                         android:layout_weight="4"
                         android:maxLines="1"
                         android:hint="@string/telephone_number_hint"
@@ -274,16 +290,17 @@
                     android:text="@string/province"
                     style="@style/paragraph"/>
 
-                <Spinner
-                    android:id="@+id/spinner_provinsi"
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/button_provinces_selection"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:paddingHorizontal="14.5dp"
                     android:textColor="@color/text_black"
-                    style="@style/paragraph"
-                    android:pointerIcon="arrow"
-                    android:background="@drawable/edit_text_rounded_rectangle"
-                    />
+                    android:textAppearance="@style/paragraph"
+                    android:textAlignment="textStart"
+                    android:text="-- Pilih Provinsi"
+                    android:drawableEnd="@drawable/chevron_down"
+                    android:background="@drawable/edit_text_rounded_rectangle"/>
 
             </LinearLayout>
 
@@ -302,16 +319,17 @@
                     android:text="@string/city"
                     style="@style/paragraph"/>
 
-                <Spinner
-                    android:id="@+id/spinner_kota"
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/spinner_district"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:paddingHorizontal="14.5dp"
                     android:textColor="@color/text_black"
-                    style="@style/paragraph"
-                    android:pointerIcon="arrow"
-                    android:background="@drawable/edit_text_rounded_rectangle"
-                    />
+                    android:textAppearance="@style/paragraph"
+                    android:textAlignment="textStart"
+                    android:text="-- Pilih Kota"
+                    android:drawableEnd="@drawable/chevron_down"
+                    android:background="@drawable/edit_text_rounded_rectangle"/>
 
             </LinearLayout>
 
@@ -331,7 +349,7 @@
                     style="@style/paragraph"/>
 
                 <EditText
-                    android:id="@+id/edit_text_alamat"
+                    android:id="@+id/edit_text_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="14.5dp"
@@ -353,7 +371,7 @@
                 android:text="@string/add_profile_picture" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/tambah_profile"
+                android:id="@+id/button_tambah_profile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
@@ -386,6 +404,7 @@
                     android:text="@string/question_to_login"
                     style="@style/paragraph.small"/>
                 <TextView
+                    android:id="@+id/link_to_login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/link_to_login_text"
@@ -401,6 +420,6 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
