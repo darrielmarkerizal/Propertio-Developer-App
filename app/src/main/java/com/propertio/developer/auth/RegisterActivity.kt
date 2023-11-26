@@ -139,16 +139,6 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-//    private fun createImagePart(): MultipartBody.Part? {
-//        if (imageUri == null) return null
-//
-//        val inputStream = contentResolver.openInputStream(imageUri!!)
-//        val byteArray = inputStream?.readBytes()
-//        val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), byteArray!!)
-//        inputStream.close()
-//        return MultipartBody.Part.createFormData("picture_profile_file", "image.jpg", requestFile)
-//    }
-
     private fun Register(userRequest: RegisterUserRequest) {
         val retro = Retro(null)
             .getRetroClientInstance()
