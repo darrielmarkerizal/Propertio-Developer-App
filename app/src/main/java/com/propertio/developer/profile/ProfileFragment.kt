@@ -52,6 +52,12 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val swipeRefreshLayout = binding.swipeRefreshLayout
+        swipeRefreshLayout.setOnRefreshListener {
+            profileViewModel.fetchProfileData()
+            swipeRefreshLayout.isRefreshing = false
+        }
+
         val viewModelFactory = ProfileViewModelFactory(TokenManager(requireContext()).token!!)
         profileViewModel = ViewModelProvider(this, viewModelFactory).get(ProfileViewModel::class.java)
 
