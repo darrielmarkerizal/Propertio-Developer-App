@@ -25,8 +25,8 @@ import com.propertio.developer.dialog.viewmodel.PhoneCodeViewModel
 import com.propertio.developer.dialog.viewmodel.ProvinceSpinnerViewModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -107,10 +107,10 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun pickPhoto() {
-        val mediaStoreIntent = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        val intent = Intent(Intent.ACTION_PICK, mediaStoreIntent)
-        intent.type = "image/*"
-        launcher.launch(intent)
+        val mediaStoreIntent = Intent(Intent.ACTION_PICK).apply {
+            setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+        }
+        launcher.launch(mediaStoreIntent)
     }
 
     private fun passwordUIErrorListener() {
@@ -139,24 +139,23 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun Register(userRequest: RegisterUserRequest) {
+    private fun register(userRequest: RegisterUserRequest) {
         val retro = Retro(null)
             .getRetroClientInstance()
             .create(UserApi::class.java)
 
-        val email = RequestBody.create("text/plain".toMediaTypeOrNull(), userRequest.email!!)
-        val password = RequestBody.create("text/plain".toMediaTypeOrNull(), userRequest.password!!)
-        val passwordConfirmation = RequestBody.create("text/plain".toMediaTypeOrNull(), userRequest.passwordConfirmation!!)
-        val firstName = RequestBody.create("text/plain".toMediaTypeOrNull(), userRequest.firstName!!)
-        val lastName = RequestBody.create("text/plain".toMediaTypeOrNull(), userRequest.lastName!!)
-        val phoneNumber = RequestBody.create("text/plain".toMediaTypeOrNull(), userRequest.phoneNumber!!)
-        val city = RequestBody.create("text/plain".toMediaTypeOrNull(), userRequest.city!!)
-        val province = RequestBody.create("text/plain".toMediaTypeOrNull(), userRequest.province!!)
-        val role = RequestBody.create("text/plain".toMediaTypeOrNull(), userRequest.role)
-        val status = RequestBody.create("text/plain".toMediaTypeOrNull(), userRequest.status)
-        val address = RequestBody.create("text/plain".toMediaTypeOrNull(), userRequest.address!!)
+        val email = userRequest.email!!.toRequestBody("text/plain".toMediaTypeOrNull())
+        val password = userRequest.password!!.toRequestBody("text/plain".toMediaTypeOrNull())
+        val passwordConfirmation = userRequest.passwordConfirmation!!.toRequestBody("text/plain".toMediaTypeOrNull())
+        val firstName = userRequest.firstName!!.toRequestBody("text/plain".toMediaTypeOrNull())
+        val lastName = userRequest.lastName!!.toRequestBody("text/plain".toMediaTypeOrNull())
+        val phoneNumber = userRequest.phoneNumber!!.toRequestBody("text/plain".toMediaTypeOrNull())
+        val city = userRequest.city!!.toRequestBody("text/plain".toMediaTypeOrNull())
+        val province = userRequest.province!!.toRequestBody("text/plain".toMediaTypeOrNull())
+        val role = userRequest.role.toRequestBody("text/plain".toMediaTypeOrNull())
+        val status = userRequest.status.toRequestBody("text/plain".toMediaTypeOrNull())
+        val address = userRequest.address!!.toRequestBody("text/plain".toMediaTypeOrNull())
 
-//        val pictureProfileFile = createImagePart()
         val fileDir = applicationContext.filesDir
         val file = File(fileDir, "image.jpg")
         val fileInputStream = contentResolver.openInputStream(imageUri!!)
@@ -289,7 +288,7 @@ class RegisterActivity : AppCompatActivity() {
                 address = editTextAddress.text.toString(),
             )
 
-            Register(userRequest)
+            register(userRequest)
         }
     }
 
