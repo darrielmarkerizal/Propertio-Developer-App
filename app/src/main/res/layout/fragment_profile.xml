@@ -215,6 +215,63 @@
                                 android:paddingHorizontal="15dp"
                                 />
                         </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/container_input_provinsi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="20dp"
+                            android:visibility="visible"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/province"
+                                style="@style/paragraph"/>
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/button_provinces_selection_profile"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:paddingHorizontal="14.5dp"
+                                android:textColor="@color/text_black"
+                                android:textAppearance="@style/paragraph"
+                                android:textAlignment="textStart"
+                                android:text="Pilih Provinsi"
+                                android:drawableEnd="@drawable/chevron_down"
+                                android:background="@drawable/edit_text_rounded_rectangle"/>
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/container_input_kota"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="20dp"
+                            android:visibility="visible"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/city"
+                                style="@style/paragraph"/>
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/spinner_district_profile"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:paddingHorizontal="14.5dp"
+                                android:textColor="@color/text_black"
+                                android:textAppearance="@style/paragraph"
+                                android:textAlignment="textStart"
+                                android:text="Pilih Kota"
+                                android:drawableEnd="@drawable/chevron_down"
+                                android:background="@drawable/edit_text_rounded_rectangle"/>
+
+                        </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
