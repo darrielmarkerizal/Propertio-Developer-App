@@ -144,6 +144,8 @@
         <item>Triliun</item>
     </string-array>
 
+    <!--  Provinces  -->
+
     <string-array name="list_of_provinces">
         <item>Aceh</item>
         <item>Sumatera Utara</item>
