@@ -67,7 +67,7 @@ class ProfileFragment : Fragment() {
                 // Set the selected item in the spinner to the user's province
                 val userProvince = profileData.userData?.province
                 if (userProvince != null) {
-                    val provincePosition = provinceNames.indexOf(userProvince)
+                    val provincePosition = provinceAdapter.getPosition(userProvince)
                     binding.spinnerProvinsiProfile.setSelection(provincePosition)
                 }
 
@@ -89,7 +89,7 @@ class ProfileFragment : Fragment() {
                 // Set the selected item in the spinner to the user's city
                 val userCity = profileData.userData?.city
                 if (userCity != null) {
-                    val cityPosition = cityNames.indexOf(userCity)
+                    val cityPosition = cityAdapter.getPosition(userCity)
                     binding.spinnerKotaProfile.setSelection(cityPosition)
                 }
             }
