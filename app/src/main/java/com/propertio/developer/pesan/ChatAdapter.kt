@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.annotation.WorkerThread
 import androidx.recyclerview.widget.RecyclerView
 import com.propertio.developer.R
+import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.common.message.MessageApi
 import com.propertio.developer.api.common.message.MessageDetailResponse
@@ -116,9 +117,7 @@ class ChatAdapter(
         Log.d("ChatAdapter", "updateChat: ${data.id}")
 
         // API
-        val sharedPreferences = context.getSharedPreferences("account_data", Context.MODE_PRIVATE)
-        val token = sharedPreferences.getString("token", null)
-        val retro = Retro(token).getRetroClientInstance().create(MessageApi::class.java)
+        val retro = Retro(TokenManager(context).token).getRetroClientInstance().create(MessageApi::class.java)
 
         if (data.id != null) {
             retro.getDetailMessage(data.id).enqueue(object : Callback<MessageDetailResponse> {
