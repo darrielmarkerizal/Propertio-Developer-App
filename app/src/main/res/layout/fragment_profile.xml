@@ -373,7 +373,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/logout_link_text"
                     android:layout_gravity="center_horizontal"
-                    android:textAppearance="@style/text.semi_bold.size14"
+                    android:textAppearance="@style/text.semi_bold.size16"
                     android:textColor="@color/red_badges"
                     android:layout_marginBottom="50dp" />
             </LinearLayout>
