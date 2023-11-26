@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.DomainURL
 import com.propertio.developer.api.DomainURL.DOMAIN
@@ -22,6 +23,7 @@ import com.propertio.developer.databinding.FragmentProfileBinding
 import android.app.AlertDialog
 import com.propertio.developer.api.profile.ProfileUpdateRequest
 import android.app.Activity
+import android.graphics.Color
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.propertio.developer.auth.LoginActivity
@@ -52,49 +54,40 @@ class ProfileFragment : Fragment() {
         val viewModelFactory = ProfileViewModelFactory(TokenManager(requireContext()).token!!)
         profileViewModel = ViewModelProvider(this, viewModelFactory).get(ProfileViewModel::class.java)
 
-        profileViewModel.combinedData.observe(viewLifecycleOwner, Observer { combined ->
-            val profileData = combined.first
+        profileViewModel.profileData.observe(viewLifecycleOwner, Observer { profileData ->
+            // Update the UI with the profile data
+            updateUI(profileData)
+            Log.d("ProfileFragment", "Profile data updated: $profileData")
+        })
 
-            // TODO: Buat suspend atau dibuat cara agar menunggu value datang sebelum membuat dan memasang list
-            val provincesData = combined.second
+        profileViewModel.provincesData.observe(viewLifecycleOwner, Observer { provincesData ->
+            val provinceNames = provincesData.map { it.name }
+            val provinceAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, provinceNames)
+            provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.spinnerProvinsiProfile.adapter = provinceAdapter
 
-            if (profileData != null && provincesData != null) {
-                val provinceNames = provincesData.map { it.name }
-                val provinceAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, provinceNames)
-                provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                binding.spinnerProvinsiProfile.adapter = provinceAdapter
-
-                // Set the selected item in the spinner to the user's province
-                val userProvince = profileData.userData?.province
-                if (userProvince != null) {
-                    val provincePosition = provinceAdapter.getPosition(userProvince)
-                    binding.spinnerProvinsiProfile.setSelection(provincePosition)
-                }
-
-                // Update the UI with the profile data
-                updateUI(profileData)
+            // Set the selected item in the spinner to the user's province
+            val userProvince = profileViewModel.profileData.value?.userData?.province
+            if (userProvince != null) {
+                val provincePosition = provinceAdapter.getPosition(userProvince)
+                binding.spinnerProvinsiProfile.setSelection(provincePosition)
+                Log.d("ProfileFragment", "Province spinner set to: $userProvince")
             }
         })
 
-        profileViewModel.combinedCityData.observe(viewLifecycleOwner, Observer { combined ->
-            val profileData = combined.first
-            val citiesData = combined.second
+        profileViewModel.cityData.observe(viewLifecycleOwner, Observer { citiesData ->
+            val cityNames = citiesData.map { it.name }
+            val cityAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cityNames)
+            cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.spinnerKotaProfile.adapter = cityAdapter
 
-            if (profileData != null && citiesData != null) {
-                val cityNames = citiesData.map { it.name }
-                val cityAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cityNames)
-                cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                binding.spinnerKotaProfile.adapter = cityAdapter
-
-                // Set the selected item in the spinner to the user's city
-                val userCity = profileData.userData?.city
-                if (userCity != null) {
-                    val cityPosition = cityAdapter.getPosition(userCity)
-                    binding.spinnerKotaProfile.setSelection(cityPosition)
-                }
+            // Set the selected item in the spinner to the user's city
+            val userCity = profileViewModel.profileData.value?.userData?.city
+            if (userCity != null) {
+                val cityPosition = cityAdapter.getPosition(userCity)
+                binding.spinnerKotaProfile.setSelection(cityPosition)
+                Log.d("ProfileFragment", "City spinner set to: $userCity")
             }
-
-            updateUI(profileData)
         })
 
         binding.btnUbahKataSandiProfil.setOnClickListener {
@@ -160,6 +153,24 @@ class ProfileFragment : Fragment() {
                 setNegativeButton("No", null)
             }.show()
         }
+
+        profileViewModel.updateProfileResponse.observe(viewLifecycleOwner, Observer { response ->
+            if (response.isSuccessful) {
+                if (profileViewModel.isUndoSuccessful.value == true) {
+                    Snackbar.make(binding.root, "Update profil dibatalkan", Snackbar.LENGTH_SHORT).show()
+                    profileViewModel.resetUndoSuccessStatus()
+                } else {
+                    val snackbar = Snackbar.make(binding.root, "Profil Berhasil Diperbarui", Snackbar.LENGTH_LONG)
+                    snackbar.setAction("Batal") {
+                        profileViewModel.undoProfileUpdate()
+                    }
+                    snackbar.setActionTextColor(Color.RED)
+                    snackbar.show()
+                }
+            } else {
+                Snackbar.make(binding.root, "Profil Gagal Diperbarui", Snackbar.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun updateUI(data: ProfileResponse.ProfileData?) {
