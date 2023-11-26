@@ -116,9 +116,11 @@ class ProfileFragment : Fragment() {
                 val address = binding.edtAlamatProfil.text.toString()
                 val city = binding.spinnerKotaProfile.selectedItem.toString()
                 val province = binding.spinnerProvinsiProfile.selectedItem.toString()
+                val role = profileViewModel.profileData.value?.role
+                val pictureProfile = profileViewModel.profileData.value?.userData?.pictureProfile
 
 
-                val request = ProfileUpdateRequest(fullName, phone, address, city, province)
+                val request = ProfileUpdateRequest(fullName, phone, address, city, province, role, pictureProfile)
                 Log.d("ProfileFragment", "Profile update request: $request")
                 profileViewModel.updateProfile(request)
             }
