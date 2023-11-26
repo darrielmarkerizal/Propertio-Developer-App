@@ -6,157 +6,194 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".unit.form.CreateUnitUmumFragment"
-    android:paddingHorizontal="32dp"
-    android:layout_marginTop="14dp"
-    android:layout_marginBottom="35dp"
+    android:paddingTop="32.5dp"
+    android:paddingBottom="150dp"
+    android:paddingHorizontal="32.5dp"
     >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/text_title_unit"
         style="@style/text.bold.size22"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Membuat Unit"
-        tools:ignore="MissingConstraints"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         />
 
     <TextView
-        android:id="@+id/textView2"
-        style="@style/text.medium.size16"
-        android:layout_width="match_parent"
+        android:id="@+id/text_view_unit_label"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
         android:text="Oakwood"
-        app:layout_constraintTop_toBottomOf="@id/textView1"/>
+        android:textAppearance="@style/text.semi_bold.size14"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/text_title_unit"
+        app:layout_constraintTop_toBottomOf="@+id/text_title_unit"
+        />
 
-    <LinearLayout
-        android:id="@+id/container_input_nama_unit"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/input_nama_unit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:visibility="visible"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/textView2"
-        >
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_view_unit_label">
 
         <TextView
+            android:id="@+id/txt_nama_unit"
+            style="@style/text.regular.size14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nama Unit"
-            style="@style/paragraph"/>
-
-        <EditText
-            android:id="@+id/edit_text_nama_unit"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:paddingHorizontal="14.5dp"
-            android:maxLines="1"
-            android:hint=" "
-            android:textColorHint="@color/text_black_placeholder"
-            android:textColor="@color/text_black"
-            style="@style/paragraph"
-            android:inputType="textPersonName"
-            android:background="@drawable/edit_text_rounded_rectangle"
-            android:layout_marginBottom="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="NotSibling"
             />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/container_input_deskripsi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:visibility="visible"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/container_input_nama_unit">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Deskripsi"
-        style="@style/paragraph"/>
-
-    <EditText
-        android:id="@+id/edit_text_deskripsi"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingHorizontal="14.5dp"
-        android:maxLines="1"
-        android:hint=" "
-        android:textColorHint="@color/text_black_placeholder"
-        android:textColor="@color/text_black"
-        style="@style/paragraph"
-        android:inputType="textPersonName"
-        android:background="@drawable/edit_text_rounded_rectangle"
-        android:layout_marginBottom="20dp"
-        />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/container_input_stock_unit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:visibility="visible"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/container_input_deskripsi"
-        >
 
         <TextView
+            android:id="@+id/next_txt_nama_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:nextFocusLeft="@id/txt_headline_project"
+            android:text="*"
+            android:textColor="@color/red_badges"
+            app:layout_constraintStart_toEndOf="@+id/txt_nama_unit"
+            app:layout_constraintTop_toTopOf="@+id/txt_nama_unit"
+            />
+
+        <EditText
+            android:id="@+id/edit_nama_unit"
+            style="@style/DesignSystem.TextInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:maxLines="1"
+            android:paddingHorizontal="14.5dp"
+            android:textColor="@color/text_black"
+            android:textColorHint="@color/text_black_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_nama_unit" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/input_deskripsi_unit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/input_nama_unit">
+
+        <TextView
+            android:id="@+id/txt_deskripsi_unit"
+            style="@style/text.regular.size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deskripsi"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="NotSibling"
+            />
+
+        <EditText
+            android:id="@+id/edit_deskripsi_unit"
+            style="@style/DesignSystem.TextInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
+            android:layout_marginTop="8dp"
+            android:padding="14.5dp"
+            android:gravity="top"
+            android:textColor="@color/text_black"
+            android:textColorHint="@color/text_black_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_deskripsi_unit" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/input_stok_unit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/input_deskripsi_unit">
+
+        <TextView
+            android:id="@+id/txt_stok_unit"
+            style="@style/text.regular.size14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Stock Unit"
-            style="@style/paragraph"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="NotSibling"
+            />
 
         <EditText
-            android:id="@+id/edit_text_stock_unit"
+            android:id="@+id/edit_stok_unit"
+            style="@style/DesignSystem.TextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:paddingHorizontal="14.5dp"
+            android:layout_marginTop="8dp"
             android:maxLines="1"
-            android:hint=" "
-            android:textColorHint="@color/text_black_placeholder"
+            android:paddingHorizontal="14.5dp"
             android:textColor="@color/text_black"
-            style="@style/paragraph"
-            android:inputType="textPersonName"
-            android:background="@drawable/edit_text_rounded_rectangle"
-            android:layout_marginBottom="20dp"
-            />
-    </LinearLayout>
+            android:textColorHint="@color/text_black_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_stok_unit" />
 
-    <LinearLayout
-        android:id="@+id/container_input_harga"
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/input_harga_unit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:visibility="visible"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/container_input_stock_unit"
-        >
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/input_stok_unit">
 
         <TextView
+            android:id="@+id/txt_harga_unit"
+            style="@style/text.regular.size14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Harga"
-            style="@style/paragraph"/>
+            android:text="Harga Unit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="NotSibling"
+            />
+
+        <TextView
+            android:id="@+id/next_txt_harga_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:nextFocusLeft="@id/txt_headline_project"
+            android:text="*"
+            android:textColor="@color/red_badges"
+            app:layout_constraintStart_toEndOf="@+id/txt_harga_unit"
+            app:layout_constraintTop_toTopOf="@+id/txt_harga_unit"
+            />
 
         <EditText
-            android:id="@+id/edit_text_harga"
+            android:id="@+id/edit_harga_unit"
+            style="@style/DesignSystem.TextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:paddingHorizontal="14.5dp"
+            android:layout_marginTop="8dp"
             android:maxLines="1"
-            android:hint="contoh: 1000000"
-            android:textColorHint="@color/text_black_placeholder"
+            android:paddingHorizontal="14.5dp"
+            android:hint="contoh:1000000"
             android:textColor="@color/text_black"
-            style="@style/paragraph"
-            android:inputType="textPersonName"
-            android:background="@drawable/edit_text_rounded_rectangle"
-            android:layout_marginBottom="20dp"
+            android:textColorHint="@color/text_black_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_harga_unit"
             />
-    </LinearLayout>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

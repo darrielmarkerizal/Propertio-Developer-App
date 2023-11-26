@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/text.regular.size14"
             android:textColor="@color/red_badges"
-            android:text="Hapus semua"
+            android:text="Hapus Semua"
             app:layout_constraintEnd_toEndOf="@+id/text_title_project_media"
             app:layout_constraintTop_toTopOf="@+id/text_view_project_photo_label" />
 
@@ -75,7 +75,7 @@
             android:id="@+id/recycler_view_list_unggah_foto"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             android:paddingStart="28.5dp"
             android:scrollbars="horizontal"
             android:visibility="visible"
