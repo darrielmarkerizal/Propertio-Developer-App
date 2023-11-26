@@ -213,6 +213,7 @@
                     style="@style/paragraph"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/edit_text_password_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:endIconMode="password_toggle"
@@ -221,15 +222,9 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edit_text_password"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingHorizontal="14.5dp"
-                        android:maxLines="1"
                         android:hint="@string/password_hint"
-                        android:textColorHint="@color/text_black_placeholder"
-                        android:textColor="@color/text_black"
-                        style="@style/paragraph"
                         android:inputType="textPassword"
-                        android:background="@drawable/edit_text_rounded_rectangle"/>
+                        style="@style/DesignSystem.TextInputEditText"/>
 
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -252,6 +247,7 @@
                     style="@style/paragraph"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/edit_text_password_confirmation_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:endIconMode="password_toggle"
@@ -260,15 +256,9 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edit_text_password_confirmation"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:paddingHorizontal="14.5dp"
-                        android:maxLines="1"
                         android:hint="@string/password_confirmation_hint"
-                        android:textColorHint="@color/text_black_placeholder"
-                        android:textColor="@color/text_black"
-                        style="@style/paragraph"
                         android:inputType="textPassword"
-                        android:background="@drawable/edit_text_rounded_rectangle"/>
+                        style="@style/DesignSystem.TextInputEditText"/>
 
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -352,8 +342,11 @@
                     android:id="@+id/edit_text_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:minHeight="100dp"
                     android:paddingHorizontal="14.5dp"
                     android:paddingVertical="14dp"
+                    android:hint="Masukkan Alamat Anda"
                     android:textColorHint="@color/text_black_placeholder"
                     android:textColor="@color/text_black"
                     style="@style/paragraph"
@@ -365,6 +358,7 @@
 
             <TextView
                 style="@style/paragraph"
+                android:layout_marginBottom="4dp"
                 android:visibility="visible"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -377,6 +371,8 @@
                 android:layout_marginBottom="30dp"
                 android:visibility="visible"
                 android:text="@string/add"
+                android:maxLines="1"
+                android:ellipsize="end"
                 style="@style/button.add"
                 />
 
