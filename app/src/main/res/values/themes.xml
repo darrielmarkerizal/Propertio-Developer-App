@@ -154,6 +154,10 @@
         <item name="android:contentDescription">"@string/tooltips_aksi_lainnya</item>
     </style>
 
+    <style name="button.circular.transparant" parent="Widget.AppCompat.ImageButton">
+        <item name="android:background">@drawable/button_circular_transparant</item>
+    </style>
+
     <!-- END   : Custom add Button   -->
 
 
