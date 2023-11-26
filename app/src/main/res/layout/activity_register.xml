@@ -288,7 +288,7 @@
                     android:textColor="@color/text_black"
                     android:textAppearance="@style/paragraph"
                     android:textAlignment="textStart"
-                    android:text="-- Pilih Provinsi"
+                    android:text="Pilih Provinsi"
                     android:drawableEnd="@drawable/chevron_down"
                     android:background="@drawable/edit_text_rounded_rectangle"/>
 
@@ -317,7 +317,7 @@
                     android:textColor="@color/text_black"
                     android:textAppearance="@style/paragraph"
                     android:textAlignment="textStart"
-                    android:text="-- Pilih Kota"
+                    android:text="Pilih Kota"
                     android:drawableEnd="@drawable/chevron_down"
                     android:background="@drawable/edit_text_rounded_rectangle"/>
 
