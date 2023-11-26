@@ -1,6 +1,5 @@
 package com.propertio.developer.profile
 
-import android.R
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -26,8 +25,10 @@ import android.app.Activity
 import android.graphics.Color
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.propertio.developer.auth.LoginActivity
 import kotlinx.coroutines.launch
+import com.propertio.developer.R
 
 
 class ProfileFragment : Fragment() {
@@ -50,6 +51,12 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val swipeRefreshLayout = binding.swipeRefreshLayout
+        swipeRefreshLayout.setOnRefreshListener {
+            profileViewModel.fetchProfileData()
+            swipeRefreshLayout.isRefreshing = false
+        }
 
         val viewModelFactory = ProfileViewModelFactory(TokenManager(requireContext()).token!!)
         profileViewModel = ViewModelProvider(this, viewModelFactory).get(ProfileViewModel::class.java)
@@ -139,19 +146,18 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        binding.btnLogoutProfil.setOnClickListener{
-            // TODO: Ubah Stylenya
-            AlertDialog.Builder(requireContext()).apply {
-                setTitle("Logout")
-                setMessage("Are you sure you want to logout?")
-                setPositiveButton("Yes") { _, _ ->
+        binding.btnLogoutProfil.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext(), R.style.CustomAlertDialog)
+                .setTitle("Keluar")
+                .setMessage("Apakah Anda yakin ingin keluar?")
+                .setPositiveButton("Ya") { _, _ ->
                     TokenManager(requireContext()).deleteToken()
                     val intent = Intent(requireContext(), LoginActivity::class.java)
                     startActivity(intent)
                     requireActivity().finish()
                 }
-                setNegativeButton("No", null)
-            }.show()
+                .setNegativeButton("Tidak", null)
+                .show()
         }
 
         profileViewModel.updateProfileResponse.observe(viewLifecycleOwner, Observer { response ->
