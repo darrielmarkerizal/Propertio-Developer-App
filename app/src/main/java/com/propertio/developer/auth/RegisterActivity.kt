@@ -260,8 +260,8 @@ class RegisterActivity : AppCompatActivity() {
             }
             if (cityViewModel.citiesData.value?.citiesId == "" || cityViewModel.citiesData.value?.citiesId == null) {
                 Toast.makeText(this@RegisterActivity, "Pilih Kota terlebih dahulu", Toast.LENGTH_SHORT).show()
-                spinnerDistrict.error = "Pilih Kota terlebih dahulu"
-                spinnerDistrict.requestFocus()
+                spinnerCity.error = "Pilih Kota terlebih dahulu"
+                spinnerCity.requestFocus()
                 return
             }
             if (editTextAddress.text.toString().isEmpty()) {
@@ -304,7 +304,7 @@ class RegisterActivity : AppCompatActivity() {
         cityViewModel = ViewModelProvider(this)[CitiesSpinnerViewModel::class.java]
 
 
-        binding.spinnerDistrict.setOnClickListener {
+        binding.spinnerCity.setOnClickListener {
             if (isProvinceSelected) {
                 CitiesSheetFragment().show(supportFragmentManager, "CitySheetFragment")
             } else {
@@ -315,8 +315,8 @@ class RegisterActivity : AppCompatActivity() {
 
 
         cityViewModel.citiesData.observe(this) {
-            binding.spinnerDistrict.text = it.citiesName
-            binding.spinnerDistrict.error = null
+            binding.spinnerCity.text = it.citiesName
+            binding.spinnerCity.error = null
         }
     }
 

@@ -310,7 +310,7 @@
                     style="@style/paragraph"/>
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/spinner_district"
+                    android:id="@+id/spinner_city"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:paddingHorizontal="14.5dp"
