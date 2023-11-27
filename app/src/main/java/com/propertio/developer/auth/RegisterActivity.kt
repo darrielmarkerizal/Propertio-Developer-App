@@ -274,13 +274,14 @@ class RegisterActivity : AppCompatActivity() {
                 return
             }
 
+
             val userRequest = RegisterUserRequest(
                 email = editTextEmail.text.toString(),
                 password = editTextPassword.text.toString(),
                 passwordConfirmation = editTextPasswordConfirmation.text.toString(),
                 firstName = editTextNamaDepan.text.toString(),
                 lastName = editTextNamaBelakang.text.toString(),
-                phoneNumber = editTextNomorTelepon.text.toString(),
+                phoneNumber = "${textViewNomorTeleponPrefix.text.toString().removePrefix(" + ")}${editTextNomorTelepon.text}",
                 city = cityViewModel.citiesData.value?.citiesId,
                 province = provinceViewModel.provinceData.value?.provinceId,
                 role = "developer",
