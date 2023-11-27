@@ -103,6 +103,10 @@ class ProfileViewModel(private val token: String) : ViewModel() {
                         _cityData.value = response.body()
                         Log.d("ProfileViewModel", "City data fetched successfully for province id: $provinceId")
                         Log.d("ProfileViewModel", "City response: ${response.body()}")
+                        // Log each city
+                        response.body()?.forEach { city ->
+                            Log.d("ProfileViewModel", "City: ${city.name}, ID: ${city.id}")
+                        }
                     } else {
                         val errorBody = response.errorBody()?.string()
                         Log.e("ProfileViewModel", "Failed to fetch city data: $errorBody")
