@@ -19,7 +19,8 @@ class ProjectFormActivity : AppCompatActivity() {
         CreateProjectInformasiUmumFragment(),
         CreateProjectLokasiFragment(),
         CreateProjectMediaFragment(),
-        CreateProjectInfrastrukturFragment()
+        CreateProjectFasilitasFragment(),
+        CreateProjectInfrastrukturFragment(),
     )
 
     private var currentFragmentIndex : Int = 0

@@ -187,18 +187,28 @@
 
 
     <!--  START : textfield -->
-    <style name="DesignSystem.TextInputEditText" parent="ThemeOverlay.Material3.TextInputEditText">
-        <item name="android:layout_height">50dp</item>
-        <item name="android:paddingTop">0dp</item>
-        <item name="android:paddingBottom">0dp</item>
+    <style name="DesignSystem.TextInputEditText.Base" parent="ThemeOverlay.Material3.TextInputEditText">
         <item name="android:background">@drawable/edit_text_rounded_rectangle</item>
-        <item name="android:maxLines">1</item>
         <item name="android:paddingStart">14.5dp</item>
         <item name="android:paddingEnd">14.5dp</item>
         <item name="android:textColorHint">@color/text_black_placeholder</item>
         <item name="android:textSize">14.5sp</item>
         <item name="android:textColor">@color/text_black</item>
         <item name="android:textAppearance">@style/text.regular.size14</item>
+    </style>
+
+    <style name="DesignSystem.TextInputEditText" parent="DesignSystem.TextInputEditText.Base">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="DesignSystem.TextInputTextField" parent="DesignSystem.TextInputEditText.Base">
+        <item name="android:gravity">top</item>
+        <item name="android:minHeight">100dp</item>
+        <item name="android:paddingTop">14.5dp</item>
+        <item name="android:paddingBottom">14.5dp</item>
     </style>
 
     <!--  END : textfield -->
