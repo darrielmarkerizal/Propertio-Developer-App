@@ -31,10 +31,18 @@ import com.propertio.developer.dialog.ProvinceSheetFragment
 import com.propertio.developer.dialog.model.CitiesModel
 import com.propertio.developer.dialog.viewmodel.CitiesSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.ProvinceSpinnerViewModel
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import java.io.File
+import android.net.Uri
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import okhttp3.RequestBody.Companion.asRequestBody
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+    private var body: MultipartBody.Part? = null
 
     private lateinit var profileViewModel: ProfileViewModel
 
@@ -121,11 +129,10 @@ class ProfileFragment : Fragment() {
                 val city = binding.spinnerDistrictProfile.text.toString()
                 val province = binding.buttonProvincesSelectionProfile.text.toString()
                 val role = profileViewModel.profileData.value?.role
-                val pictureProfile = profileViewModel.profileData.value?.userData?.pictureProfile
 
-                val request = ProfileUpdateRequest(fullName, phone, address, city, province, role, pictureProfile)
+                val request = ProfileUpdateRequest(fullName, phone, address, city, province, role, null)
                 Log.d("ProfileFragment", "Profile update request: $request")
-                profileViewModel.updateProfile(request)
+                profileViewModel.updateProfile(request, body) // body adalah MultipartBody.Part yang berisi file gambar
             }
 
             binding.buttonAddProfilePictureProfil.setOnClickListener() {
@@ -170,6 +177,45 @@ class ProfileFragment : Fragment() {
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            val imageUri = data.data
+            Log.d("ProfileFragment", "Image selected with URI: $imageUri")
+            Glide.with(this)
+                .load(imageUri)
+                .circleCrop()
+                .into(binding.imgProfil)
+
+            val parcelFileDescriptor = requireContext().contentResolver.openFileDescriptor(imageUri!!, "r")
+            val fileDescriptor = parcelFileDescriptor?.fileDescriptor
+            val imageFile = File(requireContext().cacheDir, "tempImage")
+            val tempImageUri = Uri.fromFile(imageFile)
+
+            fileDescriptor?.let {
+                val inputStream = FileInputStream(it)
+                val outputStream = FileOutputStream(imageFile)
+                inputStream.copyTo(outputStream)
+            }
+
+            val requestFile = imageFile.asRequestBody("image/*".toMediaTypeOrNull()!!)
+            val body = MultipartBody.Part.createFormData("pictureProfile", imageFile.name, requestFile)
+
+            val fullName = binding.edtNamaLengkapProfil.text.toString()
+            val phone = binding.edtNomorTeleponProfil.text.toString()
+            val address = binding.edtAlamatProfil.text.toString()
+            val city = binding.spinnerDistrictProfile.text.toString()
+            val province = binding.buttonProvincesSelectionProfile.text.toString()
+            val role = profileViewModel.profileData.value?.role
+            val pictureProfile = profileViewModel.profileData.value?.userData?.pictureProfile
+
+            val request = ProfileUpdateRequest(fullName, phone, address, city, province, role, null)
+            Log.d("ProfileFragment", "Profile update request: $request")
+            Log.d("ProfileFragment", "Profile update request: $body")
+            profileViewModel.updateProfile(request, body)
+        }
+    }
     private fun updateUI(data: ProfileResponse.ProfileData?) {
         data?.let {
             val userData = it.userData
@@ -185,19 +231,6 @@ class ProfileFragment : Fragment() {
             binding.edtNamaLengkapProfil.setText(userData?.fullName)
             binding.edtNomorTeleponProfil.setText(userData?.phone)
             binding.edtAlamatProfil.setText(userData?.address)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            val imageUri = data.data
-            Log.d("ProfileFragment", "Image selected with URI: $imageUri")
-            Glide.with(this)
-                .load(imageUri)
-                .circleCrop()
-                .into(binding.imgProfil)
         }
     }
 
