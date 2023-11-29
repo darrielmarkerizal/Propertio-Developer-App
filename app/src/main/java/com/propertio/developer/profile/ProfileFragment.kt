@@ -4,13 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -25,7 +24,6 @@ import com.propertio.developer.api.profile.ProfileResponse
 import com.propertio.developer.api.profile.ProfileUpdateRequest
 import com.propertio.developer.auth.LoginActivity
 import com.propertio.developer.databinding.FragmentProfileBinding
-import com.propertio.developer.dialog.CitiesSheetFragment
 import com.propertio.developer.dialog.ProfileCitiesSheetFragment
 import com.propertio.developer.dialog.ProvinceSheetFragment
 import com.propertio.developer.dialog.model.CitiesModel
@@ -33,11 +31,10 @@ import com.propertio.developer.dialog.viewmodel.CitiesSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.ProvinceSpinnerViewModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
-import android.net.Uri
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import okhttp3.RequestBody.Companion.asRequestBody
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null

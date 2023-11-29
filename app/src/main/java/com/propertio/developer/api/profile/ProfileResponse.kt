@@ -2,16 +2,9 @@ package com.propertio.developer.api.profile
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.propertio.developer.api.models.DefaultResponse
 
-class ProfileResponse {
-
-    @SerializedName("status")
-    @Expose
-    var status: String? = null
-
-    @SerializedName("message")
-    @Expose
-    var message: String? = null
+class ProfileResponse : DefaultResponse(){
 
     @SerializedName("data")
     @Expose
@@ -87,22 +80,5 @@ class ProfileResponse {
         }
     }
 
-    data class Province(
-        @SerializedName("id")
-        val id: String,
 
-        @SerializedName("name")
-        val name: String,
-    )
-
-    data class City(
-        @SerializedName("id")
-        val id: String,
-
-        @SerializedName("province_id")
-        val provinceId: String,
-
-        @SerializedName("name")
-        val name: String
-    )
 }

@@ -7,14 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.auth.UserResponse
+import com.propertio.developer.api.common.address.City
+import com.propertio.developer.api.common.address.Province
 import com.propertio.developer.api.profile.ProfileApi
 import com.propertio.developer.api.profile.ProfileResponse
 import com.propertio.developer.api.profile.ProfileUpdateRequest
 import kotlinx.coroutines.launch
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,11 +24,11 @@ class ProfileViewModel(private val token: String) : ViewModel() {
     private val _profileData = MutableLiveData<ProfileResponse.ProfileData>()
     val profileData: LiveData<ProfileResponse.ProfileData> get() = _profileData
 
-    private val _provincesData = MutableLiveData<List<ProfileResponse.Province>>()
-    val provincesData: LiveData<List<ProfileResponse.Province>> get() = _provincesData
+    private val _provincesData = MutableLiveData<List<Province>>()
+    val provincesData: LiveData<List<Province>> get() = _provincesData
 
-    private val _cityData = MutableLiveData<List<ProfileResponse.City>>()
-    val cityData: LiveData<List<ProfileResponse.City>> get() = _cityData
+    private val _cityData = MutableLiveData<List<City>>()
+    val cityData: LiveData<List<City>> get() = _cityData
 
     private val _updateProfileResponse = MutableLiveData<Response<UserResponse>>()
     val updateProfileResponse: LiveData<Response<UserResponse>> = _updateProfileResponse
@@ -75,12 +75,12 @@ class ProfileViewModel(private val token: String) : ViewModel() {
             val retro = Retro(token)
             val profileApi = retro.getRetroClientInstance().create(ProfileApi::class.java)
 
-            profileApi.getProvinces().enqueue(object : Callback<List<ProfileResponse.Province>> {
-                override fun onFailure(call: Call<List<ProfileResponse.Province>>, t: Throwable) {
+            profileApi.getProvinces().enqueue(object : Callback<List<Province>> {
+                override fun onFailure(call: Call<List<Province>>, t: Throwable) {
                     Log.e("ProfileViewModel", "Failed to fetch provinces data: ${t.message}")
                 }
 
-                override fun onResponse(call: Call<List<ProfileResponse.Province>>, response: Response<List<ProfileResponse.Province>>) {
+                override fun onResponse(call: Call<List<Province>>, response: Response<List<Province>>) {
                     if (response.isSuccessful) {
                         _provincesData.value = response.body()
                         Log.d("ProfileViewModel", "Provinces data fetched successfully: ${response.body()}")
@@ -98,12 +98,12 @@ class ProfileViewModel(private val token: String) : ViewModel() {
             val retro = Retro(token)
             val profileApi = retro.getRetroClientInstance().create(ProfileApi::class.java)
 
-            profileApi.getCities(provinceId).enqueue(object : Callback<List<ProfileResponse.City>> {
-                override fun onFailure(call: Call<List<ProfileResponse.City>>, t: Throwable) {
+            profileApi.getCities(provinceId).enqueue(object : Callback<List<City>> {
+                override fun onFailure(call: Call<List<City>>, t: Throwable) {
                     Log.e("ProfileViewModel", "Failed to fetch city data: ${t.message}")
                 }
 
-                override fun onResponse(call: Call<List<ProfileResponse.City>>, response: Response<List<ProfileResponse.City>>) {
+                override fun onResponse(call: Call<List<City>>, response: Response<List<City>>) {
                     if (response.isSuccessful) {
                         _cityData.value = response.body()
                         Log.d("ProfileViewModel", "City data fetched successfully for province id: $provinceId")

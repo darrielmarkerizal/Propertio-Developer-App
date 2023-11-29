@@ -1,20 +1,20 @@
 package com.propertio.developer.project
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
 import android.webkit.WebView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
+import coil.load
 import com.propertio.developer.NumericalUnitConverter
 import com.propertio.developer.PropertioDeveloperApplication
 import com.propertio.developer.R
@@ -32,7 +32,6 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.create
 import java.util.regex.Pattern
 
 class ProjectDetailActivity : AppCompatActivity() {
@@ -199,10 +198,10 @@ class ProjectDetailActivity : AppCompatActivity() {
             .getRetroClientInstance()
             .create(DeveloperApi::class.java)
 
-        retro.getProjectDetail(id).enqueue(object : retrofit2.Callback<ProjectDetail> {
+        retro.getProjectDetail(id).enqueue(object : Callback<ProjectDetail> {
             override fun onResponse(
-                call: retrofit2.Call<ProjectDetail>,
-                response: retrofit2.Response<ProjectDetail>
+                call: Call<ProjectDetail>,
+                response: Response<ProjectDetail>
             ) {
                 if (response.isSuccessful) {
                     val project = response.body()?.data
@@ -242,7 +241,7 @@ class ProjectDetailActivity : AppCompatActivity() {
             }
 
             override fun onFailure(
-                call: retrofit2.Call<ProjectDetail>,
+                call: Call<ProjectDetail>,
                 t: Throwable
             ) {
                 Log.e("ProjectDetailActivity", "onFailure: $t")
@@ -340,10 +339,14 @@ class ProjectDetailActivity : AppCompatActivity() {
 
     private fun loadTagsData(project: ProjectDetail.ProjectDeveloper) {
         with(binding) {
-            textViewPropertyType.text = project.propertyType
+            textViewPropertyType.text = project.propertyType?.name ?: textViewPropertyType.text.toString()
             textViewCertificateType.text = project.certificate
 
-            // TODO: Buat fungsi untuk mengganti icon property type
+            iconPropertyType.load(project.propertyType?.icon) {
+                crossfade(true)
+                placeholder(R.drawable.home)
+                error(R.drawable.home)
+            }
         }
     }
 

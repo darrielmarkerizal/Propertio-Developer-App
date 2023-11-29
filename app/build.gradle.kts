@@ -4,6 +4,9 @@ plugins {
     // KSP
     id("com.google.devtools.ksp")
 
+    // Kapt
+    id("kotlin-kapt")
+
 
 }
 
@@ -56,7 +59,17 @@ dependencies {
 
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
-    ksp("com.github.bumptech.glide:compiler:4.16.0")
+    kapt("com.github.bumptech.glide:compiler:4.16.0")
+
+    // SVG
+//    implementation("com.caverock:androidsvg-aar:1.4")
+//    implementation("com.caverock:androidsvg:1.4")
+
+    // Coil
+    implementation("io.coil-kt:coil:2.5.0")
+    implementation("io.coil-kt:coil-svg:2.5.0")
+
+
 
     // Room
     implementation("androidx.room:room-ktx:2.6.0")
@@ -71,7 +84,6 @@ dependencies {
     val nav_version = "2.7.5"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
-    implementation("io.coil-kt:coil:2.4.0")
     implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
 

@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.bumptech.glide.Glide
 import com.propertio.developer.NumericalUnitConverter
+import com.propertio.developer.R
 import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
 import com.propertio.developer.databinding.TemplateCardUnitBinding
 import com.propertio.developer.unit.UnitDetailActivity
@@ -49,9 +51,12 @@ class UnitAdapter(
         private fun loadImage(photoURL: String?) {
             Log.d("UnitAdapter", "loadImage: $photoURL")
             with(binding) {
-                Glide.with(context)
-                    .load(photoURL)
-                    .into(imageViewThumbnail)
+                imageViewThumbnail.load(photoURL) {
+                    crossfade(true)
+                    placeholder(R.drawable.placeholder)
+                    error(R.drawable.placeholder)
+
+                }
             }
         }
 
