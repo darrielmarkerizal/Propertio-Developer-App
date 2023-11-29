@@ -14,7 +14,7 @@ abstract class ProjectMinimum {
 
     @SerializedName("property_type")
     @Expose
-    var propertyType: String? = null
+    var propertyType: ProjectPropertyType? = null
 
     @SerializedName("posted_at")
     @Expose
@@ -52,3 +52,13 @@ abstract class ProjectMinimum {
     @Expose
     var createdAt: String? = null
 }
+
+data class ProjectPropertyType (
+    @SerializedName("name")
+    @Expose
+    var name: String? = null,
+
+    @SerializedName("icon")
+    @Expose
+    var icon: String? = null
+)

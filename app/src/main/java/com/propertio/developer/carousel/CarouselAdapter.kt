@@ -15,7 +15,7 @@ class CarouselAdapter(
         fun bind(data: ImageData) {
             with(binding) {
                 Glide.with(itemView.context)
-                    .load(data.imgaeUrl)
+                    .load(data.imageUrl)
                     .into(imageViewSlider)
             }
         }

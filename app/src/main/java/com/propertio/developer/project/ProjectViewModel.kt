@@ -142,7 +142,8 @@ class ProjectViewModel(
             val newProject = ProjectTable(
                 id = it.id!!,
                 title = it.title,
-                propertyType = it.propertyType,
+                propertyTypeName = it.propertyType?.name,
+                propertyTypeIcon = it.propertyType?.icon,
                 postedAt = it.postedAt,
                 addressAddress = it.address?.address,
                 addressDistrict = it.address?.district,
