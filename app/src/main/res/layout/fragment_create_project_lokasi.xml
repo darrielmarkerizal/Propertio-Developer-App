@@ -23,7 +23,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
+            />
 
         <TextView
             android:id="@+id/text_sub_project_lokasi"
@@ -52,7 +52,7 @@
                 android:text="Provinsi"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints,NotSibling" />
+                />
 
             <TextView
                 android:id="@+id/next_txt_provinsi_project"
@@ -63,7 +63,7 @@
                 android:textColor="@color/red_badges"
                 app:layout_constraintStart_toEndOf="@+id/txt_provinsi_project"
                 app:layout_constraintTop_toTopOf="@+id/txt_provinsi_project"
-                tools:ignore="MissingConstraints" />
+                />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/spinner_province_project"
@@ -96,7 +96,7 @@
                 android:text="Kota"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints,NotSibling" />
+                />
 
             <TextView
                 android:id="@+id/next_txt_kota_project"
@@ -106,7 +106,6 @@
                 android:text="*"
                 android:textColor="@color/red_badges"
                 app:layout_constraintStart_toEndOf="@+id/txt_kota_project"
-                tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteY="0dp" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -141,7 +140,7 @@
                 android:text="Kecamatan"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints,NotSibling" />
+                />
 
             <TextView
                 android:id="@+id/next_txt_kecamatan_project"
@@ -151,7 +150,6 @@
                 android:text="*"
                 android:textColor="@color/red_badges"
                 app:layout_constraintStart_toEndOf="@+id/txt_kecamatan_project"
-                tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteY="0dp" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -185,7 +183,7 @@
                 android:text="Alamat"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints,NotSibling" />
+                />
 
             <EditText
                 android:id="@+id/edit_text_address_project"
@@ -216,7 +214,7 @@
                 android:text="Kode Pos"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints,NotSibling" />
+                />
 
             <EditText
                 android:id="@+id/edit_text_pos_project"
@@ -246,7 +244,7 @@
                 android:text="Pencarian"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints,NotSibling" />
+                />
 
             <EditText
                 android:id="@+id/edit_text_link_maps_project"
@@ -276,7 +274,7 @@
                 android:text="Pilih lokasi anda pada peta"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints,NotSibling" />
+                />
 
             <TextView
                 android:id="@+id/txt_note_wajib_project"
@@ -287,7 +285,7 @@
                 android:textColor="@color/red_badges"
                 app:layout_constraintStart_toEndOf="@id/txt_note_pencarian_project"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="NotSibling" />
+                />
 
             <ImageView
                 android:id="@+id/img_maps"
@@ -313,7 +311,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/input_note_pencarian_project"
-            tools:ignore="MissingConstraints" />
+            />
 
         <TextView
             android:id="@+id/subtitle_siteplan_lokasi"
@@ -354,7 +352,7 @@
                 android:text="Link Immersive Siteplan"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints,NotSibling" />
+                />
 
             <EditText
                 android:id="@+id/edit_text_link_immersive_project"
@@ -378,7 +376,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/container_input_immersive_siteplan_project"
-            tools:ignore="MissingConstraints,NotSibling" />
+            />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/btn_hubungi"
@@ -402,7 +400,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_note_membuat_immersive_project"
-            tools:ignore="MissingConstraints" />
+            />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_contoh_immersive_lokasi_proyek"
@@ -419,7 +417,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/button_hubungi_kami_lokasi_proyek"
             app:layout_constraintTop_toBottomOf="@+id/button_hubungi_kami_lokasi_proyek"
-            tools:ignore="MissingConstraints" />
+            />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -439,7 +437,7 @@
                 android:text="Link Immersive Apps"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints,NotSibling" />
+                />
 
             <EditText
                 android:id="@+id/edit_text_link_immersive_apps_project"

@@ -236,7 +236,6 @@
             app:layout_constraintTop_toBottomOf="@+id/text_view_dokumen_label" />
 
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
