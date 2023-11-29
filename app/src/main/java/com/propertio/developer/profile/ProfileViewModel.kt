@@ -13,10 +13,8 @@ import com.propertio.developer.api.profile.ProfileApi
 import com.propertio.developer.api.profile.ProfileResponse
 import com.propertio.developer.api.profile.ProfileUpdateRequest
 import kotlinx.coroutines.launch
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
