@@ -9,6 +9,6 @@ data class ProfileUpdateRequest(
     @SerializedName("address") val address: String?,
     @SerializedName("province") val province: String?,
     @SerializedName("city") val city: String?,
-    @SerializedName("role") val role: String?,
-    @SerializedName("picture_profile") val pictureProfile: MultipartBody.Part?
+    @SerializedName("role") val role: String? = "developer",
+    @SerializedName("picture_profile_file") var pictureProfileFile: MultipartBody.Part? = null
 )
