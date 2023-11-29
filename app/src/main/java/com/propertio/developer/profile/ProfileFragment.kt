@@ -35,23 +35,11 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import java.io.File
 import android.net.Uri
-import android.provider.MediaStore
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
-import com.propertio.developer.api.Retro
-import com.propertio.developer.api.auth.UserResponse
-import com.propertio.developer.api.profile.ProfileApi
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-
-class ProfileFragment (private val token: String) : Fragment(){
+class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private var body: MultipartBody.Part? = null
@@ -61,29 +49,6 @@ class ProfileFragment (private val token: String) : Fragment(){
     private var isProvinceSelected : Boolean = false
     private lateinit var provinceViewModel: ProvinceSpinnerViewModel
     private lateinit var cityViewModel: CitiesSpinnerViewModel
-
-    private var imageUri: Uri? = null
-    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-
-        if (result.resultCode == AppCompatActivity.RESULT_OK) {
-            val imageUri = result.data?.data
-            // Store the imageUri in a variable to use it later in the Register function
-            this.imageUri = imageUri
-            val filename = getPathFromUri(imageUri).split("/").last()
-            binding.txtAddProfilePictureProfil.text = filename
-            Log.d("RegisterActivity", "onActivityResult: $filename")
-        }
-    }
-
-    private fun getPathFromUri(uri: Uri?): String {
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = requireContext().contentResolver.query(uri!!, projection, null, null, null)
-        cursor?.moveToNext()
-        val columnIndex = cursor?.getColumnIndex(MediaStore.Images.Media.DATA) ?: 0
-        val path = cursor?.getString(if (columnIndex >= 0) columnIndex else 0)
-        cursor?.close()
-        return path!!
-    }
 
     companion object {
         private const val PICK_IMAGE_REQUEST_CODE = 1
@@ -157,24 +122,23 @@ class ProfileFragment (private val token: String) : Fragment(){
                 .into(binding.imgProfil)
 
             binding.btnSimpanProfil.setOnClickListener {
-                val updateRequest = ProfileUpdateRequest(
-                    binding.edtNamaLengkapProfil.text.toString(),
-                    binding.edtNomorTeleponProfil.text.toString(),
-                    binding.edtAlamatProfil.text.toString(),
-                    binding.spinnerDistrictProfile.text.toString(),
-                    binding.buttonProvincesSelectionProfile.text.toString(),
-                    profileData?.role,
-                      null
-                )
+                Log.d("ProfileFragment", "Save button clicked")
+                val fullName = binding.edtNamaLengkapProfil.text.toString()
+                val phone = binding.edtNomorTeleponProfil.text.toString()
+                val address = binding.edtAlamatProfil.text.toString()
+                val city = binding.spinnerDistrictProfile.text.toString()
+                val province = binding.buttonProvincesSelectionProfile.text.toString()
+                val role = profileViewModel.profileData.value?.role
 
-                profileViewModel.updateProfile(updateRequest)
+                val request = ProfileUpdateRequest(fullName, phone, address, city, province, role, null)
+                Log.d("ProfileFragment", "Profile update request: $request")
+                profileViewModel.updateProfile(request, body) // body adalah MultipartBody.Part yang berisi file gambar
             }
 
             binding.buttonAddProfilePictureProfil.setOnClickListener() {
-                val mediaStoreIntent = Intent(Intent.ACTION_PICK).apply {
-                    setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-                }
-                launcher.launch(mediaStoreIntent)
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.type = "image/*"
+                startActivityForResult(intent, PICK_IMAGE_REQUEST_CODE)
             }
         })
 
@@ -213,6 +177,45 @@ class ProfileFragment (private val token: String) : Fragment(){
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            val imageUri = data.data
+            Log.d("ProfileFragment", "Image selected with URI: $imageUri")
+            Glide.with(this)
+                .load(imageUri)
+                .circleCrop()
+                .into(binding.imgProfil)
+
+            val parcelFileDescriptor = requireContext().contentResolver.openFileDescriptor(imageUri!!, "r")
+            val fileDescriptor = parcelFileDescriptor?.fileDescriptor
+            val imageFile = File(requireContext().cacheDir, "tempImage")
+            val tempImageUri = Uri.fromFile(imageFile)
+
+            fileDescriptor?.let {
+                val inputStream = FileInputStream(it)
+                val outputStream = FileOutputStream(imageFile)
+                inputStream.copyTo(outputStream)
+            }
+
+            val requestFile = imageFile.asRequestBody("image/*".toMediaTypeOrNull()!!)
+            val body = MultipartBody.Part.createFormData("pictureProfile", imageFile.name, requestFile)
+
+            val fullName = binding.edtNamaLengkapProfil.text.toString()
+            val phone = binding.edtNomorTeleponProfil.text.toString()
+            val address = binding.edtAlamatProfil.text.toString()
+            val city = binding.spinnerDistrictProfile.text.toString()
+            val province = binding.buttonProvincesSelectionProfile.text.toString()
+            val role = profileViewModel.profileData.value?.role
+            val pictureProfile = profileViewModel.profileData.value?.userData?.pictureProfile
+
+            val request = ProfileUpdateRequest(fullName, phone, address, city, province, role, null)
+            Log.d("ProfileFragment", "Profile update request: $request")
+            Log.d("ProfileFragment", "Profile update request: $body")
+            profileViewModel.updateProfile(request, body)
+        }
+    }
     private fun updateUI(data: ProfileResponse.ProfileData?) {
         data?.let {
             val userData = it.userData
@@ -276,67 +279,6 @@ class ProfileFragment (private val token: String) : Fragment(){
                     )
                 )
         }
-    }
-
-    fun updateProfile(updateRequest: ProfileUpdateRequest) {
-        val fullName = binding.edtNamaLengkapProfil.text.toString()
-        val phone = binding.edtNomorTeleponProfil.text.toString()
-        val address = binding.edtAlamatProfil.text.toString()
-        val city = binding.spinnerDistrictProfile.text.toString()
-        val province = binding.buttonProvincesSelectionProfile.text.toString()
-        val role = profileViewModel.profileData.value?.role
-
-        val request = ProfileUpdateRequest(fullName, phone, address, city, province, role, null)
-
-        val fileDir = requireContext().filesDir
-        val file = File(fileDir, "image.jpg")
-        val fileInputStream = requireContext().contentResolver.openInputStream(imageUri!!)
-        val fileOutputStream = FileOutputStream(file)
-        fileInputStream?.copyTo(fileOutputStream)
-        fileInputStream!!.copyTo(fileOutputStream)
-        fileInputStream.close()
-
-        val pictureProfileFile = MultipartBody.Part.createFormData(
-            "picture_profile_file",
-            file.name,
-            file.asRequestBody("image/*".toMediaTypeOrNull())
-        )
-
-        val retro = Retro(token)
-        val profileApi = retro.getRetroClientInstance().create(ProfileApi::class.java)
-
-        val fullNameBody = request.fullName!!.toRequestBody("text/plain".toMediaTypeOrNull())
-        val phoneBody = request.phone!!.toRequestBody("text/plain".toMediaTypeOrNull())
-        val addressBody = request.address!!.toRequestBody("text/plain".toMediaTypeOrNull())
-        val cityBody = request.city!!.toRequestBody("text/plain".toMediaTypeOrNull())
-        val provinceBody = request.province!!.toRequestBody("text/plain".toMediaTypeOrNull())
-        val roleBody = request.role!!.toRequestBody("text/plain".toMediaTypeOrNull())
-
-        profileApi.updateProfile(
-            token,
-            fullNameBody,
-            phoneBody,
-            addressBody,
-            cityBody,
-            provinceBody,
-            pictureProfileFile
-        ).enqueue(object : Callback<UserResponse> {
-            override fun onResponse(
-                call: Call<UserResponse>,
-                response: Response<UserResponse>
-            ) {
-                if (response.isSuccessful) {
-                    Log.d("ProfileFragment", "Profile update successful with response: ${response.body()}")
-                } else {
-                    val errorMessage = response.errorBody()?.string()
-                    Log.e("ProfileFragment", "Profile update failed with error: $errorMessage")
-                }
-            }
-
-            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                Log.e("ProfileFragment", "Profile update failed with exception: ${t.message}")
-            }
-        })
     }
 
 }
