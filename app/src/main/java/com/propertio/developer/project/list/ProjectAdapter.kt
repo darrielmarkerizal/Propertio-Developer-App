@@ -2,18 +2,25 @@ package com.propertio.developer.project.list
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.PictureDrawable
+import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.WorkerThread
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.Coil
+import coil.ImageLoader
+import coil.decode.SvgDecoder
+import coil.load
 import com.bumptech.glide.Glide
+import com.propertio.developer.R
 import com.propertio.developer.api.DomainURL
 import com.propertio.developer.database.project.ProjectTable
 import com.propertio.developer.databinding.TemplateCardProjectBinding
+//import com.propertio.developer.lib.GlideApp
+//import com.propertio.developer.lib.SvgSoftwareLayerSetter
 import com.propertio.developer.project.ProjectDetailActivity
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_ID
 
@@ -48,7 +55,7 @@ class ProjectAdapter(
                 }
 
                 textViewPrice.text = data.price.toString()
-                textViewPropertyType.text = data.propertyType
+                textViewPropertyType.text = data.propertyTypeName ?: "Property Type"
                 textViewCountUnit.text = data.countUnit.toString()
                 textViewProjectCode.text = data.projectCode
 
@@ -56,6 +63,10 @@ class ProjectAdapter(
                 // Image
                 val imageURL: String = DomainURL.DOMAIN + data.photo
                 loadImage(imageURL)
+
+                val propertyTypeIconURL : String = DomainURL.DOMAIN + data.propertyTypeIcon
+                loadImagePropertyTypeIcon(propertyTypeIconURL)
+
 
 
                 // button
@@ -76,15 +87,32 @@ class ProjectAdapter(
 
         }
 
+        private fun loadImagePropertyTypeIcon(propertyTypeIconURL: String) {
+            with(binding) {
+                Log.d("ProjectAdapter", "propertyTypeIconURL: $propertyTypeIconURL")
+                // Load with coil
+                val imageLoader = ImageLoader.Builder(context)
+                    .components {
+                        add(SvgDecoder.Factory())
+                    }
+                    .build()
 
+                icPropertyType.load(propertyTypeIconURL, imageLoader) {
+                    crossfade(true)
+                    placeholder(R.drawable.home)
+                    error(R.drawable.home)
+                }
+            }
+        }
 
         private fun loadImage(imageURL: String) {
             with(binding) {
                 Log.d("ProjectAdapter", "imageURL: $imageURL")
-                Glide.with(context)
-                    .load(imageURL)
-                    .thumbnail(0.1f)
-                    .into(imageViewThumbnail)
+                imageViewThumbnail.load(imageURL) {
+                    crossfade(true)
+                    placeholder(R.drawable.placeholder)
+                    error(R.drawable.placeholder)
+                }
             }
 
         }
@@ -96,6 +124,7 @@ class ProjectAdapter(
             LayoutInflater.from(parent.context),
             parent, false
         )
+
         return ItemProjectViewHolder(binding)
     }
 

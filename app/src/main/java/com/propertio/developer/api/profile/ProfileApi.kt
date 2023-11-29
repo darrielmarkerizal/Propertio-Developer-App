@@ -1,6 +1,7 @@
 package com.propertio.developer.api.profile
 
 import com.propertio.developer.api.auth.UserResponse
+import com.propertio.developer.api.common.address.AddressApi
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -14,15 +15,9 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface ProfileApi {
+interface ProfileApi : AddressApi{
     @GET("v1/profile")
     fun getProfile() : Call<ProfileResponse>
-
-    @GET("provinces")
-    fun getProvinces() : Call<List<ProfileResponse.Province>>
-
-    @GET("cities/{province_id}")
-    fun getCities(@Path("province_id") provinceId: String) : Call<List<ProfileResponse.City>>
 
     @FormUrlEncoded
     @POST("v1/profile?_method=PUT")

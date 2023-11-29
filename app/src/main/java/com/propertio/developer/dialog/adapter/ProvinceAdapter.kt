@@ -4,12 +4,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.propertio.developer.api.profile.ProfileResponse
+import com.propertio.developer.api.common.address.Province
 import com.propertio.developer.databinding.ItemSimpleCardForRecyclerBinding
 
-typealias onClickItemProvinceListener = (ProfileResponse.Province) -> Unit
+typealias onClickItemProvinceListener = (Province) -> Unit
 class ProvinceAdapter(
-    private val provinces: List<ProfileResponse.Province>,
+    private val provinces: List<Province>,
     private val onClickItemListener: onClickItemProvinceListener
 ) : RecyclerView.Adapter<ProvinceAdapter.ProvinceViewHolder>()
 {
@@ -17,7 +17,7 @@ class ProvinceAdapter(
         private val binding : ItemSimpleCardForRecyclerBinding
     ) : RecyclerView.ViewHolder(binding.root)
     {
-        fun bind(province: ProfileResponse.Province) {
+        fun bind(province: Province) {
             Log.d("ProvinceAdapter", "bind: ${province.toString()}")
 
             with(binding) {

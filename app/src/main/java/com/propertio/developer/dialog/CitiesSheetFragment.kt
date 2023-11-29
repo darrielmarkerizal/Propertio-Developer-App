@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
-import com.propertio.developer.api.profile.ProfileApi
-import com.propertio.developer.api.profile.ProfileResponse
+import com.propertio.developer.api.common.address.AddressApi
+import com.propertio.developer.api.common.address.City
 import com.propertio.developer.databinding.FragmentBottomRecyclerWithSearchBarSheetBinding
 import com.propertio.developer.dialog.adapter.CitiesAdapter
 import com.propertio.developer.dialog.model.CitiesModel
@@ -51,13 +51,13 @@ class CitiesSheetFragment : BottomSheetDialogFragment() {
     private fun fetchCitiesApi() {
         val retro = Retro(TokenManager(requireContext()).token)
             .getRetroClientInstance()
-            .create(ProfileApi::class.java)
+            .create(AddressApi::class.java)
 
         citiesViewModel.citiesData.value?.let {
-            retro.getCities(it.provinceId).enqueue(object : Callback<List<ProfileResponse.City>> {
+            retro.getCities(it.provinceId).enqueue(object : Callback<List<City>> {
                 override fun onResponse(
-                    call: Call<List<ProfileResponse.City>>,
-                    response: Response<List<ProfileResponse.City>>
+                    call: Call<List<City>>,
+                    response: Response<List<City>>
                 ) {
                     if (response.isSuccessful) {
                         Log.d("CitiesSheetFragment", "onResponse: ${response.body()}")
@@ -75,7 +75,7 @@ class CitiesSheetFragment : BottomSheetDialogFragment() {
                     }
                 }
 
-                override fun onFailure(call: Call<List<ProfileResponse.City>>, t: Throwable) {
+                override fun onFailure(call: Call<List<City>>, t: Throwable) {
                     Log.e("CitiesSheetFragment", "onFailure: ${t.message}", t)
                 }
 
@@ -84,7 +84,7 @@ class CitiesSheetFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun setupRecyclerView(cities: List<ProfileResponse.City>) {
+    private fun setupRecyclerView(cities: List<City>) {
         Log.d("CitiesSheetFragment", "setupRecyclerView: $cities")
 
         with(binding) {
