@@ -63,6 +63,7 @@
         tools:layout_editor_absoluteX="32dp">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textinput_cari_fasilitas"
             style="@style/DesignSystem.TextInputEditText"
             android:layout_width="match_parent"
             android:layout_marginBottom="8dp"
@@ -87,7 +88,8 @@
             android:layout_width="93dp"
             android:layout_height="32dp"
             android:text="Fasilitas"
-            tools:ignore="MissingConstraints"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -98,7 +100,7 @@
             android:layout_marginStart="34dp"
             android:text="Keunggulan"
             app:layout_constraintStart_toEndOf="@id/button_fasilitas"
-            tools:ignore="MissingConstraints"
+            app:layout_constraintTop_toTopOf="parent"
             />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -109,7 +111,7 @@
             android:layout_marginStart="34dp"
             android:text="Perabot"
             app:layout_constraintStart_toEndOf="@id/button_keunggulan"
-            tools:ignore="MissingConstraints"
+            app:layout_constraintTop_toTopOf="parent"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

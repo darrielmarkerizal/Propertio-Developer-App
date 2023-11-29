@@ -7,10 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.auth.UserResponse
+import com.propertio.developer.api.common.address.City
+import com.propertio.developer.api.common.address.Province
 import com.propertio.developer.api.profile.ProfileApi
 import com.propertio.developer.api.profile.ProfileResponse
 import com.propertio.developer.api.profile.ProfileUpdateRequest
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,11 +24,11 @@ class ProfileViewModel(private val token: String) : ViewModel() {
     private val _profileData = MutableLiveData<ProfileResponse.ProfileData>()
     val profileData: LiveData<ProfileResponse.ProfileData> get() = _profileData
 
-    private val _provincesData = MutableLiveData<List<ProfileResponse.Province>>()
-    val provincesData: LiveData<List<ProfileResponse.Province>> get() = _provincesData
+    private val _provincesData = MutableLiveData<List<Province>>()
+    val provincesData: LiveData<List<Province>> get() = _provincesData
 
-    private val _cityData = MutableLiveData<List<ProfileResponse.City>>()
-    val cityData: LiveData<List<ProfileResponse.City>> get() = _cityData
+    private val _cityData = MutableLiveData<List<City>>()
+    val cityData: LiveData<List<City>> get() = _cityData
 
     private val _updateProfileResponse = MutableLiveData<Response<UserResponse>>()
     val updateProfileResponse: LiveData<Response<UserResponse>> = _updateProfileResponse
@@ -70,12 +75,12 @@ class ProfileViewModel(private val token: String) : ViewModel() {
             val retro = Retro(token)
             val profileApi = retro.getRetroClientInstance().create(ProfileApi::class.java)
 
-            profileApi.getProvinces().enqueue(object : Callback<List<ProfileResponse.Province>> {
-                override fun onFailure(call: Call<List<ProfileResponse.Province>>, t: Throwable) {
+            profileApi.getProvinces().enqueue(object : Callback<List<Province>> {
+                override fun onFailure(call: Call<List<Province>>, t: Throwable) {
                     Log.e("ProfileViewModel", "Failed to fetch provinces data: ${t.message}")
                 }
 
-                override fun onResponse(call: Call<List<ProfileResponse.Province>>, response: Response<List<ProfileResponse.Province>>) {
+                override fun onResponse(call: Call<List<Province>>, response: Response<List<Province>>) {
                     if (response.isSuccessful) {
                         _provincesData.value = response.body()
                         Log.d("ProfileViewModel", "Provinces data fetched successfully: ${response.body()}")
@@ -93,16 +98,20 @@ class ProfileViewModel(private val token: String) : ViewModel() {
             val retro = Retro(token)
             val profileApi = retro.getRetroClientInstance().create(ProfileApi::class.java)
 
-            profileApi.getCities(provinceId).enqueue(object : Callback<List<ProfileResponse.City>> {
-                override fun onFailure(call: Call<List<ProfileResponse.City>>, t: Throwable) {
+            profileApi.getCities(provinceId).enqueue(object : Callback<List<City>> {
+                override fun onFailure(call: Call<List<City>>, t: Throwable) {
                     Log.e("ProfileViewModel", "Failed to fetch city data: ${t.message}")
                 }
 
-                override fun onResponse(call: Call<List<ProfileResponse.City>>, response: Response<List<ProfileResponse.City>>) {
+                override fun onResponse(call: Call<List<City>>, response: Response<List<City>>) {
                     if (response.isSuccessful) {
                         _cityData.value = response.body()
                         Log.d("ProfileViewModel", "City data fetched successfully for province id: $provinceId")
                         Log.d("ProfileViewModel", "City response: ${response.body()}")
+                        // Log each city
+                        response.body()?.forEach { city ->
+                            Log.d("ProfileViewModel", "City: ${city.name}, ID: ${city.id}")
+                        }
                     } else {
                         val errorBody = response.errorBody()?.string()
                         Log.e("ProfileViewModel", "Failed to fetch city data: $errorBody")
@@ -112,34 +121,54 @@ class ProfileViewModel(private val token: String) : ViewModel() {
         }
     }
 
-    fun updateProfile(request: ProfileUpdateRequest) {
+    fun updateProfile(request: ProfileUpdateRequest, pictureProfileFile: MultipartBody.Part?) {
         Log.d("ProfileViewModel", "Updating profile with request: $request")
+        if (pictureProfileFile != null) {
+            Log.d("ProfileViewModel", "Picture profile file: ${pictureProfileFile.body}")
+            Log.d("ProfileViewModel", "Picture profile file name: ${pictureProfileFile.headers?.get("Content-Disposition")}")
+            Log.d("ProfileViewModel", "Picture profile file size: ${pictureProfileFile.body.contentLength()}")
+            Log.d("ProfileViewModel", "Picture profile file type: ${pictureProfileFile.body.contentType()}")
+
+        } else {
+            Log.d("ProfileViewModel", "No picture profile file to send")
+        }
         previousProfileData = _profileData.value
         viewModelScope.launch {
             val retro = Retro(token)
             val profileApi = retro.getRetroClientInstance().create(ProfileApi::class.java)
-            profileApi.updateProfile(
-                token,
-                request.fullName,
-                request.phone,
-                request.address,
-                request.province,
-                request.city
-            ).enqueue(object : Callback<UserResponse> {
-                override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
-                    if (response.isSuccessful) {
-                        _updateProfileResponse.value = response
-                        Log.d("ProfileViewModel", "Profile update successful with response: ${response.body()}")
-                    } else {
-                        val errorMessage = response.errorBody()?.string()
-                        Log.e("ProfileViewModel", "Profile update failed with error: $errorMessage")
+            request.fullName?.toRequestBody("text/plain".toMediaTypeOrNull()!!)?.let { fullName ->
+                request.phone?.toRequestBody("text/plain".toMediaTypeOrNull()!!)?.let { phone ->
+                    request.address?.toRequestBody("text/plain".toMediaTypeOrNull()!!)?.let { address ->
+                        request.city?.toRequestBody("text/plain".toMediaTypeOrNull()!!)?.let { city ->
+                            request.province?.toRequestBody("text/plain".toMediaTypeOrNull()!!)?.let { province ->
+                                profileApi.updateProfile(
+                                    token,
+                                    fullName,
+                                    phone,
+                                    address,
+                                    city,
+                                    province,
+                                    pictureProfileFile
+                                ).enqueue(object : Callback<UserResponse> {
+                                    override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+                                        if (response.isSuccessful) {
+                                            _updateProfileResponse.value = response
+                                            Log.d("ProfileViewModel", "Profile update successful with response: ${response.body()}")
+                                        } else {
+                                            val errorMessage = response.errorBody()?.string()
+                                            Log.e("ProfileViewModel", "Profile update failed with error: $errorMessage")
+                                        }
+                                    }
+
+                                    override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                                        Log.e("ProfileViewModel", "Profile update failed with exception: ${t.message}")
+                                    }
+                                })
+                            }
+                        }
                     }
                 }
-
-                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                    Log.e("ProfileViewModel", "Profile update failed with exception: ${t.message}")
-                }
-            })
+            }
         }
     }
 
@@ -152,9 +181,9 @@ class ProfileViewModel(private val token: String) : ViewModel() {
                 previousData.userData?.city,
                 previousData.userData?.province,
                 previousData.role,
-                previousData.userData?.pictureProfile
+                null
             )
-            updateProfile(request)
+            updateProfile(request, null)
             _isUndoSuccessful.value = true
         }
     }

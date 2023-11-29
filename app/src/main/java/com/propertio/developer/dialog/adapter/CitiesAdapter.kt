@@ -4,13 +4,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.propertio.developer.api.profile.ProfileResponse
+import com.propertio.developer.api.common.address.City
 import com.propertio.developer.databinding.ItemSimpleCardForRecyclerBinding
 
 
-typealias onClickItemCitiesListener = (ProfileResponse.City) -> Unit
+typealias onClickItemCitiesListener = (City) -> Unit
 class CitiesAdapter(
-    private val cities : List<ProfileResponse.City>,
+    private val cities : List<City>,
     private val onClickItemListener: onClickItemCitiesListener
 ) : RecyclerView.Adapter<CitiesAdapter.CitiesViewHolder>()
 {
@@ -18,7 +18,7 @@ class CitiesAdapter(
         private val binding : ItemSimpleCardForRecyclerBinding
     ) : RecyclerView.ViewHolder(binding.root)
     {
-        fun bind(city: ProfileResponse.City) {
+        fun bind(city: City) {
             Log.d("CitiesAdapter", "bind: ${city.toString()}")
 
             with(binding) {

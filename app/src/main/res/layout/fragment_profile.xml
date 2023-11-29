@@ -184,11 +184,16 @@
                                 android:hint="81234567890"
                                 style="@style/text.regular.size16"/>
                         </LinearLayout>
+
+
                         <LinearLayout
+                            android:id="@+id/container_input_provinsi"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginBottom="20dp">
+                            android:layout_marginBottom="20dp"
+                            android:visibility="visible"
+                            android:orientation="vertical">
+
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
@@ -204,22 +209,30 @@
                                     android:textColor="@color/red_badges"
                                     android:text="*"/>
                             </LinearLayout>
-                            <Spinner
-                                android:id="@+id/spinner_provinsi_profile"
-                                style="@style/DesignSystem.TextInputEditText"
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/button_provinces_selection_profile"
                                 android:layout_width="match_parent"
                                 android:layout_height="50dp"
-                                android:dropDownWidth="match_parent"
-                                android:dropDownHeight="200dp"
-                                android:spinnerMode="dialog"
-                                android:paddingHorizontal="15dp"
-                                />
+                                android:paddingHorizontal="14.5dp"
+                                android:textColor="@color/text_black"
+                                android:textAppearance="@style/paragraph"
+                                android:textAlignment="textStart"
+                                android:text="Pilih Provinsi"
+                                android:drawableEnd="@drawable/chevron_down"
+                                android:background="@drawable/edit_text_rounded_rectangle"/>
+
                         </LinearLayout>
+
+
                         <LinearLayout
+                            android:id="@+id/container_input_kota"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginBottom="20dp">
+                            android:layout_marginBottom="20dp"
+                            android:visibility="visible"
+                            android:orientation="vertical">
+
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
@@ -235,16 +248,18 @@
                                     android:textColor="@color/red_badges"
                                     android:text="*"/>
                             </LinearLayout>
-                            <Spinner
-                                android:id="@+id/spinner_kota_profile"
-                                style="@style/DesignSystem.TextInputEditText"
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/spinner_district_profile"
                                 android:layout_width="match_parent"
                                 android:layout_height="50dp"
-                                android:dropDownWidth="match_parent"
-                                android:dropDownHeight="200dp"
-                                android:spinnerMode="dialog"
-                                android:paddingHorizontal="15dp"
-                                />
+                                android:paddingHorizontal="14.5dp"
+                                android:textColor="@color/text_black"
+                                android:textAppearance="@style/paragraph"
+                                android:textAlignment="textStart"
+                                android:text="Pilih Kota"
+                                android:drawableEnd="@drawable/chevron_down"
+                                android:background="@drawable/edit_text_rounded_rectangle"/>
 
                         </LinearLayout>
                         <LinearLayout

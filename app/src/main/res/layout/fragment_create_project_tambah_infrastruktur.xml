@@ -23,7 +23,7 @@
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/input_tipe_infrastruktur_project"
+        android:id="@+id/container_tipe_infrastruktur_project"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -38,7 +38,6 @@
             android:text="Tipe Infrastruktur"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="NotSibling"
             />
 
         <TextView
@@ -52,27 +51,29 @@
             app:layout_constraintTop_toTopOf="@+id/txt_tipe_infrastruktur_project"
             />
 
-        <Spinner
-            android:id="@+id/spin_tipe_infrastruktur_project"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/spinner_tipe_infrastruktur_project"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/edit_text_rounded_rectangle"
+            android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
+            android:text="Pilih Tipe Infrastruktur"
             android:textColor="@color/text_black"
-            android:textColorHint="@color/text_black_placeholder"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/paragraph"
             app:layout_constraintTop_toBottomOf="@id/txt_tipe_infrastruktur_project" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/input_nama_infrastruktur_project"
+        android:id="@+id/container_nama_infrastruktur_project"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/input_tipe_infrastruktur_project">
+        app:layout_constraintTop_toBottomOf="@id/container_tipe_infrastruktur_project">
 
         <TextView
             android:id="@+id/txt_nama_infrastruktur_project"
@@ -82,7 +83,6 @@
             android:text="Nama Infrastruktur"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="NotSibling"
             />
 
         <TextView
@@ -101,9 +101,6 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
-            android:paddingHorizontal="14.5dp"
-            android:textColor="@color/text_black"
-            android:textColorHint="@color/text_black_placeholder"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_nama_infrastruktur_project"
             />
@@ -120,8 +117,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_nama_infrastruktur_project"
+        app:layout_constraintTop_toBottomOf="@+id/container_nama_infrastruktur_project"
         />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.propertio.developer.api.models.ProjectPropertyType
 
 @Entity(tableName = "project_table")
 data class ProjectTable (
@@ -14,8 +15,11 @@ data class ProjectTable (
     @ColumnInfo(name = "title")
     var title: String? = null,
 
-    @ColumnInfo(name = "property_type")
-    var propertyType: String? = null,
+    @ColumnInfo(name = "property_type_name")
+    var propertyTypeName: String? = null,
+
+    @ColumnInfo(name = "property_type_icon")
+    var propertyTypeIcon: String? = null,
 
     @ColumnInfo(name = "posted_at")
     var postedAt: String? = null,

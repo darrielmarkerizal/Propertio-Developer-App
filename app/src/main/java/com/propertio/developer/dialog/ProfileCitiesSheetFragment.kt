@@ -10,25 +10,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
-import com.propertio.developer.api.common.address.Province
+import com.propertio.developer.api.common.address.City
 import com.propertio.developer.api.profile.ProfileApi
 import com.propertio.developer.api.profile.ProfileResponse
 import com.propertio.developer.databinding.FragmentBottomRecyclerWithSearchBarSheetBinding
-import com.propertio.developer.dialog.adapter.ProvinceAdapter
-import com.propertio.developer.dialog.model.ProvinceModel
-import com.propertio.developer.dialog.viewmodel.ProvinceSpinnerViewModel
+import com.propertio.developer.dialog.adapter.CitiesAdapter
+import com.propertio.developer.dialog.model.CitiesModel
+import com.propertio.developer.dialog.viewmodel.CitiesSpinnerViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ProvinceSheetFragment : BottomSheetDialogFragment() {
-
+class ProfileCitiesSheetFragment(private val provinceId: String) : BottomSheetDialogFragment() {
     private val binding by lazy {
         FragmentBottomRecyclerWithSearchBarSheetBinding.inflate(layoutInflater)
     }
 
-    private lateinit var provinceViewModel: ProvinceSpinnerViewModel
-
+    private lateinit var citiesViewModel: CitiesSpinnerViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,72 +39,67 @@ class ProvinceSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.textViewSheetTitle.text = "Pilih Provinsi"
-        binding.searchBarBottomSheet.hint = "Cari Provinsi"
+        binding.textViewSheetTitle.text = "Pilih Kota"
+        binding.searchBarBottomSheet.hint = "Cari Kota"
 
-        provinceViewModel = ViewModelProvider(requireActivity())[ProvinceSpinnerViewModel::class.java]
+        citiesViewModel = ViewModelProvider(requireActivity())[CitiesSpinnerViewModel::class.java]
 
-        fetchProvincesApi()
+        fetchCitiesApi(provinceId)
     }
 
-    private fun fetchProvincesApi() {
+    private fun fetchCitiesApi(provinceId: String) {
         val retro = Retro(TokenManager(requireContext()).token)
             .getRetroClientInstance()
             .create(ProfileApi::class.java)
 
-        retro.getProvinces().enqueue(object : Callback<List<Province>> {
+        retro.getCities(provinceId).enqueue(object : Callback<List<City>> {
             override fun onResponse(
-                call: Call<List<Province>>,
-                response: Response<List<Province>>
+                call: Call<List<City>>,
+                response: Response<List<City>>
             ) {
                 if (response.isSuccessful) {
-                    Log.d("ProvinceSheetFragment", "onResponse: ${response.body()}")
+                    Log.d("CitiesSheetFragment", "onResponse: ${response.body()}")
                     val data = response.body()
 
                     if (data != null) {
-                        setupRecycler(data)
+                        setupRecyclerView(data)
                         binding.progressIndicatorSheet.visibility = View.GONE
                     } else {
-                        Log.w("ProvinceSheetFragment", "onResponse: data is null")
+                        Log.w("CitiesSheetFragment", "onResponse: data is null")
                     }
-
                 } else {
-                    Log.e("ProvinceSheetFragment", "onResponse: ${response.errorBody()}")
+                    Log.e("CitiesSheetFragment", "onResponse: ${response.message()}")
+
                 }
             }
 
-            override fun onFailure(call: Call<List<Province>>, t: Throwable) {
-                Log.e("ProvinceSheetFragment", "onFailure: ${t.message}", t)
+            override fun onFailure(call: Call<List<City>>, t: Throwable) {
+                Log.e("CitiesSheetFragment", "onFailure: ${t.message}", t)
             }
-
-
         })
     }
 
-    private fun setupRecycler(provinces : List<Province>) {
-        Log.d("ProvinceSheetFragment", "setupRecycler: $provinces")
+    private fun setupRecyclerView(cities: List<City>) {
+        Log.d("CitiesSheetFragment", "setupRecyclerView: $cities")
 
         with(binding) {
             recyclerViewSheet.apply {
-                adapter = ProvinceAdapter(
-                    provinces = provinces,
-                    onClickItemListener = {
-                        Log.d("ProvinceSheetFragment", "setupRecycler: $it")
-                        provinceViewModel.provinceData
-                            .postValue(
-                                ProvinceModel(
-                                    it.id,
-                                    it.name
-                                )
+                adapter = CitiesAdapter(
+                    cities = cities,
+                    onClickItemListener = { city ->
+                        Log.d("CitiesSheetFragment", "setupRecyclerView: $city")
+                        citiesViewModel.citiesData.postValue(
+                            CitiesModel(
+                                citiesId = city.id,
+                                provinceId = city.provinceId,
+                                citiesName = city.name
                             )
-
+                        )
                         dismiss()
                     }
                 )
-
                 layoutManager = LinearLayoutManager(requireActivity())
             }
         }
     }
-
 }

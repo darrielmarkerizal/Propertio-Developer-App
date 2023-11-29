@@ -1,12 +1,10 @@
 package com.propertio.developer.profile
 
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
-import com.propertio.developer.R
+import androidx.appcompat.app.AppCompatActivity
 import com.propertio.developer.api.Retro
-import com.propertio.developer.api.auth.ChangePasswordApi
 import com.propertio.developer.api.auth.UserApi
 import com.propertio.developer.api.auth.UserRequest
 import com.propertio.developer.api.auth.UserResponse

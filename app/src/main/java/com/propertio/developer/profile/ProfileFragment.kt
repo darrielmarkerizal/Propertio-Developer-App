@@ -1,41 +1,51 @@
 package com.propertio.developer.profile
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.propertio.developer.R
 import com.propertio.developer.TokenManager
-import com.propertio.developer.api.DomainURL
 import com.propertio.developer.api.DomainURL.DOMAIN
 import com.propertio.developer.api.profile.ProfileResponse
-import com.propertio.developer.databinding.FragmentProfileBinding
-import android.app.AlertDialog
 import com.propertio.developer.api.profile.ProfileUpdateRequest
-import android.app.Activity
-import android.graphics.Color
-import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.propertio.developer.auth.LoginActivity
-import kotlinx.coroutines.launch
-import com.propertio.developer.R
-
+import com.propertio.developer.databinding.FragmentProfileBinding
+import com.propertio.developer.dialog.ProfileCitiesSheetFragment
+import com.propertio.developer.dialog.ProvinceSheetFragment
+import com.propertio.developer.dialog.model.CitiesModel
+import com.propertio.developer.dialog.viewmodel.CitiesSpinnerViewModel
+import com.propertio.developer.dialog.viewmodel.ProvinceSpinnerViewModel
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+    private var body: MultipartBody.Part? = null
 
     private lateinit var profileViewModel: ProfileViewModel
+
+    private var isProvinceSelected : Boolean = false
+    private lateinit var provinceViewModel: ProvinceSpinnerViewModel
+    private lateinit var cityViewModel: CitiesSpinnerViewModel
 
     companion object {
         private const val PICK_IMAGE_REQUEST_CODE = 1
@@ -60,42 +70,41 @@ class ProfileFragment : Fragment() {
 
         val viewModelFactory = ProfileViewModelFactory(TokenManager(requireContext()).token!!)
         profileViewModel = ViewModelProvider(this, viewModelFactory).get(ProfileViewModel::class.java)
-
-        profileViewModel.profileData.observe(viewLifecycleOwner, Observer { profileData ->
-            // Update the UI with the profile data
-            updateUI(profileData)
-            Log.d("ProfileFragment", "Profile data updated: $profileData")
-        })
+        cityViewModel = ViewModelProvider(requireActivity())[CitiesSpinnerViewModel::class.java]
+        provinceViewModel = ViewModelProvider(requireActivity())[ProvinceSpinnerViewModel::class.java]
 
         profileViewModel.provincesData.observe(viewLifecycleOwner, Observer { provincesData ->
-            val provinceNames = provincesData.map { it.name }
-            val provinceAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, provinceNames)
-            provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.spinnerProvinsiProfile.adapter = provinceAdapter
-
-            // Set the selected item in the spinner to the user's province
-            val userProvince = profileViewModel.profileData.value?.userData?.province
-            if (userProvince != null) {
-                val provincePosition = provinceAdapter.getPosition(userProvince)
-                binding.spinnerProvinsiProfile.setSelection(provincePosition)
-                Log.d("ProfileFragment", "Province spinner set to: $userProvince")
+            if (provincesData.isNotEmpty()) {
+                val firstProvinceId = provincesData[0].id
+                profileViewModel.fetchCityData(firstProvinceId)
             }
         })
 
-        profileViewModel.cityData.observe(viewLifecycleOwner, Observer { citiesData ->
-            val cityNames = citiesData.map { it.name }
-            val cityAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cityNames)
-            cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.spinnerKotaProfile.adapter = cityAdapter
+        profileViewModel.profileData.observe(viewLifecycleOwner, Observer { profileData ->
+            updateUI(profileData)
+            Log.d("ProfileFragment", "Profile data updated: $profileData")
 
-            // Set the selected item in the spinner to the user's city
-            val userCity = profileViewModel.profileData.value?.userData?.city
+            val userProvinceName = profileData?.userData?.province
+            val selectedProvince = profileViewModel.provincesData.value?.find { it.name == userProvinceName }
+            val defaultProvinceId = selectedProvince?.id
+
+            if (defaultProvinceId != null) {
+                profileViewModel.fetchCityData(defaultProvinceId)
+                ProfileCitiesSheetFragment(defaultProvinceId).show(parentFragmentManager, "CitySheetFragment")
+            }
+
+            val userProfileProvince = profileData?.userData?.province
+            val userCity = profileData?.userData?.city
+            if (userProfileProvince != null) {
+                binding.buttonProvincesSelectionProfile.text = userProfileProvince
+            }
             if (userCity != null) {
-                val cityPosition = cityAdapter.getPosition(userCity)
-                binding.spinnerKotaProfile.setSelection(cityPosition)
-                Log.d("ProfileFragment", "City spinner set to: $userCity")
+                binding.spinnerDistrictProfile.text = userCity
             }
         })
+
+        citySpinner()
+        provinceSpinner()
 
         binding.btnUbahKataSandiProfil.setOnClickListener {
             val intent = Intent(activity, ChangePassword::class.java)
@@ -114,15 +123,13 @@ class ProfileFragment : Fragment() {
                 val fullName = binding.edtNamaLengkapProfil.text.toString()
                 val phone = binding.edtNomorTeleponProfil.text.toString()
                 val address = binding.edtAlamatProfil.text.toString()
-                val city = binding.spinnerKotaProfile.selectedItem.toString()
-                val province = binding.spinnerProvinsiProfile.selectedItem.toString()
+                val city = binding.spinnerDistrictProfile.text.toString()
+                val province = binding.buttonProvincesSelectionProfile.text.toString()
                 val role = profileViewModel.profileData.value?.role
-                val pictureProfile = profileViewModel.profileData.value?.userData?.pictureProfile
 
-
-                val request = ProfileUpdateRequest(fullName, phone, address, city, province, role, pictureProfile)
+                val request = ProfileUpdateRequest(fullName, phone, address, city, province, role, null)
                 Log.d("ProfileFragment", "Profile update request: $request")
-                profileViewModel.updateProfile(request)
+                profileViewModel.updateProfile(request, body) // body adalah MultipartBody.Part yang berisi file gambar
             }
 
             binding.buttonAddProfilePictureProfil.setOnClickListener() {
@@ -131,20 +138,6 @@ class ProfileFragment : Fragment() {
                 startActivityForResult(intent, PICK_IMAGE_REQUEST_CODE)
             }
         })
-
-        binding.spinnerProvinsiProfile.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                val selectedProvince = profileViewModel.provincesData.value?.get(position)
-                if (selectedProvince != null) {
-                    profileViewModel.fetchCityData(selectedProvince.id)
-                    Log.d("ProfileFragment", "Selected province: id = ${selectedProvince.id}, name = ${selectedProvince.name}")
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // Do nothing
-            }
-        }
 
         binding.btnLogoutProfil.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext(), R.style.CustomAlertDialog)
@@ -177,8 +170,49 @@ class ProfileFragment : Fragment() {
                 Snackbar.make(binding.root, "Profil Gagal Diperbarui", Snackbar.LENGTH_SHORT).show()
             }
         })
+
+
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            val imageUri = data.data
+            Log.d("ProfileFragment", "Image selected with URI: $imageUri")
+            Glide.with(this)
+                .load(imageUri)
+                .circleCrop()
+                .into(binding.imgProfil)
+
+            val parcelFileDescriptor = requireContext().contentResolver.openFileDescriptor(imageUri!!, "r")
+            val fileDescriptor = parcelFileDescriptor?.fileDescriptor
+            val imageFile = File(requireContext().cacheDir, "tempImage")
+            val tempImageUri = Uri.fromFile(imageFile)
+
+            fileDescriptor?.let {
+                val inputStream = FileInputStream(it)
+                val outputStream = FileOutputStream(imageFile)
+                inputStream.copyTo(outputStream)
+            }
+
+            val requestFile = imageFile.asRequestBody("image/*".toMediaTypeOrNull()!!)
+            val body = MultipartBody.Part.createFormData("pictureProfile", imageFile.name, requestFile)
+
+            val fullName = binding.edtNamaLengkapProfil.text.toString()
+            val phone = binding.edtNomorTeleponProfil.text.toString()
+            val address = binding.edtAlamatProfil.text.toString()
+            val city = binding.spinnerDistrictProfile.text.toString()
+            val province = binding.buttonProvincesSelectionProfile.text.toString()
+            val role = profileViewModel.profileData.value?.role
+            val pictureProfile = profileViewModel.profileData.value?.userData?.pictureProfile
+
+            val request = ProfileUpdateRequest(fullName, phone, address, city, province, role, null)
+            Log.d("ProfileFragment", "Profile update request: $request")
+            Log.d("ProfileFragment", "Profile update request: $body")
+            profileViewModel.updateProfile(request, body)
+        }
+    }
     private fun updateUI(data: ProfileResponse.ProfileData?) {
         data?.let {
             val userData = it.userData
@@ -197,16 +231,50 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    private fun citySpinner() {
+        cityViewModel = ViewModelProvider(requireActivity())[CitiesSpinnerViewModel::class.java]
 
-        if (requestCode == PICK_IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            val imageUri = data.data
-            Log.d("ProfileFragment", "Image selected with URI: $imageUri")
-            Glide.with(this)
-                .load(imageUri)
-                .circleCrop()
-                .into(binding.imgProfil)
+        binding.spinnerDistrictProfile.setOnClickListener {
+            val userProvinceName = binding.buttonProvincesSelectionProfile.text.toString()
+            val selectedProvince = profileViewModel.provincesData.value?.find { it.name == userProvinceName }
+            val provinceId = selectedProvince?.id
+            if (provinceId != null) {
+                profileViewModel.fetchCityData(provinceId)
+                ProfileCitiesSheetFragment(provinceId).show(parentFragmentManager, "CitySheetFragment")
+            } else {
+                Toast.makeText(requireContext(), "Provinsi tidak ditemukan", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        provinceViewModel.provinceData.observe(viewLifecycleOwner) { provinceData ->
+            val provinceId = provinceData.provinceId
+            profileViewModel.fetchCityData(provinceId)
+        }
+
+        cityViewModel.citiesData.observe(viewLifecycleOwner) {
+            binding.spinnerDistrictProfile.text = it.citiesName
+        }
+    }
+
+    private fun provinceSpinner() {
+        provinceViewModel = ViewModelProvider(requireActivity())[ProvinceSpinnerViewModel::class.java]
+        binding.buttonProvincesSelectionProfile.setOnClickListener {
+            ProvinceSheetFragment().show(parentFragmentManager, "ProvinceSheetFragment")
+            isProvinceSelected = true
+            Log.d("ProfileFragment", "provinceSpinner. is selected :$isProvinceSelected")
+        }
+
+        provinceViewModel.provinceData.observe(viewLifecycleOwner) {
+            binding.buttonProvincesSelectionProfile.text = it.provinceName
+
+            cityViewModel.citiesData
+                .postValue(
+                    CitiesModel(
+                        citiesId = "",
+                        provinceId = it.provinceId,
+                        citiesName = "Pilih Kota"
+                    )
+                )
         }
     }
 

@@ -23,7 +23,8 @@
             android:text="Membuat Proyek"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
         <TextView
             android:id="@+id/text_sub_project_informasi"
@@ -37,7 +38,7 @@
             app:layout_constraintTop_toBottomOf="@id/text_title_project_informasi" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/input_headline_project"
+            android:id="@+id/container_headline_project"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -52,7 +53,7 @@
                 android:text="Headline"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="NotSibling" />
+                />
 
             <TextView
                 android:id="@+id/next_txt_headline_project"
@@ -62,7 +63,8 @@
                 android:text="*"
                 android:textColor="@color/red_badges"
                 app:layout_constraintStart_toEndOf="@+id/txt_headline_project"
-                app:layout_constraintTop_toTopOf="@+id/txt_headline_project" />
+                app:layout_constraintTop_toTopOf="@+id/txt_headline_project"
+                />
 
             <EditText
                 android:id="@+id/edit_headline_project"
@@ -70,22 +72,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="8dp"
-                android:paddingHorizontal="14.5dp"
-
-                android:textColor="@color/text_black"
-                android:textColorHint="@color/text_black_placeholder"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txt_headline_project" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/input_judul_project"
+            android:id="@+id/container_judul_project"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/input_headline_project">
+            app:layout_constraintTop_toBottomOf="@id/container_headline_project">
 
             <TextView
                 android:id="@+id/txt_judul_project"
@@ -95,7 +93,7 @@
                 android:text="Judul Proyek"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="NotSibling" />
+                />
 
             <TextView
                 android:id="@+id/next_txt_judul_project"
@@ -105,7 +103,8 @@
                 android:text="*"
                 android:textColor="@color/red_badges"
                 app:layout_constraintStart_toEndOf="@+id/txt_judul_project"
-                app:layout_constraintTop_toTopOf="@+id/txt_judul_project" />
+                app:layout_constraintTop_toTopOf="@+id/txt_judul_project"
+                />
 
             <EditText
                 android:id="@+id/edit_judul_project"
@@ -114,22 +113,19 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="8dp"
                 android:maxLines="1"
-                android:paddingHorizontal="14.5dp"
-
-                android:textColor="@color/text_black"
-                android:textColorHint="@color/text_black_placeholder"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_judul_project" />
+                app:layout_constraintTop_toBottomOf="@id/txt_judul_project"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/input_tipe_project"
+            android:id="@+id/container_tipe_project"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/input_judul_project">
+            app:layout_constraintTop_toBottomOf="@id/container_judul_project">
 
             <TextView
                 android:id="@+id/txt_tipe_project"
@@ -139,7 +135,7 @@
                 android:text="Tipe Properti"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="NotSibling" />
+                />
 
             <TextView
                 android:id="@+id/next_txt_tipe_project"
@@ -151,28 +147,30 @@
                 app:layout_constraintStart_toEndOf="@+id/txt_tipe_project"
                 app:layout_constraintTop_toTopOf="@+id/txt_tipe_project" />
 
-            <Spinner
-                android:id="@+id/spin_tipe_project"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/spinner_tipe_project"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="8dp"
                 android:background="@drawable/edit_text_rounded_rectangle"
+                android:drawableEnd="@drawable/chevron_down"
+                android:layout_marginTop="8dp"
                 android:paddingHorizontal="14.5dp"
+                android:text="Pilih Tipe Properti"
+                android:textAlignment="textStart"
+                android:textAppearance="@style/paragraph"
                 android:textColor="@color/text_black"
-                android:textColorHint="@color/text_black_placeholder"
-                app:layout_constraintStart_toStartOf="parent"
-
-                app:layout_constraintTop_toBottomOf="@id/txt_tipe_project" />
+                app:layout_constraintTop_toBottomOf="@id/txt_tipe_project"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/input_deskripsi_project"
+            android:id="@+id/container_deskripsi_project"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/input_tipe_project">
+            app:layout_constraintTop_toBottomOf="@id/container_tipe_project">
 
             <TextView
                 android:id="@+id/txt_deskripsi_project"
@@ -182,32 +180,29 @@
                 android:text="Deskripsi"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="NotSibling" />
+                />
 
             <EditText
                 android:id="@+id/edit_deskripsi_project"
                 style="@style/DesignSystem.TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/text.regular.size14"
                 android:minHeight="100dp"
                 android:layout_marginTop="8dp"
-                android:padding="14.5dp"
                 android:gravity="top"
-                android:textColor="@color/text_black"
-                android:textColorHint="@color/text_black_placeholder"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txt_deskripsi_project" />
+                app:layout_constraintTop_toBottomOf="@id/txt_deskripsi_project"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/input_tahun_project"
+            android:id="@+id/container_tahun_project"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/input_deskripsi_project">
+            app:layout_constraintTop_toBottomOf="@id/container_deskripsi_project">
 
             <TextView
                 android:id="@+id/txt_tahun_project"
@@ -217,7 +212,7 @@
                 android:text="Tahun Pembangunan"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="NotSibling" />
+                />
 
             <EditText
                 android:id="@+id/edit_tahun_project"
@@ -227,21 +222,18 @@
                 android:layout_marginTop="8dp"
                 android:hint="YYYY"
                 android:maxLines="5"
-                android:paddingHorizontal="14.5dp"
-                android:textColor="@color/text_black"
-                android:textColorHint="@color/text_black_placeholder"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txt_tahun_project" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/input_sertifikat_project"
+            android:id="@+id/container_sertifikat_project"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/input_tahun_project">
+            app:layout_constraintTop_toBottomOf="@id/container_tahun_project">
 
             <TextView
                 android:id="@+id/txt_sertifikat_project"
@@ -251,7 +243,7 @@
                 android:text="Sertifikat"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="NotSibling" />
+                />
 
             <TextView
                 android:id="@+id/next_txt_sertifikat_project"
@@ -263,24 +255,24 @@
                 app:layout_constraintStart_toEndOf="@+id/txt_sertifikat_project"
                 app:layout_constraintTop_toTopOf="@+id/txt_sertifikat_project" />
 
-            <Spinner
-                android:id="@+id/spin_sertifikat_project"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/spinner_sertifikat_project"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="8dp"
                 android:background="@drawable/edit_text_rounded_rectangle"
+                android:drawableEnd="@drawable/chevron_down"
+                android:layout_marginTop="8dp"
                 android:paddingHorizontal="14.5dp"
+                android:text="Pilih Jenis Sertifikat"
+                android:textAlignment="textStart"
+                android:textAppearance="@style/paragraph"
                 android:textColor="@color/text_black"
-                android:textColorHint="@color/text_black_placeholder"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txt_sertifikat_project" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
 </androidx.core.widget.NestedScrollView>
