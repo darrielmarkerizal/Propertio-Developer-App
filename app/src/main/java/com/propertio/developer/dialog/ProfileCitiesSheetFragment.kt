@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
+import com.propertio.developer.api.common.address.City
 import com.propertio.developer.api.profile.ProfileApi
 import com.propertio.developer.api.profile.ProfileResponse
 import com.propertio.developer.databinding.FragmentBottomRecyclerWithSearchBarSheetBinding
@@ -51,10 +52,10 @@ class ProfileCitiesSheetFragment(private val provinceId: String) : BottomSheetDi
             .getRetroClientInstance()
             .create(ProfileApi::class.java)
 
-        retro.getCities(provinceId).enqueue(object : Callback<List<ProfileResponse.City>> {
+        retro.getCities(provinceId).enqueue(object : Callback<List<City>> {
             override fun onResponse(
-                call: Call<List<ProfileResponse.City>>,
-                response: Response<List<ProfileResponse.City>>
+                call: Call<List<City>>,
+                response: Response<List<City>>
             ) {
                 if (response.isSuccessful) {
                     Log.d("CitiesSheetFragment", "onResponse: ${response.body()}")
@@ -72,13 +73,13 @@ class ProfileCitiesSheetFragment(private val provinceId: String) : BottomSheetDi
                 }
             }
 
-            override fun onFailure(call: Call<List<ProfileResponse.City>>, t: Throwable) {
+            override fun onFailure(call: Call<List<City>>, t: Throwable) {
                 Log.e("CitiesSheetFragment", "onFailure: ${t.message}", t)
             }
         })
     }
 
-    private fun setupRecyclerView(cities: List<ProfileResponse.City>) {
+    private fun setupRecyclerView(cities: List<City>) {
         Log.d("CitiesSheetFragment", "setupRecyclerView: $cities")
 
         with(binding) {
