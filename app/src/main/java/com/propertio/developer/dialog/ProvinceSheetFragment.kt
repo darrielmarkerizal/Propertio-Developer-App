@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
+import com.propertio.developer.api.common.address.AddressApi
 import com.propertio.developer.api.common.address.Province
 import com.propertio.developer.api.profile.ProfileApi
 import com.propertio.developer.api.profile.ProfileResponse
@@ -52,7 +53,7 @@ class ProvinceSheetFragment : BottomSheetDialogFragment() {
     private fun fetchProvincesApi() {
         val retro = Retro(TokenManager(requireContext()).token)
             .getRetroClientInstance()
-            .create(ProfileApi::class.java)
+            .create(AddressApi::class.java)
 
         retro.getProvinces().enqueue(object : Callback<List<Province>> {
             override fun onResponse(
