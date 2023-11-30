@@ -1,10 +1,7 @@
 package com.propertio.developer.profile
 
-import android.app.Activity
 import android.app.Activity.RESULT_OK
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -15,16 +12,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import coil.load
 import coil.transform.CircleCropTransformation
-import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.propertio.developer.R
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.DomainURL.DOMAIN
@@ -33,14 +25,12 @@ import com.propertio.developer.api.common.address.AddressApi
 import com.propertio.developer.api.common.address.Province
 import com.propertio.developer.api.profile.ProfileApi
 import com.propertio.developer.api.profile.ProfileResponse
-import com.propertio.developer.api.profile.ProfileUpdateRequest
 import com.propertio.developer.auth.LoginActivity
 import com.propertio.developer.database.profile.ProfileDatabase
 import com.propertio.developer.database.profile.ProfileTable
 import com.propertio.developer.database.profile.ProfileTableDao
 import com.propertio.developer.databinding.FragmentProfileBinding
 import com.propertio.developer.dialog.CitiesSheetFragment
-import com.propertio.developer.dialog.ProfileCitiesSheetFragment
 import com.propertio.developer.dialog.ProvinceSheetFragment
 import com.propertio.developer.dialog.model.CitiesModel
 import com.propertio.developer.dialog.model.ProvinceModel
@@ -57,8 +47,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.net.URL
 
 class ProfileFragment : Fragment() {
 
@@ -74,6 +64,7 @@ class ProfileFragment : Fragment() {
 //    private lateinit var profileViewModel: ProfileViewModel
 
     // Spinner
+    private var keepCity = true
     private var isProvinceSelected : Boolean = true
     private var isCitySelected : Boolean = true
     private lateinit var provinceViewModel: ProvinceSpinnerViewModel
@@ -87,7 +78,10 @@ class ProfileFragment : Fragment() {
 
         if (result.resultCode == RESULT_OK) {
             imageUri = result.data?.data
+
             loadImage(imageUri.toString())
+
+
 
             Toast.makeText(requireContext(), "Berhasil memilih gambar", Toast.LENGTH_SHORT).show()
         }
@@ -189,28 +183,48 @@ class ProfileFragment : Fragment() {
 
 
         // Image Request Body
-        val fileDir = requireContext().applicationContext.filesDir
-        val file = File(fileDir, "image.jpg")
-        val fileInputStream = requireContext().contentResolver.openInputStream(imageUri!!)
-        val fileOutputStream = FileOutputStream(file)
-        fileInputStream?.copyTo(fileOutputStream)
-        fileInputStream!!.copyTo(fileOutputStream)
-        fileInputStream.close()
+        var pictureProfileFile: MultipartBody.Part? = null
 
-        val pictureProfileFile = MultipartBody.Part.createFormData(
-            "picture_profile",
-            file.name,
-            file.asRequestBody("image/*".toMediaTypeOrNull())
-        )
+        if (imageUri != null) {
+            Log.d("ProfileFragment", "updateProfile: imageUri is not null")
+            val fileDir = requireContext().applicationContext.filesDir
+            val file = File(fileDir, "profile_picture.jpg")
+            val fileInputStream = requireContext().contentResolver.openInputStream(imageUri!!)
+            val fileOutputStream = FileOutputStream(file)
+            fileInputStream!!.copyTo(fileOutputStream)
+            fileInputStream.close()
+            fileOutputStream.close()
+
+            val fileSizeInBytes = file.length()
+            val fileSizeInKB = fileSizeInBytes / 1024
+            val fileSizeInMB = fileSizeInKB / 1024
+
+            val maxFileSizeInMB = 5 // MB
+
+            if (fileSizeInMB > maxFileSizeInMB) {
+                Toast.makeText(requireContext(), "Ukuran gambar terlalu besar", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            pictureProfileFile = MultipartBody.Part.createFormData(
+                "picture_profile_file",
+                file.name,
+                file.asRequestBody("image/*".toMediaTypeOrNull())
+            )
 
 
+        } else {
+            Log.d("ProfileFragment", "updateProfile: imageUri is null")
+            val file = File(requireContext().applicationContext.filesDir, "profile_picture.jpg")
 
-        Log.d("ProfileFragment", "full name: $fullName, body: $fullNameBody")
-        Log.d("ProfileFragment", "phone: $phone, body: $phoneBody")
-        Log.d("ProfileFragment", "province: $province, body: $provinceBody")
-        Log.d("ProfileFragment", "city: $city, body: $cityBody")
-        Log.d("ProfileFragment", "address: $address, body: $addressBody")
-        Log.d("ProfileFragment", "file: $file, file name: ${file.name}, file input stream: $fileInputStream, file output stream: $fileOutputStream")
+            pictureProfileFile = MultipartBody.Part.createFormData(
+                "picture_profile_file",
+                file.name,
+                file.asRequestBody("image/*".toMediaTypeOrNull())
+            )
+        }
+
+
 
 
         val retro = Retro(TokenManager(requireContext()).token)
@@ -300,11 +314,37 @@ class ProfileFragment : Fragment() {
     }
 
     private fun loadImage(pictureProfileUrl: String) {
-        binding.imgProfil.load(pictureProfileUrl) {
+        var urlWithTimestamp : String? = null
+        if (pictureProfileUrl.startsWith("http")) {
+            urlWithTimestamp = "$pictureProfileUrl?timestamp=${System.currentTimeMillis()}"
+        } else {
+            urlWithTimestamp = pictureProfileUrl
+        }
+
+        // load image
+        binding.imgProfil.load(urlWithTimestamp) {
             crossfade(true)
             transformations(CircleCropTransformation())
             placeholder(R.drawable.ic_profil)
             error(R.drawable.ic_profil)
+        }
+        Log.d("ProfileFragment", "loadImage: $urlWithTimestamp")
+    }
+
+    private suspend fun downloadImage(pictureProfileUrl: String) {
+        withContext(Dispatchers.IO) {
+            Log.w("ProfileFragment", "downloadImage: $pictureProfileUrl")
+
+            val file = File(requireContext().applicationContext.filesDir, "profile_picture.jpg")
+            val url = URL(pictureProfileUrl)
+            val connection = url.openConnection()
+            val inputStream = connection.getInputStream()
+            val fileOutputStream = FileOutputStream(file)
+
+            inputStream.copyTo(fileOutputStream)
+
+            inputStream.close()
+            fileOutputStream.close()
         }
     }
 
@@ -324,8 +364,6 @@ class ProfileFragment : Fragment() {
 
     private fun swipeRefreshHandler() {
         val swipeRefreshLayout = binding.swipeRefreshLayout
-        isCitySelected = true
-        isProvinceSelected = true
         swipeRefreshLayout.setOnRefreshListener {
             lifecycleScope.launch {
                 fetchProfileData()
@@ -337,6 +375,7 @@ class ProfileFragment : Fragment() {
 
     private fun updateUI(data: ProfileResponse.ProfileData?) {
         data?.let { profile ->
+            keepCity = true
 
             binding.txtIdProfile.text = profile.accountId
             binding.txtEmailProfile.text = profile.email
@@ -350,7 +389,7 @@ class ProfileFragment : Fragment() {
                 binding.edtNamaLengkapProfil.setText(userData.fullName)
                 setTextViewPhoneNumber(userData.phone)
 
-                setTextViewSpinner(listOf(userData.province, userData.city))
+                setTextViewSpinner(userData.province, userData.city)
 
                 binding.edtAlamatProfil.setText(userData.address)
 
@@ -368,12 +407,14 @@ class ProfileFragment : Fragment() {
 
     }
 
-    private fun setTextViewSpinner(listOf: List<String?>) {
-        Log.d("ProfileFragment", "setTextViewSpinner: $listOf")
+    private fun setTextViewSpinner(province: String?, city: String?) {
+        Log.d("ProfileFragment", "setTextViewSpinner: $province, $city")
 
-        if (listOf[0] != null && listOf[1] != null) {
-            binding.buttonProvincesSelectionProfile.text = listOf[0]
-            binding.spinnerCityProfile.text = listOf[1]
+        if (province != null && city != null) {
+            isCitySelected = true
+            isProvinceSelected = true
+            binding.buttonProvincesSelectionProfile.text = province
+            binding.spinnerCityProfile.text = city
         }
 
     }
@@ -405,9 +446,30 @@ class ProfileFragment : Fragment() {
                         updateUI(data)
                         if (data != null) {
                             if (data.userData != null) {
+
                                 data.userData?.province?.let {
                                     getViewModelData(it)
                                 }
+
+                                lifecycleScope.launch {
+                                    val pictureProfile =  data.userData?.pictureProfile
+
+                                    // check if pictureProfile start with DOMAIN
+                                    if (pictureProfile != null) {
+                                        if (pictureProfile.startsWith(DOMAIN)) {
+                                            downloadImage(pictureProfile)
+                                        }
+                                        else {
+                                            downloadImage(DOMAIN + pictureProfile)
+                                        }
+                                    }
+                                    else {
+                                        Log.w("ProfileFragment", "onResponse: pictureProfile is null")
+                                    }
+
+                                }
+
+
                             }
                         }
 
@@ -528,6 +590,7 @@ class ProfileFragment : Fragment() {
         binding.buttonProvincesSelectionProfile.setOnClickListener {
             ProvinceSheetFragment().show(parentFragmentManager, "ProvinceSheetFragment")
             isProvinceSelected = true
+            keepCity = false
             Log.d("ProfileFragment", "provinceSpinner. is selected :$isProvinceSelected")
         }
 
@@ -537,12 +600,19 @@ class ProfileFragment : Fragment() {
             isProvinceSelected = true
             isCitySelected = false
 
+            val citiesName = if (keepCity) {
+                binding.spinnerCityProfile.text.toString()
+                } else {
+                    "Pilih Kota"
+                }
+
+
             cityViewModel.citiesData
                 .postValue(
                     CitiesModel(
                         citiesId = "",
                         provinceId = it.provinceId,
-                        citiesName = "Pilih Kota"
+                        citiesName = citiesName
                     )
                 )
         }

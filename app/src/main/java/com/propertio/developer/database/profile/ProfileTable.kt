@@ -1,5 +1,6 @@
 package com.propertio.developer.database.profile
 
+import android.net.Uri
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
