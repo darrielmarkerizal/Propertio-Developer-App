@@ -250,7 +250,7 @@
                             </LinearLayout>
 
                             <androidx.appcompat.widget.AppCompatButton
-                                android:id="@+id/spinner_district_profile"
+                                android:id="@+id/spinner_city_profile"
                                 android:layout_width="match_parent"
                                 android:layout_height="50dp"
                                 android:paddingHorizontal="14.5dp"
