@@ -13,7 +13,7 @@
         android:paddingTop="32.5dp"
         android:paddingBottom="150dp"
         android:paddingHorizontal="32.5dp"
-        />
+        >
 
     <TextView
         android:id="@+id/title_unit_data_kantor"
@@ -112,24 +112,16 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edit_jumlah_lantai_kantor_layout"
+        <EditText
+            android:id="@+id/edt_jumlah_lantai_kantor"
+            style="@style/DesignSystem.TextInputEditText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:endIconMode="custom"
-            app:endIconDrawable="@drawable/outline_info_24"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:hint="Masukkan Jumlah Lantai"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_jumlah_lantai_kantor"
-                android:layout_width="match_parent"
-                style="@style/DesignSystem.TextInputEditText"
-                />
-
-        </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintTop_toBottomOf="@id/txt_jumlah_lantai_kantor"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -153,24 +145,16 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edit_kamar_kantor_layout"
+        <EditText
+            android:id="@+id/edt_kamar_kantor"
+            style="@style/DesignSystem.TextInputEditText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:endIconMode="custom"
-            app:endIconDrawable="@drawable/outline_info_24"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:hint="Masukkan Jumlah Kamar"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_kamar_kantor"
-                android:layout_width="match_parent"
-                style="@style/DesignSystem.TextInputEditText"
-                />
-
-        </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintTop_toBottomOf="@id/txt_kamar_kantor"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -194,24 +178,16 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edit_kamar_mandi_kantor_layout"
+        <EditText
+            android:id="@+id/edt_kamar_mandi_kantor"
+            style="@style/DesignSystem.TextInputEditText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:endIconMode="custom"
-            app:endIconDrawable="@drawable/outline_info_24"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:hint="Masukkan Jumlah Kamr Mandi"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_kamar_mandi_kantor"
-                android:layout_width="match_parent"
-                style="@style/DesignSystem.TextInputEditText"
-                />
-
-        </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintTop_toBottomOf="@id/txt_kamar_mandi_kantor"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -243,7 +219,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Tempat Parkir"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
@@ -279,7 +255,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Daya Listrik"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
@@ -315,7 +291,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Jenis Air"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
@@ -351,7 +327,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Interior"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
@@ -387,7 +363,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Akses Jalan"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
@@ -395,5 +371,5 @@
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

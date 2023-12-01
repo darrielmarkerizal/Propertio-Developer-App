@@ -115,7 +115,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Tempat Parkir"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
@@ -151,7 +151,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Daya Listrik"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
@@ -178,7 +178,6 @@
             android:text="Akses Jalan"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:drawableEnd=""
             />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -189,7 +188,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Akses Jalan"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
