@@ -268,7 +268,7 @@
 
             <TextView
                 android:id="@+id/txt_note_pencarian_project"
-                style="@style/text.medium.size11"
+                style="@style/text.regular.size14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pilih lokasi anda pada peta"
@@ -324,17 +324,33 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title_siteplan_project_lokasi" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <RelativeLayout
             android:id="@+id/button_siteplan_photo_project"
-            style="@style/button.add"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:elevation="0dp"
-            android:text="Tambahkan"
+            android:layout_height="50dp"
+            android:background="@drawable/button_add_rounded_rectangle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/subtitle_siteplan_lokasi" />
+            app:layout_constraintTop_toBottomOf="@id/subtitle_siteplan_lokasi">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_circle"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tambahkan"
+
+                    android:layout_marginLeft="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#49454F"
+                    style="@style/text.regular.size16"/>
+            </LinearLayout>
+        </RelativeLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/container_input_immersive_siteplan_project"
