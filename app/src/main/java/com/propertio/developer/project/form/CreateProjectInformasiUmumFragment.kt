@@ -37,9 +37,13 @@ class CreateProjectInformasiUmumFragment : Fragment() {
          *     activityBinding?.floatingButtonBack?.setOnClickListener { ... } <- ini button Back
          *     activityBinding?.floatingButtonNext?.setOnClickListener { ... } <- ini button Next
          *  4. jangan lupa tambahkan "activity.onBackButtonProjectManagementClick()"
-         *     pada floatingButtonBack.setOnClickListener
+         *     pada floatingButtonBack.setOnClickListener pada bagian paling akhir
          *  5. jangan lupa tambahkan "activity.onNextButtonProjectManagementClick()"
-         *     pada floatingButtonNext.setOnClickListener
+         *     pada floatingButtonNext.setOnClickListener pada bagian paling akhir
+         *
+         *  NB: penambahan ...ProjectManagementClick bertujuan agar halaman dapat berpindah
+         *      ke halaman selanjutnya atau sebelumnya. Disarankan untuk ditaruh paling akhir.
+         *      boleh dibuat ke dalam if-else
          */
         val activity = activity as? ProjectFormActivity
         val activityBinding = activity?.binding
