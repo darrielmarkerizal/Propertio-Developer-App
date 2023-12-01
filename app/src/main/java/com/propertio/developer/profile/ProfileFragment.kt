@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.propertio.developer.PropertioDeveloperApplication
 import com.propertio.developer.R
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.DomainURL.DOMAIN
@@ -36,6 +37,8 @@ import com.propertio.developer.dialog.model.CitiesModel
 import com.propertio.developer.dialog.model.ProvinceModel
 import com.propertio.developer.dialog.viewmodel.CitiesSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.ProvinceSpinnerViewModel
+import com.propertio.developer.project.ProjectViewModel
+import com.propertio.developer.project.ProjectViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -58,6 +61,8 @@ class ProfileFragment : Fragment() {
 
     private lateinit var profileDao : ProfileTableDao
 
+    private lateinit var projectViewModel: ProjectViewModel
+
 
     private var body: MultipartBody.Part? = null
 
@@ -67,8 +72,9 @@ class ProfileFragment : Fragment() {
     private var keepCity = true
     private var isProvinceSelected : Boolean = true
     private var isCitySelected : Boolean = true
-    private lateinit var provinceViewModel: ProvinceSpinnerViewModel
-    private lateinit var cityViewModel: CitiesSpinnerViewModel
+    private val provinceViewModel by lazy { ViewModelProvider(requireActivity())[ProvinceSpinnerViewModel::class.java] }
+    private val cityViewModel by lazy { ViewModelProvider(requireActivity())[CitiesSpinnerViewModel::class.java] }
+
 
 
     private var imageUri: Uri? = null
@@ -104,13 +110,18 @@ class ProfileFragment : Fragment() {
         val databaseRoom = ProfileDatabase.getDatabase(requireActivity())
         profileDao = databaseRoom.profileTableDao()
 
+        val factory = ProjectViewModelFactory(
+            (requireActivity().application as PropertioDeveloperApplication).repository
+        )
+        projectViewModel = ViewModelProvider(requireActivity(), factory)[ProjectViewModel::class.java]
+
 
         // Layout
         swipeRefreshHandler()
 
 
         // Initialize View Model
-        initializeViewModel()
+//        initializeViewModel()
 
 
         // fetch Data From Api
@@ -154,6 +165,14 @@ class ProfileFragment : Fragment() {
                     TokenManager(requireContext()).deleteToken()
                     val intent = Intent(requireContext(), LoginActivity::class.java)
                     startActivity(intent)
+
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            profileDao.deleteAll()
+                            projectViewModel.deleteAllLocalProjects()
+                        }
+                    }
+
                     requireActivity().finish()
                 }
                 .setNegativeButton("Tidak", null)
@@ -358,8 +377,8 @@ class ProfileFragment : Fragment() {
     private fun initializeViewModel() {
 //        val viewModelFactory = ProfileViewModelFactory(TokenManager(requireContext()).token!!)
 //        profileViewModel = ViewModelProvider(this, viewModelFactory)[ProfileViewModel::class.java]
-        cityViewModel = ViewModelProvider(requireActivity())[CitiesSpinnerViewModel::class.java]
-        provinceViewModel = ViewModelProvider(requireActivity())[ProvinceSpinnerViewModel::class.java]
+//        cityViewModel = ViewModelProvider(requireActivity())[CitiesSpinnerViewModel::class.java]
+//        provinceViewModel = ViewModelProvider(requireActivity())[ProvinceSpinnerViewModel::class.java]
     }
 
     private fun swipeRefreshHandler() {
@@ -568,8 +587,6 @@ class ProfileFragment : Fragment() {
 
 
     private fun citySpinner() {
-        cityViewModel = ViewModelProvider(requireActivity())[CitiesSpinnerViewModel::class.java]
-
 
         binding.spinnerCityProfile.setOnClickListener {
             if (isProvinceSelected) {
@@ -586,7 +603,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun provinceSpinner() {
-        provinceViewModel = ViewModelProvider(requireActivity())[ProvinceSpinnerViewModel::class.java]
+
         binding.buttonProvincesSelectionProfile.setOnClickListener {
             ProvinceSheetFragment().show(parentFragmentManager, "ProvinceSheetFragment")
             isProvinceSelected = true

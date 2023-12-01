@@ -103,6 +103,7 @@
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_nama_infrastruktur_project"
+            android:hint="Masukkan Nama Infrastruktur"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

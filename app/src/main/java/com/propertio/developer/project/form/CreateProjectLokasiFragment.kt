@@ -35,9 +35,9 @@ class CreateProjectLokasiFragment : Fragment() {
     private var isProvinceSelected = false
     private var isCitySelected = false
     private var isDistrictSelected = false
-    private lateinit var provinceViewModel : ProvinceSpinnerViewModel
-    private lateinit var cityViewModel : CitiesSpinnerViewModel
-    private lateinit var districtViewModel : DistrictsSpinnerViewModel
+    private val provinceViewModel by lazy { ViewModelProvider(requireActivity())[ProvinceSpinnerViewModel::class.java] }
+    private val cityViewModel by lazy { ViewModelProvider(requireActivity())[CitiesSpinnerViewModel::class.java] }
+    private val districtViewModel by lazy { ViewModelProvider(requireActivity())[DistrictsSpinnerViewModel::class.java] }
 
 
     override fun onCreateView(
@@ -55,16 +55,19 @@ class CreateProjectLokasiFragment : Fragment() {
             checkMapsApi()
         }
 
+
+        // Spinner
         provinceSpinner()
         citySpinner()
         districtSpinner()
 
 
 
+
     }
 
     private fun districtSpinner() {
-        districtViewModel = ViewModelProvider(this)[DistrictsSpinnerViewModel::class.java]
+//        districtViewModel = ViewModelProvider(this)[DistrictsSpinnerViewModel::class.java]
 
         binding.spinnerDistrictProject.setOnClickListener {
             if (isCitySelected && isProvinceSelected) {
@@ -83,7 +86,7 @@ class CreateProjectLokasiFragment : Fragment() {
     }
 
     private fun citySpinner() {
-        cityViewModel = ViewModelProvider(this)[CitiesSpinnerViewModel::class.java]
+//        cityViewModel = ViewModelProvider(this)[CitiesSpinnerViewModel::class.java]
 
         binding.spinnerCityProject.setOnClickListener {
             if (isProvinceSelected) {
@@ -114,13 +117,15 @@ class CreateProjectLokasiFragment : Fragment() {
     }
 
     private fun provinceSpinner() {
-        provinceViewModel = ViewModelProvider(this)[ProvinceSpinnerViewModel::class.java]
+//        provinceViewModel = ViewModelProvider(this)[ProvinceSpinnerViewModel::class.java]
+
         binding.spinnerProvinceProject.setOnClickListener {
             ProvinceSheetFragment().show(parentFragmentManager, "ProvinceSheetFragment")
             Log.d("CreateProjectLokasiFragment", "provinceSpinner. is selected :$isProvinceSelected")
         }
 
         provinceViewModel.provinceData.observe(viewLifecycleOwner) {
+            Log.d("CreateProjectLokasiFragment", "provinceSpinner: ${it.provinceName}")
             binding.spinnerProvinceProject.text = it.provinceName
             binding.spinnerProvinceProject.error = null
 
