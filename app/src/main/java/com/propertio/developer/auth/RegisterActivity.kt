@@ -164,6 +164,18 @@ class RegisterActivity : AppCompatActivity() {
         fileInputStream!!.copyTo(fileOutputStream)
         fileInputStream.close()
 
+
+        val fileSizeInBytes = file.length()
+        val fileSizeInKB = fileSizeInBytes / 1024
+        val fileSizeInMB = fileSizeInKB / 1024
+
+        val maxFileSizeInMB = 5 // MB
+
+        if (fileSizeInMB > maxFileSizeInMB) {
+            Toast.makeText(this, "Ukuran gambar terlalu besar", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val pictureProfileFile = MultipartBody.Part.createFormData(
             "picture_profile_file",
             file.name,
