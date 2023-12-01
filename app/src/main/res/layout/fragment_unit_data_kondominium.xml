@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="32.5dp"
+        android:paddingBottom="150dp"
+        android:paddingHorizontal="32.5dp"
+        />
+
+    <TextView
+        android:id="@+id/title_unit_data_kondominium"
+        style="@style/text.medium.size16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="Kondominium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_luas_bangunan_kondominium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_unit_data_kondominium"
+        >
+
+        <TextView
+            android:id="@+id/txt_luas_bangunan_kondominium"
+            style="@style/text.regular.size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Luas Bangunan"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <EditText
+            android:id="@+id/edit_luas_bangunan_kondominium"
+            style="@style/DesignSystem.TextInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_luas_bangunan_kondominium"
+            android:text="m²"
+            android:textAlignment="textEnd"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_kamar_kondominium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_luas_bangunan_kondominium"
+        >
+
+        <TextView
+            android:id="@+id/txt_kamar_kondominium"
+            style="@style/text.regular.size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kamar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edit_kamar_kondominium_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/outline_info_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_kamar_kondominium"
+                android:layout_width="match_parent"
+                style="@style/DesignSystem.TextInputEditText"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_kamar_mandi_kondominium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_kamar_kondominium"
+        >
+
+        <TextView
+            android:id="@+id/txt_kamar_mandi_kondominium"
+            style="@style/text.regular.size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kamar Mandi"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edit_kamar_mandi_kondominium_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/outline_info_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_kamar_mandi_kondominium"
+                android:layout_width="match_parent"
+                style="@style/DesignSystem.TextInputEditText"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_tempat_parkir_kondominium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_kamar_mandi_kondominium"
+        >
+
+        <TextView
+            android:id="@+id/txt_tempat_parkir_kondominium"
+            style="@style/text.regular.size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tempat Parkir"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/spinner_tempat_parkir_kondominium"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edit_text_rounded_rectangle"
+            android:drawableEnd="@drawable/chevron_down"
+            android:paddingHorizontal="14.5dp"
+            android:text="Pilih"
+            android:textColor="@color/text_black"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/paragraph"
+            app:layout_constraintTop_toBottomOf="@id/txt_tempat_parkir_kondominium"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_daya_listrik_kondominium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_tempat_parkir_kondominium"
+        >
+
+        <TextView
+            android:id="@+id/txt_daya_listrik_kondominium"
+            style="@style/text.regular.size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Daya Listrik"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/spinner_daya_listrik_kondominium"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edit_text_rounded_rectangle"
+            android:drawableEnd="@drawable/chevron_down"
+            android:paddingHorizontal="14.5dp"
+            android:text="Pilih"
+            android:textColor="@color/text_black"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/paragraph"
+            app:layout_constraintTop_toBottomOf="@id/txt_daya_listrik_kondominium"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_jenis_air_kondominium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_daya_listrik_kondominium"
+        >
+
+        <TextView
+            android:id="@+id/txt_jenis_air_kondominium"
+            style="@style/text.regular.size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jenis Air"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/spinner_jenis_air_kondominium"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edit_text_rounded_rectangle"
+            android:drawableEnd="@drawable/chevron_down"
+            android:paddingHorizontal="14.5dp"
+            android:text="Pilih"
+            android:textColor="@color/text_black"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/paragraph"
+            app:layout_constraintTop_toBottomOf="@id/txt_jenis_air_kondominium"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_interior_kondominium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_jenis_air_kondominium"
+        >
+
+        <TextView
+            android:id="@+id/txt_interior_kondominium"
+            style="@style/text.regular.size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Interior"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/spinner_interior_kondominium"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edit_text_rounded_rectangle"
+            android:drawableEnd="@drawable/chevron_down"
+            android:paddingHorizontal="14.5dp"
+            android:text="Pilih"
+            android:textColor="@color/text_black"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/paragraph"
+            app:layout_constraintTop_toBottomOf="@id/txt_interior_kondominium"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_akses_jalan_kondominium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_interior_kondominium"
+        >
+
+        <TextView
+            android:id="@+id/txt_akses_jalan_kondominium"
+            style="@style/text.regular.size14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Akses Jalan"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/spinner_akses_jalan_kondominium"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edit_text_rounded_rectangle"
+            android:drawableEnd="@drawable/chevron_down"
+            android:paddingHorizontal="14.5dp"
+            android:text="Pilih"
+            android:textColor="@color/text_black"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/paragraph"
+            app:layout_constraintTop_toBottomOf="@id/txt_akses_jalan_kondominium"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
