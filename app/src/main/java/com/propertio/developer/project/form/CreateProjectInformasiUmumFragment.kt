@@ -1,14 +1,18 @@
 package com.propertio.developer.project.form
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.propertio.developer.R
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.databinding.FragmentCreateProjectInformasiUmumBinding
-import com.propertio.developer.project_management.ButtonNavigationProjectManagementClickListener
+import com.propertio.developer.dialog.CertificateTypeSheetFragment
+import com.propertio.developer.dialog.PropertyTypeSheetFragment
+import com.propertio.developer.dialog.viewmodel.CertificateTypeSpinnerViewModel
+import com.propertio.developer.dialog.viewmodel.PropertyTypeSpinnerViewModel
 
 
 class CreateProjectInformasiUmumFragment : Fragment() {
@@ -17,17 +21,33 @@ class CreateProjectInformasiUmumFragment : Fragment() {
         FragmentCreateProjectInformasiUmumBinding.inflate(layoutInflater)
     }
 
+    // Spinner
+    private var isPropertyTypeSpinnerSelected = false
+    private val propertyTypeViewModel by lazy { ViewModelProvider(requireActivity())[PropertyTypeSpinnerViewModel::class.java] }
+
+    private var isCertificateTypeSpinnerSelected = false
+    private val certificateTypeViewModel by lazy { ViewModelProvider(requireActivity())[CertificateTypeSpinnerViewModel::class.java] }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Spinner
+        propertyTypeSpinner()
+        certificateTypeSpinner()
+
+        // TODO: validate posted_at or Tahun Pembangunan !important
+
+
+
+
+
 
         /*
          * TODO: Berikut contoh mendapatkan binding dari ProjectFormActivity
@@ -60,6 +80,34 @@ class CreateProjectInformasiUmumFragment : Fragment() {
             activity.onNextButtonProjectManagementClick()
         }
 
+    }
+
+    private fun certificateTypeSpinner() {
+        binding.spinnerSertifikatProject.setOnClickListener {
+            CertificateTypeSheetFragment().show(parentFragmentManager, "PropertyTypeSheetFragment")
+            Log.d("CreateProjectInformasiUmumFragment", "propertyTypeSpinner: $isCertificateTypeSpinnerSelected")
+        }
+
+        certificateTypeViewModel.certificateTypeData.observe(viewLifecycleOwner) {
+            binding.spinnerSertifikatProject.text = it
+
+            isCertificateTypeSpinnerSelected = true
+            Log.d("CreateProjectInformasiUmumFragment", "propertyTypeSpinner: $isCertificateTypeSpinnerSelected")
+        }
+    }
+
+    private fun propertyTypeSpinner() {
+        binding.spinnerTipeProject.setOnClickListener {
+            PropertyTypeSheetFragment().show(parentFragmentManager, "PropertyTypeSheetFragment")
+            Log.d("CreateProjectInformasiUmumFragment", "propertyTypeSpinner: $isPropertyTypeSpinnerSelected")
+        }
+
+        propertyTypeViewModel.propertyTypeData.observe(viewLifecycleOwner) {
+            binding.spinnerTipeProject.text = it.name
+
+            isPropertyTypeSpinnerSelected = true
+            Log.d("CreateProjectInformasiUmumFragment", "propertyTypeSpinner: $isPropertyTypeSpinnerSelected")
+        }
     }
 
 

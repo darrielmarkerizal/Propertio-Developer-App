@@ -47,30 +47,6 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
 
         setInitialFragment()
 
-//        with(binding) {
-//            floatingButtonBack.setOnClickListener {
-//                if (currentFragmentIndex <= 0) {
-//                    Log.d("ProjectForm", "Exit From Project Form")
-//                    finish()
-//                }
-//
-//                currentFragmentIndex--
-//                replaceFragment(formsFragment[currentFragmentIndex])
-//            }
-//            floatingButtonNext.setOnClickListener {
-//                if (currentFragmentIndex == formsFragment.size - 1) {
-//                    Log.d("ProjectForm", "Post Project Form")
-//
-//                    // TODO: Post Project Form
-//                    Toast.makeText(this@ProjectFormActivity, "Post Project Form Belum Tersedia", Toast.LENGTH_SHORT).show()
-//                }
-//
-//                currentFragmentIndex++
-//                replaceFragment(formsFragment[currentFragmentIndex])
-//            }
-//
-//        }
-
     }
 
     private fun setInitialFragment() {
