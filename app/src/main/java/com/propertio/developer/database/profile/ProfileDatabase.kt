@@ -5,7 +5,11 @@ import androidx.room.Database
 import androidx.room.Room.databaseBuilder
 import androidx.room.RoomDatabase
 
-@Database(entities = [ProfileTable::class], version = 1, exportSchema = false)
+@Database(
+    entities = [ProfileTable::class],
+    version = 1,
+    exportSchema = true
+)
 abstract class ProfileDatabase : RoomDatabase(){
 
     abstract fun profileTableDao(): ProfileTableDao
