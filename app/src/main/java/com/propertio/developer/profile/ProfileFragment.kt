@@ -72,8 +72,9 @@ class ProfileFragment : Fragment() {
     private var keepCity = true
     private var isProvinceSelected : Boolean = true
     private var isCitySelected : Boolean = true
-    private lateinit var provinceViewModel: ProvinceSpinnerViewModel
-    private lateinit var cityViewModel: CitiesSpinnerViewModel
+    private val provinceViewModel by lazy { ViewModelProvider(requireActivity())[ProvinceSpinnerViewModel::class.java] }
+    private val cityViewModel by lazy { ViewModelProvider(requireActivity())[CitiesSpinnerViewModel::class.java] }
+
 
 
     private var imageUri: Uri? = null
@@ -120,7 +121,7 @@ class ProfileFragment : Fragment() {
 
 
         // Initialize View Model
-        initializeViewModel()
+//        initializeViewModel()
 
 
         // fetch Data From Api
@@ -376,8 +377,8 @@ class ProfileFragment : Fragment() {
     private fun initializeViewModel() {
 //        val viewModelFactory = ProfileViewModelFactory(TokenManager(requireContext()).token!!)
 //        profileViewModel = ViewModelProvider(this, viewModelFactory)[ProfileViewModel::class.java]
-        cityViewModel = ViewModelProvider(requireActivity())[CitiesSpinnerViewModel::class.java]
-        provinceViewModel = ViewModelProvider(requireActivity())[ProvinceSpinnerViewModel::class.java]
+//        cityViewModel = ViewModelProvider(requireActivity())[CitiesSpinnerViewModel::class.java]
+//        provinceViewModel = ViewModelProvider(requireActivity())[ProvinceSpinnerViewModel::class.java]
     }
 
     private fun swipeRefreshHandler() {
@@ -586,8 +587,6 @@ class ProfileFragment : Fragment() {
 
 
     private fun citySpinner() {
-        cityViewModel = ViewModelProvider(requireActivity())[CitiesSpinnerViewModel::class.java]
-
 
         binding.spinnerCityProfile.setOnClickListener {
             if (isProvinceSelected) {
@@ -604,7 +603,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun provinceSpinner() {
-        provinceViewModel = ViewModelProvider(requireActivity())[ProvinceSpinnerViewModel::class.java]
+
         binding.buttonProvincesSelectionProfile.setOnClickListener {
             ProvinceSheetFragment().show(parentFragmentManager, "ProvinceSheetFragment")
             isProvinceSelected = true
