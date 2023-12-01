@@ -164,6 +164,18 @@ class RegisterActivity : AppCompatActivity() {
         fileInputStream!!.copyTo(fileOutputStream)
         fileInputStream.close()
 
+
+        val fileSizeInBytes = file.length()
+        val fileSizeInKB = fileSizeInBytes / 1024
+        val fileSizeInMB = fileSizeInKB / 1024
+
+        val maxFileSizeInMB = 5 // MB
+
+        if (fileSizeInMB > maxFileSizeInMB) {
+            Toast.makeText(this, "Ukuran gambar terlalu besar", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val pictureProfileFile = MultipartBody.Part.createFormData(
             "picture_profile_file",
             file.name,
@@ -282,8 +294,8 @@ class RegisterActivity : AppCompatActivity() {
                 firstName = editTextNamaDepan.text.toString(),
                 lastName = editTextNamaBelakang.text.toString(),
                 phoneNumber = "${textViewNomorTeleponPrefix.text.toString().removePrefix(" + ")}${editTextNomorTelepon.text}",
-                city = cityViewModel.citiesData.value?.citiesId,
-                province = provinceViewModel.provinceData.value?.provinceId,
+                city = cityViewModel.citiesData.value?.citiesName,
+                province = provinceViewModel.provinceData.value?.provinceName,
                 role = "developer",
                 status = "active",
                 address = editTextAddress.text.toString(),
@@ -306,7 +318,7 @@ class RegisterActivity : AppCompatActivity() {
 
         binding.spinnerCity.setOnClickListener {
             if (isProvinceSelected) {
-                CitiesSheetFragment().show(supportFragmentManager, "CitySheetFragment")
+                CitiesSheetFragment().show(supportFragmentManager, "CitiesSheetFragment")
             } else {
                 Toast.makeText(this, "Pilih Provinsi terlebih dahulu", Toast.LENGTH_SHORT).show()
             }
@@ -332,13 +344,14 @@ class RegisterActivity : AppCompatActivity() {
         provinceViewModel.provinceData.observe(this) {
             binding.buttonProvincesSelection.text = it.provinceName
             binding.buttonProvincesSelection.error = null
+
             isProvinceSelected = true
             cityViewModel.citiesData
                 .postValue(
                     CitiesModel(
                         citiesId = "",
                         provinceId = it.provinceId,
-                        citiesName = "-- Pilih Kota"
+                        citiesName = "Pilih Kota"
                     )
                 )
         }

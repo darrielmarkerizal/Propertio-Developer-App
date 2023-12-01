@@ -250,7 +250,7 @@
                             </LinearLayout>
 
                             <androidx.appcompat.widget.AppCompatButton
-                                android:id="@+id/spinner_district_profile"
+                                android:id="@+id/spinner_city_profile"
                                 android:layout_width="match_parent"
                                 android:layout_height="50dp"
                                 android:paddingHorizontal="14.5dp"
@@ -332,42 +332,7 @@
                                 </LinearLayout>
                             </RelativeLayout>
                         </LinearLayout>
-                        <!--                    <LinearLayout-->
-                        <!--                        android:layout_width="match_parent"-->
-                        <!--                        android:layout_height="wrap_content"-->
-                        <!--                        android:orientation="vertical"-->
-                        <!--                        android:layout_marginBottom="30dp">-->
-                        <!--                        <TextView-->
-                        <!--                            style="@style/text.regular.size16"-->
-                        <!--                            android:layout_width="wrap_content"-->
-                        <!--                            android:layout_height="wrap_content"-->
-                        <!--                            android:text="Tambah Foto Banner"-->
-                        <!--                            android:layout_marginBottom="5dp"/>-->
-                        <!--                        <RelativeLayout-->
-                        <!--                            android:id="@+id/button_add_banner_picture"-->
-                        <!--                            android:layout_width="match_parent"-->
-                        <!--                            android:layout_height="50dp"-->
-                        <!--                            android:background="@drawable/button_add_rounded_rectangle">-->
-                        <!--                            <LinearLayout-->
-                        <!--                                android:layout_width="wrap_content"-->
-                        <!--                                android:layout_height="wrap_content"-->
-                        <!--                                android:layout_centerInParent="true">-->
-                        <!--                                <ImageView-->
-                        <!--                                    android:layout_width="wrap_content"-->
-                        <!--                                    android:layout_height="wrap_content"-->
-                        <!--                                    android:src="@drawable/ic_add_circle"/>-->
-                        <!--                                <TextView-->
-                        <!--                                    android:layout_width="wrap_content"-->
-                        <!--                                    android:layout_height="wrap_content"-->
-                        <!--                                    android:text="Tambahkan"-->
-                        <!--                                    android:textSize="16sp"-->
-                        <!--                                    android:layout_marginLeft="5dp"-->
-                        <!--                                    android:layout_gravity="center_vertical"-->
-                        <!--                                    android:textColor="#49454F"-->
-                        <!--                                    style="@style/text.regular.size16"/>-->
-                        <!--                            </LinearLayout>-->
-                        <!--                        </RelativeLayout>-->
-                        <!--                    </LinearLayout>-->
+
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/btn_ubah_kata_sandi_profil"
                             android:layout_width="match_parent"

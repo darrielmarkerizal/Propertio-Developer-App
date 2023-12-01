@@ -4,6 +4,9 @@ plugins {
     // KSP
     id("com.google.devtools.ksp")
 
+    // Kapt
+    id("kotlin-kapt")
+
 
 }
 
@@ -41,7 +44,17 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+//    sourceSets {
+//        // Adds exported schema location as test app assets.
+//        getByName("androidTest").assets.srcDir("$projectDir/schemas")
+//    }
+
 }
+
+//ksp {
+//    arg(RoomSchemaArgProvider(File(projectDir, "schemas")))
+//}
 
 dependencies {
     // API
@@ -54,14 +67,26 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
+    //TODO: Remove Glide Kapt and SVG
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
-    ksp("com.github.bumptech.glide:compiler:4.16.0")
+    kapt("com.github.bumptech.glide:compiler:4.16.0")
+
+    // SVG
+//    implementation("com.caverock:androidsvg-aar:1.4")
+//    implementation("com.caverock:androidsvg:1.4")
+
+    // Coil
+    implementation("io.coil-kt:coil:2.5.0")
+    implementation("io.coil-kt:coil-svg:2.5.0")
+
+
 
     // Room
     implementation("androidx.room:room-ktx:2.6.0")
     implementation("androidx.room:room-runtime:2.6.0")
     ksp("androidx.room:room-compiler:2.6.0")
+    testImplementation("androidx.room:room-testing:2.6.1")
 
 
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
@@ -71,7 +96,6 @@ dependencies {
     val nav_version = "2.7.5"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
-    implementation("io.coil-kt:coil:2.4.0")
     implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
 
@@ -83,3 +107,14 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
+
+//class RoomSchemaArgProvider(
+//    @get:InputDirectory
+//    @get:PathSensitive(PathSensitivity.RELATIVE)
+//    val schemaDir: File
+//) : CommandLineArgumentProvider {
+//
+//    override fun asArguments(): Iterable<String> {
+//        return listOf("room.schemaLocation=${schemaDir.path}")
+//    }
+//}

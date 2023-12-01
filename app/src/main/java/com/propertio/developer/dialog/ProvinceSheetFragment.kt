@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
+import com.propertio.developer.api.common.address.AddressApi
+import com.propertio.developer.api.common.address.Province
 import com.propertio.developer.api.profile.ProfileApi
 import com.propertio.developer.api.profile.ProfileResponse
 import com.propertio.developer.databinding.FragmentBottomRecyclerWithSearchBarSheetBinding
@@ -51,12 +53,12 @@ class ProvinceSheetFragment : BottomSheetDialogFragment() {
     private fun fetchProvincesApi() {
         val retro = Retro(TokenManager(requireContext()).token)
             .getRetroClientInstance()
-            .create(ProfileApi::class.java)
+            .create(AddressApi::class.java)
 
-        retro.getProvinces().enqueue(object : Callback<List<ProfileResponse.Province>> {
+        retro.getProvinces().enqueue(object : Callback<List<Province>> {
             override fun onResponse(
-                call: Call<List<ProfileResponse.Province>>,
-                response: Response<List<ProfileResponse.Province>>
+                call: Call<List<Province>>,
+                response: Response<List<Province>>
             ) {
                 if (response.isSuccessful) {
                     Log.d("ProvinceSheetFragment", "onResponse: ${response.body()}")
@@ -74,7 +76,7 @@ class ProvinceSheetFragment : BottomSheetDialogFragment() {
                 }
             }
 
-            override fun onFailure(call: Call<List<ProfileResponse.Province>>, t: Throwable) {
+            override fun onFailure(call: Call<List<Province>>, t: Throwable) {
                 Log.e("ProvinceSheetFragment", "onFailure: ${t.message}", t)
             }
 
@@ -82,7 +84,7 @@ class ProvinceSheetFragment : BottomSheetDialogFragment() {
         })
     }
 
-    private fun setupRecycler(provinces : List<ProfileResponse.Province>) {
+    private fun setupRecycler(provinces : List<Province>) {
         Log.d("ProvinceSheetFragment", "setupRecycler: $provinces")
 
         with(binding) {

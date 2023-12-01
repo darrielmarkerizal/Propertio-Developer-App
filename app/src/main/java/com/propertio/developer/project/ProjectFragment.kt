@@ -38,9 +38,9 @@ class ProjectFragment : Fragment() {
     private lateinit var tokenManager: TokenManager
 
     private var visibleThreshold : Int = 5
-    val cardHeight = 500
-    val cardsToLoadMore = 2
-    val loadHeighThreshold = cardHeight * cardsToLoadMore
+    private val cardHeight = 500
+    private val cardsToLoadMore = 2
+    private val loadHeighThreshold = cardHeight * cardsToLoadMore
 
     private var _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean>
