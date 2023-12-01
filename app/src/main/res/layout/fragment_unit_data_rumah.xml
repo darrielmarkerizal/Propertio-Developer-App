@@ -13,7 +13,7 @@
         android:paddingTop="32.5dp"
         android:paddingBottom="150dp"
         android:paddingHorizontal="32.5dp"
-        />
+        >
 
         <TextView
             android:id="@+id/title_unit_data_rumah"
@@ -117,6 +117,7 @@
             style="@style/DesignSystem.TextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:hint="Masukkan Jumlah Lantai"
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_jumlah_lantai_rumah"
@@ -138,7 +139,7 @@
             style="@style/text.regular.size14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kamar"
+            android:text="Kamar Tidur"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
@@ -148,6 +149,7 @@
             style="@style/DesignSystem.TextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:hint="Masukkan Jumlah Kamar Tidur"
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_kamar_rumah"
@@ -180,6 +182,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
+            android:hint="Masukkan Jumlah Kamar Mandi"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_kamar_mandi_rumah"
             />
@@ -213,7 +216,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Tempat Parkir"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
@@ -249,7 +252,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Daya Listrik"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
@@ -285,7 +288,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Jenis Air"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
@@ -321,7 +324,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Interior"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
@@ -357,7 +360,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Akses Jalan"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
@@ -365,5 +368,5 @@
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

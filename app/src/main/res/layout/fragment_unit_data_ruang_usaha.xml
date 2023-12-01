@@ -13,7 +13,7 @@
         android:paddingTop="32.5dp"
         android:paddingBottom="150dp"
         android:paddingHorizontal="32.5dp"
-        />
+        >
 
     <TextView
         android:id="@+id/title_unit_data_ruang_usaha"
@@ -84,6 +84,7 @@
             style="@style/DesignSystem.TextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:hint="Masukkan Jumlah Kamar Mandi"
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_kamar_mandi_ruang_usaha"
@@ -118,7 +119,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Tempat Parkir"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
@@ -154,7 +155,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Daya Listrik"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
@@ -190,7 +191,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Jenis Air"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
@@ -226,7 +227,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Interior"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
@@ -262,7 +263,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Akses Jalan"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
@@ -270,5 +271,5 @@
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
