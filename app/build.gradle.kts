@@ -44,7 +44,17 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+//    sourceSets {
+//        // Adds exported schema location as test app assets.
+//        getByName("androidTest").assets.srcDir("$projectDir/schemas")
+//    }
+
 }
+
+//ksp {
+//    arg(RoomSchemaArgProvider(File(projectDir, "schemas")))
+//}
 
 dependencies {
     // API
@@ -57,6 +67,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
+    //TODO: Remove Glide Kapt and SVG
     // Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
     kapt("com.github.bumptech.glide:compiler:4.16.0")
@@ -75,6 +86,7 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.0")
     implementation("androidx.room:room-runtime:2.6.0")
     ksp("androidx.room:room-compiler:2.6.0")
+    testImplementation("androidx.room:room-testing:2.6.1")
 
 
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
@@ -95,3 +107,14 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
+
+//class RoomSchemaArgProvider(
+//    @get:InputDirectory
+//    @get:PathSensitive(PathSensitivity.RELATIVE)
+//    val schemaDir: File
+//) : CommandLineArgumentProvider {
+//
+//    override fun asArguments(): Iterable<String> {
+//        return listOf("room.schemaLocation=${schemaDir.path}")
+//    }
+//}
