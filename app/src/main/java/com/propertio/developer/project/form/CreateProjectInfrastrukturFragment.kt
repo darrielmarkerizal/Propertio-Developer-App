@@ -1,22 +1,32 @@
 package com.propertio.developer.project.form
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.propertio.developer.databinding.FragmentCreateProjectInfrastrukturBinding
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CreateProjectInfrastrukturFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class CreateProjectInfrastrukturFragment : Fragment() {
 
     private val binding by lazy {
         FragmentCreateProjectInfrastrukturBinding.inflate(layoutInflater)
+    }
+
+    private val launcher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+
+        if (result.resultCode == Activity.RESULT_OK) {
+            Log.d("CreateProjectInfrastrukturFragment", "onViewCreated: RESULT_OK")
+        }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,8 +36,23 @@ class CreateProjectInfrastrukturFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        with(binding) {
+            buttonUnggahPhotoProjectInfrastuktur.setOnClickListener {
+
+                // go to CreateProjectTambahInfrastrukturFragment
+                val intent = Intent(requireContext(), CreateProjectTambahInfrastrukturFragment::class.java)
+
+                // launcher start acitivity
+                launcher.launch(intent)
+            }
+        }
     }
 }
