@@ -13,293 +13,294 @@
         android:paddingTop="32.5dp"
         android:paddingBottom="150dp"
         android:paddingHorizontal="32.5dp"
-        />
-
-    <TextView
-        android:id="@+id/title_unit_data_apartemen"
-        style="@style/text.medium.size16"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:text="Apartemen"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_luas_bangunan_apartemen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_unit_data_apartemen"
         >
 
         <TextView
-            android:id="@+id/txt_luas_bangunan_apartemen"
-            style="@style/text.regular.size14"
-            android:layout_width="wrap_content"
+            android:id="@+id/title_unit_data_apartemen"
+            style="@style/text.medium.size16"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Luas Bangunan"
+            android:layout_marginTop="14dp"
+            android:text="Apartemen"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
 
-        <EditText
-            android:id="@+id/edit_luas_bangunan_apartemen"
-            style="@style/DesignSystem.TextInputEditText"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_luas_bangunan_apartemen"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_luas_bangunan_apartemen"
-            android:text="m²"
-            android:textAlignment="textEnd"
-            />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_kamar_apartemen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_luas_bangunan_apartemen"
-        >
-
-        <TextView
-            android:id="@+id/txt_kamar_apartemen"
-            style="@style/text.regular.size14"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kamar"
+            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toBottomOf="@id/title_unit_data_apartemen"
+            >
 
-        <EditText
-            android:id="@+id/edit_kamar_apartemen"
-            style="@style/DesignSystem.TextInputEditText"
+            <TextView
+                android:id="@+id/txt_luas_bangunan_apartemen"
+                style="@style/text.regular.size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Luas Bangunan"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <EditText
+                android:id="@+id/edit_luas_bangunan_apartemen"
+                style="@style/DesignSystem.TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txt_luas_bangunan_apartemen"
+                android:text="m²"
+                android:textAlignment="textEnd"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_kamar_apartemen"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_kamar_apartemen"
-            />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_kamar_mandi_apartemen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_kamar_apartemen"
-        >
-
-        <TextView
-            android:id="@+id/txt_kamar_mandi_apartemen"
-            style="@style/text.regular.size14"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kamar Mandi"
+            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toBottomOf="@id/container_luas_bangunan_apartemen"
+            >
 
-        <EditText
-            android:id="@+id/edit_kamar_mandi_apartemen"
-            style="@style/DesignSystem.TextInputEditText"
+            <TextView
+                android:id="@+id/txt_kamar_apartemen"
+                style="@style/text.regular.size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kamar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <EditText
+                android:id="@+id/edit_kamar_apartemen"
+                style="@style/DesignSystem.TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txt_kamar_apartemen"
+                android:hint="Masukkan Jumlah Kamar"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_kamar_mandi_apartemen"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txt_kamar_mandi_apartemen"
-            />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_tempat_parkir_apartemen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_kamar_mandi_apartemen"
-        >
-
-        <TextView
-            android:id="@+id/txt_tempat_parkir_apartemen"
-            style="@style/text.regular.size14"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tempat Parkir"
+            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toBottomOf="@id/container_kamar_apartemen"
+            >
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/spinner_tempat_parkir_apartemen"
+            <TextView
+                android:id="@+id/txt_kamar_mandi_apartemen"
+                style="@style/text.regular.size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kamar Mandi"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <EditText
+                android:id="@+id/edit_kamar_mandi_apartemen"
+                style="@style/DesignSystem.TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txt_kamar_mandi_apartemen"
+                android:hint="Masukkan Jumlah Kamar Mandi"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_tempat_parkir_apartemen"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/edit_text_rounded_rectangle"
-            android:drawableEnd="@drawable/chevron_down"
-            android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
-            android:textColor="@color/text_black"
-            android:textAlignment="textStart"
-            android:textAppearance="@style/paragraph"
-            app:layout_constraintTop_toBottomOf="@id/txt_tempat_parkir_apartemen"
-            />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_daya_listrik_apartemen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_tempat_parkir_apartemen"
-        >
-
-        <TextView
-            android:id="@+id/txt_daya_listrik_apartemen"
-            style="@style/text.regular.size14"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Daya Listrik"
+            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toBottomOf="@id/container_kamar_mandi_apartemen"
+            >
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/spinner_daya_listrik_apartemen"
+            <TextView
+                android:id="@+id/txt_tempat_parkir_apartemen"
+                style="@style/text.regular.size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tempat Parkir"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/spinner_tempat_parkir_apartemen"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edit_text_rounded_rectangle"
+                android:drawableEnd="@drawable/chevron_down"
+                android:paddingHorizontal="14.5dp"
+                android:text="Pilih Jumlah Tempat Parkir"
+                android:textColor="@color/text_black"
+                android:textAlignment="textStart"
+                android:textAppearance="@style/paragraph"
+                app:layout_constraintTop_toBottomOf="@id/txt_tempat_parkir_apartemen"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_daya_listrik_apartemen"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/edit_text_rounded_rectangle"
-            android:drawableEnd="@drawable/chevron_down"
-            android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
-            android:textColor="@color/text_black"
-            android:textAlignment="textStart"
-            android:textAppearance="@style/paragraph"
-            app:layout_constraintTop_toBottomOf="@id/txt_daya_listrik_apartemen"
-            />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_jenis_air_apartemen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_daya_listrik_apartemen"
-        >
-
-        <TextView
-            android:id="@+id/txt_jenis_air_apartemen"
-            style="@style/text.regular.size14"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Jenis Air"
+            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toBottomOf="@id/container_tempat_parkir_apartemen"
+            >
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/spinner_jenis_air_apartemen"
+            <TextView
+                android:id="@+id/txt_daya_listrik_apartemen"
+                style="@style/text.regular.size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Daya Listrik"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/spinner_daya_listrik_apartemen"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edit_text_rounded_rectangle"
+                android:drawableEnd="@drawable/chevron_down"
+                android:paddingHorizontal="14.5dp"
+                android:text="Pilih Daya Listrik"
+                android:textColor="@color/text_black"
+                android:textAlignment="textStart"
+                android:textAppearance="@style/paragraph"
+                app:layout_constraintTop_toBottomOf="@id/txt_daya_listrik_apartemen"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_jenis_air_apartemen"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/edit_text_rounded_rectangle"
-            android:drawableEnd="@drawable/chevron_down"
-            android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
-            android:textColor="@color/text_black"
-            android:textAlignment="textStart"
-            android:textAppearance="@style/paragraph"
-            app:layout_constraintTop_toBottomOf="@id/txt_jenis_air_apartemen"
-            />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_interior_apartemen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_jenis_air_apartemen"
-        >
-
-        <TextView
-            android:id="@+id/txt_interior_apartemen"
-            style="@style/text.regular.size14"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Interior"
+            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toBottomOf="@id/container_daya_listrik_apartemen"
+            >
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/spinner_interior_apartemen"
+            <TextView
+                android:id="@+id/txt_jenis_air_apartemen"
+                style="@style/text.regular.size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jenis Air"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/spinner_jenis_air_apartemen"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edit_text_rounded_rectangle"
+                android:drawableEnd="@drawable/chevron_down"
+                android:paddingHorizontal="14.5dp"
+                android:text="Pilih Jenis Air"
+                android:textColor="@color/text_black"
+                android:textAlignment="textStart"
+                android:textAppearance="@style/paragraph"
+                app:layout_constraintTop_toBottomOf="@id/txt_jenis_air_apartemen"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_interior_apartemen"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/edit_text_rounded_rectangle"
-            android:drawableEnd="@drawable/chevron_down"
-            android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
-            android:textColor="@color/text_black"
-            android:textAlignment="textStart"
-            android:textAppearance="@style/paragraph"
-            app:layout_constraintTop_toBottomOf="@id/txt_interior_apartemen"
-            />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container_akses_jalan_apartemen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_interior_apartemen"
-        >
-
-        <TextView
-            android:id="@+id/txt_akses_jalan_apartemen"
-            style="@style/text.regular.size14"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Akses Jalan"
+            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toBottomOf="@id/container_jenis_air_apartemen"
+            >
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/spinner_akses_jalan_apartemen"
+            <TextView
+                android:id="@+id/txt_interior_apartemen"
+                style="@style/text.regular.size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Interior"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/spinner_interior_apartemen"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edit_text_rounded_rectangle"
+                android:drawableEnd="@drawable/chevron_down"
+                android:paddingHorizontal="14.5dp"
+                android:text="Pilih Interior"
+                android:textColor="@color/text_black"
+                android:textAlignment="textStart"
+                android:textAppearance="@style/paragraph"
+                app:layout_constraintTop_toBottomOf="@id/txt_interior_apartemen"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_akses_jalan_apartemen"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/edit_text_rounded_rectangle"
-            android:drawableEnd="@drawable/chevron_down"
-            android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
-            android:textColor="@color/text_black"
-            android:textAlignment="textStart"
-            android:textAppearance="@style/paragraph"
-            app:layout_constraintTop_toBottomOf="@id/txt_akses_jalan_apartemen"
-            />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/container_interior_apartemen"
+            >
 
+            <TextView
+                android:id="@+id/txt_akses_jalan_apartemen"
+                style="@style/text.regular.size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Akses Jalan"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/spinner_akses_jalan_apartemen"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edit_text_rounded_rectangle"
+                android:drawableEnd="@drawable/chevron_down"
+                android:paddingHorizontal="14.5dp"
+                android:text="Pilih"
+                android:hint="Pilih Akses Jalan"
+                android:textColor="@color/text_black"
+                android:textAlignment="textStart"
+                android:textAppearance="@style/paragraph"
+                app:layout_constraintTop_toBottomOf="@id/txt_akses_jalan_apartemen"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.core.widget.NestedScrollView>

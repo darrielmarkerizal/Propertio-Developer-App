@@ -333,11 +333,10 @@ class ProfileFragment : Fragment() {
     }
 
     private fun loadImage(pictureProfileUrl: String) {
-        var urlWithTimestamp : String? = null
-        if (pictureProfileUrl.startsWith("http")) {
-            urlWithTimestamp = "$pictureProfileUrl?timestamp=${System.currentTimeMillis()}"
+        val urlWithTimestamp : String = if (pictureProfileUrl.startsWith("http")) {
+            "$pictureProfileUrl?timestamp=${System.currentTimeMillis()}"
         } else {
-            urlWithTimestamp = pictureProfileUrl
+            pictureProfileUrl
         }
 
         // load image

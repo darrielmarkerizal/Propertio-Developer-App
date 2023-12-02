@@ -198,7 +198,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Masukkan alamat"
-                android:inputType="textPostalAddress"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txt_alamat_project" />
@@ -228,7 +227,8 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="8dp"
                 android:hint="Masukkan kode pos"
-                android:inputType="text"
+                android:inputType="number"
+                android:maxLength="5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_view_pos_label_project" />
@@ -258,10 +258,25 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="8dp"
                 android:hint="Masukkan link google maps"
+                android:paddingEnd="55dp"
                 android:inputType="textUri"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_view_pencarian_project" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/button_search_maps_project"
+                style="@style/button.circular.transparant"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="16dp"
+                android:scaleType="fitXY"
+                android:tint="@color/grey_500"
+                android:src="@drawable/baseline_search_24"
+                app:layout_constraintBottom_toBottomOf="@+id/edit_text_link_maps_project"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/edit_text_link_maps_project" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -358,13 +373,23 @@
             </LinearLayout>
         </RelativeLayout>
 
+        <include
+            android:id="@+id/card_file_thumbnail"
+            layout="@layout/card_file_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/button_siteplan_photo_project"
+            app:layout_constraintStart_toStartOf="@+id/button_siteplan_photo_project"
+            app:layout_constraintTop_toBottomOf="@id/button_siteplan_photo_project" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/container_input_immersive_siteplan_project"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="32dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_siteplan_photo_project">
+            app:layout_constraintTop_toBottomOf="@id/card_file_thumbnail">
 
             <TextView
                 android:id="@+id/text_link_immersive_label_project"
@@ -373,8 +398,7 @@
                 android:layout_height="wrap_content"
                 android:text="Link Immersive Siteplan"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/edit_text_link_immersive_project"
@@ -386,6 +410,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_link_immersive_label_project" />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView

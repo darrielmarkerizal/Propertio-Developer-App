@@ -186,15 +186,11 @@
 
             <EditText
                 android:id="@+id/edit_deskripsi_project"
-                style="@style/DesignSystem.TextInputEditText"
+                style="@style/DesignSystem.TextInputTextField"
                 android:hint="Masukkan Deskripsi Proyek"
                 android:layout_width="match_parent"
-                android:paddingTop="8dp"
-                android:paddingStart="8dp"
                 android:layout_height="wrap_content"
-                android:minHeight="100dp"
                 android:layout_marginTop="8dp"
-                android:gravity="top"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txt_deskripsi_project"
                 />
@@ -226,7 +222,9 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="8dp"
                 android:hint="YYYY"
-                android:maxLines="5"
+                android:maxLines="1"
+                android:maxLength="4"
+                android:inputType="number"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txt_tahun_project" />
 

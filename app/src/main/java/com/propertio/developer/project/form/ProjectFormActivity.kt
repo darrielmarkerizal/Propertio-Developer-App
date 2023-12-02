@@ -3,11 +3,13 @@ package com.propertio.developer.project.form
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.propertio.developer.R
 import com.propertio.developer.databinding.ActivityProjectFormBinding
 import com.propertio.developer.databinding.ToolbarBinding
+import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
 import com.propertio.developer.project_management.ButtonNavigationProjectManagementClickListener
 
 class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManagementClickListener {
@@ -15,6 +17,10 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
     val binding by lazy {
         ActivityProjectFormBinding.inflate(layoutInflater)
     }
+
+    // ViewModels
+    val projectInformationLocationViewModel : ProjectInformationLocationViewModel by viewModels()
+    var projectId: Int? = null
 
     private val formsFragment = listOf(
         CreateProjectInformasiUmumFragment(),
@@ -46,30 +52,6 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
         setToolbarToCreate(bindingToolbar)
 
         setInitialFragment()
-
-//        with(binding) {
-//            floatingButtonBack.setOnClickListener {
-//                if (currentFragmentIndex <= 0) {
-//                    Log.d("ProjectForm", "Exit From Project Form")
-//                    finish()
-//                }
-//
-//                currentFragmentIndex--
-//                replaceFragment(formsFragment[currentFragmentIndex])
-//            }
-//            floatingButtonNext.setOnClickListener {
-//                if (currentFragmentIndex == formsFragment.size - 1) {
-//                    Log.d("ProjectForm", "Post Project Form")
-//
-//                    // TODO: Post Project Form
-//                    Toast.makeText(this@ProjectFormActivity, "Post Project Form Belum Tersedia", Toast.LENGTH_SHORT).show()
-//                }
-//
-//                currentFragmentIndex++
-//                replaceFragment(formsFragment[currentFragmentIndex])
-//            }
-//
-//        }
 
     }
 

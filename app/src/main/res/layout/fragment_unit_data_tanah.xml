@@ -46,6 +46,7 @@
             style="@style/DesignSystem.TextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:hint="Masukkan Luas Tanah"
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_luas_tanah_tanah"
@@ -72,7 +73,6 @@
             android:text="Akses Jalan"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:drawableEnd=""
             />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -83,7 +83,7 @@
             android:background="@drawable/edit_text_rounded_rectangle"
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
-            android:text="Pilih"
+            android:text="Pilih Akses Jalan"
             android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
