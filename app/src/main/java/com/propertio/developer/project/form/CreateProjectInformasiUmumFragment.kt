@@ -24,7 +24,7 @@ class CreateProjectInformasiUmumFragment : Fragment() {
     }
 
     // ViewModels
-    val projectInformationLocationViewModel : ProjectInformationLocationViewModel by activityViewModels()
+    private val projectInformationLocationViewModel : ProjectInformationLocationViewModel by activityViewModels()
 
     // Spinner
     private var isPropertyTypeSpinnerSelected = false
