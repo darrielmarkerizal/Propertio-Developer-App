@@ -189,8 +189,6 @@
                 style="@style/DesignSystem.TextInputTextField"
                 android:hint="Masukkan Deskripsi Proyek"
                 android:layout_width="match_parent"
-                android:paddingTop="8dp"
-                android:paddingStart="8dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
