@@ -26,9 +26,7 @@ import retrofit2.create
 
 class CreateProjectFasilitasFragment : Fragment() {
 
-    private val binding by lazy {
-        FragmentCreateProjectFasilitasBinding.inflate(layoutInflater)
-    }
+    private val binding by lazy { FragmentCreateProjectFasilitasBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
