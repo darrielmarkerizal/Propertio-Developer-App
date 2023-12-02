@@ -4,20 +4,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.propertio.developer.database.MasterData
 import com.propertio.developer.databinding.ItemSimpleCardForRecyclerBinding
 
 class CertificateTypeAdapter(
-    private val certificateTypes: List<String>,
-    private val onClickItemListener: (String) -> Unit
+    private val certificateTypes: List<MasterData>,
+    private val onClickItemListener: (MasterData) -> Unit
 ) : RecyclerView.Adapter<CertificateTypeAdapter.CertificateTypeViewHolder>() {
     inner class CertificateTypeViewHolder(
         private val binding: ItemSimpleCardForRecyclerBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(certificate: String) {
+        fun bind(certificate: MasterData) {
             Log.d("CertificateTypeAdapter", "bind: $certificate")
 
             with(binding) {
-                textViewItemCardOption.text = certificate
+                textViewItemCardOption.text = certificate.toUser
 
                 cardViewItemCardOption.setOnClickListener {
                     onClickItemListener(certificate)

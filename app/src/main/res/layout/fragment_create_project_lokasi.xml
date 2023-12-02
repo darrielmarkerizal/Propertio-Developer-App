@@ -198,7 +198,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Masukkan alamat"
-                android:inputType="textPostalAddress"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txt_alamat_project" />
@@ -228,7 +227,8 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="8dp"
                 android:hint="Masukkan kode pos"
-                android:inputType="text"
+                android:inputType="number"
+                android:maxLength="5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_view_pos_label_project" />
