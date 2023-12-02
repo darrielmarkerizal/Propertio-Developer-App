@@ -16,3 +16,4 @@
 local.properties
 /.idea/migrations.xml
 /.idea/deploymentTargetDropDown.xml
+/.idea/appInsightsSettings.xml
