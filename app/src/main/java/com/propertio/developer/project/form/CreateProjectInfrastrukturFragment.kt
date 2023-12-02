@@ -45,7 +45,7 @@ class CreateProjectInfrastrukturFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
-            buttonUnggahPhotoProjectInfrastuktur.setOnClickListener {
+            buttonUnggahProjectInfrastruktur.setOnClickListener {
 
                 // go to CreateProjectTambahInfrastrukturFragment
                 val intent = Intent(requireContext(), CreateProjectTambahInfrastrukturFragment::class.java)
