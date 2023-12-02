@@ -205,13 +205,14 @@
         <item name="android:paddingBottom">0dp</item>
         <item name="android:maxLines">1</item>
         <item name="hintTextColor">@color/text_black_placeholder</item>
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="DesignSystem.TextInputTextField" parent="DesignSystem.TextInputEditText.Base">
         <item name="android:gravity">top</item>
         <item name="android:minHeight">100dp</item>
-        <item name="android:paddingTop">14.5dp</item>
-        <item name="android:paddingBottom">14.5dp</item>
+        <item name="android:padding">14.5dp</item>
+        <item name="android:inputType">textMultiLine</item>
     </style>
 
     <!--  END : textfield -->

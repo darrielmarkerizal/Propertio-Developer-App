@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.propertio.developer.database.MasterDataDeveloperPropertio
 import com.propertio.developer.databinding.FragmentBottomRecyclerWithSearchBarSheetBinding
 import com.propertio.developer.dialog.adapter.CertificateTypeAdapter
 import com.propertio.developer.dialog.viewmodel.CertificateTypeSpinnerViewModel
@@ -44,7 +45,7 @@ class CertificateTypeSheetFragment : BottomSheetDialogFragment() {
         with(binding) {
             recyclerViewSheet.apply {
                 adapter = CertificateTypeAdapter(
-                    certificateTypes = listOfCertificate,
+                    certificateTypes = MasterDataDeveloperPropertio.certificate,
                     onClickItemListener = {
                         Log.d("CertificateTypeSheet", "setupRecyclerView: $it")
                         certificateTypeViewModel.certificateTypeData.postValue(it)
@@ -60,14 +61,14 @@ class CertificateTypeSheetFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private val listOfCertificate = listOf(
-        "Hak Milik",
-        "Hak Guna Bangunan",
-        "Girik / Petok D",
-        "Letter C",
-        "Lainnya",
-        "Strata"
-    )
+//    private val listOfCertificate = listOf(
+//        "Hak Milik",
+//        "Hak Guna Bangunan",
+//        "Girik / Petok D",
+//        "Letter C",
+//        "Lainnya",
+//        "Strata"
+//    )
 
 
 }
