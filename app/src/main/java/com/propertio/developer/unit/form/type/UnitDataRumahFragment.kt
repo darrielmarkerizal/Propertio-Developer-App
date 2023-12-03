@@ -10,9 +10,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.R
 import com.propertio.developer.databinding.FragmentUnitDataRumahBinding
 import com.propertio.developer.dialog.ElectricitySheetFragment
+import com.propertio.developer.dialog.InteriorSheetFragment
 import com.propertio.developer.dialog.ParkingSheetFragment
+import com.propertio.developer.dialog.RoadAccessSheetFragment
+import com.propertio.developer.dialog.WaterSheetFragment
 import com.propertio.developer.dialog.viewmodel.ElectricityTypeSpinnerViewModel
+import com.propertio.developer.dialog.viewmodel.InteriorTypeSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.ParkingTypeSpinnerViewModel
+import com.propertio.developer.dialog.viewmodel.RoadAccessTypeSpinnerViewModel
+import com.propertio.developer.dialog.viewmodel.WaterTypeSpinnerViewModel
 import com.propertio.developer.unit.form.UnitFormActivity
 
 
@@ -23,6 +29,15 @@ class UnitDataRumahFragment : Fragment() {
 
     private var isElectricityTypeSpinnerSelected = false
     private val electricityTypeViewModel by lazy { ViewModelProvider(requireActivity())[ElectricityTypeSpinnerViewModel::class.java] }
+
+    private var isWaterTypeSpinnerSelected = false
+    private val waterTypeViewModel by lazy { ViewModelProvider(requireActivity())[WaterTypeSpinnerViewModel::class.java] }
+
+    private var isInteriorTypeSpinnerSelected = false
+    private val interiorTypeViewModel by lazy { ViewModelProvider(requireActivity())[InteriorTypeSpinnerViewModel::class.java] }
+
+    private var isRoadAccessTypeSpinnerSelected = false
+    private val roadAccessTypeViewModel by lazy { ViewModelProvider(requireActivity())[RoadAccessTypeSpinnerViewModel::class.java] }
 
     private val binding by lazy {
         FragmentUnitDataRumahBinding.inflate(layoutInflater)
@@ -48,6 +63,9 @@ class UnitDataRumahFragment : Fragment() {
 
         parkingTypeSpinner()
         electricityTypeSpinner()
+        waterTypeSpinner()
+        interiorTypeSpinner()
+        roadAccessTypeSpinner()
 
         activityBinding?.floatingButtonBack?.setOnClickListener {
             activity.onBackButtonUnitManagementClick()
@@ -69,6 +87,7 @@ class UnitDataRumahFragment : Fragment() {
         parkingTypeViewModel.parkingTypeData.observe(viewLifecycleOwner) {
             Log.d("UnitDataRumahFragment", "parkingTypeSpinner: $it")
             binding.spinnerTempatParkirRumah.text = it.toUser
+            Log.d("UnitDataRumahFragment", "parkingTypeSpinner: $isParkingTypeSpinnerSelected")
             isParkingTypeSpinnerSelected = true
         }
     }
@@ -83,7 +102,53 @@ class UnitDataRumahFragment : Fragment() {
         electricityTypeViewModel.electricityTypeData.observe(viewLifecycleOwner) {
             Log.d("UnitDataRumahFragment", "electricityTypeSpinner: $it")
             binding.spinnerDayaListrikRumah.text = it.toUser
+            Log.d("UnitDataRumahFragment", "electricityTypeSpinner: $isElectricityTypeSpinnerSelected")
             isElectricityTypeSpinnerSelected = true
+        }
+    }
+
+    private fun waterTypeSpinner() {
+        binding.spinnerJenisAirRumah.setOnClickListener {
+            binding.spinnerJenisAirRumah.isEnabled = true
+            WaterSheetFragment().show(childFragmentManager, "WaterSheetFragment")
+            Log.d("UnitDataRumahFragment", "waterTypeSpinner: clicked")
+        }
+
+        waterTypeViewModel.waterTypeData.observe(viewLifecycleOwner) {
+            Log.d("UnitDataRumahFragment", "waterTypeSpinner: $it")
+            binding.spinnerJenisAirRumah.text = it.toUser
+            Log.d("UnitDataRumahFragment", "waterTypeSpinner: $isWaterTypeSpinnerSelected")
+            isWaterTypeSpinnerSelected = true
+        }
+    }
+
+    private fun interiorTypeSpinner() {
+        binding.spinnerInteriorRumah.setOnClickListener {
+            binding.spinnerInteriorRumah.isEnabled = true
+            InteriorSheetFragment().show(childFragmentManager, "InteriorSheetFragment")
+            Log.d("UnitDataRumahFragment", "interiorTypeSpinner: clicked")
+        }
+
+        interiorTypeViewModel.interiorTypeData.observe(viewLifecycleOwner) {
+            Log.d("UnitDataRumahFragment", "interiorTypeSpinner: $it")
+            binding.spinnerInteriorRumah.text = it.toUser
+            Log.d("UnitDataRumahFragment", "interiorTypeSpinner: $isInteriorTypeSpinnerSelected")
+            isInteriorTypeSpinnerSelected = true
+        }
+    }
+
+    private fun roadAccessTypeSpinner() {
+        binding.spinnerAksesJalanRumah.setOnClickListener {
+            binding.spinnerAksesJalanRumah.isEnabled = true
+            RoadAccessSheetFragment().show(childFragmentManager, "RoadAccessSheetFragment")
+            Log.d("UnitDataRumahFragment", "roadAccessTypeSpinner: clicked")
+        }
+
+        roadAccessTypeViewModel.roadAccessTypeData.observe(viewLifecycleOwner) {
+            Log.d("UnitDataRumahFragment", "roadAccessTypeSpinner: $it")
+            binding.spinnerAksesJalanRumah.text = it.toUser
+            Log.d("UnitDataRumahFragment", "roadAccessTypeSpinner: $isRoadAccessTypeSpinnerSelected")
+            isRoadAccessTypeSpinnerSelected = true
         }
     }
 
