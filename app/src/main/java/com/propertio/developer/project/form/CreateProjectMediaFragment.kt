@@ -22,7 +22,6 @@ import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.projectmanagement.PostStoreProjectPhotoResponse
 import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
 import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResponse
-import com.propertio.developer.api.models.DefaultResponse
 import com.propertio.developer.databinding.FragmentCreateProjectMediaBinding
 import com.propertio.developer.model.Caption
 import com.propertio.developer.model.LitePhotosModel
@@ -227,7 +226,6 @@ class CreateProjectMediaFragment : Fragment() {
 
         // Detele All Photos
         binding.linkTextViewProjectPhotoDelete.setOnClickListener {
-//            Toast.makeText(context, "Layanan ini belum tersedia", Toast.LENGTH_SHORT).show()
             deleteAllPhotos()
         }
 
