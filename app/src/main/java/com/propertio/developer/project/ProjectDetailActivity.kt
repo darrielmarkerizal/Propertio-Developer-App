@@ -74,11 +74,13 @@ class ProjectDetailActivity : AppCompatActivity() {
         val idProject = intent.getIntExtra(PROJECT_ID, 0)
         Log.d("ProjectDetailActivity", "idProject: $idProject")
 
-        // TODO : Ganti Property Type dengan ID Property Type
+        val propertyType = intent.getStringExtra("Property Type")
+        Log.d("ProjectDetailActivity", "Property Type: $propertyType")
+
         binding.buttonAddUnit.setOnClickListener {
             val intentToUnitForm = Intent(this, UnitFormActivity::class.java)
             intentToUnitForm.putExtra(PROJECT_ID, idProject)
-            intentToUnitForm.putExtra("Property Type", "Apartemen")
+            intentToUnitForm.putExtra("Property Type", propertyType)
             startActivity(intentToUnitForm)
         }
 
