@@ -82,6 +82,11 @@
         <item name="android:background">@drawable/button_secondary_rounded_rectangle</item>
     </style>
 
+    <style name="button.secondary.s.rounded.disabled" parent="button.secondary.s.rounded">
+        <item name="android:textColor">@color/grey_500</item>
+        <item name="android:background">@drawable/button_secondary_rounded_rectangle_disabled</item>
+    </style>
+
     <!-- Tertiary   -->
     <style name="button.tertiary" parent="Base.Theme.button">
         <item name="android:background">@drawable/button_tertiary_rounded_rectangle</item>
@@ -206,6 +211,10 @@
         <item name="android:maxLines">1</item>
         <item name="hintTextColor">@color/text_black_placeholder</item>
         <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="DesignSystem.TextInputEditText.Rectangle">
+        <item name="android:background">@drawable/edit_text_caption</item>
     </style>
 
     <style name="DesignSystem.TextInputTextField" parent="DesignSystem.TextInputEditText.Base">

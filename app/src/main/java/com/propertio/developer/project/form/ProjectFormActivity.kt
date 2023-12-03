@@ -10,6 +10,7 @@ import com.propertio.developer.R
 import com.propertio.developer.databinding.ActivityProjectFormBinding
 import com.propertio.developer.databinding.ToolbarBinding
 import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
+import com.propertio.developer.project.viewmodel.ProjectMediaViewModel
 import com.propertio.developer.project_management.ButtonNavigationProjectManagementClickListener
 
 class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManagementClickListener {
@@ -20,6 +21,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
 
     // ViewModels
     val projectInformationLocationViewModel : ProjectInformationLocationViewModel by viewModels()
+    val projectMedia : ProjectMediaViewModel by viewModels()
     var projectId: Int? = null
 
     private val formsFragment = listOf(
