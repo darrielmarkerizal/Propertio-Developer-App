@@ -15,6 +15,7 @@ import com.propertio.developer.unit.form.type.*
 class UnitFormActivity : AppCompatActivity() {
 
     private val binding by lazy {
+        Log.d("UnitFormActivity", "Inflating layout")
         ActivityUnitFormBinding.inflate(layoutInflater)
     }
 
@@ -27,27 +28,30 @@ class UnitFormActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("UnitFormActivity", "onCreate called")
         setContentView(binding.root)
 
         val propertyType = intent.getStringExtra("Property Type")
         val projectId = intent.getIntExtra(PROJECT_ID, 0)
 
-        Log.d("Unit Form Activity", "Project ID : $projectId")
-        Log.d("Unit Form Activity", "Property Type : $propertyType")
+        Log.d("UnitFormActivity", "Project ID : $projectId")
+        Log.d("UnitFormActivity", "Property Type : $propertyType")
 
         when (propertyType) {
-            "gudang" -> formsFragment.add(1, UnitDataGudangFragment())
-            "kantor" -> formsFragment.add(1, UnitDataKantorFragment())
-            "kondominium" -> formsFragment.add(1, UnitDataKondominiumFragment())
-            "pabrik" -> formsFragment.add(1, UnitDataPabrikFragment())
-            "ruangUsaha" -> formsFragment.add(1, UnitDataRuangUsahaFragment())
-            "ruko" -> formsFragment.add(1, UnitDataRukoFragment())
+            "Gudang" -> formsFragment.add(1, UnitDataGudangFragment())
+            "Kantor" -> formsFragment.add(1, UnitDataKantorFragment())
+            "Kondominium" -> formsFragment.add(1, UnitDataKondominiumFragment())
+            "Pabrik" -> formsFragment.add(1, UnitDataPabrikFragment())
+            "Ruang usaha" -> formsFragment.add(1, UnitDataRuangUsahaFragment())
+            "Ruko" -> formsFragment.add(1, UnitDataRukoFragment())
             "Rumah" -> formsFragment.add(1, UnitDataRumahFragment())
-            "tanah" -> formsFragment.add(1, UnitDataTanahFragment())
-            "villa" -> formsFragment.add(1, UnitDataVillaFragment())
+            "Tanah" -> formsFragment.add(1, UnitDataTanahFragment())
+            "Villa" -> formsFragment.add(1, UnitDataVillaFragment())
+            "Apartemen" -> formsFragment.add(1, UnitDataApartemenFragment())
             else -> Log.e("UnitFormActivity", "Invalid property type: $propertyType")
         }
 
+        Log.d("UnitFormActivity", "Starting fragment transaction")
         supportFragmentManager.beginTransaction()
             .replace(R.id.frame_container_unit_form, formsFragment[currentFragmentIndex])
             .commit()
@@ -57,6 +61,7 @@ class UnitFormActivity : AppCompatActivity() {
         binding.floatingButtonNext.setOnClickListener {
             if (currentFragmentIndex < formsFragment.size - 1) {
                 currentFragmentIndex++
+                Log.d("UnitFormActivity", "Next button clicked, currentFragmentIndex: $currentFragmentIndex")
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.frame_container_unit_form, formsFragment[currentFragmentIndex])
                     .commit()
@@ -67,11 +72,13 @@ class UnitFormActivity : AppCompatActivity() {
         binding.floatingButtonBack.setOnClickListener {
             if (currentFragmentIndex > 0) {
                 currentFragmentIndex--
+                Log.d("UnitFormActivity", "Back button clicked, currentFragmentIndex: $currentFragmentIndex")
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.frame_container_unit_form, formsFragment[currentFragmentIndex])
                     .commit()
                 binding.toolbarContainerUnitForm.textViewTitle.text = "Edit Unit"
             } else if (currentFragmentIndex == 0) {
+                Log.d("UnitFormActivity", "Navigating to ProjectDetailActivity")
                 val intentToProjectDetail = Intent(this, ProjectDetailActivity::class.java)
                 startActivity(intentToProjectDetail)
             }
