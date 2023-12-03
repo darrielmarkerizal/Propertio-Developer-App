@@ -20,9 +20,13 @@ import com.propertio.developer.dialog.viewmodel.ParkingTypeSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.RoadAccessTypeSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.WaterTypeSpinnerViewModel
 import com.propertio.developer.unit.form.UnitFormActivity
+import com.propertio.developer.unit.form.UnitFormViewModel
+import androidx.lifecycle.Observer
+
 
 
 class UnitDataRumahFragment : Fragment() {
+    private lateinit var unitFormViewModel: UnitFormViewModel
 
     private var isParkingTypeSpinnerSelected = false
     private val parkingTypeViewModel by lazy { ViewModelProvider(requireActivity())[ParkingTypeSpinnerViewModel::class.java] }
@@ -54,12 +58,15 @@ class UnitDataRumahFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("UnitDataRumahFragment", "onViewCreated: $isParkingTypeSpinnerSelected")
-        Log.d("UnitDataRumahFragment", "onViewCreated: ${parkingTypeViewModel.parkingTypeData.value}")
-        Log.d("UnitDataRumahFragment", "onViewCreated: ${parkingTypeViewModel.parkingTypeData.value?.toUser}")
+        unitFormViewModel = ViewModelProvider(requireActivity())[UnitFormViewModel::class.java]
+        Log.d("UnitDataRumahFragment", "onViewCreated: $unitFormViewModel")
 
         val activity = activity as? UnitFormActivity
         val activityBinding = activity?.binding
+
+        unitFormViewModel.projectId.observe(viewLifecycleOwner, Observer<Int> { projectId ->
+            Log.d("UnitDataRumahFragment", "Observed projectId in ViewModel: $projectId")
+        })
 
         parkingTypeSpinner()
         electricityTypeSpinner()
@@ -73,6 +80,7 @@ class UnitDataRumahFragment : Fragment() {
 
         activityBinding?.floatingButtonNext?.setOnClickListener {
             Log.d("UnitDataRumahFragment", "Next button clicked")
+
             activity.onNextButtonUnitManagementClick()
         }
     }
