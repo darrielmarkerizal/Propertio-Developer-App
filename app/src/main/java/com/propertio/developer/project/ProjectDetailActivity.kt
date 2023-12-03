@@ -23,10 +23,13 @@ import com.propertio.developer.api.DomainURL
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
+import com.propertio.developer.api.models.ProjectMinimum
+import com.propertio.developer.api.models.ProjectPropertyType
 import com.propertio.developer.carousel.CarouselAdapter
 import com.propertio.developer.carousel.ImageData
 import com.propertio.developer.database.project.ProjectTable
 import com.propertio.developer.databinding.ActivityProjectDetailBinding
+import com.propertio.developer.unit.form.UnitFormActivity
 import com.propertio.developer.unit.list.UnitAdapter
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -69,6 +72,15 @@ class ProjectDetailActivity : AppCompatActivity() {
 
 
         val idProject = intent.getIntExtra(PROJECT_ID, 0)
+        Log.d("ProjectDetailActivity", "idProject: $idProject")
+
+        // TODO : Ganti Property Type dengan ID Property Type
+        binding.buttonAddUnit.setOnClickListener {
+            val intentToUnitForm = Intent(this, UnitFormActivity::class.java)
+            intentToUnitForm.putExtra(PROJECT_ID, idProject)
+            intentToUnitForm.putExtra("Property Type", "Apartemen")
+            startActivity(intentToUnitForm)
+        }
 
         if (idProject == 0) {
             Log.e("ProjectDetailActivity", "projectData is null")
