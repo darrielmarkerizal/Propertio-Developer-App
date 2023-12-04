@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.R
 import com.propertio.developer.databinding.FragmentUnitDataTanahBinding
@@ -45,6 +46,18 @@ class UnitDataTanahFragment : Fragment() {
 
         roadAccessTypeSpinner()
 
+        observeLiveData(unitFormViewModel.projectId) { projectId ->
+            Log.d("UnitDataApartemenFragment", "Observed projectId in ViewModel: $projectId")
+        }
+
+        observeLiveData(unitFormViewModel.luasTanah) { luasTanah ->
+            binding.editLuasTanahTanah.setText(luasTanah)
+        }
+
+        observeLiveData(unitFormViewModel.roadAccessType) { roadAccessType ->
+            binding.spinnerAksesJalanTanah.text = roadAccessType
+        }
+
         activityBinding.floatingButtonBack.setOnClickListener {
             activity.onBackButtonUnitManagementClick()
         }
@@ -58,6 +71,9 @@ class UnitDataTanahFragment : Fragment() {
             val price = unitFormViewModel.hargaUnit.value
             val luas_tanah = binding.editLuasTanahTanah.text.toString()
             val road_access_type = binding.spinnerAksesJalanTanah.text.toString()
+
+            activity.unitFormViewModel.updateLuasTanah(luas_tanah)
+            activity.unitFormViewModel.updateRoadAccessType(road_access_type)
 
             activity.onNextButtonUnitManagementClick()
         }
@@ -78,5 +94,10 @@ class UnitDataTanahFragment : Fragment() {
         }
     }
 
+    private fun <T> observeLiveData(liveData: LiveData<T>, updateUI: (T) -> Unit) {
+        liveData.observe(viewLifecycleOwner) { value ->
+            updateUI(value)
+        }
+    }
 
 }

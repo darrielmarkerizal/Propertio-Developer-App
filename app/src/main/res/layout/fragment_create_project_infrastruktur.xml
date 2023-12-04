@@ -77,13 +77,14 @@
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_infrastruktur"
+        android:id="@+id/recyler_view_infrastruktur_project"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/button_unggah_project_infrastruktur"
         android:layout_marginTop="20dp"
-        tools:listitem="@layout/item_infrastruktur"
-        />
+        app:layout_constraintEnd_toEndOf="@+id/button_unggah_project_infrastruktur"
+        app:layout_constraintStart_toStartOf="@+id/button_unggah_project_infrastruktur"
+        app:layout_constraintTop_toBottomOf="@id/button_unggah_project_infrastruktur"
+        tools:listitem="@layout/item_infrastruktur" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

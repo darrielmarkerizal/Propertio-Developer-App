@@ -21,6 +21,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".project.form.CreateProjectSuccessActivity"
+            android:exported="false" />
+        <activity
             android:name=".unit.form.UnitFormActivity"
             android:exported="false" />
         <activity

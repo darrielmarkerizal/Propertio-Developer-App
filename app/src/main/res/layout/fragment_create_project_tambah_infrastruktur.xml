@@ -7,7 +7,6 @@
     tools:context=".project.form.CreateProjectTambahInfrastrukturFragment"
     android:background="@color/white"
     android:paddingTop="32.5dp"
-    android:paddingBottom="150dp"
     android:paddingHorizontal="32.5dp"
     >
 
@@ -60,9 +59,10 @@
             android:drawableEnd="@drawable/chevron_down"
             android:paddingHorizontal="14.5dp"
             android:text="Pilih Tipe Infrastruktur"
-            android:textColor="@color/text_black"
             android:textAlignment="textStart"
             android:textAppearance="@style/paragraph"
+            android:textColor="@color/text_black"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_tipe_infrastruktur_project" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -113,12 +113,14 @@
         style="@style/button.primary.l"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="364dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="150dp"
         android:text="Simpan"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/container_tipe_infrastruktur_project"
         app:layout_constraintHorizontal_bias="0.25"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/container_tipe_infrastruktur_project"
         app:layout_constraintTop_toBottomOf="@+id/container_nama_infrastruktur_project"
-        />
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

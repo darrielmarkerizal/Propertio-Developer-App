@@ -38,6 +38,8 @@ import retrofit2.Response
 import java.util.regex.Pattern
 
 class ProjectDetailActivity : AppCompatActivity() {
+    private var projectId: Int? = null
+
     private val binding by lazy {
         ActivityProjectDetailBinding.inflate(layoutInflater)
     }
@@ -78,15 +80,21 @@ class ProjectDetailActivity : AppCompatActivity() {
         Log.d("ProjectDetailActivity", "Property Type: $propertyType")
 
         binding.buttonAddUnit.setOnClickListener {
-            val intentToUnitForm = Intent(this, UnitFormActivity::class.java)
-            intentToUnitForm.putExtra(PROJECT_ID, idProject)
-            intentToUnitForm.putExtra("Property Type", propertyType)
-            startActivity(intentToUnitForm)
+            if (projectId != null && projectId != 0) {
+                val intentToUnitForm = Intent(this, UnitFormActivity::class.java)
+                intentToUnitForm.putExtra(PROJECT_ID, projectId)
+                intentToUnitForm.putExtra("Property Type", propertyType)
+                startActivity(intentToUnitForm)
+            } else {
+                Log.w("ProjectDetailActivity", "projectId is null")
+            }
         }
 
         if (idProject == 0) {
             Log.e("ProjectDetailActivity", "projectData is null")
             finishActivity(RESULT_CANCELED)
+        } else {
+            projectId = idProject
         }
 
 

@@ -11,6 +11,8 @@ import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_I
 import com.propertio.developer.unit.form.type.*
 import com.propertio.developer.unit_management.ButtonNavigationUnitManagementClickListener
 import androidx.lifecycle.Observer
+import com.propertio.developer.model.Project
+import com.propertio.developer.project.ProjectDetailActivity
 
 class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClickListener {
 
@@ -37,7 +39,7 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
 
         binding.toolbarContainerUnitForm.textViewTitle.text = "Tambah Unit"
 
-        val propertyType = intent.getStringExtra("Property Type")
+        val propertyType = intent.getStringExtra("Property Type") // Bisa ganti jadi val propertyType = "Apartemen"
         val projectId = intent.getIntExtra(PROJECT_ID, 0)
         unitFormViewModel.updateProjectId(projectId)
         Log.d("UnitFormActivity", "Project ID updated successfully in ViewModel: $projectId")
