@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.databinding.FragmentCreateUnitUmumBinding
 
@@ -31,21 +32,21 @@ class CreateUnitUmumFragment : Fragment() {
         val activity = activity as? UnitFormActivity
         val activityBinding = activity?.binding
 
-        unitFormViewModel.namaUnit.observe(viewLifecycleOwner, { value ->
-            binding.editNamaUnit.setText(value)
-        })
+        observeLiveData(unitFormViewModel.namaUnit) { namaUnit ->
+            binding.editNamaUnit.setText(namaUnit)
+        }
 
-        unitFormViewModel.deskripsiUnit.observe(viewLifecycleOwner, { value ->
-            binding.editDeskripsiUnit.setText(value)
-        })
+        observeLiveData(unitFormViewModel.deskripsiUnit) { deskripsiUnit ->
+            binding.editDeskripsiUnit.setText(deskripsiUnit)
+        }
 
-        unitFormViewModel.stokUnit.observe(viewLifecycleOwner, { value ->
-            binding.editStokUnit.setText(value)
-        })
+        observeLiveData(unitFormViewModel.stokUnit) { stokUnit ->
+            binding.editStokUnit.setText(stokUnit)
+        }
 
-        unitFormViewModel.hargaUnit.observe(viewLifecycleOwner, { value ->
-            binding.editHargaUnit.setText(value)
-        })
+        observeLiveData(unitFormViewModel.hargaUnit) { hargaUnit ->
+            binding.editHargaUnit.setText(hargaUnit)
+        }
 
         activityBinding?.floatingButtonBack?.setOnClickListener {
             activity.onBackButtonUnitManagementClick()
@@ -87,5 +88,11 @@ class CreateUnitUmumFragment : Fragment() {
             return false
         }
         return true
+    }
+
+    private fun <T> observeLiveData(liveData: LiveData<T>, updateUI: (T) -> Unit) {
+        liveData.observe(viewLifecycleOwner) { value ->
+            updateUI(value)
+        }
     }
 }
