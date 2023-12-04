@@ -111,7 +111,7 @@ class UnitDataGudangFragment : Fragment() {
             formActivity?.unitFormViewModel?.updateElectricityType(electricity_type)
             formActivity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
 
-            val retro = Retro(TokenManager(requireActivity()).token)
+            val retro = Retro(TokenManager(requireContext()).token)
                 .getRetroClientInstance()
                 .create(DeveloperApi::class.java)
 

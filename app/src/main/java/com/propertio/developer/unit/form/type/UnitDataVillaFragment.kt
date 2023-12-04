@@ -155,7 +155,7 @@ class UnitDataVillaFragment : Fragment() {
             formActivity?.unitFormViewModel?.updateInteriorType(interior_type)
             formActivity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
 
-            val retro = Retro(TokenManager(requireActivity()).token)
+            val retro = Retro(TokenManager(requireContext()).token)
                 .getRetroClientInstance()
                 .create(DeveloperApi::class.java)
 
