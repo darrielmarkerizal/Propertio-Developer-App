@@ -6,13 +6,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
+import com.propertio.developer.TokenManager
+import com.propertio.developer.api.Retro
+import com.propertio.developer.api.developer.DeveloperApi
+import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
+import com.propertio.developer.api.developer.unitmanagement.UnitRequest
 import com.propertio.developer.databinding.FragmentUnitDataTanahBinding
 import com.propertio.developer.dialog.RoadAccessSheetFragment
 import com.propertio.developer.dialog.viewmodel.RoadAccessTypeSpinnerViewModel
 import com.propertio.developer.unit.form.UnitFormActivity
 import com.propertio.developer.unit.form.UnitFormViewModel
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class UnitDataTanahFragment : Fragment() {
@@ -64,18 +73,95 @@ class UnitDataTanahFragment : Fragment() {
 
         activityBinding.floatingButtonNext.setOnClickListener {
 
-            val projectId = unitFormViewModel.projectId.value
-            val title = unitFormViewModel.namaUnit.value
+            val projectId = unitFormViewModel.projectId.value ?: 0
+            val title = unitFormViewModel.namaUnit.value ?: ""
             val description = unitFormViewModel.deskripsiUnit.value
             val stock = unitFormViewModel.stokUnit.value
-            val price = unitFormViewModel.hargaUnit.value
+            val price = unitFormViewModel.hargaUnit.value ?: ""
             val luas_tanah = binding.editLuasTanahTanah.text.toString()
             val road_access_type = binding.spinnerAksesJalanTanah.text.toString()
 
             formActivity.unitFormViewModel.updateLuasTanah(luas_tanah)
             formActivity.unitFormViewModel.updateRoadAccessType(road_access_type)
 
-            formActivity.onNextButtonUnitManagementClick()
+            val retro = Retro(TokenManager(requireActivity()).token)
+                .getRetroClientInstance()
+                .create(DeveloperApi::class.java)
+
+            val unitRequest = UnitRequest(
+                title = title,
+                price = price,
+                description = description,
+                stock = stock,
+                surfaceArea = luas_tanah,
+                buildingArea = null,
+                floor = null,
+                bedroom = null,
+                bathroom = null,
+                garage = null,
+                powerSupply = null,
+                waterType = null,
+                interior = null,
+                roadAccess = road_access_type,
+                order = null
+            )
+
+            Log.d("UnitDataTanahFragment", "onViewCreated: $unitRequest")
+
+            retro.postStoreUnit(
+                id = projectId,
+                unitRequest = unitRequest
+            ).enqueue(object : Callback<PostUnitResponse> {
+                override fun onResponse(
+                    call: Call<PostUnitResponse>,
+                    response: Response<PostUnitResponse>
+                ) {
+                    if(response.isSuccessful) {
+                        val responseData = response.body()?.data
+                        if (responseData != null) {
+                            Log.d("UnitDataTanahFragment", "onResponse: $responseData")
+
+
+
+
+                            //TODO: Tambahkan kode seperti ini untuk setiap tipe unit
+                            formActivity.unitId = responseData.id
+                            if (formActivity.unitId != null || formActivity.unitId != 0) {
+                                Toast.makeText(requireContext(), "Unit berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+                                formActivity.onNextButtonUnitManagementClick()
+                            } else {
+                                Log.e("UnitDataTanahFragment", "onResponse: Unit ID is null or 0")
+                                Toast.makeText(requireContext(), "Gagal menambahkan unit", Toast.LENGTH_SHORT).show()
+                            }
+
+
+
+
+                        }
+                    } else {
+                        var errorMessage = response.errorBody()?.string()
+                        errorMessage = errorMessage?.split("\"data\":")?.last()
+                        errorMessage = errorMessage?.trim('{', '}')
+
+                        if (errorMessage != null) {
+                            for (error in errorMessage.split(",")) {
+                                Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+                            }
+                        }
+                        Log.w("UnitDataTanahFragment", "onResponse: Error code: ${response.code()}, message: ${response.message()}, error body: $errorMessage")
+
+                        if (response.code() == 500) {
+                            Log.e("UnitDataTanahFragment", "Server error: Something went wrong on the server side.")
+                            // You can add more actions here, for example, show an error dialog or a specific message to the user
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<PostUnitResponse>, t: Throwable) {
+                    Log.e("UnitDataTanahFragment", "onFailure: ${t.message}", t)
+                    Toast.makeText(requireContext(), "Gagal menambahkan unit", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
     }
 
