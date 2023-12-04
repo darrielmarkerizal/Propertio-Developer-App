@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.R
 import com.propertio.developer.databinding.FragmentUnitDataRuangUsahaBinding
@@ -69,6 +70,38 @@ class UnitDataRuangUsahaFragment : Fragment() {
         interiorTypeSpinner()
         roadAccessTypeSpinner()
 
+        observeLiveData(unitFormViewModel.projectId) { projectId ->
+            Log.d("UnitDataApartemenFragment", "Observed projectId in ViewModel: $projectId")
+        }
+
+        observeLiveData(unitFormViewModel.luasBangunan) {
+            binding.editLuasBangunanRuangUsaha.setText(it)
+        }
+
+        observeLiveData(unitFormViewModel.jumlahKamarMandi) {
+            binding.editKamarMandiRuangUsaha.setText(it)
+        }
+
+        observeLiveData(unitFormViewModel.jumlahParkir) {
+            binding.spinnerTempatParkirRuangUsaha.text = it
+        }
+
+        observeLiveData(unitFormViewModel.electricityType) {
+            binding.spinnerDayaListrikRuangUsaha.text = it
+        }
+
+        observeLiveData(unitFormViewModel.waterType) {
+            binding.spinnerJenisAirRuangUsaha.text = it
+        }
+
+        observeLiveData(unitFormViewModel.interiorType) {
+            binding.spinnerInteriorRuangUsaha.text = it
+        }
+
+        observeLiveData(unitFormViewModel.roadAccessType) {
+            binding.spinnerAksesJalanRuangUsaha.text = it
+        }
+
         activityBinding?.floatingButtonBack?.setOnClickListener {
             activity.onBackButtonUnitManagementClick()
         }
@@ -87,6 +120,15 @@ class UnitDataRuangUsahaFragment : Fragment() {
             val water_type = binding.spinnerJenisAirRuangUsaha.text.toString()
             val interior_type = binding.spinnerInteriorRuangUsaha.text.toString()
             val road_access_type = binding.spinnerAksesJalanRuangUsaha.text.toString()
+
+            activity.unitFormViewModel.updateLuasBangunan(luas_bangunan)
+            activity.unitFormViewModel.updateJumlahKamarMandi(kamar_mandi)
+            activity.unitFormViewModel.updateParkingType(parking_type)
+            activity.unitFormViewModel.updateElectricityType(electricity_type)
+            activity.unitFormViewModel.updateWaterType(water_type)
+            activity.unitFormViewModel.updateInteriorType(interior_type)
+            activity.unitFormViewModel.updateRoadAccessType(road_access_type)
+
 
             activity.onNextButtonUnitManagementClick()
         }
@@ -164,6 +206,12 @@ class UnitDataRuangUsahaFragment : Fragment() {
             binding.spinnerAksesJalanRuangUsaha.text = it.toUser
             Log.d("UnitDataRuangUsahaFragment", "roadAccessTypeSpinner: $isRoadAccessTypeSpinnerSelected")
             isRoadAccessTypeSpinnerSelected = true
+        }
+    }
+
+    private fun <T> observeLiveData(liveData: LiveData<T>, updateUI: (T) -> Unit) {
+        liveData.observe(viewLifecycleOwner) { value ->
+            updateUI(value)
         }
     }
 }

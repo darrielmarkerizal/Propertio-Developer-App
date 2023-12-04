@@ -99,4 +99,9 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
             .replace(R.id.frame_container_unit_form, fragment)
             .commit()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unitFormViewModel.clearData()
+    }
 }

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.R
 import com.propertio.developer.databinding.FragmentUnitDataKantorBinding
@@ -68,6 +69,50 @@ class UnitDataKantorFragment : Fragment() {
         interiorTypeSpinner()
         roadAccessTypeSpinner()
 
+        observeLiveData(unitFormViewModel.projectId) {
+            Log.d("UnitDataKantorFragment", "onViewCreated: $it")
+        }
+
+        observeLiveData(unitFormViewModel.luasBangunan) {
+            binding.editLuasBangunanKantor.setText(it)
+        }
+
+        observeLiveData(unitFormViewModel.luasTanah) {
+            binding.editLuasTanahKantor.setText(it)
+        }
+
+        observeLiveData(unitFormViewModel.jumlahLantai) {
+            binding.edtJumlahLantaiKantor.setText(it)
+        }
+
+        observeLiveData(unitFormViewModel.jumlahKamarTidur) {
+            binding.edtKamarKantor.setText(it)
+        }
+
+        observeLiveData(unitFormViewModel.jumlahKamarMandi) {
+            binding.edtKamarMandiKantor.setText(it)
+        }
+
+        observeLiveData(unitFormViewModel.jumlahParkir) {
+            binding.spinnerTempatParkirKantor.text = it
+        }
+
+        observeLiveData(unitFormViewModel.electricityType) {
+            binding.spinnerDayaListrikKantor.text = it
+        }
+
+        observeLiveData(unitFormViewModel.waterType) {
+            binding.spinnerJenisAirKantor.text = it
+        }
+
+        observeLiveData(unitFormViewModel.interiorType) {
+            binding.spinnerInteriorKantor.text = it
+        }
+
+        observeLiveData(unitFormViewModel.roadAccessType) {
+            binding.spinnerAksesJalanKantor.text = it
+        }
+
         
         activityBinding?.floatingButtonBack?.setOnClickListener {
             activity.onBackButtonUnitManagementClick()
@@ -90,6 +135,17 @@ class UnitDataKantorFragment : Fragment() {
             val water_type = binding.spinnerJenisAirKantor.text.toString()
             val interior_type = binding.spinnerInteriorKantor.text.toString()
             val road_access_type = binding.spinnerAksesJalanKantor.text.toString()
+
+            activity?.unitFormViewModel?.updateLuasBangunan(luas_bangunan)
+            activity?.unitFormViewModel?.updateLuasTanah(luas_tanah)
+            activity?.unitFormViewModel?.updateJumlahLantai(lantai)
+            activity?.unitFormViewModel?.updateJumlahKamar(kamar)
+            activity?.unitFormViewModel?.updateJumlahKamarMandi(kamar_mandi)
+            activity?.unitFormViewModel?.updateParkingType(parking_type)
+            activity?.unitFormViewModel?.updateElectricityType(electricity_type)
+            activity?.unitFormViewModel?.updateWaterType(water_type)
+            activity?.unitFormViewModel?.updateInteriorType(interior_type)
+            activity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
 
             activity.onNextButtonUnitManagementClick()
         }
@@ -170,5 +226,10 @@ class UnitDataKantorFragment : Fragment() {
         }
     }
 
+    private fun <T> observeLiveData(liveData: LiveData<T>, updateUI: (T) -> Unit) {
+        liveData.observe(viewLifecycleOwner) { value ->
+            updateUI(value)
+        }
+    }
 
 }
