@@ -17,7 +17,9 @@ typealias onClickItemFacilityTypeListener = (GeneralType) -> Unit
 class FacilityTypeAdapter(
     private val context : Context,
     private val facilityTypeList: List<GeneralType>,
-    private val onClickItemFacilityTypeListener: onClickItemFacilityTypeListener
+    private val selectedFacilities: List<String>,
+    private val onSelectItemFacilityType: onClickItemFacilityTypeListener,
+    private val onDeselectItemFacilityType : onClickItemFacilityTypeListener
 ) : RecyclerView.Adapter<FacilityTypeAdapter.FacilityTypeViewHolder>(){
     inner class FacilityTypeViewHolder(
         private val binding : ItemFasilitasBinding
@@ -27,12 +29,18 @@ class FacilityTypeAdapter(
 
             with(binding) {
 
+                checkboxFasilitas.isChecked = selectedFacilities.contains(facility.id.toString())
+
                 textViewSelectedOptionFasilitas.text = facility.name
                 loadImage(facility.icon)
 
                 checkboxFasilitas.setOnClickListener {
                     Log.d("FacilityTypeAdapter", "bind: checkbox status : ${checkboxFasilitas.isChecked}")
-                    onClickItemFacilityTypeListener(facility)
+                    if (checkboxFasilitas.isChecked) {
+                        onSelectItemFacilityType(facility)
+                    } else {
+                        onDeselectItemFacilityType(facility)
+                    }
                 }
 
 

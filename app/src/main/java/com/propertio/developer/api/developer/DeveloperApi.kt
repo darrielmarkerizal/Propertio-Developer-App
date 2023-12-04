@@ -6,7 +6,6 @@ import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
 import com.propertio.developer.api.developer.projectmanagement.ProjectListResponse
 import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResponse
 import com.propertio.developer.api.developer.type.GeneralTypeResponse
-import com.propertio.developer.api.models.DefaultResponse
 import com.propertio.developer.model.Caption
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -14,6 +13,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Field
+import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Multipart
@@ -21,7 +21,6 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface DeveloperApi {
 
@@ -94,4 +93,12 @@ interface DeveloperApi {
             @Body caption : Caption
     ) : Call<UpdateProjectResponse>
 
+
+    @FormUrlEncoded
+    @POST("v1/cms/project-management/project-facilities")
+    fun sendFacilities(
+        @Field("project_id") projectId : String,
+        @FieldMap facilities: Map<String, String>
+    ): Call<UpdateProjectResponse>
 }
+

@@ -80,6 +80,10 @@ class CreateProjectInformasiUmumFragment : Fragment() {
         }
 
         activityBinding?.floatingButtonNext?.setOnClickListener {
+            //TODO: Delete this two line below
+            activity.onNextButtonProjectManagementClick()
+            return@setOnClickListener
+
             if (binding.editHeadlineProject.text.toString().isEmpty()) {
                 binding.editHeadlineProject.error = "Harap isi Headline Project"
                 return@setOnClickListener
