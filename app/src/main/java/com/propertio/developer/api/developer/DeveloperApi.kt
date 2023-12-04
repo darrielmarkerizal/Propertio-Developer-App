@@ -7,6 +7,8 @@ import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
 import com.propertio.developer.api.developer.projectmanagement.ProjectListResponse
 import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResponse
 import com.propertio.developer.api.developer.type.GeneralTypeResponse
+import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
+import com.propertio.developer.api.developer.unitmanagement.UnitRequest
 import com.propertio.developer.api.models.DefaultResponse
 import com.propertio.developer.model.Caption
 import com.propertio.developer.model.StatusProject
@@ -98,13 +100,12 @@ interface DeveloperApi {
 
 
     @POST("v1/cms/project-management/{id}/unit")
-    fun createUnit(
+    fun postStoreUnit(
         @Path("id") id : Int,
-        @Body unit : RequestBody
-    ) : Call<DefaultResponse>
-
-
-    @FormUrlEncoded
+        @Body unitRequest: UnitRequest
+    ) : Call<PostUnitResponse>
+  
+  @FormUrlEncoded
     @POST("v1/cms/project-management/project-facilities")
     fun sendFacilities(
         @Field("project_id") projectId : String,
@@ -132,4 +133,3 @@ interface DeveloperApi {
     ) : Call<UpdateProjectResponse>
 
 }
-
