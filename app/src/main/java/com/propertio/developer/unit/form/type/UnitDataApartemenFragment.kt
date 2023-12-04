@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.databinding.FragmentUnitDataApartemenBinding
 import com.propertio.developer.dialog.ElectricitySheetFragment
@@ -63,6 +64,42 @@ class UnitDataApartemenFragment : Fragment() {
         interiorTypeSpinner()
         roadAccessTypeSpinner()
 
+        observeLiveData(unitFormViewModel.projectId) { projectId ->
+            Log.d("UnitDataApartemenFragment", "Observed projectId in ViewModel: $projectId")
+        }
+
+        observeLiveData(unitFormViewModel.luasBangunan) { value ->
+            binding.editLuasBangunanApartemen.setText(value)
+        }
+
+        observeLiveData(unitFormViewModel.jumlahKamarTidur) { value ->
+            binding.editKamarApartemen.setText(value)
+        }
+
+        observeLiveData(unitFormViewModel.jumlahKamarMandi) { value ->
+            binding.editKamarMandiApartemen.setText(value)
+        }
+
+        observeLiveData(unitFormViewModel.jumlahParkir) { value ->
+            binding.spinnerTempatParkirApartemen.text = value
+        }
+
+        observeLiveData(unitFormViewModel.electricityType) { value ->
+            binding.spinnerDayaListrikApartemen.text = value
+        }
+
+        observeLiveData(unitFormViewModel.waterType) { value ->
+            binding.spinnerJenisAirApartemen.text = value
+        }
+
+        observeLiveData(unitFormViewModel.interiorType) { value ->
+            binding.spinnerInteriorApartemen.text = value
+        }
+
+        observeLiveData(unitFormViewModel.roadAccessType) { value ->
+            binding.spinnerAksesJalanApartemen.text = value
+        }
+
         activityBinding?.floatingButtonBack?.setOnClickListener {
             activity.onBackButtonUnitManagementClick()
         }
@@ -81,6 +118,15 @@ class UnitDataApartemenFragment : Fragment() {
             val water_type = binding.spinnerJenisAirApartemen.text.toString()
             val interior_type = binding.spinnerInteriorApartemen.text.toString()
             val road_access_type = binding.spinnerAksesJalanApartemen.text.toString()
+
+            activity?.unitFormViewModel?.updateLuasBangunan(luas_bangunan)
+            activity?.unitFormViewModel?.updateJumlahKamar(kamar)
+            activity?.unitFormViewModel?.updateJumlahKamarMandi(kamar_mandi)
+            activity?.unitFormViewModel?.updateParkingType(parking_type)
+            activity?.unitFormViewModel?.updateElectricityType(electricity_type)
+            activity?.unitFormViewModel?.updateWaterType(water_type)
+            activity?.unitFormViewModel?.updateInteriorType(interior_type)
+            activity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
 
             activity.onNextButtonUnitManagementClick()
         }
@@ -158,6 +204,12 @@ class UnitDataApartemenFragment : Fragment() {
             binding.spinnerAksesJalanApartemen.text = it.toUser
             Log.d("UnitDataApartemenFragment", "roadAccessTypeSpinner: $roadAccessTypeSpinnerSelected")
             roadAccessTypeSpinnerSelected = true
+        }
+    }
+
+    private fun <T> observeLiveData(liveData: LiveData<T>, updateUI: (T) -> Unit) {
+        liveData.observe(viewLifecycleOwner) { value ->
+            updateUI(value)
         }
     }
 

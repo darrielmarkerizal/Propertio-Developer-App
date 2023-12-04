@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.R
 import com.propertio.developer.databinding.FragmentUnitDataGudangBinding
@@ -56,6 +57,30 @@ class UnitDataGudangFragment : Fragment() {
         electricityTypeSpinner()
         roadAccessTypeSpinner()
 
+        observeLiveData(unitFormViewModel.projectId) {
+            Log.d("UnitDataGudangFragment", "onViewCreated: $it")
+        }
+
+        observeLiveData(unitFormViewModel.luasBangunan) {
+            binding.editLuasBangunanGudang.setText(it)
+        }
+
+        observeLiveData(unitFormViewModel.luasTanah) {
+            binding.editLuasTanahGudang.setText(it)
+        }
+
+        observeLiveData(unitFormViewModel.jumlahParkir) {
+            binding.spinnerTempatParkirGudang.text = it
+        }
+
+        observeLiveData(unitFormViewModel.electricityType) {
+            binding.spinnerDayaListrikGudang.text = it
+        }
+
+        observeLiveData(unitFormViewModel.roadAccessType) {
+            binding.spinnerAksesJalanGudang.text = it
+        }
+
         activityBinding?.floatingButtonBack?.setOnClickListener {
             activity.onBackButtonUnitManagementClick()
         }
@@ -71,6 +96,12 @@ class UnitDataGudangFragment : Fragment() {
             val parking_type = binding.spinnerTempatParkirGudang.text.toString()
             val electricity_type = binding.spinnerDayaListrikGudang.text.toString()
             val road_access_type = binding.spinnerAksesJalanGudang.text.toString()
+
+            activity?.unitFormViewModel?.updateLuasBangunan(luas_bangunan)
+            activity?.unitFormViewModel?.updateLuasTanah(luas_tanah)
+            activity?.unitFormViewModel?.updateParkingType(parking_type)
+            activity?.unitFormViewModel?.updateElectricityType(electricity_type)
+            activity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
 
             activity.onNextButtonUnitManagementClick()
         }
@@ -118,6 +149,12 @@ class UnitDataGudangFragment : Fragment() {
             binding.spinnerAksesJalanGudang.text = it.toUser
             Log.d("UnitDataApartemenFragment", "roadAccessTypeSpinner: $isRoadAccessTypeSpinnerSelected")
             isRoadAccessTypeSpinnerSelected = true
+        }
+    }
+
+    private fun <T> observeLiveData(liveData: LiveData<T>, updateUI: (T) -> Unit) {
+        liveData.observe(viewLifecycleOwner) { value ->
+            updateUI(value)
         }
     }
 
