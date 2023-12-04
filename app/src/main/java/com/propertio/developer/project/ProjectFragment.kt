@@ -56,7 +56,16 @@ class ProjectFragment : Fragment() {
     private val tabButtonViewModel : ProjectTabButtonViewModel by activityViewModels()
 
 
-    val launcherAddProject = registerForActivityResult(
+    private val launcherAddProject = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.resultCode == RESULT_OK) {
+            Log.d("ProjectFragment Launcher", "Result OK")
+
+        }
+    }
+
+    private val launcherToRincian = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
         if (it.resultCode == RESULT_OK) {
@@ -82,7 +91,16 @@ class ProjectFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        projectAdapter = ProjectAdapter(requireContext())
+        projectAdapter = ProjectAdapter(
+            context = requireActivity(),
+            onClickRincian = { data ->
+                Log.d("ProjectAdapter", "Repost button clicked")
+                val intentToDetailProject = Intent(context, ProjectDetailActivity::class.java)
+                intentToDetailProject.putExtra(ProjectDetailActivity.PROJECT_ID, data.id)
+                intentToDetailProject.putExtra("Property Type", data.propertyTypeName)
+                launcherToRincian.launch(intentToDetailProject)
+            }
+        )
         return binding.root
     }
 
