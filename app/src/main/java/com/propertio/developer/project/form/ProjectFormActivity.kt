@@ -21,12 +21,12 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
     }
 
     // ViewModels
-    val projectInformationLocationViewModel : ProjectInformationLocationViewModel by viewModels()
-    val projectMedia : ProjectMediaViewModel by viewModels()
-    val projectFacility : ProjectFacilityViewModel by viewModels()
-    var projectId: Int? = null
+    internal val projectInformationLocationViewModel : ProjectInformationLocationViewModel by viewModels()
+    internal val projectMedia : ProjectMediaViewModel by viewModels()
+    internal val projectFacility : ProjectFacilityViewModel by viewModels()
+    internal var projectId: Int? = null
 
-    private val formsFragment = listOf(
+    internal val formsFragment = listOf(
         CreateProjectInformasiUmumFragment(),
         CreateProjectLokasiFragment(),
         CreateProjectMediaFragment(),
@@ -34,7 +34,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
         CreateProjectInfrastrukturFragment(),
     )
 
-    private var currentFragmentIndex : Int = 0
+    internal var currentFragmentIndex : Int = 0
         set(value) {
             if (value in formsFragment.indices) {
                 Log.d("TAG", "set: $value")
@@ -63,10 +63,11 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
         replaceFragment(formsFragment[currentFragmentIndex])
     }
 
-    private fun replaceFragment(fragment: Fragment) {
+    internal fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frame_container_project_form, fragment)
+        fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
 

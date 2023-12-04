@@ -55,7 +55,7 @@ class CreateProjectFasilitasFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        setRecylcerCategoryFacility()
+        setRecyclerCategoryFacility()
 
 
         activityBinding.floatingButtonBack.setOnClickListener {
@@ -99,7 +99,7 @@ class CreateProjectFasilitasFragment : Fragment() {
         }
     }
 
-    private fun setRecylcerCategoryFacility() {
+    private fun setRecyclerCategoryFacility() {
         val retro = Retro(TokenManager(requireContext()).token!!)
             .getRetroClientInstance()
             .create(DeveloperApi::class.java)

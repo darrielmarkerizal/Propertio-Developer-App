@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.propertio.developer.api.models.GeneralType
 import com.propertio.developer.databinding.ItemSimpleCardForRecyclerBinding
 
-typealias onClickItemPropertyTypeListener = (GeneralType) -> Unit
+typealias OnClickItemPropertyTypeListener = (GeneralType) -> Unit
 class PropertyTypeAdapter(
     private val propertyTypes: List<GeneralType>,
-    private val onClickItemListener: onClickItemPropertyTypeListener
+    private val onClickItemListener: OnClickItemPropertyTypeListener
 ) : RecyclerView.Adapter<PropertyTypeAdapter.PropertyTypeViewHolder>() {
 
     inner class PropertyTypeViewHolder(

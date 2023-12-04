@@ -13,13 +13,13 @@ import com.propertio.developer.api.DomainURL.DOMAIN
 import com.propertio.developer.api.models.GeneralType
 import com.propertio.developer.databinding.ItemFasilitasBinding
 
-typealias onClickItemFacilityTypeListener = (GeneralType) -> Unit
+typealias OnClickItemFacilityTypeListener = (GeneralType) -> Unit
 class FacilityTypeAdapter(
     private val context : Context,
     private val facilityTypeList: List<GeneralType>,
     private val selectedFacilities: List<String>,
-    private val onSelectItemFacilityType: onClickItemFacilityTypeListener,
-    private val onDeselectItemFacilityType : onClickItemFacilityTypeListener
+    private val onSelectItemFacilityType: OnClickItemFacilityTypeListener,
+    private val onDeselectItemFacilityType : OnClickItemFacilityTypeListener
 ) : RecyclerView.Adapter<FacilityTypeAdapter.FacilityTypeViewHolder>(){
     inner class FacilityTypeViewHolder(
         private val binding : ItemFasilitasBinding

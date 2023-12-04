@@ -1,5 +1,6 @@
 package com.propertio.developer.api.developer
 
+import com.propertio.developer.api.developer.projectmanagement.PostStoreProjectInfrastructureRequest
 import com.propertio.developer.api.developer.projectmanagement.PostStoreProjectLocationResponse
 import com.propertio.developer.api.developer.projectmanagement.PostStoreProjectPhotoResponse
 import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
@@ -100,5 +101,14 @@ interface DeveloperApi {
         @Field("project_id") projectId : String,
         @FieldMap facilities: Map<String, String>
     ): Call<UpdateProjectResponse>
+
+    @POST("v1/cms/project-management/project-infrastructure")
+    fun sendInfrastructure(
+        @Body infrastructure: PostStoreProjectInfrastructureRequest
+    ): Call<UpdateProjectResponse>
+
+    @DELETE("v1/cms/project-management/project-infrastructure/{id}")
+    fun deleteProjectInfrastructure(@Path("id") id : Int) : Call<UpdateProjectResponse>
+
 }
 
