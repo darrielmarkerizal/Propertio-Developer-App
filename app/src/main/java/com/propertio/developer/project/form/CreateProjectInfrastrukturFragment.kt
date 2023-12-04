@@ -129,10 +129,32 @@ class CreateProjectInfrastrukturFragment : Fragment() {
         }
 
         activityBinding.floatingButtonNext.setOnClickListener {
-            // TODO: Next Button.. Publish Or Not?
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    developerApi.publishProject(formActivity.projectId!!).enqueue(object : Callback<UpdateProjectResponse> {
+                        override fun onResponse(call: Call<UpdateProjectResponse>, response: Response<UpdateProjectResponse>) {
+                            if (response.isSuccessful) {
+                                formActivity.onNextButtonProjectManagementClick()
+                            } else {
+                                Log.e("CreateProjectInfrastrukturFragment", "onResponse: ${response.errorBody()?.string()}")
+                                Toast.makeText(requireContext(), "Terjadi Kesalahan Sistem : ${response.code()}", Toast.LENGTH_SHORT).show()
+                            }
+                        }
 
-            formActivity.onNextButtonProjectManagementClick()
+                        override fun onFailure(call: Call<UpdateProjectResponse>, t: Throwable) {
+                            Log.e("CreateProjectInfrastrukturFragment", "onFailure: ${t.message}")
+                            Toast.makeText(requireContext(), "Terjadi Kesalahan Sistem", Toast.LENGTH_SHORT).show()
+                        }
+                    })
+                }
+            }
+
+
+
         }
+
+
+
 
     }
 

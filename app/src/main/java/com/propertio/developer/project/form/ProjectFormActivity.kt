@@ -1,5 +1,6 @@
 package com.propertio.developer.project.form
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -79,10 +80,9 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
 
     override fun onNextButtonProjectManagementClick() {
         if (currentFragmentIndex == formsFragment.size - 1) {
-            Log.d("ProjectForm", "Post Project Form")
-
-            // TODO: Post Project Form
-            Toast.makeText(this@ProjectFormActivity, "Post Project Form Belum Tersedia", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, CreateProjectSuccessActivity::class.java)
+            startActivity(intent)
+            finish()
         }
 
         currentFragmentIndex++

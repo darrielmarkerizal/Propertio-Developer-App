@@ -8,6 +8,7 @@ import com.propertio.developer.api.developer.projectmanagement.ProjectListRespon
 import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResponse
 import com.propertio.developer.api.developer.type.GeneralTypeResponse
 import com.propertio.developer.model.Caption
+import com.propertio.developer.model.StatusProject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -109,6 +110,18 @@ interface DeveloperApi {
 
     @DELETE("v1/cms/project-management/project-infrastructure/{id}")
     fun deleteProjectInfrastructure(@Path("id") id : Int) : Call<UpdateProjectResponse>
+
+    @POST("v1/cms/project-management/project-publish/{id}")
+    fun publishProject(@Path("id") id : Int) : Call<UpdateProjectResponse>
+
+    @POST("v1/cms/project-management/project-repost/{id}")
+    fun repostProject(@Path("id") id : Int) : Call<UpdateProjectResponse>
+
+    @POST("v1/cms/project-management/project-update-status/{id}")
+    fun updateProjectStatus(
+        @Path("id") id : Int,
+        @Body status : StatusProject
+    ) : Call<UpdateProjectResponse>
 
 }
 
