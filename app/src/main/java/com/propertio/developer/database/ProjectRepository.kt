@@ -18,9 +18,9 @@ class ProjectRepository(
 
     private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
 
-    fun allProjectsPaginated(limit: Int, offset: Int): Flow<List<ProjectTable>> {
+    fun allProjectsPaginated(limit: Int, offset: Int, status : String, filter : String = ""): Flow<List<ProjectTable>> {
         Log.d("Repository", "allProjectsPaginated: from $limit to $offset")
-        return projectTableDao.allProjectsPaginated(limit, offset)
+        return projectTableDao.allProjectsPaginated(limit, offset, status, filter = "%$filter%")
     }
 
     suspend fun getProjectById(id: Int): ProjectTable {
