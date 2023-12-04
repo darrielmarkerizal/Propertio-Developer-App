@@ -27,6 +27,7 @@ import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_I
 
 class ProjectAdapter(
     private val context: Context,
+    private val onClickRincian: (ProjectTable) -> Unit
 ) : ListAdapter<ProjectTable, ProjectAdapter.ItemProjectViewHolder>(ProjectDiffCallback()) {
 
     class ProjectDiffCallback : DiffUtil.ItemCallback<ProjectTable>() {
@@ -71,11 +72,7 @@ class ProjectAdapter(
 
                 // button
                 buttonRincian.setOnClickListener {
-                    Log.d("ProjectAdapter", "Repost button clicked")
-                    val intentToDetailProject = Intent(context, ProjectDetailActivity::class.java)
-                    intentToDetailProject.putExtra(PROJECT_ID, data.id)
-                    intentToDetailProject.putExtra("Property Type", data.propertyTypeName)
-                    context.startActivity(intentToDetailProject)
+                    onClickRincian(data)
                 }
 
 
