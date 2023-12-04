@@ -4,44 +4,80 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="4dp">
+    android:padding="4dp"
+    android:layout_marginStart="28.5dp"
+    >
 
-
-    <ImageView
-        android:id="@+id/image_view_item_unggah_photo"
-        android:layout_width="132dp"
-        android:layout_height="132dp"
-        android:scaleType="centerCrop"
+    <FrameLayout
+        android:id="@+id/container_image_view_item_unggah_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_text_caption"
+        android:clipToOutline="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/placeholder" />
+        >
+
+        <ImageView
+            android:id="@+id/image_view_item_unggah_photo"
+            android:layout_width="266dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/placeholder"
+            />
+
+
+    </FrameLayout>
+
 
     <EditText
         android:id="@+id/edit_text_caption_photo_card"
-        style="@style/DesignSystem.TextInputEditText"
+        style="@style/DesignSystem.TextInputEditText.Rectangle"
         android:layout_width="0dp"
-        android:layout_height="25dp"
+        android:layout_height="30dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:hint="Caption"
         android:inputType="textShortMessage"
         android:maxLines="1"
         android:singleLine="true"
         android:textAppearance="@style/text.regular.size12"
-        app:layout_constraintEnd_toEndOf="@+id/image_view_item_unggah_photo"
+        app:layout_constraintEnd_toStartOf="@+id/button_simpan_caption"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_view_item_unggah_photo" />
+        app:layout_constraintTop_toBottomOf="@+id/container_image_view_item_unggah_photo" />
 
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/button_simpan_caption"
+        style="@style/button.tertiary.s"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:src="@drawable/save_fill0_wght400_grad0_opsz24"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_text_caption_photo_card"
+        app:layout_constraintEnd_toEndOf="@+id/container_image_view_item_unggah_photo"
+        app:layout_constraintTop_toTopOf="@+id/edit_text_caption_photo_card" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_cover_photo_card"
         style="@style/button.secondary.s.rounded"
         android:layout_width="0dp"
-        android:layout_height="25dp"
+        android:layout_height="30dp"
         android:layout_marginTop="8dp"
         android:text="Cover"
-        app:layout_constraintEnd_toEndOf="@+id/image_view_item_unggah_photo"
-        app:layout_constraintStart_toStartOf="@+id/image_view_item_unggah_photo"
+        app:layout_constraintEnd_toEndOf="@+id/container_image_view_item_unggah_photo"
+        app:layout_constraintStart_toStartOf="@+id/container_image_view_item_unggah_photo"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_caption_photo_card" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:visibility="gone"
+        android:id="@+id/is_cover_photo_card"
+        style="@style/button.secondary.s.rounded.disabled"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:text="Terpilih"
+        app:layout_constraintEnd_toEndOf="@+id/container_image_view_item_unggah_photo"
+        app:layout_constraintStart_toStartOf="@+id/container_image_view_item_unggah_photo"
+        app:layout_constraintTop_toBottomOf="@+id/button_cover_photo_card" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/button_delete_photo_card"
@@ -52,7 +88,7 @@
         android:background="@drawable/circle_red"
         android:tint="@color/white"
         android:src="@android:drawable/ic_menu_close_clear_cancel"
-        app:layout_constraintEnd_toEndOf="@+id/image_view_item_unggah_photo"
-        app:layout_constraintTop_toTopOf="@+id/image_view_item_unggah_photo" />
+        app:layout_constraintEnd_toEndOf="@+id/container_image_view_item_unggah_photo"
+        app:layout_constraintTop_toTopOf="@+id/container_image_view_item_unggah_photo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

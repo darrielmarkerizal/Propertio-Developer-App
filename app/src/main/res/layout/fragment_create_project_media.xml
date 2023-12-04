@@ -76,14 +76,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:paddingStart="28.5dp"
-            android:scrollbars="horizontal"
+            android:scrollbars="none"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_view_button_unggah_photo_project_label"
             tools:itemCount="1"
-            tools:listitem="@layout/item_unggah_photo" />
+            tools:listitem="@layout/item_unggah_photo"
+            />
 
         <TextView
             android:id="@+id/text_view_video_title_media_project"
@@ -219,7 +219,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:textAppearance="@style/text.semi_bold.size14"
-            android:text="Dokumen"
+            android:text="Dokumen Proyek Properti"
             app:layout_constraintStart_toStartOf="@+id/text_link_virtual_tour_label"
             app:layout_constraintTop_toBottomOf="@+id/editText" />
 
@@ -234,6 +234,17 @@
             app:layout_constraintEnd_toEndOf="@+id/text_title_project_media"
             app:layout_constraintStart_toStartOf="@+id/text_view_dokumen_label"
             app:layout_constraintTop_toBottomOf="@+id/text_view_dokumen_label" />
+
+        <include
+            android:id="@+id/card_document_proyek_property_thumbnail"
+            layout="@layout/card_file_thumbnail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/button_tambahkan_dokumen_project"
+            app:layout_constraintStart_toStartOf="@+id/button_tambahkan_dokumen_project"
+            app:layout_constraintTop_toBottomOf="@+id/button_tambahkan_dokumen_project" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

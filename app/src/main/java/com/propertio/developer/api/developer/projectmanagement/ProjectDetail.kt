@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.propertio.developer.api.models.DefaultResponse
 import com.propertio.developer.api.models.ProjectMinimum
+import java.io.Serial
 
 class ProjectDetail : DefaultResponse() {
 
@@ -72,7 +73,27 @@ class ProjectDetail : DefaultResponse() {
         @Expose
         var projectFacilities: List<ProjectFacility>? = null
 
-        //TODO: define project infrastructure
+        class ProjectInfrastructure {
+            @SerializedName("id")
+            @Expose
+            var id: Int? = null
+
+            @SerializedName("project_id")
+            @Expose
+            var projectId: String? = null
+
+            @SerializedName("infrastructure_type_id")
+            @Expose
+            var infrastructureTypeId: String? = null
+
+            @SerializedName("name")
+            @Expose
+            var name: String? = null
+
+            @SerializedName("distance")
+            @Expose
+            var distance: String? = null
+        }
 
         class ProjectFacility {
             @SerializedName("id")

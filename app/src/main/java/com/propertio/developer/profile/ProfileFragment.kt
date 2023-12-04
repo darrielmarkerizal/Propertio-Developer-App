@@ -64,10 +64,6 @@ class ProfileFragment : Fragment() {
     private lateinit var projectViewModel: ProjectViewModel
 
 
-    private var body: MultipartBody.Part? = null
-
-//    private lateinit var profileViewModel: ProfileViewModel
-
     // Spinner
     private var keepCity = true
     private var isProvinceSelected : Boolean = true
@@ -367,18 +363,6 @@ class ProfileFragment : Fragment() {
     }
 
 
-    /**
-     * Initialize view model.
-     * - profileViewModel: ProfileViewModel
-     * - cityViewModel: CitiesSpinnerViewModel
-     * - provinceViewModel: ProvinceSpinnerViewModel
-     */
-    private fun initializeViewModel() {
-//        val viewModelFactory = ProfileViewModelFactory(TokenManager(requireContext()).token!!)
-//        profileViewModel = ViewModelProvider(this, viewModelFactory)[ProfileViewModel::class.java]
-//        cityViewModel = ViewModelProvider(requireActivity())[CitiesSpinnerViewModel::class.java]
-//        provinceViewModel = ViewModelProvider(requireActivity())[ProvinceSpinnerViewModel::class.java]
-    }
 
     private fun swipeRefreshHandler() {
         val swipeRefreshLayout = binding.swipeRefreshLayout

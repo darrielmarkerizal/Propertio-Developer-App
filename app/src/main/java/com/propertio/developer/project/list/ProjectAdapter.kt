@@ -74,6 +74,7 @@ class ProjectAdapter(
                     Log.d("ProjectAdapter", "Repost button clicked")
                     val intentToDetailProject = Intent(context, ProjectDetailActivity::class.java)
                     intentToDetailProject.putExtra(PROJECT_ID, data.id)
+                    intentToDetailProject.putExtra("Property Type", data.propertyTypeName)
                     context.startActivity(intentToDetailProject)
                 }
 

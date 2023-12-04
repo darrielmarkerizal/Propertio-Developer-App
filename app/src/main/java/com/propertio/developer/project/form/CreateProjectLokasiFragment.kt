@@ -60,7 +60,7 @@ class CreateProjectLokasiFragment : Fragment() {
     private val binding by lazy { FragmentCreateProjectLokasiBinding.inflate(layoutInflater) }
 
     // ViewModels
-    val projectInformationLocationViewModel : ProjectInformationLocationViewModel by activityViewModels()
+    private val projectInformationLocationViewModel : ProjectInformationLocationViewModel by activityViewModels()
 
     // Province, City, District
     private var isProvinceSelected = false
