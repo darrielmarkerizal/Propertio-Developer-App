@@ -126,22 +126,4 @@ class UnitFormViewModel : ViewModel() {
         _roadAccessType.value = roadAccessType
         Log.d("UnitFormViewModel", "updateRoadAccessType: $roadAccessType")
     }
-
-    fun clearData() {
-        _projectId.value = null
-        _namaUnit.value = null
-        _deskripsiUnit.value = null
-        _stokUnit.value = null
-        _hargaUnit.value = null
-        _luasTanah.value = null
-        _luasBangunan.value = null
-        _jumlahLantai.value = null
-        _jumlahKamarTidur.value = null
-        _jumlahKamarMandi.value = null
-        _jumlahParkir.value = null
-        _electricityType.value = null
-        _waterType.value = null
-        _interiorType.value = null
-        _roadAccessType.value = null
-    }
 }

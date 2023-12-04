@@ -6,6 +6,8 @@ import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
 import com.propertio.developer.api.developer.projectmanagement.ProjectListResponse
 import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResponse
 import com.propertio.developer.api.developer.type.GeneralTypeResponse
+import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
+import com.propertio.developer.api.developer.unitmanagement.UnitRequest
 import com.propertio.developer.api.models.DefaultResponse
 import com.propertio.developer.model.Caption
 import okhttp3.MultipartBody
@@ -93,5 +95,11 @@ interface DeveloperApi {
             @Path("id") id: Int,
             @Body caption : Caption
     ) : Call<UpdateProjectResponse>
+
+    @POST("v1/cms/project-management/{id}/unit")
+    fun postStoreUnit(
+        @Path("id") id : Int,
+        @Body unitRequest: UnitRequest
+    ) : Call<PostUnitResponse>
 }
 

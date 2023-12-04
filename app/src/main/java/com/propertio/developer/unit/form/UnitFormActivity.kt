@@ -11,6 +11,8 @@ import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_I
 import com.propertio.developer.unit.form.type.*
 import com.propertio.developer.unit_management.ButtonNavigationUnitManagementClickListener
 import androidx.lifecycle.Observer
+import com.propertio.developer.model.Project
+import com.propertio.developer.project.ProjectDetailActivity
 
 class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClickListener {
 
@@ -98,10 +100,5 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
         supportFragmentManager.beginTransaction()
             .replace(R.id.frame_container_unit_form, fragment)
             .commit()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        unitFormViewModel.clearData()
     }
 }
