@@ -262,6 +262,11 @@ class CreateProjectMediaFragment : Fragment() {
         }
 
         activityBinding?.floatingButtonNext?.setOnClickListener {
+            //TODO: Delete this two line below
+            formActivity?.onNextButtonProjectManagementClick()
+            return@setOnClickListener
+
+
             val retro = Retro(TokenManager(requireContext()).token)
                 .getRetroClientInstance()
                 .create(DeveloperApi::class.java)

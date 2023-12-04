@@ -204,9 +204,11 @@ class CreateProjectLokasiFragment : Fragment() {
         }
 
         activityBinding?.floatingButtonNext?.setOnClickListener {
-            // TODO: Delete two line below. (those just for testing purpose)
+            // TODO: Delete Four line below. (those just for testing purpose)
             projectInformationLocationViewModel.isAlreadyUploaded = true
             activity.projectId = 62
+            activity.onNextButtonProjectManagementClick()
+            return@setOnClickListener
 
 
             if (projectInformationLocationViewModel.isAlreadyUploaded) {

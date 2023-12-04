@@ -73,6 +73,10 @@ class ProjectDetail : DefaultResponse() {
         @Expose
         var projectFacilities: List<ProjectFacility>? = null
 
+        @SerializedName("project_infrastructures")
+        @Expose
+        var projectInfrastructures: List<ProjectInfrastructure>? = null
+
         class ProjectInfrastructure {
             @SerializedName("id")
             @Expose

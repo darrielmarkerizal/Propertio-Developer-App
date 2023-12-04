@@ -1,19 +1,21 @@
 package com.propertio.developer.api.developer
 
+import com.propertio.developer.api.developer.projectmanagement.PostStoreProjectInfrastructureRequest
 import com.propertio.developer.api.developer.projectmanagement.PostStoreProjectLocationResponse
 import com.propertio.developer.api.developer.projectmanagement.PostStoreProjectPhotoResponse
 import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
 import com.propertio.developer.api.developer.projectmanagement.ProjectListResponse
 import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResponse
 import com.propertio.developer.api.developer.type.GeneralTypeResponse
-import com.propertio.developer.api.models.DefaultResponse
 import com.propertio.developer.model.Caption
+import com.propertio.developer.model.StatusProject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Field
+import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Multipart
@@ -21,7 +23,6 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface DeveloperApi {
 
@@ -94,6 +95,7 @@ interface DeveloperApi {
             @Body caption : Caption
     ) : Call<UpdateProjectResponse>
 
+
     @POST("v1/cms/project-management/{id}/unit")
     fun createUnit(
         @Path("id") id : Int,
@@ -101,4 +103,32 @@ interface DeveloperApi {
     ) : Call<DefaultResponse>
 
 
+    @FormUrlEncoded
+    @POST("v1/cms/project-management/project-facilities")
+    fun sendFacilities(
+        @Field("project_id") projectId : String,
+        @FieldMap facilities: Map<String, String>
+    ): Call<UpdateProjectResponse>
+
+    @POST("v1/cms/project-management/project-infrastructure")
+    fun sendInfrastructure(
+        @Body infrastructure: PostStoreProjectInfrastructureRequest
+    ): Call<UpdateProjectResponse>
+
+    @DELETE("v1/cms/project-management/project-infrastructure/{id}")
+    fun deleteProjectInfrastructure(@Path("id") id : Int) : Call<UpdateProjectResponse>
+
+    @POST("v1/cms/project-management/project-publish/{id}")
+    fun publishProject(@Path("id") id : Int) : Call<UpdateProjectResponse>
+
+    @POST("v1/cms/project-management/project-repost/{id}")
+    fun repostProject(@Path("id") id : Int) : Call<UpdateProjectResponse>
+
+    @POST("v1/cms/project-management/project-update-status/{id}")
+    fun updateProjectStatus(
+        @Path("id") id : Int,
+        @Body status : StatusProject
+    ) : Call<UpdateProjectResponse>
+
 }
+
