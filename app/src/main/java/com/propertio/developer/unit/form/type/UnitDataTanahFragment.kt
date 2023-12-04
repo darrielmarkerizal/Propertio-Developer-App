@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
-import com.propertio.developer.R
 import com.propertio.developer.databinding.FragmentUnitDataTanahBinding
 import com.propertio.developer.dialog.RoadAccessSheetFragment
 import com.propertio.developer.dialog.viewmodel.RoadAccessTypeSpinnerViewModel
@@ -25,6 +24,9 @@ class UnitDataTanahFragment : Fragment() {
     private val binding by lazy {
         FragmentUnitDataTanahBinding.inflate(layoutInflater)
     }
+    private val formActivity by lazy { activity as UnitFormActivity }
+    private val activityBinding by lazy { formActivity.binding }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -41,8 +43,6 @@ class UnitDataTanahFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val activity = activity as UnitFormActivity
-        val activityBinding = activity.binding
 
         roadAccessTypeSpinner()
 
@@ -59,7 +59,7 @@ class UnitDataTanahFragment : Fragment() {
         }
 
         activityBinding.floatingButtonBack.setOnClickListener {
-            activity.onBackButtonUnitManagementClick()
+            formActivity.onBackButtonUnitManagementClick()
         }
 
         activityBinding.floatingButtonNext.setOnClickListener {
@@ -72,10 +72,10 @@ class UnitDataTanahFragment : Fragment() {
             val luas_tanah = binding.editLuasTanahTanah.text.toString()
             val road_access_type = binding.spinnerAksesJalanTanah.text.toString()
 
-            activity.unitFormViewModel.updateLuasTanah(luas_tanah)
-            activity.unitFormViewModel.updateRoadAccessType(road_access_type)
+            formActivity.unitFormViewModel.updateLuasTanah(luas_tanah)
+            formActivity.unitFormViewModel.updateRoadAccessType(road_access_type)
 
-            activity.onNextButtonUnitManagementClick()
+            formActivity.onNextButtonUnitManagementClick()
         }
     }
 

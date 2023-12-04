@@ -7,6 +7,7 @@ import android.text.Html
 import android.util.Log
 import android.webkit.WebView
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
@@ -23,8 +24,6 @@ import com.propertio.developer.api.DomainURL
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
-import com.propertio.developer.api.models.ProjectMinimum
-import com.propertio.developer.api.models.ProjectPropertyType
 import com.propertio.developer.carousel.CarouselAdapter
 import com.propertio.developer.carousel.ImageData
 import com.propertio.developer.database.project.ProjectTable
@@ -53,6 +52,14 @@ class ProjectDetailActivity : AppCompatActivity() {
     private lateinit var unitAdapter: UnitAdapter
     private val unitList : MutableLiveData<List<ProjectDetail.ProjectDeveloper.ProjectUnit>> by lazy {
         MutableLiveData<List<ProjectDetail.ProjectDeveloper.ProjectUnit>>()
+    }
+
+    private val launcherToCreateUnit = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            Log.d("ProjectDetailActivity", "Unit created successfully")
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,7 +91,7 @@ class ProjectDetailActivity : AppCompatActivity() {
                 val intentToUnitForm = Intent(this, UnitFormActivity::class.java)
                 intentToUnitForm.putExtra(PROJECT_ID, projectId)
                 intentToUnitForm.putExtra("Property Type", propertyType)
-                startActivity(intentToUnitForm)
+                launcherToCreateUnit.launch(intentToUnitForm)
             } else {
                 Log.w("ProjectDetailActivity", "projectId is null")
             }

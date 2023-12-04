@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
-import com.propertio.developer.R
 import com.propertio.developer.databinding.FragmentUnitDataVillaBinding
 import com.propertio.developer.dialog.ElectricitySheetFragment
 import com.propertio.developer.dialog.InteriorSheetFragment
@@ -45,6 +44,8 @@ class UnitDataVillaFragment : Fragment() {
     private val binding by lazy {
         FragmentUnitDataVillaBinding.inflate(layoutInflater)
     }
+    private val formActivity by lazy { activity as UnitFormActivity }
+    private val activityBinding by lazy { formActivity.binding }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,8 +62,6 @@ class UnitDataVillaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val activity = activity as UnitFormActivity
-        val activityBinding = activity.binding
 
         parkingTypeSpinner()
         electricityTypeSpinner()
@@ -115,7 +114,7 @@ class UnitDataVillaFragment : Fragment() {
         }
 
         activityBinding.floatingButtonBack.setOnClickListener {
-            activity.onBackButtonUnitManagementClick()
+            formActivity.onBackButtonUnitManagementClick()
         }
 
         activityBinding.floatingButtonNext.setOnClickListener {
@@ -136,18 +135,18 @@ class UnitDataVillaFragment : Fragment() {
             val interior_type = binding.spinnerInteriorVilla.text.toString()
             val road_access_type = binding.spinnerAksesJalanVilla.text.toString()
 
-            activity?.unitFormViewModel?.updateLuasTanah(luas_tanah)
-            activity?.unitFormViewModel?.updateLuasBangunan(luas_bangunan)
-            activity?.unitFormViewModel?.updateJumlahLantai(jumlah_lantai)
-            activity?.unitFormViewModel?.updateJumlahKamar(jumlah_kamar_tidur)
-            activity?.unitFormViewModel?.updateJumlahKamarMandi(jumlah_kamar_mandi)
-            activity?.unitFormViewModel?.updateParkingType(parking_type)
-            activity?.unitFormViewModel?.updateElectricityType(electricity_type)
-            activity?.unitFormViewModel?.updateWaterType(water_type)
-            activity?.unitFormViewModel?.updateInteriorType(interior_type)
-            activity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
+            formActivity?.unitFormViewModel?.updateLuasTanah(luas_tanah)
+            formActivity?.unitFormViewModel?.updateLuasBangunan(luas_bangunan)
+            formActivity?.unitFormViewModel?.updateJumlahLantai(jumlah_lantai)
+            formActivity?.unitFormViewModel?.updateJumlahKamar(jumlah_kamar_tidur)
+            formActivity?.unitFormViewModel?.updateJumlahKamarMandi(jumlah_kamar_mandi)
+            formActivity?.unitFormViewModel?.updateParkingType(parking_type)
+            formActivity?.unitFormViewModel?.updateElectricityType(electricity_type)
+            formActivity?.unitFormViewModel?.updateWaterType(water_type)
+            formActivity?.unitFormViewModel?.updateInteriorType(interior_type)
+            formActivity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
 
-            activity.onNextButtonUnitManagementClick()
+            formActivity.onNextButtonUnitManagementClick()
         }
     }
 

@@ -43,6 +43,8 @@ class UnitDataApartemenFragment : Fragment() {
     private val binding by lazy {
         FragmentUnitDataApartemenBinding.inflate(layoutInflater)
     }
+    private val formActivity by lazy { activity as UnitFormActivity }
+    private val activityBinding by lazy { formActivity.binding }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,9 +56,6 @@ class UnitDataApartemenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val activity = activity as? UnitFormActivity
-        val activityBinding = activity?.binding
 
         parkingTypeSpinner()
         electricityTypeSpinner()
@@ -101,7 +100,7 @@ class UnitDataApartemenFragment : Fragment() {
         }
 
         activityBinding?.floatingButtonBack?.setOnClickListener {
-            activity.onBackButtonUnitManagementClick()
+            formActivity.onBackButtonUnitManagementClick()
         }
 
         activityBinding?.floatingButtonNext?.setOnClickListener {
@@ -119,16 +118,16 @@ class UnitDataApartemenFragment : Fragment() {
             val interior_type = binding.spinnerInteriorApartemen.text.toString()
             val road_access_type = binding.spinnerAksesJalanApartemen.text.toString()
 
-            activity?.unitFormViewModel?.updateLuasBangunan(luas_bangunan)
-            activity?.unitFormViewModel?.updateJumlahKamar(kamar)
-            activity?.unitFormViewModel?.updateJumlahKamarMandi(kamar_mandi)
-            activity?.unitFormViewModel?.updateParkingType(parking_type)
-            activity?.unitFormViewModel?.updateElectricityType(electricity_type)
-            activity?.unitFormViewModel?.updateWaterType(water_type)
-            activity?.unitFormViewModel?.updateInteriorType(interior_type)
-            activity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
+            formActivity?.unitFormViewModel?.updateLuasBangunan(luas_bangunan)
+            formActivity?.unitFormViewModel?.updateJumlahKamar(kamar)
+            formActivity?.unitFormViewModel?.updateJumlahKamarMandi(kamar_mandi)
+            formActivity?.unitFormViewModel?.updateParkingType(parking_type)
+            formActivity?.unitFormViewModel?.updateElectricityType(electricity_type)
+            formActivity?.unitFormViewModel?.updateWaterType(water_type)
+            formActivity?.unitFormViewModel?.updateInteriorType(interior_type)
+            formActivity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
 
-            activity.onNextButtonUnitManagementClick()
+            formActivity.onNextButtonUnitManagementClick()
         }
     }
 
