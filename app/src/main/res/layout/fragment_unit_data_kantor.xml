@@ -54,8 +54,9 @@
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_luas_tanah_kantor"
-            android:text="m²"
-            android:textAlignment="textEnd"
+            android:hint="m²"
+            android:textAlignment="textStart"
+            android:inputType="number"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -87,8 +88,9 @@
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_luas_bangunan_kantor"
-            android:text="m²"
-            android:textAlignment="textEnd"
+            android:hint="m²"
+            android:textAlignment="textStart"
+            android:inputType="number"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -120,6 +122,7 @@
             android:layout_marginTop="8dp"
             android:hint="Masukkan Jumlah Lantai"
             app:layout_constraintStart_toStartOf="parent"
+            android:inputType="number"
             app:layout_constraintTop_toBottomOf="@id/txt_jumlah_lantai_kantor"
             />
 
@@ -153,6 +156,7 @@
             android:layout_marginTop="8dp"
             android:hint="Masukkan Jumlah Kamar"
             app:layout_constraintStart_toStartOf="parent"
+            android:inputType="number"
             app:layout_constraintTop_toBottomOf="@id/txt_kamar_kantor"
             />
 
@@ -186,6 +190,7 @@
             android:layout_marginTop="8dp"
             android:hint="Masukkan Jumlah Kamr Mandi"
             app:layout_constraintStart_toStartOf="parent"
+            android:inputType="number"
             app:layout_constraintTop_toBottomOf="@id/txt_kamar_mandi_kantor"
             />
 

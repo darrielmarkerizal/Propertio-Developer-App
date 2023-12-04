@@ -1,20 +1,24 @@
 package com.propertio.developer.unit.form
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.R
 import com.propertio.developer.databinding.ActivityUnitFormBinding
-import com.propertio.developer.project.ProjectDetailActivity
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_ID
 import com.propertio.developer.unit.form.type.*
+import com.propertio.developer.unit_management.ButtonNavigationUnitManagementClickListener
+import androidx.lifecycle.Observer
 
-class UnitFormActivity : AppCompatActivity() {
+class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClickListener {
 
-    private val binding by lazy {
+    val unitFormViewModel : UnitFormViewModel by lazy {
+        ViewModelProvider(this).get(UnitFormViewModel::class.java)
+    }
+
+    val binding by lazy {
         Log.d("UnitFormActivity", "Inflating layout")
         ActivityUnitFormBinding.inflate(layoutInflater)
     }
@@ -31,8 +35,12 @@ class UnitFormActivity : AppCompatActivity() {
         Log.d("UnitFormActivity", "onCreate called")
         setContentView(binding.root)
 
+        binding.toolbarContainerUnitForm.textViewTitle.text = "Tambah Unit"
+
         val propertyType = intent.getStringExtra("Property Type")
         val projectId = intent.getIntExtra(PROJECT_ID, 0)
+        unitFormViewModel.updateProjectId(projectId)
+        Log.d("UnitFormActivity", "Project ID updated successfully in ViewModel: $projectId")
 
         Log.d("UnitFormActivity", "Project ID : $projectId")
         Log.d("UnitFormActivity", "Property Type : $propertyType")
@@ -55,33 +63,45 @@ class UnitFormActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.frame_container_unit_form, formsFragment[currentFragmentIndex])
             .commit()
+    }
 
-        binding.toolbarContainerUnitForm.textViewTitle.text = "Tambah Unit"
+    override fun onNextButtonUnitManagementClick() {
+        navigateToNextFragment()
+    }
 
-        binding.floatingButtonNext.setOnClickListener {
-            if (currentFragmentIndex < formsFragment.size - 1) {
-                currentFragmentIndex++
-                Log.d("UnitFormActivity", "Next button clicked, currentFragmentIndex: $currentFragmentIndex")
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.frame_container_unit_form, formsFragment[currentFragmentIndex])
-                    .commit()
-                binding.toolbarContainerUnitForm.textViewTitle.text = "Tambah Unit"
-            }
+    override fun onBackButtonUnitManagementClick() {
+        navigateToPreviousFragment()
+    }
+
+    private fun navigateToNextFragment() {
+        if (currentFragmentIndex < formsFragment.size - 1) {
+            currentFragmentIndex++
+            Log.d("UnitFormActivity", "Next button clicked, currentFragmentIndex: $currentFragmentIndex")
+            replaceFragment(formsFragment[currentFragmentIndex])
+            binding.toolbarContainerUnitForm.textViewTitle.text = "Tambah Unit"
         }
+    }
 
-        binding.floatingButtonBack.setOnClickListener {
-            if (currentFragmentIndex > 0) {
-                currentFragmentIndex--
-                Log.d("UnitFormActivity", "Back button clicked, currentFragmentIndex: $currentFragmentIndex")
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.frame_container_unit_form, formsFragment[currentFragmentIndex])
-                    .commit()
-                binding.toolbarContainerUnitForm.textViewTitle.text = "Edit Unit"
-            } else if (currentFragmentIndex == 0) {
-                Log.d("UnitFormActivity", "Navigating to ProjectDetailActivity")
-                val intentToProjectDetail = Intent(this, ProjectDetailActivity::class.java)
-                startActivity(intentToProjectDetail)
-            }
+    private fun navigateToPreviousFragment() {
+        if (currentFragmentIndex > 0) {
+            currentFragmentIndex--
+            Log.d("UnitFormActivity", "Back button clicked, currentFragmentIndex: $currentFragmentIndex")
+            replaceFragment(formsFragment[currentFragmentIndex])
+            binding.toolbarContainerUnitForm.textViewTitle.text = "Edit Unit"
+        } else if (currentFragmentIndex == 0) {
+            Log.d("UnitFormActivity", "Navigating to ProjectDetailActivity")
+            finish()
         }
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frame_container_unit_form, fragment)
+            .commit()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unitFormViewModel.clearData()
     }
 }

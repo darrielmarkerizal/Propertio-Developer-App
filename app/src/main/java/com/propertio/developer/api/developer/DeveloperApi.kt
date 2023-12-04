@@ -96,6 +96,13 @@ interface DeveloperApi {
     ) : Call<UpdateProjectResponse>
 
 
+    @POST("v1/cms/project-management/{id}/unit")
+    fun createUnit(
+        @Path("id") id : Int,
+        @Body unit : RequestBody
+    ) : Call<DefaultResponse>
+
+
     @FormUrlEncoded
     @POST("v1/cms/project-management/project-facilities")
     fun sendFacilities(
