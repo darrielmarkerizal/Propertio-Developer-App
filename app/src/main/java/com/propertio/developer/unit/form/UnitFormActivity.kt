@@ -8,11 +8,17 @@ import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.R
 import com.propertio.developer.databinding.ActivityUnitFormBinding
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_ID
-import com.propertio.developer.unit.form.type.*
 import com.propertio.developer.unit_management.ButtonNavigationUnitManagementClickListener
-import androidx.lifecycle.Observer
-import com.propertio.developer.model.Project
-import com.propertio.developer.project.ProjectDetailActivity
+import com.propertio.developer.unit.form.type.UnitDataApartemenFragment
+import com.propertio.developer.unit.form.type.UnitDataGudangFragment
+import com.propertio.developer.unit.form.type.UnitDataKantorFragment
+import com.propertio.developer.unit.form.type.UnitDataKondominiumFragment
+import com.propertio.developer.unit.form.type.UnitDataPabrikFragment
+import com.propertio.developer.unit.form.type.UnitDataRuangUsahaFragment
+import com.propertio.developer.unit.form.type.UnitDataRukoFragment
+import com.propertio.developer.unit.form.type.UnitDataRumahFragment
+import com.propertio.developer.unit.form.type.UnitDataTanahFragment
+import com.propertio.developer.unit.form.type.UnitDataVillaFragment
 
 class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClickListener {
 
@@ -31,6 +37,7 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
     )
 
     private var currentFragmentIndex = 0
+    internal var unitId : Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

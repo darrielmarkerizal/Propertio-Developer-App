@@ -5,7 +5,12 @@ import com.propertio.developer.api.models.DefaultResponse
 
 class PostUnitResponse : DefaultResponse() {
     @SerializedName("data")
-    var data: Any? = null
+    var data: PostStoreUnit? = null
+
+    data class PostStoreUnit (
+        @SerializedName("id")
+        var id: Int? = null
+    )
 
 
 }

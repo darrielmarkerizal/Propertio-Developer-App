@@ -9,7 +9,6 @@ import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResp
 import com.propertio.developer.api.developer.type.GeneralTypeResponse
 import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitRequest
-import com.propertio.developer.api.models.DefaultResponse
 import com.propertio.developer.model.Caption
 import com.propertio.developer.model.StatusProject
 import okhttp3.MultipartBody
