@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import com.propertio.developer.R
 import com.propertio.developer.databinding.FragmentUnitDataRumahBinding
 import com.propertio.developer.dialog.ElectricitySheetFragment
 import com.propertio.developer.dialog.InteriorSheetFragment
@@ -22,7 +21,6 @@ import com.propertio.developer.dialog.viewmodel.WaterTypeSpinnerViewModel
 import com.propertio.developer.unit.form.UnitFormActivity
 import com.propertio.developer.unit.form.UnitFormViewModel
 import androidx.lifecycle.Observer
-
 
 
 class UnitDataRumahFragment : Fragment() {
@@ -80,6 +78,22 @@ class UnitDataRumahFragment : Fragment() {
 
         activityBinding?.floatingButtonNext?.setOnClickListener {
             Log.d("UnitDataRumahFragment", "Next button clicked")
+
+            val projectId = unitFormViewModel.projectId.value
+            val title = unitFormViewModel.namaUnit.value
+            val description = unitFormViewModel.deskripsiUnit.value
+            val stock = unitFormViewModel.stokUnit.value
+            val price = unitFormViewModel.hargaUnit.value
+            val luas_tanah = binding.editLuasTanahRumah.text.toString()
+            val luas_bangunan = binding.editLuasBangunanRumah.text.toString()
+            val jumlah_lantai = binding.editJumlahLantaiRumah.text.toString()
+            val jumlah_kamar_tidur = binding.editKamarMandiRumah.text.toString()
+            val jumlah_kamar_mandi = binding.editKamarMandiRumah.text.toString()
+            val parking_type = binding.spinnerTempatParkirRumah.text.toString()
+            val electricity_type = binding.spinnerDayaListrikRumah.text.toString()
+            val water_type = binding.spinnerJenisAirRumah.text.toString()
+            val interior_type = binding.spinnerInteriorRumah.text.toString()
+            val road_access_type = binding.spinnerAksesJalanRumah.text.toString()
 
             activity.onNextButtonUnitManagementClick()
         }

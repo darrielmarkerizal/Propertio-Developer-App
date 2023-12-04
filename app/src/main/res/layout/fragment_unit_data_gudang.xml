@@ -49,8 +49,9 @@
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_luas_tanah_gudang"
-            android:text="m²"
-            android:textAlignment="textEnd"
+            android:hint="m²"
+            android:inputType="number"
+            android:textAlignment="textStart"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -82,8 +83,9 @@
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_luas_bangunan_gudang"
-            android:text="m²"
-            android:textAlignment="textEnd"
+            android:hint="m²"
+            android:textAlignment="textStart"
+            android:inputType="number"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
