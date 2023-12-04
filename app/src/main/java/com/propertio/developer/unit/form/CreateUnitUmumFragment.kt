@@ -7,11 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import com.propertio.developer.R
+import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.databinding.FragmentCreateUnitUmumBinding
-import com.propertio.developer.unit.form.type.*
 
 class CreateUnitUmumFragment : Fragment() {
+    val unitFormViewModel : UnitFormViewModel by lazy {
+        ViewModelProvider(this).get(UnitFormViewModel::class.java)
+    }
 
     private val binding by lazy {
         FragmentCreateUnitUmumBinding.inflate(layoutInflater)
@@ -28,6 +30,22 @@ class CreateUnitUmumFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val activity = activity as? UnitFormActivity
         val activityBinding = activity?.binding
+
+        unitFormViewModel.namaUnit.observe(viewLifecycleOwner, { value ->
+            binding.editNamaUnit.setText(value)
+        })
+
+        unitFormViewModel.deskripsiUnit.observe(viewLifecycleOwner, { value ->
+            binding.editDeskripsiUnit.setText(value)
+        })
+
+        unitFormViewModel.stokUnit.observe(viewLifecycleOwner, { value ->
+            binding.editStokUnit.setText(value)
+        })
+
+        unitFormViewModel.hargaUnit.observe(viewLifecycleOwner, { value ->
+            binding.editHargaUnit.setText(value)
+        })
 
         activityBinding?.floatingButtonBack?.setOnClickListener {
             activity.onBackButtonUnitManagementClick()

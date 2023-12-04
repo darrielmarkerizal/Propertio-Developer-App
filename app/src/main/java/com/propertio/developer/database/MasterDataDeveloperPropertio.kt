@@ -70,6 +70,31 @@ object MasterDataDeveloperPropertio {
         MasterData("95000 Watt", "95000 Watt")
     )
 
+    val water = listOf(
+        MasterData("PAM", "PAM"),
+        MasterData("Sumur", "Sumur"),
+        MasterData("PAM dan Sumur", "PAM dan Sumur"),
+        MasterData("Tidak ada", "Tidak ada")
+    )
+
+    val interior = listOf(
+        MasterData("Full", "Full"),
+        MasterData("Sebagian", "Sebagian"),
+        MasterData("Kosong", "Kosong")
+    )
+
+    val roadAccess = listOf(
+        MasterData("Gang Kecil", "Gang Kecil"),
+        MasterData("Persimpangan dua motor", "Persimpangan dua motor"),
+        MasterData("Mobil Kecil dapat masuk", "Mobil Kecil dapat masuk"),
+        MasterData("Persimpangan dua mobil", "Persimpangan dua mobil"),
+        MasterData("Jalan Desa", "Jalan Desa"),
+        MasterData("Jalan Kota", "Jalan Kota"),
+        MasterData("Jalan Provinsi", "Jalan Provinsi"),
+        MasterData("Jalan Nasional", "Jalan Nasional"),
+        MasterData("Jalan Industri", "Jalan Industri")
+    )
+
 
 }
 

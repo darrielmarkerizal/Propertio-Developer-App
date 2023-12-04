@@ -46,12 +46,12 @@
             style="@style/DesignSystem.TextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="Masukkan Luas Tanah"
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_luas_tanah_tanah"
-            android:text="m²"
-            android:textAlignment="textEnd"
+            android:hint="m²"
+            android:textAlignment="textStart"
+            android:inputType="number"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

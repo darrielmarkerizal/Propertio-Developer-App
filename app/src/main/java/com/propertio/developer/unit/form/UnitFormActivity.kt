@@ -10,6 +10,7 @@ import com.propertio.developer.databinding.ActivityUnitFormBinding
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_ID
 import com.propertio.developer.unit.form.type.*
 import com.propertio.developer.unit_management.ButtonNavigationUnitManagementClickListener
+import androidx.lifecycle.Observer
 
 class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClickListener {
 
@@ -38,6 +39,8 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
 
         val propertyType = intent.getStringExtra("Property Type")
         val projectId = intent.getIntExtra(PROJECT_ID, 0)
+        unitFormViewModel.updateProjectId(projectId)
+        Log.d("UnitFormActivity", "Project ID updated successfully in ViewModel: $projectId")
 
         Log.d("UnitFormActivity", "Project ID : $projectId")
         Log.d("UnitFormActivity", "Property Type : $propertyType")
