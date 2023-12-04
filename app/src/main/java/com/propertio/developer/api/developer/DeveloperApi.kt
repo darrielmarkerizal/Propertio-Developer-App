@@ -93,12 +93,5 @@ interface DeveloperApi {
             @Path("id") id: Int,
             @Body caption : Caption
     ) : Call<UpdateProjectResponse>
-
-    @POST("v1/cms/project-management/{id}/unit")
-    fun createUnit(
-        @Path("id") id : Int,
-        @Body unit : RequestBody
-    ) : Call<DefaultResponse>
-
-
 }
+

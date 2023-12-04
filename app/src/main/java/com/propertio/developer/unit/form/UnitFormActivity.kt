@@ -37,7 +37,7 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
 
         binding.toolbarContainerUnitForm.textViewTitle.text = "Tambah Unit"
 
-        val propertyType = intent.getStringExtra("Property Type")
+        val propertyType = intent.getStringExtra("Property Type") // Bisa ganti jadi val propertyType = "Apartemen"
         val projectId = intent.getIntExtra(PROJECT_ID, 0)
         unitFormViewModel.updateProjectId(projectId)
         Log.d("UnitFormActivity", "Project ID updated successfully in ViewModel: $projectId")
