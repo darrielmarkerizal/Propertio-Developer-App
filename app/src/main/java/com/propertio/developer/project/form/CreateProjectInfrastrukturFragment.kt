@@ -48,9 +48,6 @@ class CreateProjectInfrastrukturFragment : Fragment() {
 
     lateinit var projectInfrastructureAdapter : ProjectInfrastructureAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -109,7 +106,9 @@ class CreateProjectInfrastrukturFragment : Fragment() {
 
             // Delete All Button
             binding.linkTextViewProjectInfrastukturReset.setOnClickListener {
-                //TODO: Delete All Project Infrastructure
+                lifecycleScope.launch {
+                    deleteAllProjectInfrastructure()
+                }
 
             }
         }
@@ -123,7 +122,26 @@ class CreateProjectInfrastrukturFragment : Fragment() {
         setupRecylcerView()
 
 
+        activityBinding.floatingButtonBack.setOnClickListener {
+            // TODO: Back Button
 
+            formActivity.onBackButtonProjectManagementClick()
+        }
+
+        activityBinding.floatingButtonNext.setOnClickListener {
+            // TODO: Next Button.. Publish Or Not?
+
+            formActivity.onNextButtonProjectManagementClick()
+        }
+
+    }
+
+    private suspend fun deleteAllProjectInfrastructure() {
+        withContext(Dispatchers.IO) {
+            projectInfrastructureViewModel.projectInfrastructureList.value?.forEach {
+                deleteProjectInfrastucture(it.id)
+            }
+        }
     }
 
     private fun setupRecylcerView() {
