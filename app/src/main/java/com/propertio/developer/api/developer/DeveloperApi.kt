@@ -67,6 +67,30 @@ interface DeveloperApi {
         @Part siteplanImage : MultipartBody.Part? = null,
     ) : Call<PostStoreProjectLocationResponse>
 
+    @Multipart
+    @PUT("v1/cms/project-management/project-location/{id}")
+    fun updateProjectLocation(
+        @Path("id") id : Int,
+        @Part("headline") headline: RequestBody,
+        @Part("title") title: RequestBody,
+        @Part("property_type_id") propertyTypeId: RequestBody,
+        @Part("description") description: RequestBody? = null,
+        @Part("completed_at") completedAt: RequestBody? = null,
+        @Part("certificate") certificate: RequestBody,
+        @Part("province") province: RequestBody,
+        @Part("city") city: RequestBody,
+        @Part("district") district: RequestBody,
+        @Part("address") address: RequestBody? = null,
+        @Part("postal_code") postalCode: RequestBody? = null,
+        @Part("longitude") longitude: RequestBody? = null,
+        @Part("latitude") latitude: RequestBody? = null,
+        @Part("immersive_siteplan") immersiveSiteplan: RequestBody? = null,
+        @Part("immersive_apps") immersiveApps: RequestBody? = null,
+        @Part("status") status: RequestBody? = null,
+        @Part("listing_class") listingClass: RequestBody? = null,
+        @Part siteplanImage : MultipartBody.Part? = null,
+    ) : Call<PostStoreProjectLocationResponse>
+
     @DELETE("v1/cms/project-management/project-photos/{id}")
     fun deleteProjectPhoto(@Path("id") id : Int) : Call<UpdateProjectResponse>
 

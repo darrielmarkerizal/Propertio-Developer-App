@@ -22,6 +22,8 @@ class CreateProjectInformasiUmumFragment : Fragment() {
     private val binding by lazy {
         FragmentCreateProjectInformasiUmumBinding.inflate(layoutInflater)
     }
+    private val formActivity by lazy { activity as ProjectFormActivity }
+    private val activityBinding by lazy { formActivity.binding }
 
     // ViewModels
     private val projectInformationLocationViewModel : ProjectInformationLocationViewModel by activityViewModels()
@@ -50,40 +52,14 @@ class CreateProjectInformasiUmumFragment : Fragment() {
 
 
 
-
-
-
-        /*
-         * TODO: Berikut contoh mendapatkan binding dari ProjectFormActivity
-         *  1. Buat variabel activity "activity = activity as? ProjectFormActivity"
-         *  2. Buat variabel activityBinding "activityBinding = activity?.binding"
-         *  3. Gunakan activityBinding untuk mengakses binding dari ProjectFormActivity, contoh
-         *     activityBinding?.floatingButtonBack?.setOnClickListener { ... } <- ini button Back
-         *     activityBinding?.floatingButtonNext?.setOnClickListener { ... } <- ini button Next
-         *  4. jangan lupa tambahkan "activity.onBackButtonProjectManagementClick()"
-         *     pada floatingButtonBack.setOnClickListener pada bagian paling akhir
-         *  5. jangan lupa tambahkan "activity.onNextButtonProjectManagementClick()"
-         *     pada floatingButtonNext.setOnClickListener pada bagian paling akhir
-         *
-         *  NB: penambahan ...ProjectManagementClick bertujuan agar halaman dapat berpindah
-         *      ke halaman selanjutnya atau sebelumnya. Disarankan untuk ditaruh paling akhir.
-         *      boleh dibuat ke dalam if-else
-         */
-        val activity = activity as? ProjectFormActivity
-        val activityBinding = activity?.binding
-
-        activityBinding?.floatingButtonBack?.setOnClickListener {
+        activityBinding.floatingButtonBack.setOnClickListener {
             // TODO : Tambahkan kode untuk mengecek apakah sudah dikirim atau belum, jika sudah maka berikan alert bahwa data akan disimpan sebagai draft
-            Toast.makeText(activity, "Anda Menekan Di Fragment, Bukan Di Activity", Toast.LENGTH_SHORT).show()
+            Toast.makeText(formActivity, "Anda Menekan Di Fragment, Bukan Di Activity", Toast.LENGTH_SHORT).show()
 
-            activity.onBackButtonProjectManagementClick()
+            formActivity.onBackButtonProjectManagementClick()
         }
 
-        activityBinding?.floatingButtonNext?.setOnClickListener {
-            //TODO: Delete this two line below
-            activity.onNextButtonProjectManagementClick()
-            return@setOnClickListener
-
+        activityBinding.floatingButtonNext.setOnClickListener {
             if (binding.editHeadlineProject.text.toString().isEmpty()) {
                 binding.editHeadlineProject.error = "Harap isi Headline Project"
                 return@setOnClickListener
@@ -110,7 +86,7 @@ class CreateProjectInformasiUmumFragment : Fragment() {
             projectInformationLocationViewModel.certificate = certificateTypeViewModel.certificateTypeData.value?.toDb!!
 
 
-            activity.onNextButtonProjectManagementClick()
+            formActivity.onNextButtonProjectManagementClick()
         }
 
     }

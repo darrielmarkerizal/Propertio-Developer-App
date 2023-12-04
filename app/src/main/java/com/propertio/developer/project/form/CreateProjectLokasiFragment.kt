@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.URLUtil.isValidUrl
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -17,13 +16,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import coil.load
-import coil.transform.CircleCropTransformation
 import com.propertio.developer.R
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.projectmanagement.PostStoreProjectLocationResponse
-import com.propertio.developer.api.services.GooglePlacesService
 import com.propertio.developer.databinding.FragmentCreateProjectLokasiBinding
 import com.propertio.developer.dialog.CitiesSheetFragment
 import com.propertio.developer.dialog.DistrictsSheetFragment
@@ -42,14 +39,12 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import java.io.File
 import java.io.FileOutputStream
 import java.net.MalformedURLException
@@ -58,6 +53,8 @@ import java.net.URL
 class CreateProjectLokasiFragment : Fragment() {
 
     private val binding by lazy { FragmentCreateProjectLokasiBinding.inflate(layoutInflater) }
+    private val formActivity by lazy { activity as ProjectFormActivity }
+    private val activityBinding by lazy { formActivity.binding }
 
     // ViewModels
     private val projectInformationLocationViewModel : ProjectInformationLocationViewModel by activityViewModels()
@@ -93,6 +90,13 @@ class CreateProjectLokasiFragment : Fragment() {
             Toast.makeText(requireContext(), "Berhasil menambahkan gambar", Toast.LENGTH_SHORT).show()
         }
 
+    }
+
+    // developerApi
+    private val developerApi by lazy {
+        Retro(TokenManager(requireContext()).token)
+            .getRetroClientInstance()
+            .create(DeveloperApi::class.java)
     }
 
     private fun getPathFromUri(uri: Uri?): String {
@@ -192,27 +196,16 @@ class CreateProjectLokasiFragment : Fragment() {
         }
 
 
-        val activity = activity as? ProjectFormActivity
-        val activityBinding = activity?.binding
-
-
-        activityBinding?.floatingButtonBack?.setOnClickListener {
+        activityBinding.floatingButtonBack.setOnClickListener {
             // TODO: do something here
 
 
-            activity.onBackButtonProjectManagementClick()
+            formActivity.onBackButtonProjectManagementClick()
         }
 
-        activityBinding?.floatingButtonNext?.setOnClickListener {
-            // TODO: Delete Four line below. (those just for testing purpose)
-            projectInformationLocationViewModel.isAlreadyUploaded = true
-            activity.projectId = 62
-            activity.onNextButtonProjectManagementClick()
-            return@setOnClickListener
-
-
+        activityBinding.floatingButtonNext.setOnClickListener {
             if (projectInformationLocationViewModel.isAlreadyUploaded) {
-                activity.onNextButtonProjectManagementClick()
+                formActivity.onNextButtonProjectManagementClick()
                 return@setOnClickListener
             }
 
@@ -300,66 +293,48 @@ class CreateProjectLokasiFragment : Fragment() {
 
 
             // Form Request
+            if (projectInformationLocationViewModel.isAlreadyUploaded) {
+                updateProjectLocation(
+                    headlineBody,
+                    titleBody,
+                    propertyTypeIdBody,
+                    certificateBody,
+                    provinceBody,
+                    cityBody,
+                    districtBody,
+                    descriptionBody,
+                    completedAtBody,
+                    addressBody,
+                    postalCodeBody,
+                    longitudeBody,
+                    latitudeBody,
+                    immersiveSiteplanBody,
+                    immersiveAppsBody,
+                    siteplanImage
+                )
+            } else {
+                createProjectLocation(
+                    headlineBody,
+                    titleBody,
+                    propertyTypeIdBody,
+                    certificateBody,
+                    provinceBody,
+                    cityBody,
+                    districtBody,
+                    descriptionBody,
+                    completedAtBody,
+                    addressBody,
+                    postalCodeBody,
+                    longitudeBody,
+                    latitudeBody,
+                    immersiveSiteplanBody,
+                    immersiveAppsBody,
+                    siteplanImage
+                )
+            }
 
 
-            val retro = Retro(TokenManager(requireActivity()).token)
-                .getRetroClientInstance()
-                .create(DeveloperApi::class.java)
-            retro.uploadProjectLocation(
-                headline = headlineBody,
-                title = titleBody,
-                propertyTypeId = propertyTypeIdBody,
-                certificate = certificateBody,
-                province = provinceBody,
-                city = cityBody,
-                district = districtBody,
 
-                description = descriptionBody,
-                completedAt = completedAtBody,
-                address = addressBody,
-                postalCode = postalCodeBody,
-                longitude = longitudeBody,
-                latitude = latitudeBody,
-                immersiveSiteplan = immersiveSiteplanBody,
-                immersiveApps = immersiveAppsBody,
-                siteplanImage = siteplanImage
-            ).enqueue(object : Callback<PostStoreProjectLocationResponse> {
-                override fun onResponse(
-                    call: Call<PostStoreProjectLocationResponse>,
-                    response: Response<PostStoreProjectLocationResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val responseData = response.body()?.data
-                        if (responseData != null) {
-                            activity.projectId = responseData.id
-
-                            Toast.makeText(requireActivity(), "Berhasil membuat project", Toast.LENGTH_SHORT).show()
-                            activity.onNextButtonProjectManagementClick()
-                        } else {
-                            Toast.makeText(requireActivity(), "Terjadi Kesalahan", Toast.LENGTH_SHORT).show()
-                            Log.w("CreateProjectLokasiFragment", "onResponse: responseData is null")
-                        }
-                    } else {
-                        // Mendapatkan Error Message
-                        var errorMessage = response.errorBody()?.string()
-                        errorMessage = errorMessage?.split("\"data\":")?.last()
-                        errorMessage = errorMessage?.trim('{', '}')
-
-                        if (errorMessage != null) {
-                            for (error in errorMessage.split(',')){
-                                Toast.makeText(requireActivity(), "Gagal membuat project: ${error}", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                        Log.w("CreateProjectLokasiFragment", "onResponse Error: ${response.errorBody()?.string()}")
-                    }
-                }
-
-                override fun onFailure(call: Call<PostStoreProjectLocationResponse>, t: Throwable) {
-                    Log.e("CreateProjectLokasiFragment", "onFailure: ${t.message}")
-                    Toast.makeText(requireActivity(), "Terjadi Kesalahan", Toast.LENGTH_SHORT).show()
-                }
-
-            })
 
 
         }
@@ -367,6 +342,156 @@ class CreateProjectLokasiFragment : Fragment() {
 
     }
 
+    private fun updateProjectLocation(
+        headlineBody: RequestBody,
+        titleBody: RequestBody,
+        propertyTypeIdBody: RequestBody,
+        certificateBody: RequestBody,
+        provinceBody: RequestBody,
+        cityBody: RequestBody,
+        districtBody: RequestBody,
+        descriptionBody: RequestBody?,
+        completedAtBody: RequestBody?,
+        addressBody: RequestBody,
+        postalCodeBody: RequestBody,
+        longitudeBody: RequestBody,
+        latitudeBody: RequestBody,
+        immersiveSiteplanBody: RequestBody,
+        immersiveAppsBody: RequestBody,
+        siteplanImage: MultipartBody.Part?
+    ) {
+        developerApi.updateProjectLocation(
+            id = formActivity.projectId!!,
+            headline = headlineBody,
+            title = titleBody,
+            propertyTypeId = propertyTypeIdBody,
+            certificate = certificateBody,
+            province = provinceBody,
+            city = cityBody,
+            district = districtBody,
+
+            description = descriptionBody,
+            completedAt = completedAtBody,
+            address = addressBody,
+            postalCode = postalCodeBody,
+            longitude = longitudeBody,
+            latitude = latitudeBody,
+            immersiveSiteplan = immersiveSiteplanBody,
+            immersiveApps = immersiveAppsBody,
+            siteplanImage = siteplanImage
+        ).enqueue(object : Callback<PostStoreProjectLocationResponse> {
+            override fun onResponse(
+                call: Call<PostStoreProjectLocationResponse>,
+                response: Response<PostStoreProjectLocationResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val responseData = response.body()?.data
+                    if (responseData != null) {
+                        formActivity.projectId = responseData.id
+                        projectInformationLocationViewModel.isAlreadyUploaded = true
+                        Toast.makeText(requireActivity(), "Berhasil membuat project", Toast.LENGTH_SHORT).show()
+                        formActivity.onNextButtonProjectManagementClick()
+                    } else {
+                        Toast.makeText(requireActivity(), "Terjadi Kesalahan", Toast.LENGTH_SHORT).show()
+                        Log.w("CreateProjectLokasiFragment", "onResponse: responseData is null")
+                    }
+                } else {
+                    // Mendapatkan Error Message
+                    var errorMessage = response.errorBody()?.string()
+                    errorMessage = errorMessage?.split("\"data\":")?.last()
+                    errorMessage = errorMessage?.trim('{', '}')
+
+                    if (errorMessage != null) {
+                        for (error in errorMessage.split(',')){
+                            Toast.makeText(requireActivity(), "Gagal membuat project: ${error}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    Log.w("CreateProjectLokasiFragment", "onResponse Error: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<PostStoreProjectLocationResponse>, t: Throwable) {
+                Log.e("CreateProjectLokasiFragment", "onFailure: ${t.message}")
+                Toast.makeText(requireActivity(), "Terjadi Kesalahan", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun createProjectLocation(
+        headlineBody: RequestBody,
+        titleBody: RequestBody,
+        propertyTypeIdBody: RequestBody,
+        certificateBody: RequestBody,
+        provinceBody: RequestBody,
+        cityBody: RequestBody,
+        districtBody: RequestBody,
+        descriptionBody: RequestBody?,
+        completedAtBody: RequestBody?,
+        addressBody: RequestBody,
+        postalCodeBody: RequestBody,
+        longitudeBody: RequestBody,
+        latitudeBody: RequestBody,
+        immersiveSiteplanBody: RequestBody,
+        immersiveAppsBody: RequestBody,
+        siteplanImage: MultipartBody.Part?
+    ) {
+        developerApi.uploadProjectLocation(
+            headline = headlineBody,
+            title = titleBody,
+            propertyTypeId = propertyTypeIdBody,
+            certificate = certificateBody,
+            province = provinceBody,
+            city = cityBody,
+            district = districtBody,
+
+            description = descriptionBody,
+            completedAt = completedAtBody,
+            address = addressBody,
+            postalCode = postalCodeBody,
+            longitude = longitudeBody,
+            latitude = latitudeBody,
+            immersiveSiteplan = immersiveSiteplanBody,
+            immersiveApps = immersiveAppsBody,
+            siteplanImage = siteplanImage
+        ).enqueue(object : Callback<PostStoreProjectLocationResponse> {
+            override fun onResponse(
+                call: Call<PostStoreProjectLocationResponse>,
+                response: Response<PostStoreProjectLocationResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val responseData = response.body()?.data
+                    if (responseData != null) {
+                        formActivity.projectId = responseData.id
+                        projectInformationLocationViewModel.isAlreadyUploaded = true
+                        Toast.makeText(requireActivity(), "Berhasil membuat project", Toast.LENGTH_SHORT).show()
+                        formActivity.onNextButtonProjectManagementClick()
+                    } else {
+                        Toast.makeText(requireActivity(), "Terjadi Kesalahan", Toast.LENGTH_SHORT).show()
+                        Log.w("CreateProjectLokasiFragment", "onResponse: responseData is null")
+                    }
+                } else {
+                    // Mendapatkan Error Message
+                    var errorMessage = response.errorBody()?.string()
+                    errorMessage = errorMessage?.split("\"data\":")?.last()
+                    errorMessage = errorMessage?.trim('{', '}')
+
+                    if (errorMessage != null) {
+                        for (error in errorMessage.split(',')){
+                            Toast.makeText(requireActivity(), "Gagal membuat project: ${error}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    Log.w("CreateProjectLokasiFragment", "onResponse Error: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<PostStoreProjectLocationResponse>, t: Throwable) {
+                Log.e("CreateProjectLokasiFragment", "onFailure: ${t.message}")
+                Toast.makeText(requireActivity(), "Terjadi Kesalahan", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
 
 
 

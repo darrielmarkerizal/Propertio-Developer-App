@@ -6,6 +6,7 @@ import android.graphics.drawable.PictureDrawable
 import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -27,7 +28,8 @@ import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_I
 
 class ProjectAdapter(
     private val context: Context,
-    private val onClickRincian: (ProjectTable) -> Unit
+    private val onClickRincian: (ProjectTable) -> Unit,
+    private val onClickMore: (ProjectTable, View) -> Unit
 ) : ListAdapter<ProjectTable, ProjectAdapter.ItemProjectViewHolder>(ProjectDiffCallback()) {
 
     class ProjectDiffCallback : DiffUtil.ItemCallback<ProjectTable>() {
@@ -73,6 +75,10 @@ class ProjectAdapter(
                 // button
                 buttonRincian.setOnClickListener {
                     onClickRincian(data)
+                }
+
+                buttonMoreHorizontal.setOnClickListener {
+                    onClickMore(data, buttonMoreHorizontal)
                 }
 
 
