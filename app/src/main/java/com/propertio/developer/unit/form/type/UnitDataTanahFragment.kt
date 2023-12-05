@@ -68,6 +68,12 @@ class UnitDataTanahFragment : Fragment() {
         }
 
         activityBinding.floatingButtonBack.setOnClickListener {
+            val luas_tanah = binding.editLuasTanahTanah.text.toString()
+            val road_access_type = binding.spinnerAksesJalanTanah.text.toString()
+
+            formActivity.unitFormViewModel.updateLuasTanah(luas_tanah)
+            formActivity.unitFormViewModel.updateRoadAccessType(road_access_type)
+
             formActivity.onBackButtonUnitManagementClick()
         }
 
@@ -84,7 +90,7 @@ class UnitDataTanahFragment : Fragment() {
             formActivity.unitFormViewModel.updateLuasTanah(luas_tanah)
             formActivity.unitFormViewModel.updateRoadAccessType(road_access_type)
 
-            val retro = Retro(TokenManager(requireActivity()).token)
+            val retro = Retro(TokenManager(requireContext()).token)
                 .getRetroClientInstance()
                 .create(DeveloperApi::class.java)
 

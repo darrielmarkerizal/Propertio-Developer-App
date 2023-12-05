@@ -111,6 +111,22 @@ class UnitDataRuangUsahaFragment : Fragment() {
         }
 
         activityBinding?.floatingButtonBack?.setOnClickListener {
+            val luas_bangunan = binding.editLuasBangunanRuangUsaha.text.toString()
+            val kamar_mandi = binding.editKamarMandiRuangUsaha.text.toString()
+            val parking_type = binding.spinnerTempatParkirRuangUsaha.text.toString()
+            val electricity_type = binding.spinnerDayaListrikRuangUsaha.text.toString()
+            val water_type = binding.spinnerJenisAirRuangUsaha.text.toString()
+            val interior_type = binding.spinnerInteriorRuangUsaha.text.toString()
+            val road_access_type = binding.spinnerAksesJalanRuangUsaha.text.toString()
+
+            formActivity.unitFormViewModel.updateLuasBangunan(luas_bangunan)
+            formActivity.unitFormViewModel.updateJumlahKamarMandi(kamar_mandi)
+            formActivity.unitFormViewModel.updateParkingType(parking_type)
+            formActivity.unitFormViewModel.updateElectricityType(electricity_type)
+            formActivity.unitFormViewModel.updateWaterType(water_type)
+            formActivity.unitFormViewModel.updateInteriorType(interior_type)
+            formActivity.unitFormViewModel.updateRoadAccessType(road_access_type)
+
             formActivity.onBackButtonUnitManagementClick()
         }
 
@@ -138,7 +154,7 @@ class UnitDataRuangUsahaFragment : Fragment() {
             formActivity.unitFormViewModel.updateRoadAccessType(road_access_type)
 
 
-            val retro = Retro(TokenManager(requireActivity()).token)
+            val retro = Retro(TokenManager(requireContext()).token)
                 .getRetroClientInstance()
                 .create(DeveloperApi::class.java)
 
