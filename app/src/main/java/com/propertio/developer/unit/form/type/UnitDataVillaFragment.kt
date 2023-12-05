@@ -6,8 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
+import com.propertio.developer.TokenManager
+import com.propertio.developer.api.Retro
+import com.propertio.developer.api.developer.DeveloperApi
+import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
+import com.propertio.developer.api.developer.unitmanagement.UnitRequest
 import com.propertio.developer.databinding.FragmentUnitDataVillaBinding
 import com.propertio.developer.dialog.ElectricitySheetFragment
 import com.propertio.developer.dialog.InteriorSheetFragment
@@ -21,6 +27,9 @@ import com.propertio.developer.dialog.viewmodel.RoadAccessTypeSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.WaterTypeSpinnerViewModel
 import com.propertio.developer.unit.form.UnitFormActivity
 import com.propertio.developer.unit.form.UnitFormViewModel
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class UnitDataVillaFragment : Fragment() {
@@ -114,16 +123,6 @@ class UnitDataVillaFragment : Fragment() {
         }
 
         activityBinding.floatingButtonBack.setOnClickListener {
-            formActivity.onBackButtonUnitManagementClick()
-        }
-
-        activityBinding.floatingButtonNext.setOnClickListener {
-
-            val projectId = unitFormViewModel.projectId.value
-            val title = unitFormViewModel.namaUnit.value
-            val description = unitFormViewModel.deskripsiUnit.value
-            val stock = unitFormViewModel.stokUnit.value
-            val price = unitFormViewModel.hargaUnit.value
             val luas_tanah = binding.editLuasTanahVilla.text.toString()
             val luas_bangunan = binding.editLuasBangunanVilla.text.toString()
             val jumlah_lantai = binding.editJumlahLantaiVilla.text.toString()
@@ -146,7 +145,116 @@ class UnitDataVillaFragment : Fragment() {
             formActivity?.unitFormViewModel?.updateInteriorType(interior_type)
             formActivity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
 
-            formActivity.onNextButtonUnitManagementClick()
+            formActivity.onBackButtonUnitManagementClick()
+        }
+
+        activityBinding.floatingButtonNext.setOnClickListener {
+
+            val projectId = unitFormViewModel.projectId.value ?: 0
+            val title = unitFormViewModel.namaUnit.value ?: ""
+            val description = unitFormViewModel.deskripsiUnit.value
+            val stock = unitFormViewModel.stokUnit.value
+            val price = unitFormViewModel.hargaUnit.value ?: ""
+            val luas_tanah = binding.editLuasTanahVilla.text.toString()
+            val luas_bangunan = binding.editLuasBangunanVilla.text.toString()
+            val jumlah_lantai = binding.editJumlahLantaiVilla.text.toString()
+            val jumlah_kamar_tidur = binding.editKamarVilla.text.toString()
+            val jumlah_kamar_mandi = binding.editKamarMandiVilla.text.toString()
+            val parking_type = binding.spinnerTempatParkirVilla.text.toString()
+            val electricity_type = binding.spinnerDayaListrikVilla.text.toString()
+            val water_type = binding.spinnerJenisAirVilla.text.toString()
+            val interior_type = binding.spinnerInteriorVilla.text.toString()
+            val road_access_type = binding.spinnerAksesJalanVilla.text.toString()
+
+            formActivity?.unitFormViewModel?.updateLuasTanah(luas_tanah)
+            formActivity?.unitFormViewModel?.updateLuasBangunan(luas_bangunan)
+            formActivity?.unitFormViewModel?.updateJumlahLantai(jumlah_lantai)
+            formActivity?.unitFormViewModel?.updateJumlahKamar(jumlah_kamar_tidur)
+            formActivity?.unitFormViewModel?.updateJumlahKamarMandi(jumlah_kamar_mandi)
+            formActivity?.unitFormViewModel?.updateParkingType(parking_type)
+            formActivity?.unitFormViewModel?.updateElectricityType(electricity_type)
+            formActivity?.unitFormViewModel?.updateWaterType(water_type)
+            formActivity?.unitFormViewModel?.updateInteriorType(interior_type)
+            formActivity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
+
+            val retro = Retro(TokenManager(requireContext()).token)
+                .getRetroClientInstance()
+                .create(DeveloperApi::class.java)
+
+            val unitRequest = UnitRequest(
+                title = title,
+                price = price,
+                description = description,
+                stock = stock,
+                surfaceArea = luas_tanah,
+                buildingArea = luas_bangunan,
+                floor = jumlah_lantai,
+                bedroom = jumlah_kamar_tidur,
+                bathroom = jumlah_kamar_mandi,
+                garage = parking_type,
+                powerSupply = electricity_type,
+                waterType = water_type,
+                interior = interior_type,
+                roadAccess = road_access_type,
+                order = null
+            )
+
+            Log.d("UnitDataVillaFragment", "onViewCreated: $unitRequest")
+
+            retro.postStoreUnit(
+                id = projectId,
+                unitRequest = unitRequest
+            ).enqueue(object : Callback<PostUnitResponse> {
+                override fun onResponse(
+                    call: Call<PostUnitResponse>,
+                    response: Response<PostUnitResponse>
+                ) {
+                    if(response.isSuccessful) {
+                        val responseData = response.body()?.data
+                        if (responseData != null) {
+                            Log.d("UnitDataVillaFragment", "onResponse: $responseData")
+
+
+
+
+                            //TODO: Tambahkan kode seperti ini untuk setiap tipe unit
+                            formActivity.unitId = responseData.id
+                            if (formActivity.unitId != null || formActivity.unitId != 0) {
+                                Toast.makeText(requireContext(), "Unit berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+                                formActivity.onNextButtonUnitManagementClick()
+                            } else {
+                                Log.e("UnitDataVillaFragment", "onResponse: Unit ID is null or 0")
+                                Toast.makeText(requireContext(), "Gagal menambahkan unit", Toast.LENGTH_SHORT).show()
+                            }
+
+
+
+
+                        }
+                    } else {
+                        var errorMessage = response.errorBody()?.string()
+                        errorMessage = errorMessage?.split("\"data\":")?.last()
+                        errorMessage = errorMessage?.trim('{', '}')
+
+                        if (errorMessage != null) {
+                            for (error in errorMessage.split(",")) {
+                                Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+                            }
+                        }
+                        Log.w("UnitDataVillaFragment", "onResponse: Error code: ${response.code()}, message: ${response.message()}, error body: $errorMessage")
+
+                        if (response.code() == 500) {
+                            Log.e("UnitDataVillaFragment", "Server error: Something went wrong on the server side.")
+                            // You can add more actions here, for example, show an error dialog or a specific message to the user
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<PostUnitResponse>, t: Throwable) {
+                    Log.e("UnitDataVillaFragment", "onFailure: ${t.message}", t)
+                    Toast.makeText(requireContext(), "Gagal menambahkan unit", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
     }
 
