@@ -8,6 +8,7 @@ import com.propertio.developer.api.developer.projectmanagement.ProjectListRespon
 import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResponse
 import com.propertio.developer.api.developer.type.GeneralTypeResponse
 import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
+import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitRequest
 import com.propertio.developer.model.Caption
 import com.propertio.developer.model.StatusProject
@@ -47,6 +48,30 @@ interface DeveloperApi {
     @Multipart
     @POST("v1/cms/project-management/project-location")
     fun uploadProjectLocation(
+        @Part("headline") headline: RequestBody,
+        @Part("title") title: RequestBody,
+        @Part("property_type_id") propertyTypeId: RequestBody,
+        @Part("description") description: RequestBody? = null,
+        @Part("completed_at") completedAt: RequestBody? = null,
+        @Part("certificate") certificate: RequestBody,
+        @Part("province") province: RequestBody,
+        @Part("city") city: RequestBody,
+        @Part("district") district: RequestBody,
+        @Part("address") address: RequestBody? = null,
+        @Part("postal_code") postalCode: RequestBody? = null,
+        @Part("longitude") longitude: RequestBody? = null,
+        @Part("latitude") latitude: RequestBody? = null,
+        @Part("immersive_siteplan") immersiveSiteplan: RequestBody? = null,
+        @Part("immersive_apps") immersiveApps: RequestBody? = null,
+        @Part("status") status: RequestBody? = null,
+        @Part("listing_class") listingClass: RequestBody? = null,
+        @Part siteplanImage : MultipartBody.Part? = null,
+    ) : Call<PostStoreProjectLocationResponse>
+
+    @Multipart
+    @PUT("v1/cms/project-management/project-location/{id}")
+    fun updateProjectLocation(
+        @Path("id") id : Int,
         @Part("headline") headline: RequestBody,
         @Part("title") title: RequestBody,
         @Part("property_type_id") propertyTypeId: RequestBody,
@@ -131,4 +156,10 @@ interface DeveloperApi {
         @Body status : StatusProject
     ) : Call<UpdateProjectResponse>
 
+
+    @GET("v1/cms/project-management/{projectId}/unit/{unitId}")
+    fun getUnitDetail(
+        @Path("projectId") projectId : Int,
+        @Path("unitId") unitId : Int
+    ) : Call<UnitDetailResponse>
 }
