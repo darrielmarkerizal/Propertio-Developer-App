@@ -106,7 +106,7 @@ class CreateProjectInformasiUmumFragment : Fragment() {
 
 
     private fun loadTextData() {
-        printLog()
+        projectInformationLocationViewModel.printLog()
         binding.editHeadlineProject.setText(projectInformationLocationViewModel.headline)
         binding.editJudulProject.setText(projectInformationLocationViewModel.title)
         binding.editDeskripsiProject.setText(projectInformationLocationViewModel.description)
@@ -156,18 +156,6 @@ class CreateProjectInformasiUmumFragment : Fragment() {
     }
 
 
-    private fun printLog() {
-        Log.d( "ViewModel",
-            "loadTextData:" +
-                    "\n ${projectInformationLocationViewModel.headline} " +
-                    "\n ${projectInformationLocationViewModel.title} " +
-                    "\n ${projectInformationLocationViewModel.description} " +
-                    "\n ${projectInformationLocationViewModel.completedAt} " +
-                    "\n ${projectInformationLocationViewModel.propertyTypeName} " +
-                    "\n ${projectInformationLocationViewModel.propertyTypeId} " +
-                    "\n ${projectInformationLocationViewModel.certificate} "
-        )
-    }
 
     private fun certificateTypeSpinner() {
         binding.spinnerSertifikatProject.setOnClickListener {

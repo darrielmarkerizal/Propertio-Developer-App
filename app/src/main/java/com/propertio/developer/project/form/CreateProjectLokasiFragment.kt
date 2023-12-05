@@ -27,6 +27,7 @@ import com.propertio.developer.dialog.DistrictsSheetFragment
 import com.propertio.developer.dialog.ProvinceSheetFragment
 import com.propertio.developer.dialog.model.CitiesModel
 import com.propertio.developer.dialog.model.DistrictsModel
+import com.propertio.developer.dialog.model.ProvinceModel
 import com.propertio.developer.dialog.viewmodel.CitiesSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.DistrictsSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.ProvinceSpinnerViewModel
@@ -154,7 +155,16 @@ class CreateProjectLokasiFragment : Fragment() {
         provinceSpinner()
         citySpinner()
         districtSpinner()
+
+        // Load Data
+        if (projectInformationLocationViewModel.isUploaded) {
+            loadTextData()
+            checkSpinnerData(true)
+        }
+
         checkSpinnerData()
+
+
 
 
 
@@ -204,6 +214,7 @@ class CreateProjectLokasiFragment : Fragment() {
         }
 
         activityBinding.floatingButtonNext.setOnClickListener {
+            projectInformationLocationViewModel.printLog()
             if (!isProvinceSelected && !isCitySelected && !isDistrictSelected) {
                 binding.spinnerProvinceProject.error = "Wajib diisi"
                 binding.spinnerCityProject.error = "Wajib diisi"
@@ -212,12 +223,6 @@ class CreateProjectLokasiFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            Log.d("CreateProjectLokasiFragment", "Check Required Previous Data:\n " +
-                    "${projectInformationLocationViewModel.headline} \n" +
-                    "${projectInformationLocationViewModel.title} \n" +
-                    "${projectInformationLocationViewModel.propertyTypeId} \n" +
-                    "${projectInformationLocationViewModel.certificate} \n"
-            )
 
             // get Text
             val headline = projectInformationLocationViewModel.headline!!
@@ -288,6 +293,7 @@ class CreateProjectLokasiFragment : Fragment() {
 
 
             // Form Request
+            Log.d("CreateProjectLokasiFragment", "Update or Edit: ${projectInformationLocationViewModel.isUploaded}")
             if (projectInformationLocationViewModel.isUploaded) {
                 updateProjectLocation(
                     headlineBody,
@@ -337,6 +343,20 @@ class CreateProjectLokasiFragment : Fragment() {
 
     }
 
+
+
+    private fun loadTextData() {
+        binding.editTextAddressProject.setText(projectInformationLocationViewModel.address)
+        binding.editTextPosProject.setText(projectInformationLocationViewModel.postalCode)
+        val siteplanImageURL = "https://www.google.com/maps/search/?api=1&query=${projectInformationLocationViewModel.latitude},${projectInformationLocationViewModel.longitude}"
+        binding.editTextLinkMapsProject.setText(siteplanImageURL)
+        binding.editTextLinkImmersiveProject.setText(projectInformationLocationViewModel.immersiveSiteplan)
+        binding.editTextLinkImmersiveAppsProject.setText(projectInformationLocationViewModel.immersiveApps)
+
+
+        projectInformationLocationViewModel.printLog()
+    }
+
     private fun updateProjectLocation(
         headlineBody: RequestBody,
         titleBody: RequestBody,
@@ -347,12 +367,12 @@ class CreateProjectLokasiFragment : Fragment() {
         districtBody: RequestBody,
         descriptionBody: RequestBody?,
         completedAtBody: RequestBody?,
-        addressBody: RequestBody,
-        postalCodeBody: RequestBody,
-        longitudeBody: RequestBody,
-        latitudeBody: RequestBody,
-        immersiveSiteplanBody: RequestBody,
-        immersiveAppsBody: RequestBody,
+        addressBody: RequestBody?,
+        postalCodeBody: RequestBody?,
+        longitudeBody: RequestBody?,
+        latitudeBody: RequestBody?,
+        immersiveSiteplanBody: RequestBody?,
+        immersiveAppsBody: RequestBody?,
         siteplanImage: MultipartBody.Part?
     ) {
         developerApi.updateProjectLocation(
@@ -423,12 +443,12 @@ class CreateProjectLokasiFragment : Fragment() {
         districtBody: RequestBody,
         descriptionBody: RequestBody?,
         completedAtBody: RequestBody?,
-        addressBody: RequestBody,
-        postalCodeBody: RequestBody,
-        longitudeBody: RequestBody,
-        latitudeBody: RequestBody,
-        immersiveSiteplanBody: RequestBody,
-        immersiveAppsBody: RequestBody,
+        addressBody: RequestBody?,
+        postalCodeBody: RequestBody?,
+        longitudeBody: RequestBody?,
+        latitudeBody: RequestBody?,
+        immersiveSiteplanBody: RequestBody?,
+        immersiveAppsBody: RequestBody?,
         siteplanImage: MultipartBody.Part?
     ) {
         developerApi.uploadProjectLocation(
@@ -471,12 +491,13 @@ class CreateProjectLokasiFragment : Fragment() {
                     errorMessage = errorMessage?.split("\"data\":")?.last()
                     errorMessage = errorMessage?.trim('{', '}')
 
+                    Log.w("CreateProjectLokasiFragment", "onResponse Error: ${response.errorBody()?.string()}")
                     if (errorMessage != null) {
                         for (error in errorMessage.split(',')){
                             Toast.makeText(requireActivity(), "Gagal membuat project: ${error}", Toast.LENGTH_SHORT).show()
                         }
                     }
-                    Log.w("CreateProjectLokasiFragment", "onResponse Error: ${response.errorBody()?.string()}")
+                    Log.w("CreateProjectLokasiFragment", "onResponse Error: ${response.body()?.message}")
                 }
             }
 
@@ -499,11 +520,27 @@ class CreateProjectLokasiFragment : Fragment() {
         }
     }
 
-    private fun checkSpinnerData() {
+    private fun checkSpinnerData(isAlreadyUploaded: Boolean = false) {
         lifecycleScope.launch {
-            val province = projectInformationLocationViewModel.province?.copy()
-            val city = projectInformationLocationViewModel.city?.copy()
-            val district = projectInformationLocationViewModel.district?.copy()
+            val province : ProvinceModel?
+            val city : CitiesModel?
+            val district : DistrictsModel?
+            if (isAlreadyUploaded) {
+                province = projectInformationLocationViewModel.savedProvince?.copy()
+                city = projectInformationLocationViewModel.savedCity?.copy()
+                district = projectInformationLocationViewModel.savedDistrict?.copy()
+
+            } else {
+                province = projectInformationLocationViewModel.province?.copy()
+                city = projectInformationLocationViewModel.city?.copy()
+                district = projectInformationLocationViewModel.district?.copy()
+            }
+
+            Log.d("CreateProjectLokasiFragment", "checkSpinnerData: ${province?.provinceId} ${province?.provinceName}")
+            Log.d("CreateProjectLokasiFragment", "checkSpinnerData: ${city?.provinceId} ${city?.citiesName}")
+            Log.d("CreateProjectLokasiFragment", "checkSpinnerData: ${district?.districtsId} ${district?.districtsName}")
+
+
             if (province != null) {
                 Log.d("CreateProjectLokasiFragment", "checkSpinnerData: ${province}")
                 provinceViewModel.provinceData.postValue(province)
@@ -559,7 +596,6 @@ class CreateProjectLokasiFragment : Fragment() {
 
 
     private fun citySpinner() {
-//        cityViewModel = ViewModelProvider(this)[CitiesSpinnerViewModel::class.java]
 
         binding.spinnerCityProject.setOnClickListener {
             if (isProvinceSelected) {

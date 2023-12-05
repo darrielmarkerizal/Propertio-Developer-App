@@ -1,5 +1,6 @@
 package com.propertio.developer.project.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.propertio.developer.dialog.model.CitiesModel
@@ -28,6 +29,32 @@ class ProjectInformationLocationViewModel : ViewModel() {
     var status : String? = null
     var listingClass : String? = null
     var siteplanImageURL : String? = null
+
+
+    // NOTE : Jangan pakai selain untuk edit form
+    var savedProvince : ProvinceModel? = null
+    var savedCity : CitiesModel? = null
+    var savedDistrict : DistrictsModel? = null
+
+
+    fun printLog() {
+        Log.d( "ViewModel",
+            "loadTextData:" +
+                    "\n $headline " +
+                    "\n $title " +
+                    "\n $description " +
+                    "\n $completedAt " +
+                    "\n $propertyTypeName " +
+                    "\n $certificate " +
+                    "\n ${province?.provinceId} " +
+                    "\n ${province?.provinceName} " +
+                    "\n ${city?.citiesId} " +
+                    "\n ${city?.citiesName} " +
+                    "\n ${district?.districtsId} " +
+                    "\n ${district?.districtsName} "
+        )
+
+    }
 
 
     fun clear() {
@@ -95,8 +122,8 @@ class ProjectInformationLocationViewModel : ViewModel() {
         city : CitiesModel? = this.city,
         district : DistrictsModel? = this.district,
     ) {
-        this.province = province
-        this.city = city
-        this.district = district
+        this.savedProvince = province
+        this.savedCity = city
+        this.savedDistrict = district
     }
 }

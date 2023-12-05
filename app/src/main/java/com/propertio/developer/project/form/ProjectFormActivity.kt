@@ -101,17 +101,6 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
 
     }
 
-    private fun printLog() {
-        Log.d( "ViewModel",
-            "loadTextData:" +
-                    "\n ${projectInformationLocationViewModel.headline} " +
-                    "\n ${projectInformationLocationViewModel.title} " +
-                    "\n ${projectInformationLocationViewModel.description} " +
-                    "\n ${projectInformationLocationViewModel.completedAt} " +
-                    "\n ${projectInformationLocationViewModel.propertyTypeName} " +
-                    "\n ${projectInformationLocationViewModel.certificate} "
-        )
-    }
 
     private fun setInitialFragment() {
         replaceFragment(formsFragment[currentFragmentIndex])
