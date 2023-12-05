@@ -1,21 +1,33 @@
 package com.propertio.developer.project.form
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.propertio.developer.R
 import com.propertio.developer.databinding.ActivityProjectFormBinding
 import com.propertio.developer.databinding.ToolbarBinding
+import com.propertio.developer.project.viewmodel.ProjectFacilityViewModel
+import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
+import com.propertio.developer.project.viewmodel.ProjectMediaViewModel
+import com.propertio.developer.project_management.ButtonNavigationProjectManagementClickListener
 
-class ProjectFormActivity : AppCompatActivity() {
+class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManagementClickListener {
 
-    private val binding by lazy {
+    val binding by lazy {
         ActivityProjectFormBinding.inflate(layoutInflater)
     }
 
-    private val formsFragment = listOf(
+    // ViewModels
+    internal val projectInformationLocationViewModel : ProjectInformationLocationViewModel by viewModels()
+    internal val projectMedia : ProjectMediaViewModel by viewModels()
+    internal val projectFacility : ProjectFacilityViewModel by viewModels()
+    internal var projectId: Int? = null
+
+    internal val formsFragment = listOf(
         CreateProjectInformasiUmumFragment(),
         CreateProjectLokasiFragment(),
         CreateProjectMediaFragment(),
@@ -23,7 +35,7 @@ class ProjectFormActivity : AppCompatActivity() {
         CreateProjectInfrastrukturFragment(),
     )
 
-    private var currentFragmentIndex : Int = 0
+    internal var currentFragmentIndex : Int = 0
         set(value) {
             if (value in formsFragment.indices) {
                 Log.d("TAG", "set: $value")
@@ -46,40 +58,17 @@ class ProjectFormActivity : AppCompatActivity() {
 
         setInitialFragment()
 
-        with(binding) {
-            floatingButtonBack.setOnClickListener {
-                if (currentFragmentIndex <= 0) {
-                    Log.d("ProjectForm", "Exit From Project Form")
-                    finish()
-                }
-
-                currentFragmentIndex--
-                replaceFragment(formsFragment[currentFragmentIndex])
-            }
-            floatingButtonNext.setOnClickListener {
-                if (currentFragmentIndex == formsFragment.size - 1) {
-                    Log.d("ProjectForm", "Post Project Form")
-
-                    // TODO: Post Project Form
-                    Toast.makeText(this@ProjectFormActivity, "Post Project Form Belum Tersedia", Toast.LENGTH_SHORT).show()
-                }
-
-                currentFragmentIndex++
-                replaceFragment(formsFragment[currentFragmentIndex])
-            }
-
-        }
-
     }
 
     private fun setInitialFragment() {
         replaceFragment(formsFragment[currentFragmentIndex])
     }
 
-    private fun replaceFragment(fragment: Fragment) {
+    internal fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frame_container_project_form, fragment)
+        fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
 
@@ -87,6 +76,31 @@ class ProjectFormActivity : AppCompatActivity() {
     private fun setToolbarToCreate(bindingToolbar: ToolbarBinding) {
         bindingToolbar.textViewTitle.text = "Tambah Proyek"
     }
+
+
+    override fun onNextButtonProjectManagementClick() {
+        if (currentFragmentIndex == formsFragment.size - 1) {
+            val intent = Intent(this, CreateProjectSuccessActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        currentFragmentIndex++
+        replaceFragment(formsFragment[currentFragmentIndex])
+    }
+
+
+    override fun onBackButtonProjectManagementClick() {
+        if (currentFragmentIndex <= 0) {
+            Log.d("ProjectForm", "Exit From Project Form")
+            finish()
+        }
+
+        currentFragmentIndex--
+        replaceFragment(formsFragment[currentFragmentIndex])
+    }
+
+
 
 
 }

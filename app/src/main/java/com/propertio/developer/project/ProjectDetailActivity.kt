@@ -7,6 +7,7 @@ import android.text.Html
 import android.util.Log
 import android.webkit.WebView
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
@@ -27,6 +28,7 @@ import com.propertio.developer.carousel.CarouselAdapter
 import com.propertio.developer.carousel.ImageData
 import com.propertio.developer.database.project.ProjectTable
 import com.propertio.developer.databinding.ActivityProjectDetailBinding
+import com.propertio.developer.unit.form.UnitFormActivity
 import com.propertio.developer.unit.list.UnitAdapter
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -35,6 +37,8 @@ import retrofit2.Response
 import java.util.regex.Pattern
 
 class ProjectDetailActivity : AppCompatActivity() {
+    private var projectId: Int? = null
+
     private val binding by lazy {
         ActivityProjectDetailBinding.inflate(layoutInflater)
     }
@@ -48,6 +52,14 @@ class ProjectDetailActivity : AppCompatActivity() {
     private lateinit var unitAdapter: UnitAdapter
     private val unitList : MutableLiveData<List<ProjectDetail.ProjectDeveloper.ProjectUnit>> by lazy {
         MutableLiveData<List<ProjectDetail.ProjectDeveloper.ProjectUnit>>()
+    }
+
+    private val launcherToCreateUnit = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            Log.d("ProjectDetailActivity", "Unit created successfully")
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,10 +81,27 @@ class ProjectDetailActivity : AppCompatActivity() {
 
 
         val idProject = intent.getIntExtra(PROJECT_ID, 0)
+        Log.d("ProjectDetailActivity", "idProject: $idProject")
+
+        val propertyType = intent.getStringExtra("Property Type")
+        Log.d("ProjectDetailActivity", "Property Type: $propertyType")
+
+        binding.buttonAddUnit.setOnClickListener {
+            if (projectId != null && projectId != 0) {
+                val intentToUnitForm = Intent(this, UnitFormActivity::class.java)
+                intentToUnitForm.putExtra(PROJECT_ID, projectId)
+                intentToUnitForm.putExtra("Property Type", propertyType)
+                launcherToCreateUnit.launch(intentToUnitForm)
+            } else {
+                Log.w("ProjectDetailActivity", "projectId is null")
+            }
+        }
 
         if (idProject == 0) {
             Log.e("ProjectDetailActivity", "projectData is null")
             finishActivity(RESULT_CANCELED)
+        } else {
+            projectId = idProject
         }
 
 

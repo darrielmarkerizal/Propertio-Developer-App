@@ -105,25 +105,91 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxCornerRadiusBottomEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusTopStart="12dp"
-                app:endIconMode="clear_text"
-                app:hintEnabled="false"
                 android:layout_marginVertical="20dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    style="@style/DesignSystem.TextInputEditText"
-                    android:layout_width="match_parent"
-                    android:backgroundTint="@color/grey_50"
-                    android:drawableStart="@drawable/baseline_search_24"
-                    android:hint="Cari Proyek" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="-10dp"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:endIconMode="clear_text"
+                    app:hintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/button_search"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/text_edit_search_filter"
+                        style="@style/DesignSystem.TextInputEditText"
+                        android:layout_width="match_parent"
+                        android:backgroundTint="@color/grey_50"
+                        android:hint="Cari Proyek" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/button_search"
+                    android:layout_width="50dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/button_primary_rounded_rectangle"
+                    android:src="@drawable/baseline_search_24"
+                    android:tint="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/button_aktif"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:minWidth="101dp"
+                        android:text="Aktif"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="0dp"
+                        android:textAppearance="@style/text.medium.size12"
+                        android:background="@drawable/button_radio_secondary_rounded"
+                        android:layout_marginEnd="12dp"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/button_draf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:minWidth="101dp"
+                        android:text="Draf"
+                        android:layout_marginTop="0dp"
+                        android:textAppearance="@style/text.medium.size12"
+                        android:background="@drawable/button_radio_secondary_rounded"/>
+
+
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
 
             <FrameLayout
                 android:id="@+id/frameLayout_belum_ada_proyek"

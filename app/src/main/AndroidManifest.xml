@@ -14,12 +14,18 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PropertioDeveloperApp"
-        android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".project.form.CreateProjectSuccessActivity"
+            android:exported="false" />
+        <activity
+            android:name=".unit.form.UnitFormActivity"
+            android:exported="false" />
         <activity
             android:name=".unit.UnitDetailActivity"
             android:exported="false" />

@@ -82,6 +82,11 @@
         <item name="android:background">@drawable/button_secondary_rounded_rectangle</item>
     </style>
 
+    <style name="button.secondary.s.rounded.disabled" parent="button.secondary.s.rounded">
+        <item name="android:textColor">@color/grey_500</item>
+        <item name="android:background">@drawable/button_secondary_rounded_rectangle_disabled</item>
+    </style>
+
     <!-- Tertiary   -->
     <style name="button.tertiary" parent="Base.Theme.button">
         <item name="android:background">@drawable/button_tertiary_rounded_rectangle</item>
@@ -133,6 +138,7 @@
     </style>
 
     <!--  END : button design system  -->
+
 
 
     <!-- START : Custom add Button   -->
@@ -204,13 +210,19 @@
         <item name="android:paddingTop">0dp</item>
         <item name="android:paddingBottom">0dp</item>
         <item name="android:maxLines">1</item>
+        <item name="hintTextColor">@color/text_black_placeholder</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="DesignSystem.TextInputEditText.Rectangle">
+        <item name="android:background">@drawable/edit_text_caption</item>
     </style>
 
     <style name="DesignSystem.TextInputTextField" parent="DesignSystem.TextInputEditText.Base">
         <item name="android:gravity">top</item>
         <item name="android:minHeight">100dp</item>
-        <item name="android:paddingTop">14.5dp</item>
-        <item name="android:paddingBottom">14.5dp</item>
+        <item name="android:padding">14.5dp</item>
+        <item name="android:inputType">textMultiLine</item>
     </style>
 
     <!--  END : textfield -->

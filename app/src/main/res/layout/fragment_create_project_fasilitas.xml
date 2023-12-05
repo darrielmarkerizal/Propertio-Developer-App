@@ -7,7 +7,6 @@
     tools:context=".project.form.CreateProjectFasilitasFragment"
     android:background="@color/white"
     android:paddingTop="32.5dp"
-    android:paddingBottom="150dp"
     android:paddingHorizontal="32.5dp"
     >
 
@@ -75,12 +74,13 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/button_about_fasilitas"
+        android:id="@+id/container_button_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/textInputLayout_fasilitas"
-        >
+        app:layout_constraintEnd_toEndOf="@+id/text_title_project_fasilitas"
+        app:layout_constraintStart_toStartOf="@+id/text_title_project_fasilitas"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayout_fasilitas">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_fasilitas"
@@ -89,41 +89,41 @@
             android:layout_height="32dp"
             android:text="Fasilitas"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_keunggulan"
             style="@style/button.secondary.s.rounded"
             android:layout_width="93dp"
             android:layout_height="32dp"
-            android:layout_marginStart="34dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:text="Keunggulan"
+            app:layout_constraintEnd_toStartOf="@+id/button_perabot"
             app:layout_constraintStart_toEndOf="@id/button_fasilitas"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_perabot"
             style="@style/button.secondary.s.rounded"
             android:layout_width="93dp"
             android:layout_height="32dp"
-            android:layout_marginStart="34dp"
             android:text="Perabot"
-            app:layout_constraintStart_toEndOf="@id/button_keunggulan"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_fasilitas"
+        android:id="@+id/recycler_view_fasilitas"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/button_about_fasilitas"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
-        tools:listitem="@layout/item_fasilitas"
-        />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/container_button_category"
+        app:layout_constraintStart_toStartOf="@+id/container_button_category"
+        app:layout_constraintTop_toBottomOf="@id/container_button_category"
+        tools:listitem="@layout/item_fasilitas" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,8 +11,11 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.WorkerThread
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -20,12 +23,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.propertio.developer.PropertioDeveloperApplication
+import com.propertio.developer.R
 import com.propertio.developer.TokenManager
 import com.propertio.developer.database.project.ProjectTable
 import com.propertio.developer.databinding.FragmentProjectBinding
 import com.propertio.developer.model.Project
 import com.propertio.developer.project.form.ProjectFormActivity
 import com.propertio.developer.project.list.ProjectAdapter
+import com.propertio.developer.project.viewmodel.ProjectTabButtonViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -34,8 +39,6 @@ import kotlinx.coroutines.withContext
 class ProjectFragment : Fragment() {
     private lateinit var projectViewModel: ProjectViewModel
     private lateinit var projectAdapter: ProjectAdapter
-    private lateinit var launcher: ActivityResultLauncher<Intent>
-    private lateinit var tokenManager: TokenManager
 
     private var visibleThreshold : Int = 5
     private val cardHeight = 500
@@ -46,27 +49,41 @@ class ProjectFragment : Fragment() {
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
-    private val binding by lazy {
-        FragmentProjectBinding.inflate(layoutInflater)
+    private val binding by lazy { FragmentProjectBinding.inflate(layoutInflater) }
+
+    // Tab Button
+    private var currentStatus : Boolean = true
+    private val tabButtonViewModel : ProjectTabButtonViewModel by activityViewModels()
+
+
+    private val launcherAddProject = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.resultCode == RESULT_OK) {
+            Log.d("ProjectFragment Launcher", "Result OK")
+
+        }
+    }
+
+    private val launcherToRincian = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.resultCode == RESULT_OK) {
+            Log.d("ProjectFragment Launcher", "Result OK")
+
+        }
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        tokenManager = TokenManager(requireContext())
+
         val factory = ProjectViewModelFactory(
             (requireActivity().application as PropertioDeveloperApplication).repository
         )
         projectViewModel = ViewModelProvider(requireActivity(), factory)[ProjectViewModel::class.java]
 
-        launcher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) {
-            if (it.resultCode == RESULT_OK) {
-                Log.d("ProjectFragment Launcher", "Result OK")
 
-            }
-        }
 
     }
 
@@ -74,6 +91,16 @@ class ProjectFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        projectAdapter = ProjectAdapter(
+            context = requireActivity(),
+            onClickRincian = { data ->
+                Log.d("ProjectAdapter", "Repost button clicked")
+                val intentToDetailProject = Intent(context, ProjectDetailActivity::class.java)
+                intentToDetailProject.putExtra(ProjectDetailActivity.PROJECT_ID, data.id)
+                intentToDetailProject.putExtra("Property Type", data.propertyTypeName)
+                launcherToRincian.launch(intentToDetailProject)
+            }
+        )
         return binding.root
     }
 
@@ -88,7 +115,7 @@ class ProjectFragment : Fragment() {
         with(binding) {
             fabAddProject.setOnClickListener {
                 val intent = Intent(requireContext(), ProjectFormActivity::class.java)
-                launcher.launch(intent)
+                launcherAddProject.launch(intent)
             }
 
             if (isLoading.value == true) {
@@ -100,24 +127,83 @@ class ProjectFragment : Fragment() {
 
         }
 
-        lifecycleScope.launch {
-            setRecyclerListProject()
+        // Tab Button
+        binding.buttonAktif.setOnClickListener {
+            Log.d("ProjectFragment", "onViewCreated: buttonAktif")
+            tabButtonViewModel.tabActiveStatus.value = true
         }
+        binding.buttonDraf.setOnClickListener {
+            Log.d("ProjectFragment", "onViewCreated: buttonDraft")
+            tabButtonViewModel.tabActiveStatus.value = false
+
+        }
+
+        lifecycleScope.launch {
+
+            if (tabButtonViewModel.isActive()) {
+                setTabToActive()
+
+            } else {
+                setTabToDraf()
+            }
+
+
+
+            tabButtonViewModel.tabActiveStatus.observe(viewLifecycleOwner) {
+                if (it) {
+                    setTabToActive()
+                } else {
+                    setTabToDraf()
+                }
+            }
+
+
+            binding.buttonSearch.setOnClickListener {
+                val filter = binding.textEditSearchFilter.text.toString()
+                visibleThreshold = 5
+                setRecyclerListProject(currentStatus, filter)
+            }
+
+        }
+
 
 
     }
 
+    private fun setTabToDraf() {
+        Log.w("ProjectFragment", "setTabToDraf: ")
+        binding.buttonAktif.isActivated = false
+        binding.buttonAktif.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        binding.buttonDraf.isActivated = true
+        binding.buttonDraf.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
 
 
-    private fun setRecyclerListProject() {
-        projectAdapter = ProjectAdapter(requireContext())
+        currentStatus = false
+        setRecyclerListProject(currentStatus)
+    }
+
+    private fun setTabToActive() {
+        Log.w("ProjectFragment", "setTabToActive: ")
+        binding.buttonAktif.isActivated = true
+        binding.buttonAktif.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+        binding.buttonDraf.isActivated = false
+        binding.buttonDraf.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+
+
+        currentStatus = true
+        setRecyclerListProject(currentStatus)
+    }
+
+
+
+    private fun setRecyclerListProject(status: Boolean, filter : String = "") {
 
         binding.recylerViewProjects.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = projectAdapter
 
             lifecycleScope.launch {
-                loadProjects()
+                loadProjects(status, filter)
             }
 
         }
@@ -135,34 +221,41 @@ class ProjectFragment : Fragment() {
                         _isLoading.value = true
                         visibleThreshold += 3
 
+                        binding.progressBarProject.visibility = View.VISIBLE
+
                         lifecycleScope.launch {
-                            loadProjects()
+                            loadProjects(status, filter)
                         }
                     }
                 }
 
-            })
+            }
+        )
 
     }
 
 
-    private suspend fun loadProjects() {
-        Log.d("ProjectFragment", "loadProjects: visibleThreshold: $visibleThreshold")
-        val projects = withContext(Dispatchers.IO) {
-            projectViewModel.allProjectsPaginated(visibleThreshold, 0)
-        }
-        projects.observe(viewLifecycleOwner) { projects ->
-            if (projects.isEmpty()) {
-                binding.frameLayoutBelumAdaProyek.visibility = View.VISIBLE
-            } else {
-                binding.frameLayoutBelumAdaProyek.visibility = View.GONE
+    private suspend fun loadProjects(status : Boolean, filter : String = "") {
+        withContext(Dispatchers.Main) {
+            Log.d("ProjectFragment", "loadProjects: visibleThreshold: $visibleThreshold")
+            val projects = withContext(Dispatchers.IO) {
+                projectViewModel.allProjectsPaginated(visibleThreshold, 0, status, filter)
             }
+            projects.observe(viewLifecycleOwner) { listProjects ->
+                if (listProjects.isEmpty()) {
+                    binding.frameLayoutBelumAdaProyek.visibility = View.VISIBLE
+                } else {
+                    binding.frameLayoutBelumAdaProyek.visibility = View.GONE
+                }
 
-            // Update the list of projects
-            projectAdapter.submitList(projects)
+                // Update the list of projects
+                projectAdapter.submitList(listProjects)
 
-            _isLoading.value = false
+                _isLoading.value = false
+                binding.progressBarProject.visibility = View.GONE
+            }
         }
+
     }
 
 
