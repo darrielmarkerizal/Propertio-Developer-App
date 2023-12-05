@@ -28,6 +28,20 @@ class ProjectMediaViewModel : ViewModel() {
         return Pair(photos.getOrNull(index), index)
     }
 
+    fun add(
+        projectPhotos  : List<LitePhotosModel> = emptyList(),
+        videoLink : String? = null,
+        virtualTourName : String? = null,
+        virtualTourLink : String? = null,
+        documentFilePath : String? = null
+    ){
+        this.projectPhotos.postValue(projectPhotos)
+        this.videoLink = videoLink
+        this.virtualTourName = virtualTourName
+        this.virtualTourLink = virtualTourLink
+        this.documentFilePath = documentFilePath
+    }
+
 
 }
 

@@ -204,11 +204,6 @@ class CreateProjectLokasiFragment : Fragment() {
         }
 
         activityBinding.floatingButtonNext.setOnClickListener {
-            if (projectInformationLocationViewModel.isAlreadyUploaded) {
-                formActivity.onNextButtonProjectManagementClick()
-                return@setOnClickListener
-            }
-
             if (!isProvinceSelected && !isCitySelected && !isDistrictSelected) {
                 binding.spinnerProvinceProject.error = "Wajib diisi"
                 binding.spinnerCityProject.error = "Wajib diisi"
@@ -293,7 +288,7 @@ class CreateProjectLokasiFragment : Fragment() {
 
 
             // Form Request
-            if (projectInformationLocationViewModel.isAlreadyUploaded) {
+            if (projectInformationLocationViewModel.isUploaded) {
                 updateProjectLocation(
                     headlineBody,
                     titleBody,
@@ -388,7 +383,7 @@ class CreateProjectLokasiFragment : Fragment() {
                     val responseData = response.body()?.data
                     if (responseData != null) {
                         formActivity.projectId = responseData.id
-                        projectInformationLocationViewModel.isAlreadyUploaded = true
+                        projectInformationLocationViewModel.isAlreadyUploaded.postValue(true)
                         Toast.makeText(requireActivity(), "Berhasil membuat project", Toast.LENGTH_SHORT).show()
                         formActivity.onNextButtonProjectManagementClick()
                     } else {
@@ -463,7 +458,7 @@ class CreateProjectLokasiFragment : Fragment() {
                     val responseData = response.body()?.data
                     if (responseData != null) {
                         formActivity.projectId = responseData.id
-                        projectInformationLocationViewModel.isAlreadyUploaded = true
+                        projectInformationLocationViewModel.isAlreadyUploaded.postValue(true)
                         Toast.makeText(requireActivity(), "Berhasil membuat project", Toast.LENGTH_SHORT).show()
                         formActivity.onNextButtonProjectManagementClick()
                     } else {
