@@ -6,6 +6,7 @@ import com.propertio.developer.api.models.DefaultResponse
 import com.propertio.developer.api.models.UnitMinimum
 import com.propertio.developer.model.ProjectVideo
 import com.propertio.developer.model.ProjectVirtualTour
+import com.propertio.developer.model.UnitVirtualTour
 
 class UnitDetailResponse : DefaultResponse() {
     @SerializedName("data")
@@ -27,7 +28,7 @@ class UnitDetailResponse : DefaultResponse() {
 
         @SerializedName("unitVirtualTour")
         @Expose
-        var unitVirtualTour: ProjectVirtualTour? = null
+        var unitVirtualTour: List<UnitVirtualTour>? = null
         // TODO: Define type of unitVirtualTour
 
         @SerializedName("unitVideo")

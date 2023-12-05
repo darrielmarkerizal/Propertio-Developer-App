@@ -116,6 +116,7 @@ interface DeveloperApi {
     @POST("v1/cms/project-management/{project_id}/unit-photo")
     fun uploadUnitPhoto(
         @Path("project_id") projectId : String,
+        @Part("unit_id") unitId: RequestBody,
         @Part files: List<MultipartBody.Part>
     ): Call<PostStoreUnitPhotoResponse>
 
