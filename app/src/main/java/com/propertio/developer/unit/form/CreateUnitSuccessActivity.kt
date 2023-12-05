@@ -6,7 +6,6 @@ import com.propertio.developer.R
 import com.propertio.developer.databinding.ActivityUnitSuccessBinding
 
 class CreateUnitSuccessActivity : AppCompatActivity() {
-
     private val binding by lazy { ActivityUnitSuccessBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,7 +14,11 @@ class CreateUnitSuccessActivity : AppCompatActivity() {
         with(binding) {
             buttonKembaliKeDetailProyek.setOnClickListener {
                 finish()
-            }
+
+        binding.buttonKembaliKeDetailProyek.setOnClickListener {
+            setResult(RESULT_OK)
+            finish()
+
         }
     }
 }

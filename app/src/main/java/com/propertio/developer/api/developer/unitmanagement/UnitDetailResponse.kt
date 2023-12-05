@@ -4,13 +4,19 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.propertio.developer.api.models.DefaultResponse
 import com.propertio.developer.api.models.UnitMinimum
+import com.propertio.developer.model.ProjectVideo
+import com.propertio.developer.model.ProjectVirtualTour
 
 class UnitDetailResponse : DefaultResponse() {
     @SerializedName("data")
     @Expose
-    var data: List<Unit>? = null
+    var data: Unit? = null
 
     class Unit : UnitMinimum() {
+        @SerializedName("property_type")
+        @Expose
+        var propertyType: String? = null
+
         @SerializedName("unitPhotos")
         @Expose
         var unitPhotos: List<UnitPhoto>? = null
@@ -21,12 +27,12 @@ class UnitDetailResponse : DefaultResponse() {
 
         @SerializedName("unitVirtualTour")
         @Expose
-        var unitVirtualTour: List<*>? = null
+        var unitVirtualTour: ProjectVirtualTour? = null
         // TODO: Define type of unitVirtualTour
 
         @SerializedName("unitVideo")
         @Expose
-        var unitVideo: String? = null
+        var unitVideo: ProjectVideo? = null
 
         @SerializedName("unitDocuments")
         @Expose

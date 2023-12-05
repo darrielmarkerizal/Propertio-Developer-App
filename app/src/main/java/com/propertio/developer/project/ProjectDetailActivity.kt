@@ -28,6 +28,8 @@ import com.propertio.developer.carousel.CarouselAdapter
 import com.propertio.developer.carousel.ImageData
 import com.propertio.developer.database.project.ProjectTable
 import com.propertio.developer.databinding.ActivityProjectDetailBinding
+import com.propertio.developer.project.list.FileThumbnailAdapter
+import com.propertio.developer.unit.UnitDetailActivity
 import com.propertio.developer.unit.form.UnitFormActivity
 import com.propertio.developer.unit.list.UnitAdapter
 import kotlinx.coroutines.launch
@@ -59,6 +61,14 @@ class ProjectDetailActivity : AppCompatActivity() {
     ) { result ->
         if (result.resultCode == RESULT_OK) {
             Log.d("ProjectDetailActivity", "Unit created successfully")
+        }
+    }
+
+    private val launcherToDetailUnit = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            Log.d("ProjectDetailActivity", "Unit updated successfully")
         }
     }
 
@@ -153,7 +163,7 @@ class ProjectDetailActivity : AppCompatActivity() {
     private fun observeUnits() {
         Log.d("ProjectDetailActivity", "observeUnits: $unitList")
         unitList.observe(this) {
-            val adapter = UnitAdapter(this, unitList)
+            val adapter = unitAdapter
             binding.recyclerViewUnit.adapter = adapter
         }
     }
@@ -201,9 +211,23 @@ class ProjectDetailActivity : AppCompatActivity() {
 
     }
 
+
     private fun setUnitRecycler() {
         Log.d("ProjectDetailActivity", "setUnitRecycler: $unitList")
-        unitAdapter = UnitAdapter(this, unitList)
+        unitAdapter = UnitAdapter(
+            unitList,
+            onClickUnit = {
+                if (projectId != null) {
+                    Log.d("onClickUnitCard", "Unit clicked: ${it.id} & ${projectId}")
+                    val intentToDetail = Intent(this, UnitDetailActivity::class.java)
+                    intentToDetail.putExtra(PROJECT_DETAIL_UID, it.id)
+                    intentToDetail.putExtra(PROJECT_DETAIL_PID, projectId)
+                    launcherToDetailUnit.launch(intentToDetail)
+                } else {
+                    Log.w("onClickUnitCard", "projectId is null")
+                }
+            }
+        )
         binding.recyclerViewUnit.apply {
             adapter = unitAdapter
             layoutManager = LinearLayoutManager(this@ProjectDetailActivity)
@@ -239,8 +263,9 @@ class ProjectDetailActivity : AppCompatActivity() {
 
                         loadTextBasedData(project)
                         loadTagsData(project)
-                        loadVideo(project.projectVideos)
+                        loadVideo(project.projectVideos?.linkVideoURL)
                         loadImage(project.projectPhotos)
+                        loadDocument(project.projectDocuments)
 
                         updateTable(project)
 
@@ -276,6 +301,26 @@ class ProjectDetailActivity : AppCompatActivity() {
                 Log.e("ProjectDetailActivity", "onFailure: $t")
             }
         })
+    }
+
+    private fun loadDocument(projectDocuments: List<ProjectDetail.ProjectDeveloper.ProjectDocument>?) {
+        binding.containerCardFileThumbnail.apply {
+            if (projectDocuments.isNullOrEmpty()) {
+                Log.w("ProjectDetailActivity", "projectDocuments is null")
+            } else {
+                Log.d("ProjectDetailActivity", "projectDocuments: $projectDocuments")
+                layoutManager = LinearLayoutManager(this@ProjectDetailActivity, LinearLayoutManager.VERTICAL, false)
+                adapter = FileThumbnailAdapter(
+                    projectDocuments = projectDocuments,
+                    onClickFile = {
+                        val intent = Intent(Intent.ACTION_VIEW)
+                        intent.data = Uri.parse(DomainURL.DOMAIN + it.filename)
+                        startActivity(intent)
+                    }
+                )
+
+            }
+        }
     }
 
     private fun updateTable(project: ProjectDetail.ProjectDeveloper) {
@@ -321,31 +366,23 @@ class ProjectDetailActivity : AppCompatActivity() {
     }
 
 
-    private fun loadVideo(videos: List<ProjectDetail.ProjectDeveloper.ProjectVideo>?) {
-        if (videos != null) {
-            var found = false
-            for (video in videos) {
-                Log.d("ProjectDetailActivity", "video: ${video.linkVideoURL}")
+    private fun loadVideo(videoUrl: String?) {
+        Log.d("ProjectDetailActivity", "loadVideo: $videoUrl")
+        if (videoUrl != null) {
+            Log.d("ProjectDetailActivity", "video: ${videoUrl}")
 
-                if (video.linkVideoURL != null) {
-                    val webView: WebView = binding.webViewVideo
+            val webView: WebView = binding.webViewVideo
 
-                    val videoId = extractVideoIdFromUrl(video.linkVideoURL!!)
-                    if (videoId == "") {
-                        Log.w("ProjectDetailActivity", "videoId is empty")
-                        break
-                    }
-
-                    webView.settings.javaScriptEnabled = true
-                    webView.loadUrl("https://www.youtube.com/embed/$videoId")
-                    found = true
-                    break
-                }
+            val videoId = extractVideoIdFromUrl(videoUrl)
+            if (videoId == "") {
+                Log.w("ProjectDetailActivity", "videoId is empty")
+                return@loadVideo
             }
-            if (!found) {
-                Log.w("ProjectDetailActivity", "No video found")
-                binding.groupVideoDetailProject.visibility = TextView.GONE
-            }
+            webView.settings.javaScriptEnabled = true
+            webView.loadUrl("https://www.youtube.com/embed/$videoId")
+
+            binding.groupVideoDetailProject.visibility = TextView.VISIBLE
+
         } else {
             Log.w("ProjectDetailActivity", "videos is null")
             binding.groupVideoDetailProject.visibility = TextView.GONE
@@ -353,7 +390,7 @@ class ProjectDetailActivity : AppCompatActivity() {
 
     }
 
-    fun extractVideoIdFromUrl(url: String): String {
+    private fun extractVideoIdFromUrl(url: String): String {
         val pattern = "(?<=watch\\?v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|\\/e\\/|watch\\?v%3D|watch\\?feature=player_embedded&v=|%2Fvideos%2F|embed%\u200C\u200B2F|youtu.be%2F|%2Fv%2F)[^#\\&\\?\\n]*"
         val compiledPattern = Pattern.compile(pattern)
         val matcher = compiledPattern.matcher(url)
@@ -371,7 +408,17 @@ class ProjectDetailActivity : AppCompatActivity() {
             textViewPropertyType.text = project.propertyType?.name ?: textViewPropertyType.text.toString()
             textViewCertificateType.text = project.certificate
 
-            iconPropertyType.load(project.propertyType?.icon) {
+            val imageUrl = if (project.propertyType?.icon != null) {
+                if (project.propertyType?.icon!!.startsWith("http")) {
+                    project.propertyType?.icon
+                } else {
+                    DomainURL.DOMAIN + project.propertyType?.icon
+                }
+            } else {
+                null
+            }
+
+            iconPropertyType.load(imageUrl) {
                 crossfade(true)
                 placeholder(R.drawable.home)
                 error(R.drawable.home)
@@ -389,7 +436,7 @@ class ProjectDetailActivity : AppCompatActivity() {
             textViewCompletedAt.text = project.completedAt ?: textViewCompletedAt.text.toString()
             Log.i("ProjectDetailActivity", "loadTextBasedData Without Formatter Success")
             textViewViews.text = NumericalUnitConverter.unitFormatter(project.countViews ?: 0, false)
-            textViewPublished.text = datesFormatter(project.postedAt)
+            textViewPublished.text = datesFormatter(project.createdAt)
             textViewAddress.text = addressFormatter(project.address)
 
         }
@@ -413,7 +460,7 @@ class ProjectDetailActivity : AppCompatActivity() {
         val dates = createDate ?: "0000-01-01 00:00:00"
         Log.d("ProjectDetailActivity", "dates: $dates")
 
-        val date = dates!!.split(" ")[0].split("-")
+        val date = dates.split(" ", "T")[0].split("-")
         val year = date[0]
         val month = listOfMonth[date[1].toInt() -1]
         val day = date[2]
@@ -444,6 +491,8 @@ class ProjectDetailActivity : AppCompatActivity() {
     companion object {
         // NAME
         const val PROJECT_ID = "project_id"
+        const val PROJECT_DETAIL_UID = "project_detail_uid"
+        const val PROJECT_DETAIL_PID = "project_detail_pid"
     }
 
 
