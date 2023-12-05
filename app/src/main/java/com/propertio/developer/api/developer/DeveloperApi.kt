@@ -8,6 +8,7 @@ import com.propertio.developer.api.developer.projectmanagement.ProjectListRespon
 import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResponse
 import com.propertio.developer.api.developer.type.GeneralTypeResponse
 import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
+import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitRequest
 import com.propertio.developer.model.Caption
 import com.propertio.developer.model.StatusProject
@@ -155,4 +156,10 @@ interface DeveloperApi {
         @Body status : StatusProject
     ) : Call<UpdateProjectResponse>
 
+
+    @GET("v1/cms/project-management/{projectId}/unit/{unitId}")
+    fun getUnitDetail(
+        @Path("projectId") projectId : Int,
+        @Path("unitId") unitId : Int
+    ) : Call<UnitDetailResponse>
 }

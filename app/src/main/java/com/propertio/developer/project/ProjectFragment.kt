@@ -130,6 +130,25 @@ class ProjectFragment : Fragment() {
             },
             onClickMore = { data, button ->
                 horizontalMoreButtonPopUp(data, button)
+            },
+            onClickRepost = {data ->
+                developerApi.repostProject(data.id).enqueue(object : Callback<UpdateProjectResponse> {
+                    override fun onResponse(
+                        call: Call<UpdateProjectResponse>,
+                        response: Response<UpdateProjectResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.d("ProjectFragment", "onResponse: ${response.body()?.message}")
+                        } else {
+                            Log.d("ProjectFragment", "onResponse: ${response.errorBody()?.string()}")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UpdateProjectResponse>, t: Throwable) {
+                        Log.e("ProjectFragment", "onFailure: ", t)
+                    }
+
+                })
             }
         )
         return binding.root
