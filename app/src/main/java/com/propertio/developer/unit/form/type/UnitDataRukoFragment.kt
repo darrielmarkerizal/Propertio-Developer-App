@@ -125,6 +125,28 @@ class UnitDataRukoFragment : Fragment() {
         }
 
         activityBinding?.floatingButtonBack?.setOnClickListener {
+            val luas_tanah = binding.editLuasTanahRuko.text.toString()
+            val luas_bangunan = binding.editLuasBangunanRuko.text.toString()
+            val lantai = binding.edtJumlahLantaiRuko.text.toString()
+            val kamar = binding.editKamarRuko.text.toString()
+            val kamar_mandi = binding.edtKamarMandiRuko.text.toString()
+            val parking_type = binding.spinnerTempatParkirRuko.text.toString()
+            val electricity_type = binding.spinnerDayaListrikRuko.text.toString()
+            val water_type = binding.spinnerJenisAirRuko.text.toString()
+            val interior_type = binding.spinnerInteriorRuko.text.toString()
+            val road_access_type = binding.spinnerAksesJalanRuko.text.toString()
+
+            formActivity.unitFormViewModel.updateLuasTanah(luas_tanah)
+            formActivity.unitFormViewModel.updateLuasBangunan(luas_bangunan)
+            formActivity.unitFormViewModel.updateJumlahLantai(lantai)
+            formActivity.unitFormViewModel.updateJumlahKamar(kamar)
+            formActivity.unitFormViewModel.updateJumlahKamarMandi(kamar_mandi)
+            formActivity.unitFormViewModel.updateParkingType(parking_type)
+            formActivity.unitFormViewModel.updateElectricityType(electricity_type)
+            formActivity.unitFormViewModel.updateWaterType(water_type)
+            formActivity.unitFormViewModel.updateInteriorType(interior_type)
+            formActivity.unitFormViewModel.updateRoadAccessType(road_access_type)
+
             formActivity.onBackButtonUnitManagementClick()
         }
 

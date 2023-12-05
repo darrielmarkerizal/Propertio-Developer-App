@@ -115,6 +115,24 @@ class UnitDataPabrikFragment : Fragment() {
         }
         
         activityBinding?.floatingButtonBack?.setOnClickListener {
+            val luas_tanah = binding.editLuasTanahPabrik.text.toString()
+            val luas_bangunan = binding.editLuasBangunanPabrik.text.toString()
+            val kamar_mandi = binding.edtKamarMandiPabrik.text.toString()
+            val parking_type = binding.spinnerTempatParkirPabrik.text.toString()
+            val electricity_type = binding.spinnerDayaListrikPabrik.text.toString()
+            val water_type = binding.spinnerJenisAirPabrik.text.toString()
+            val interior_type = binding.spinnerInteriorPabrik.text.toString()
+            val road_access_type = binding.spinnerAksesJalanPabrik.text.toString()
+
+            formActivity?.unitFormViewModel?.updateLuasTanah(luas_tanah)
+            formActivity?.unitFormViewModel?.updateLuasBangunan(luas_bangunan)
+            formActivity?.unitFormViewModel?.updateJumlahKamarMandi(kamar_mandi)
+            formActivity?.unitFormViewModel?.updateParkingType(parking_type)
+            formActivity?.unitFormViewModel?.updateElectricityType(electricity_type)
+            formActivity?.unitFormViewModel?.updateWaterType(water_type)
+            formActivity?.unitFormViewModel?.updateInteriorType(interior_type)
+            formActivity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
+
             formActivity.onBackButtonUnitManagementClick()
         }
         

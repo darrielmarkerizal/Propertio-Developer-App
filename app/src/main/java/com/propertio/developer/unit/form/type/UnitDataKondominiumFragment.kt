@@ -115,6 +115,24 @@ class UnitDataKondominiumFragment : Fragment() {
         }
         
         activityBinding.floatingButtonBack.setOnClickListener {
+            val luas_bangunan = binding.editLuasBangunanKondominium.text.toString()
+            val kamar = binding.edtJumlahKamarKondominium.text.toString()
+            val kamar_mandi = binding.edtJumlahKamarMandiKondominium.text.toString()
+            val parking_type = binding.spinnerTempatParkirKondominium.text.toString()
+            val electricity_type = binding.spinnerDayaListrikKondominium.text.toString()
+            val water_type = binding.spinnerJenisAirKondominium.text.toString()
+            val interior_type = binding.spinnerInteriorKondominium.text.toString()
+            val road_access_type = binding.spinnerAksesJalanKondominium.text.toString()
+
+            formActivity?.unitFormViewModel?.updateLuasBangunan(luas_bangunan)
+            formActivity?.unitFormViewModel?.updateJumlahKamar(kamar)
+            formActivity?.unitFormViewModel?.updateJumlahKamarMandi(kamar_mandi)
+            formActivity?.unitFormViewModel?.updateParkingType(parking_type)
+            formActivity?.unitFormViewModel?.updateElectricityType(electricity_type)
+            formActivity?.unitFormViewModel?.updateWaterType(water_type)
+            formActivity?.unitFormViewModel?.updateInteriorType(interior_type)
+            formActivity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
+
             formActivity.onBackButtonUnitManagementClick()
         }
         
