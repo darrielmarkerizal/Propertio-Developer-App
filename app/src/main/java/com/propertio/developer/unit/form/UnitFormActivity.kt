@@ -38,6 +38,7 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
 
     private var currentFragmentIndex = 0
     internal var unitId : Int? = null
+    internal var projectId : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
