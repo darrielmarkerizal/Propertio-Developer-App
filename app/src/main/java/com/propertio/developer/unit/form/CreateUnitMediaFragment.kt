@@ -45,13 +45,7 @@ class CreateUnitMediaFragment : Fragment() {
 
     private val binding by lazy { FragmentCreateUnitMediaBinding.inflate(layoutInflater) }
     private val formActivity by lazy { activity as UnitFormActivity }
-    private val activityBinding by lazy { formActivity?.binding }
-
-    val unitId = formActivity?.unitId ?: 0
-    val unitIdBody = unitId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-
-    val projectId = formActivity?.unitFormViewModel?.projectId?.value ?: 0
-    val projectIdBody = projectId.toString()
+    private val activityBinding by lazy { formActivity.binding }
 
     private val developerApi by lazy {
         Retro(TokenManager(requireContext()).token)
@@ -139,7 +133,7 @@ class CreateUnitMediaFragment : Fragment() {
                         if (response.isSuccessful) {
                             Log.d("CreateUnitMediaFragment", "onResponse id $id: ${response.body()?.message}")
                             lifecycleScope.launch {
-                                fetchUnitPhotos(projectId, formActivity?.unitId ?: 0)
+                                fetchUnitPhotos(projectId.toInt(), formActivity?.unitId ?: 0)
                                 Log.d("CreateUnitMediaFragment", "onResponse id $id: ${response.body()?.message}")
                             }
                         } else {
@@ -247,7 +241,7 @@ class CreateUnitMediaFragment : Fragment() {
         }
 
         activityBinding?.floatingButtonBack?.setOnClickListener {
-            formActivity.onBackButtonUnitManagementClick()
+            formActivity?.onBackButtonUnitManagementClick()
         }
 
         activityBinding?.floatingButtonNext?.setOnClickListener {
@@ -336,7 +330,7 @@ class CreateUnitMediaFragment : Fragment() {
                 }
             })
 
-            formActivity.onNextButtonUnitManagementClick()
+            formActivity?.onNextButtonUnitManagementClick()
 
         }
     }
