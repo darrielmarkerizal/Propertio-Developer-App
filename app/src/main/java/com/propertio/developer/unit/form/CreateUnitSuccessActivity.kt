@@ -14,11 +14,12 @@ class CreateUnitSuccessActivity : AppCompatActivity() {
         with(binding) {
             buttonKembaliKeDetailProyek.setOnClickListener {
                 finish()
+            }
 
         binding.buttonKembaliKeDetailProyek.setOnClickListener {
             setResult(RESULT_OK)
             finish()
 
         }
-    }
+    }}
 }

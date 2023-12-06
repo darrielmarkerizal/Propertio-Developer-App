@@ -2,8 +2,10 @@ package com.propertio.developer.unit.form
 
 import android.app.Activity
 import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,15 +13,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.propertio.developer.R
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.unitmanagement.PostStoreUnitPhotoResponse
+import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
 import com.propertio.developer.databinding.FragmentCreateUnitMediaBinding
 import com.propertio.developer.model.Caption
+import com.propertio.developer.model.LitePhotosModel
 import com.propertio.developer.unit.UnitMediaViewModel
 import com.propertio.developer.unit.list.UnggahFotoAdapter
 import com.propertio.developer.unit_management.UpdateUnitResponse
@@ -40,7 +45,7 @@ class CreateUnitMediaFragment : Fragment() {
 
     private val binding by lazy { FragmentCreateUnitMediaBinding.inflate(layoutInflater) }
     private val formActivity by lazy { activity as UnitFormActivity }
-    private val activityBinding by lazy { formActivity?.binding }
+    private val activityBinding by lazy { formActivity.binding }
 
     private val developerApi by lazy {
         Retro(TokenManager(requireContext()).token)
@@ -128,7 +133,8 @@ class CreateUnitMediaFragment : Fragment() {
                         if (response.isSuccessful) {
                             Log.d("CreateUnitMediaFragment", "onResponse id $id: ${response.body()?.message}")
                             lifecycleScope.launch {
-                                fetchUnitPhotos(formActivity?.unitId ?: 0)
+                                fetchUnitPhotos(projectId.toInt(), formActivity?.unitId ?: 0)
+                                Log.d("CreateUnitMediaFragment", "onResponse id $id: ${response.body()?.message}")
                             }
                         } else {
                             Log.e("CreateUnitMediaFragment", "onResponse id $id: ${response.errorBody()?.string()}")
@@ -153,7 +159,8 @@ class CreateUnitMediaFragment : Fragment() {
                         if (response.isSuccessful) {
                             Log.d("CreateUnitMediaFragment", "onResponse id $id: ${response.body()?.message}")
                             lifecycleScope.launch {
-                                fetchUnitPhotos(formActivity?.unitId ?: 0)
+                                fetchUnitPhotos(formActivity?.projectId ?: 0, formActivity?.unitId ?: 0)
+                                Log.d("CreateUnitMediaFragment", "onResponse id $id: ${response.body()?.message}")
                             }
                         } else {
                             Log.e("CreateUnitMediaFragment", "onResponse id $id: ${response.errorBody()?.string()}")
@@ -169,7 +176,7 @@ class CreateUnitMediaFragment : Fragment() {
         }
     }
 
-    private fun deletePhoto(projectId: String, id: Int) {
+    private fun deletePhoto(projectId: String, id: Int, isMessage: Boolean = true) {
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 developerApi.deleteUnitPhoto(projectId, id).enqueue(object :
@@ -178,7 +185,8 @@ class CreateUnitMediaFragment : Fragment() {
                         if (response.isSuccessful) {
                             Log.d("CreateUnitMediaFragment", "onResponse id $id: ${response.body()?.message}")
                             lifecycleScope.launch {
-                                fetchUnitPhotos(formActivity?.unitId ?: 0)
+                                fetchUnitPhotos(formActivity?.projectId ?: 0, formActivity?.unitId ?: 0)
+                                Log.d("CreateUnitMediaFragment", "onResponse id $id: ${response.body()?.message}")
                             }
                         } else {
                             Log.e("CreateUnitMediaFragment", "onResponse id $id: ${response.errorBody()?.string()}")
@@ -198,10 +206,144 @@ class CreateUnitMediaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        if (documentUri == null) {
+            binding.cardDocumentUnitPropertyThumbnail.root.visibility = View.GONE
+        }
+
+        binding.buttonUnggahPhotoUnit.setOnClickListener{
+            pickPhoto()
+        }
+
+        setListUnggahFotoRecycler()
+        photosPreviewObserver()
+
+        binding.linkTextViewUnitPhotoDelete.setOnClickListener{
+            deleteAllPhotos()
+        }
+
+        validateYoutubeLinkObserver()
+
+        binding.linkTextUnitVideoTutorial.setOnClickListener{
+            openTutorialVideo()
+        }
+
+        binding.buttonHubungiKamiMediaUnit.setOnClickListener{
+            openContactUs()
+        }
+
+        binding.buttonHubungiKamiMediaUnit2.setOnClickListener {
+            openContactUs()
+        }
+
+        binding.buttonTambahkanDokumenUnit.setOnClickListener{
+            pickDocument()
+        }
+
+        activityBinding?.floatingButtonBack?.setOnClickListener {
+            formActivity?.onBackButtonUnitManagementClick()
+        }
+
+        activityBinding?.floatingButtonNext?.setOnClickListener {
+            val retro = Retro(TokenManager(requireContext()).token)
+                .getRetroClientInstance()
+                .create(DeveloperApi::class.java)
+
+            val projectId = formActivity?.projectId.toString()
+            val unitId = formActivity?.unitId ?: 0
+            val youtubeLink = binding.editTextLinkYoutubeMediaUnit.text.toString()
+            val virtualTour = binding.editLinkVirtualTourUnit.text.toString()
+            val virtualTourLink = binding.editLinkVirtualTourUnit.text.toString()
+            val modelLink = binding.editLinkModelUnit.text.toString()
+
+            var unitIdBody = unitId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+            var youtubeLinkBody = youtubeLink.toRequestBody("text/plain".toMediaTypeOrNull())
+            var virtualTourBody = virtualTour.toRequestBody("text/plain".toMediaTypeOrNull())
+            var virtualTourLinkBody = virtualTourLink.toRequestBody("text/plain".toMediaTypeOrNull())
+            var modelLinkBody = modelLink.toRequestBody("text/plain".toMediaTypeOrNull())
+
+
+            var documentBody : MultipartBody.Part? = null
+
+            if (documentUri != null) {
+                Log.d("CreateUnitMediaFragment", "onViewCreated: $documentUri")
+                val fileDir = requireContext().applicationContext.filesDir
+                val file = File(fileDir, "unit_document.pdf")
+                val fileInputStream = requireContext().contentResolver.openInputStream(documentUri!!)
+                val fileOutputStream = FileOutputStream(file)
+                fileInputStream!!.copyTo(fileOutputStream)
+                fileInputStream.close()
+                fileOutputStream.close()
+
+                val fileSizeInBytes = file.length()
+                val fileSizeInKB = fileSizeInBytes / 1024
+                val fileSizeInMB = fileSizeInKB / 1024
+
+                val maxFileSizeInMB = 4
+
+                if (fileSizeInMB > maxFileSizeInMB) {
+                    Toast.makeText(requireContext(), "File terlalu besar", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                documentBody = MultipartBody.Part.createFormData(
+                    "document_file",
+                    file.name,
+                    file.asRequestBody("application/pdf".toMediaTypeOrNull())
+                )
+            } else {
+                Log.d("CreateUnitMediaFragment", "onViewCreated: documentUri is null")
+                val file = File(requireContext().applicationContext.filesDir, "unit_document.pdf")
+
+                documentBody = MultipartBody.Part.createFormData(
+                    "document_file",
+                    file.name,
+                    file.asRequestBody("application/pdf".toMediaTypeOrNull())
+                )
+            }
+
+            retro.uploadAnotherUnitMedia(
+                projectId = projectId,
+                unitId = unitIdBody,
+                videoLink = youtubeLinkBody,
+                virtualTourName = virtualTourBody,
+                virtualTourLink = virtualTourLinkBody,
+                document_file = documentBody,
+                modelLink = modelLinkBody
+            ).enqueue(object : Callback<UpdateUnitResponse> {
+                override fun onResponse(
+                    call: Call<UpdateUnitResponse>,
+                    response: Response<UpdateUnitResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d("CreateUnitMediaFragment", "onResponse: ${response.body()}")
+                        Toast.makeText(requireActivity(), "Berhasil menambahkan media unit", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse: ${response.body()}")
+                        Toast.makeText(requireActivity(), "Gagal menambahkan mediaunit", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<UpdateUnitResponse>, t: Throwable) {
+                    Log.e("CreateUnitMediaFragment", "onFailure: ${t.message}")
+                    Toast.makeText(requireActivity(), "Gagal menambahkan media unit", Toast.LENGTH_SHORT).show()
+                }
+            })
+
+            formActivity?.onNextButtonUnitManagementClick()
+
+        }
     }
 
     private fun uploadPhotos(uri: Uri) {
         Log.d("CreateUnitMediaFragment", "uploadPhotos: $uri")
+
+        val unitId = formActivity?.unitId ?: 0
+        val unitIdBody = unitId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+
+        val projectId = formActivity?.unitFormViewModel?.projectId?.value ?: 0
+        val projectIdBody = projectId.toString()
+
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
 
@@ -225,17 +367,170 @@ class CreateUnitMediaFragment : Fragment() {
                 }
 
                 val files = MultipartBody.Part.createFormData(
-                    "photo_file",
+                    "photo_file[]",
                     file.name,
                     file.asRequestBody("image/*".toMediaTypeOrNull())
                 )
 
-                val unitId = formActivity?.unitId ?: 0
-                val unitIdBody = unitId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                developerApi.uploadUnitPhoto(
+                    projectId = projectIdBody,
+                    unitId = unitIdBody,
+                    files = listOf(files)
+                ).enqueue(object : Callback<PostStoreUnitPhotoResponse> {
+                    override fun onResponse(
+                        call: Call<PostStoreUnitPhotoResponse>,
+                        response: Response<PostStoreUnitPhotoResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.d("CreateUnitMediaFragment", "onResponse: ${response.body()}")
+                            lifecycleScope.launch {
+                                fetchUnitPhotos(projectId, formActivity?.unitId ?: 0)
+                                imageUri = null
+                                Log.d("CreateUnitMediaFragment", "onResponse: ${response.body()}")
+                            }
+                        } else {
+                            Log.e("CreateUnitMediaFragment", "onResponse gagal: ${response.body()}")
+                            Log.e("CreateUnitMediaFragment", "onResponse gagal 2: ${response.errorBody()?.string()}")
+                            Log.e("CreateUnitMediaFragment", "onResponse gagal 3: ${response.message()}")
+                            Log.e("CreateUnitMediaFragment", "onResponse gagal 4: ${response.raw()}")
+                            Log.e("CreateUnitMediaFragment", "onResponse gagal 5: ${response.code()}")
+                            Log.e("CreateUnitMediaFragment", "onResponse gagal 6: ${response.headers()}")
+                            Log.d("CreateUnitMediaFragment", "projectId: $projectId and unitId: $unitId")
 
-                val projectId = formActivity?.unitFormViewModel.projectId.value ?: 0
-                val projectIdBody = projectId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                            Toast.makeText(context, "Gagal Mengunggah Photo", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<PostStoreUnitPhotoResponse>, t: Throwable) {
+                        Log.e("CreateUnitMediaFragment", "onFailure: ${t.message}")
+                        Toast.makeText(context, "Gagal Mengunggah Photo", Toast.LENGTH_SHORT).show()
+                    }
+                })
             }
         }
+    }
+
+    private suspend fun fetchUnitPhotos(projectId: Int, unitId: Int) {
+        withContext(Dispatchers.IO) {
+            developerApi.getUnitDetail(projectId, unitId).enqueue(object : Callback<UnitDetailResponse> {
+                override fun onResponse(
+                    call: Call<UnitDetailResponse>,
+                    response: Response<UnitDetailResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d("CreateUnitMediaFragment", "onResponse: ${response.body()}")
+                        val unitId = formActivity?.unitId.toString()
+                        val data = response.body()?.data
+                        val photos = data?.unitPhotos
+                        if (photos != null) {
+                            unitMediaViewModdel.unitPhoto.value = photos.map {
+                                LitePhotosModel(
+                                    id = it.id,
+                                    projectId = unitId, // Note : Tidak project ID di reponse
+                                    filePath = it.filename,
+                                    isCover = it.isCover!!.toInt(),
+                                    caption = it.caption
+                                )
+                            }
+
+                            Log.d(
+                                "CreateUnitMediaFragment",
+                                "onResponse: ${unitMediaViewModdel.unitPhoto.value}"
+                            )
+                        }
+                    } else {
+                        Log.e("CreateUnitMediaFragment", "Error onResponse disini: ${response.body()}")
+                        Log.e("CreateUnitMediaFragment", "Error onResponse disini 2: ${response.errorBody()?.string()}")
+                        Log.e("CreateUnitMediaFragment", "Error onResponse disini 3: ${response.message()}")
+                        Log.e("CreateUnitMediaFragment", "Error onResponse disini 4: ${response.raw()}")
+                        Log.e("CreateUnitMediaFragment", "Error onResponse disini 5: ${response.code()}")
+                        Log.e("CreateUnitMediaFragment", "Error onResponse disini 6: ${response.headers()}")
+                        Log.e("CreateUnitMediaFragment", "Error onResponse disini 7: ${response.errorBody()}")
+                    }
+                }
+                override fun onFailure(call: Call<UnitDetailResponse>, t: Throwable) {
+                    Log.e("CreateUnitMediaFragment", "onFailure: ${t.message}")
+                    t.printStackTrace()
+                    Log.e("CreateUnitMediaFragment", "onFailure: ${t.stackTrace}")
+                }
+            })
+        }
+    }
+
+    private fun deleteAllPhotos() {
+        val photos = unitMediaViewModdel.unitPhoto.value?.toMutableList()
+        var i = 0
+
+        lifecycleScope.launch {
+            if (photos != null) {
+                while (photos.size > 1) {
+                    val photo = photos[i]
+                    if (photo.isCover != 1) {
+                        deletePhoto(photo.projectId ?: "", photo.id ?: 0, false)
+                        continue
+                    }
+                    i++
+                }
+            }
+        }
+    }
+
+    private fun photosPreviewObserver() {
+        unitMediaViewModdel.unitPhoto.observe(viewLifecycleOwner) {
+            Log.d("CreateUnitMediaFragment", "photosPreviewObserver: $it")
+
+            photosAdapter.photosList = it ?: emptyList()
+            binding.recyclerViewListUnggahFoto.adapter = photosAdapter
+
+            if (it != null && it.isNotEmpty()) {
+                binding.recyclerViewListUnggahFoto.visibility = View.VISIBLE
+            } else {
+                binding.recyclerViewListUnggahFoto.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun setListUnggahFotoRecycler() {
+        binding.recyclerViewListUnggahFoto.apply {
+            adapter = photosAdapter
+            layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
+    private fun pickPhoto() {
+        val imageStoreIntent = Intent(Intent.ACTION_PICK).apply {
+            setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+        }
+        imageLauncher.launch(imageStoreIntent)
+    }
+
+    private fun pickDocument() {
+        val documentStoreIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = "application/pdf"
+            addCategory(Intent.CATEGORY_OPENABLE)
+        }
+        documentLauncher.launch(documentStoreIntent)
+    }
+
+    private fun validateYoutubeLinkObserver() {
+        binding.editTextLinkYoutubeMediaUnit.doAfterTextChanged { inputUrl ->
+            if (inputUrl != null) {
+                if (inputUrl.contains("youtube.com") || inputUrl.contains("youtu.be")) {
+                    binding.editTextLinkYoutubeMediaUnit.error = null
+                } else {
+                    binding.editTextLinkYoutubeMediaUnit.error = "Link Youtube tidak valid"
+                }
+            }
+        }
+    }
+
+    private fun openContactUs() {
+        // TOOD: Do something here
+        Toast.makeText(context, "Open Contact Us : Belum Tersedia", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun openTutorialVideo() {
+        // TOOD: Do something here
+        Toast.makeText(context, "Open Tutorial Video : Belum Tersedia", Toast.LENGTH_SHORT).show()
     }
 }

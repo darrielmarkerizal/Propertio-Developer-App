@@ -102,7 +102,7 @@
             app:layout_constraintTop_toBottomOf="@+id/recycler_view_list_unggah_foto" />
 
         <TextView
-            android:id="@+id/link_text_view_unit_photo_delete2"
+            android:id="@+id/link_text_view_unit_photo_delete_denah_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/text.regular.size14"
