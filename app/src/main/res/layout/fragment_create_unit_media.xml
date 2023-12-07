@@ -102,7 +102,7 @@
             app:layout_constraintTop_toBottomOf="@+id/recycler_view_list_unggah_foto" />
 
         <TextView
-            android:id="@+id/link_text_view_unit_photo_delete2"
+            android:id="@+id/link_text_view_unit_photo_delete_denah_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/text.regular.size14"
@@ -311,6 +311,17 @@
             app:layout_constraintStart_toStartOf="@+id/text_title_unit_media"
             app:layout_constraintTop_toBottomOf="@+id/text_view_dokumen_unit_title" />
 
+        <include
+            android:id="@+id/card_document_unit_property_thumbnail"
+            layout="@layout/card_file_thumbnail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/button_tambahkan_dokumen_unit"
+            app:layout_constraintStart_toStartOf="@id/button_tambahkan_dokumen_unit"
+            app:layout_constraintTop_toBottomOf="@id/button_tambahkan_dokumen_unit"/>
+
         <TextView
             android:id="@+id/text_view_video_title_media_unit"
             android:layout_width="wrap_content"
@@ -319,7 +330,7 @@
             android:text="Video"
             android:textAppearance="@style/text.semi_bold.size14"
             app:layout_constraintStart_toStartOf="@+id/text_title_unit_media"
-            app:layout_constraintTop_toBottomOf="@+id/button_tambahkan_dokumen_unit" />
+            app:layout_constraintTop_toBottomOf="@+id/card_document_unit_property_thumbnail" />
 
         <TextView
             android:id="@+id/text_link_video_youtube_label_unit"

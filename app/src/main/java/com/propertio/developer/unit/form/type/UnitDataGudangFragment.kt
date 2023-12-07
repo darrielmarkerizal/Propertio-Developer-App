@@ -90,6 +90,18 @@ class UnitDataGudangFragment : Fragment() {
         }
 
         activityBinding?.floatingButtonBack?.setOnClickListener {
+            val luas_bangunan = binding.editLuasBangunanGudang.text.toString()
+            val luas_tanah = binding.editLuasTanahGudang.text.toString()
+            val parking_type = binding.spinnerTempatParkirGudang.text.toString()
+            val electricity_type = binding.spinnerDayaListrikGudang.text.toString()
+            val road_access_type = binding.spinnerAksesJalanGudang.text.toString()
+
+            formActivity?.unitFormViewModel?.updateLuasBangunan(luas_bangunan)
+            formActivity?.unitFormViewModel?.updateLuasTanah(luas_tanah)
+            formActivity?.unitFormViewModel?.updateParkingType(parking_type)
+            formActivity?.unitFormViewModel?.updateElectricityType(electricity_type)
+            formActivity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
+
             formActivity.onBackButtonUnitManagementClick()
         }
         
@@ -111,7 +123,7 @@ class UnitDataGudangFragment : Fragment() {
             formActivity?.unitFormViewModel?.updateElectricityType(electricity_type)
             formActivity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
 
-            val retro = Retro(TokenManager(requireActivity()).token)
+            val retro = Retro(TokenManager(requireContext()).token)
                 .getRetroClientInstance()
                 .create(DeveloperApi::class.java)
 

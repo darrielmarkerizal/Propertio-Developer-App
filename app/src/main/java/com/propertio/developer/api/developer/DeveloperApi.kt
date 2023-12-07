@@ -7,10 +7,13 @@ import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
 import com.propertio.developer.api.developer.projectmanagement.ProjectListResponse
 import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResponse
 import com.propertio.developer.api.developer.type.GeneralTypeResponse
+import com.propertio.developer.api.developer.unitmanagement.PostStoreUnitPhotoResponse
 import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
+import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitRequest
 import com.propertio.developer.model.Caption
 import com.propertio.developer.model.StatusProject
+import com.propertio.developer.unit_management.UpdateUnitResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -67,8 +70,40 @@ interface DeveloperApi {
         @Part siteplanImage : MultipartBody.Part? = null,
     ) : Call<PostStoreProjectLocationResponse>
 
+    @Multipart
+    @PUT("v1/cms/project-management/project-location/{id}")
+    fun updateProjectLocation(
+        @Path("id") id : Int,
+        @Part("headline") headline: RequestBody,
+        @Part("title") title: RequestBody,
+        @Part("property_type_id") propertyTypeId: RequestBody,
+        @Part("description") description: RequestBody? = null,
+        @Part("completed_at") completedAt: RequestBody? = null,
+        @Part("certificate") certificate: RequestBody,
+        @Part("province") province: RequestBody,
+        @Part("city") city: RequestBody,
+        @Part("district") district: RequestBody,
+        @Part("address") address: RequestBody? = null,
+        @Part("postal_code") postalCode: RequestBody? = null,
+        @Part("longitude") longitude: RequestBody? = null,
+        @Part("latitude") latitude: RequestBody? = null,
+        @Part("immersive_siteplan") immersiveSiteplan: RequestBody? = null,
+        @Part("immersive_apps") immersiveApps: RequestBody? = null,
+        @Part("status") status: RequestBody? = null,
+        @Part("listing_class") listingClass: RequestBody? = null,
+        @Part siteplanImage : MultipartBody.Part? = null,
+    ) : Call<PostStoreProjectLocationResponse>
+
     @DELETE("v1/cms/project-management/project-photos/{id}")
-    fun deleteProjectPhoto(@Path("id") id : Int) : Call<UpdateProjectResponse>
+    fun deleteProjectPhoto(
+        @Path("id") id : Int
+    ) : Call<UpdateProjectResponse>
+
+    @DELETE("v1/cms/project-management/{project_id}/unit/{id}")
+    fun deleteUnitPhoto(
+        @Path("project_id") project : String,
+        @Path("id") id : Int
+    ) : Call<UpdateUnitResponse>
 
     @Multipart
     @POST("v1/cms/project-management/project-photos")
@@ -76,6 +111,16 @@ interface DeveloperApi {
         @Part("project_id") projectId: RequestBody,
         @Part files: List<MultipartBody.Part>
     ): Call<PostStoreProjectPhotoResponse>
+
+    @Multipart
+    @POST("v1/cms/project-management/{project_id}/unit-photo")
+    fun uploadUnitPhoto(
+        @Path("project_id") projectId : String,
+        @Part("unit_id") unitId: RequestBody,
+        @Part files: List<MultipartBody.Part>
+    ): Call<PostStoreUnitPhotoResponse>
+
+
 
     @Multipart
     @POST("v1/cms/project-management/project-other-media")
@@ -87,8 +132,28 @@ interface DeveloperApi {
         @Part document_file: MultipartBody.Part? = null
     ): Call<UpdateProjectResponse>
 
+    @Multipart
+    @POST("v1/cms/project-management/{project_id}/unit-other-media")
+    fun uploadAnotherUnitMedia(
+        @Path("project_id") projectId : String,
+        @Part("unit_id") unitId: RequestBody,
+        @Part("video_link") videoLink: RequestBody? = null,
+        @Part("virtual_tour_name") virtualTourName: RequestBody? = null,
+        @Part("virtual_tour_link") virtualTourLink: RequestBody? = null,
+        @Part("model_link") modelLink: RequestBody? = null,
+        @Part document_file: MultipartBody.Part? = null
+    ): Call<UpdateUnitResponse>
+
     @POST("v1/cms/project-management/project-photos/{id}/cover?_method=PUT")
-    fun updateCoverProjectPhoto(@Path("id") id : Int) : Call<UpdateProjectResponse>
+    fun updateCoverProjectPhoto(
+        @Path("id") id : Int
+    ) : Call<UpdateProjectResponse>
+
+    @POST("v1/cms/project-management/{project_id}/unit-photo/{id}/cover?_method=PUT")
+    fun updateCoverUnitPhoto(
+        @Path("project_id") projectId : String,
+        @Path("id") id : Int
+    ) : Call<UpdateUnitResponse>
 
 
     @PUT("v1/cms/project-management/project-photos/{id}/caption")
@@ -96,6 +161,13 @@ interface DeveloperApi {
             @Path("id") id: Int,
             @Body caption : Caption
     ) : Call<UpdateProjectResponse>
+
+    @PUT("v1/cms/project-management/{project_id}/unit-photo/{id}")
+    fun updateCaptionUnitPhoto(
+        @Path("project_id") projectId: String,
+        @Path("id") id : Int,
+        @Body caption : Caption
+    ) : Call<UpdateUnitResponse>
 
 
     @POST("v1/cms/project-management/{id}/unit")
@@ -131,4 +203,10 @@ interface DeveloperApi {
         @Body status : StatusProject
     ) : Call<UpdateProjectResponse>
 
+
+    @GET("v1/cms/project-management/{projectId}/unit/{unitId}")
+    fun getUnitDetail(
+        @Path("projectId") projectId : Int,
+        @Path("unitId") unitId : Int
+    ) : Call<UnitDetailResponse>
 }

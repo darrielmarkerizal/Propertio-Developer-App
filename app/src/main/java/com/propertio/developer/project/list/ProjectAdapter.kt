@@ -6,6 +6,7 @@ import android.graphics.drawable.PictureDrawable
 import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -15,6 +16,7 @@ import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.load
 import com.bumptech.glide.Glide
+import com.propertio.developer.NumericalUnitConverter
 import com.propertio.developer.R
 import com.propertio.developer.api.DomainURL
 import com.propertio.developer.database.project.ProjectTable
@@ -27,7 +29,9 @@ import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_I
 
 class ProjectAdapter(
     private val context: Context,
-    private val onClickRincian: (ProjectTable) -> Unit
+    private val onClickRincian: (ProjectTable) -> Unit,
+    private val onClickMore: (ProjectTable, View) -> Unit,
+    private val onClickRepost: (ProjectTable) -> Unit
 ) : ListAdapter<ProjectTable, ProjectAdapter.ItemProjectViewHolder>(ProjectDiffCallback()) {
 
     class ProjectDiffCallback : DiffUtil.ItemCallback<ProjectTable>() {
@@ -55,7 +59,7 @@ class ProjectAdapter(
                     textViewAddress.text = projectAddress
                 }
 
-                textViewPrice.text = data.price.toString()
+                textViewPrice.text = NumericalUnitConverter.unitFormatter(data.price ?: "0", true)
                 textViewPropertyType.text = data.propertyTypeName ?: "Property Type"
                 textViewCountUnit.text = data.countUnit.toString()
                 textViewProjectCode.text = data.projectCode
@@ -75,11 +79,68 @@ class ProjectAdapter(
                     onClickRincian(data)
                 }
 
+                buttonMoreHorizontal.setOnClickListener {
+                    onClickMore(data, buttonMoreHorizontal)
+                }
+
+                buttonRepost.setOnClickListener {
+                    onClickRepost(data)
+                }
+
 
                 // Additional
-                textViewDatetime.text = data.postedAt
+                textViewDatetime.text = formatDate(data.postedAt ?: "1970-1-1 00:00:00")
 
 
+
+
+
+            }
+
+
+        }
+
+        private fun formatDate(inputDate: String): String {
+            val months = context.resources.getStringArray(R.array.list_of_months)
+
+            val date = inputDate.split(" ").get(0).split("-")
+            val time = inputDate.split(" ").get(1).split(":")
+
+            // get today date
+            val today = java.util.Calendar.getInstance()
+
+
+            if (today.get(java.util.Calendar.YEAR) > date[0].toInt()) {
+                return "${date[0]} ${months[date[1].toInt() - 1]} ${date[2]}"
+            }
+            else if (
+                today.get(java.util.Calendar.DAY_OF_MONTH) == date[2].toInt()
+                && today.get(java.util.Calendar.MONTH) == date[1].toInt() - 1
+            ) {
+                Log.d("ChatAdapter", "dateFormat #2: $time")
+                return "Hari ini"
+            } else if (
+                today.get(java.util.Calendar.DAY_OF_MONTH) == date[2].toInt() + 1
+                && today.get(java.util.Calendar.MONTH) == date[1].toInt() - 1
+            ){
+                return "Kemarin"
+            } else if (
+                today.get(java.util.Calendar.DAY_OF_MONTH) == date[2].toInt() + 2
+                && today.get(java.util.Calendar.MONTH) == date[1].toInt() - 1
+            ){
+                return "Dua hari yang lalu"
+            } else if (
+                today.get(java.util.Calendar.DAY_OF_MONTH) == date[2].toInt() + 3
+                && today.get(java.util.Calendar.MONTH) == date[1].toInt() - 1
+            ) {
+                return "Tiga hari yang lalu"
+            }else if (
+                today.get(java.util.Calendar.DAY_OF_MONTH) <= date[2].toInt() + 7
+                && today.get(java.util.Calendar.MONTH) == date[1].toInt() - 1
+            ) {
+                return "Minggu ini"
+            } else {
+                return "${date[2]} ${months[date[1].toInt() - 1]}"
             }
 
 

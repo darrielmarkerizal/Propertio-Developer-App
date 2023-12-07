@@ -52,6 +52,12 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        val idFromIntent = intent.getIntExtra("EDIT_PROJECT", 0)
+        intent.removeExtra("EDIT_PROJECT")
+        if (idFromIntent != 0) {
+            projectId = idFromIntent
+        }
+
         val bindingToolbar = binding.toolbarContainerProjectForm
 
         setToolbarToCreate(bindingToolbar)
@@ -74,7 +80,11 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
 
 
     private fun setToolbarToCreate(bindingToolbar: ToolbarBinding) {
-        bindingToolbar.textViewTitle.text = "Tambah Proyek"
+        if (projectId != null) {
+            bindingToolbar.textViewTitle.text = "Edit Proyek"
+        } else {
+            bindingToolbar.textViewTitle.text = "Tambah Proyek"
+        }
     }
 
 
@@ -83,6 +93,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
             val intent = Intent(this, CreateProjectSuccessActivity::class.java)
             startActivity(intent)
             finish()
+            return
         }
 
         currentFragmentIndex++
@@ -94,6 +105,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
         if (currentFragmentIndex <= 0) {
             Log.d("ProjectForm", "Exit From Project Form")
             finish()
+            return
         }
 
         currentFragmentIndex--

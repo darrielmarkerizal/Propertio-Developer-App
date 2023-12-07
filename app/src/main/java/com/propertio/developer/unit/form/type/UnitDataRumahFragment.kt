@@ -119,6 +119,28 @@ class UnitDataRumahFragment : Fragment() {
         roadAccessTypeSpinner()
 
         activityBinding.floatingButtonBack.setOnClickListener {
+            val luas_tanah = binding.editLuasTanahRumah.text.toString()
+            val luas_bangunan = binding.editLuasBangunanRumah.text.toString()
+            val jumlah_lantai = binding.editJumlahLantaiRumah.text.toString()
+            val jumlah_kamar_tidur = binding.editKamarMandiRumah.text.toString()
+            val jumlah_kamar_mandi = binding.editKamarMandiRumah.text.toString()
+            val parking_type = binding.spinnerTempatParkirRumah.text.toString()
+            val electricity_type = binding.spinnerDayaListrikRumah.text.toString()
+            val water_type = binding.spinnerJenisAirRumah.text.toString()
+            val interior_type = binding.spinnerInteriorRumah.text.toString()
+            val road_access_type = binding.spinnerAksesJalanRumah.text.toString()
+
+            formActivity.unitFormViewModel.updateLuasTanah(luas_tanah)
+            formActivity.unitFormViewModel.updateLuasBangunan(luas_bangunan)
+            formActivity.unitFormViewModel.updateJumlahLantai(jumlah_lantai)
+            formActivity.unitFormViewModel.updateJumlahKamar(jumlah_kamar_tidur)
+            formActivity.unitFormViewModel.updateJumlahKamarMandi(jumlah_kamar_mandi)
+            formActivity.unitFormViewModel.updateParkingType(parking_type)
+            formActivity.unitFormViewModel.updateElectricityType(electricity_type)
+            formActivity.unitFormViewModel.updateWaterType(water_type)
+            formActivity.unitFormViewModel.updateInteriorType(interior_type)
+            formActivity.unitFormViewModel.updateRoadAccessType(road_access_type)
+
             formActivity.onBackButtonUnitManagementClick()
         }
 
@@ -152,7 +174,7 @@ class UnitDataRumahFragment : Fragment() {
             formActivity.unitFormViewModel.updateInteriorType(interior_type)
             formActivity.unitFormViewModel.updateRoadAccessType(road_access_type)
 
-            val retro = Retro(TokenManager(requireActivity()).token)
+            val retro = Retro(TokenManager(requireContext()).token)
                 .getRetroClientInstance()
                 .create(DeveloperApi::class.java)
 
