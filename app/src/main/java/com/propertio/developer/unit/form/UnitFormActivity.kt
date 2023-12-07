@@ -59,7 +59,7 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
         Log.d("UnitFormActivity", "onCreate called")
         setContentView(binding.root)
 
-        binding.toolbarContainerUnitForm.textViewTitle.text = "Tambah Unit"
+        binding.toolbarContainerUnitForm.textViewTitle.text = "Unit"
 
         val propertyType = intent.getStringExtra("Property Type") // Bisa ganti jadi val propertyType = "Apartemen"
         val projectId = intent.getIntExtra(PROJECT_ID, 0)
@@ -99,7 +99,6 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
         currentFragmentIndex++
         Log.d("UnitFormActivity", "Next button clicked, currentFragmentIndex: $currentFragmentIndex")
         replaceFragment(formsFragment[currentFragmentIndex])
-        binding.toolbarContainerUnitForm.textViewTitle.text = "Tambah Unit"
 
 
 
@@ -114,7 +113,6 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
         currentFragmentIndex--
         Log.d("UnitFormActivity", "Back button clicked, currentFragmentIndex: $currentFragmentIndex")
         replaceFragment(formsFragment[currentFragmentIndex])
-        binding.toolbarContainerUnitForm.textViewTitle.text = "Edit Unit"
     }
 
 
