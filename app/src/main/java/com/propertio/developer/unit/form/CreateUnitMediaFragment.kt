@@ -108,6 +108,7 @@ class CreateUnitMediaFragment : Fragment() {
             },
             onClickDelete = {
                 if (it.projectId != null && it.id != null) {
+                    Log.d("CreateUnitMediaFragment", "onCreateView: ${it.projectId} and ${it.id}")
                     deletePhoto(it.projectId, it.id)
                 } else {
                     Toast.makeText(context, "Gagal Menghapus Photo", Toast.LENGTH_SHORT).show()
@@ -156,10 +157,11 @@ class CreateUnitMediaFragment : Fragment() {
                 developerApi.updateCoverUnitPhoto(projectId, id).enqueue(object :
                     Callback<UpdateUnitResponse> {
                     override fun onResponse(call: Call<UpdateUnitResponse>, response: Response<UpdateUnitResponse>) {
+                        Log.d("CreateUnitMediaFragment", "API URL: ${call.request().url}")
                         if (response.isSuccessful) {
                             Log.d("CreateUnitMediaFragment", "onResponse id $id: ${response.body()?.message}")
                             lifecycleScope.launch {
-                                fetchUnitPhotos(formActivity?.projectId ?: 0, formActivity?.unitId ?: 0)
+                                fetchUnitPhotos(projectId.toInt(), formActivity?.unitId ?: 0)
                                 Log.d("CreateUnitMediaFragment", "onResponse id $id: ${response.body()?.message}")
                             }
                         } else {
@@ -182,14 +184,21 @@ class CreateUnitMediaFragment : Fragment() {
                 developerApi.deleteUnitPhoto(projectId, id).enqueue(object :
                     Callback<UpdateUnitResponse> {
                     override fun onResponse(call: Call<UpdateUnitResponse>, response: Response<UpdateUnitResponse>) {
+                        Log.d("CreateUnitMediaFragment", "API URL: ${call.request().url}")
                         if (response.isSuccessful) {
-                            Log.d("CreateUnitMediaFragment", "onResponse id $id: ${response.body()?.message}")
+                            Log.d("CreateUnitMediaFragment", "onResponse id $id: ${response.body()}")
+                            Log.d("CreateUnitMediaFragment", "Photo deletion was successful")
                             lifecycleScope.launch {
-                                fetchUnitPhotos(formActivity?.projectId ?: 0, formActivity?.unitId ?: 0)
-                                Log.d("CreateUnitMediaFragment", "onResponse id $id: ${response.body()?.message}")
+                                fetchUnitPhotos(projectId.toInt(), formActivity?.unitId ?: 0)
                             }
                         } else {
                             Log.e("CreateUnitMediaFragment", "onResponse id $id: ${response.errorBody()?.string()}")
+                            Log.e("CreateUnitMediaFragment", "onResponse id $id: ${response.message()}")
+                            Log.e("CreateUnitMediaFragment", "onResponse id $id: ${response.raw()}")
+                            Log.e("CreateUnitMediaFragment", "onResponse id $id: ${response.code()}")
+                            Log.e("CreateUnitMediaFragment", "onResponse id $id: ${response.headers()}")
+                            Log.e("CreateUnitMediaFragment", "onResponse id $id: ${response.errorBody()}")
+                            Log.d("CreateUnitMediaFragment", "projectId: $projectId and unitId: $id")
                             Toast.makeText(context, "Gagal Menghapus Photo", Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -249,7 +258,7 @@ class CreateUnitMediaFragment : Fragment() {
                 .getRetroClientInstance()
                 .create(DeveloperApi::class.java)
 
-            val projectId = formActivity?.projectId.toString()
+            val projectId = formActivity?.unitFormViewModel?.projectId?.value.toString()
             val unitId = formActivity?.unitId ?: 0
             val youtubeLink = binding.editTextLinkYoutubeMediaUnit.text.toString()
             val virtualTour = binding.editLinkVirtualTourUnit.text.toString()
@@ -320,6 +329,12 @@ class CreateUnitMediaFragment : Fragment() {
                         Toast.makeText(requireActivity(), "Berhasil menambahkan media unit", Toast.LENGTH_SHORT).show()
                     } else {
                         Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse: ${response.body()}")
+                        Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 2: ${response.errorBody()?.string()}")
+                        Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 3: ${response.message()}")
+                        Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 4: ${response.raw()}")
+                        Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 5: ${response.code()}")
+                        Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 6: ${response.headers()}")
+
                         Toast.makeText(requireActivity(), "Gagal menambahkan mediaunit", Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -383,6 +398,7 @@ class CreateUnitMediaFragment : Fragment() {
                     ) {
                         if (response.isSuccessful) {
                             Log.d("CreateUnitMediaFragment", "onResponse: ${response.body()}")
+                            Log.d("CreateUnitMediaFragment", "projectId yang dikirim: $projectId and unitId: $unitId")
                             lifecycleScope.launch {
                                 fetchUnitPhotos(projectId, formActivity?.unitId ?: 0)
                                 imageUri = null
@@ -426,7 +442,7 @@ class CreateUnitMediaFragment : Fragment() {
                             unitMediaViewModdel.unitPhoto.value = photos.map {
                                 LitePhotosModel(
                                     id = it.id,
-                                    projectId = unitId, // Note : Tidak project ID di reponse
+                                    projectId = formActivity?.unitFormViewModel?.projectId?.value.toString(),
                                     filePath = it.filename,
                                     isCover = it.isCover!!.toInt(),
                                     caption = it.caption
@@ -477,12 +493,11 @@ class CreateUnitMediaFragment : Fragment() {
 
     private fun photosPreviewObserver() {
         unitMediaViewModdel.unitPhoto.observe(viewLifecycleOwner) {
-            Log.d("CreateUnitMediaFragment", "photosPreviewObserver: $it")
-
-            photosAdapter.photosList = it ?: emptyList()
+            val sortedPhotos = it.sortedByDescending { photo -> photo.isCover }
+            photosAdapter.photosList = sortedPhotos
             binding.recyclerViewListUnggahFoto.adapter = photosAdapter
 
-            if (it != null && it.isNotEmpty()) {
+            if (sortedPhotos.isNotEmpty()) {
                 binding.recyclerViewListUnggahFoto.visibility = View.VISIBLE
             } else {
                 binding.recyclerViewListUnggahFoto.visibility = View.GONE
@@ -525,8 +540,11 @@ class CreateUnitMediaFragment : Fragment() {
     }
 
     private fun openContactUs() {
-        // TOOD: Do something here
-        Toast.makeText(context, "Open Contact Us : Belum Tersedia", Toast.LENGTH_SHORT).show()
+        val phoneNumber = "6285702750455"
+        val url = "https://wa.me/$phoneNumber"
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(url)
+        startActivity(intent)
     }
 
     private fun openTutorialVideo() {

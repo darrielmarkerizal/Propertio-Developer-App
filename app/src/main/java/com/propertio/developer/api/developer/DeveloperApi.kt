@@ -99,7 +99,7 @@ interface DeveloperApi {
         @Path("id") id : Int
     ) : Call<UpdateProjectResponse>
 
-    @DELETE("v1/cms/project-management/{project_id}/unit/{id}")
+    @DELETE("v1/cms/project-management/{project_id}/unit-photo/{id}")
     fun deleteUnitPhoto(
         @Path("project_id") project : String,
         @Path("id") id : Int
@@ -162,7 +162,7 @@ interface DeveloperApi {
             @Body caption : Caption
     ) : Call<UpdateProjectResponse>
 
-    @PUT("v1/cms/project-management/{project_id}/unit-photo/{id}")
+    @PUT("v1/cms/project-management/{project_id}/unit-photo/{id}/caption?_method=PUT")
     fun updateCaptionUnitPhoto(
         @Path("project_id") projectId: String,
         @Path("id") id : Int,
