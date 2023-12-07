@@ -157,10 +157,11 @@ class CreateUnitMediaFragment : Fragment() {
                 developerApi.updateCoverUnitPhoto(projectId, id).enqueue(object :
                     Callback<UpdateUnitResponse> {
                     override fun onResponse(call: Call<UpdateUnitResponse>, response: Response<UpdateUnitResponse>) {
+                        Log.d("CreateUnitMediaFragment", "API URL: ${call.request().url}")
                         if (response.isSuccessful) {
                             Log.d("CreateUnitMediaFragment", "onResponse id $id: ${response.body()?.message}")
                             lifecycleScope.launch {
-                                fetchUnitPhotos(formActivity?.projectId ?: 0, formActivity?.unitId ?: 0)
+                                fetchUnitPhotos(projectId.toInt(), formActivity?.unitId ?: 0)
                                 Log.d("CreateUnitMediaFragment", "onResponse id $id: ${response.body()?.message}")
                             }
                         } else {
@@ -257,7 +258,7 @@ class CreateUnitMediaFragment : Fragment() {
                 .getRetroClientInstance()
                 .create(DeveloperApi::class.java)
 
-            val projectId = formActivity?.projectId.toString()
+            val projectId = formActivity?.unitFormViewModel?.projectId?.value.toString()
             val unitId = formActivity?.unitId ?: 0
             val youtubeLink = binding.editTextLinkYoutubeMediaUnit.text.toString()
             val virtualTour = binding.editLinkVirtualTourUnit.text.toString()
@@ -328,6 +329,12 @@ class CreateUnitMediaFragment : Fragment() {
                         Toast.makeText(requireActivity(), "Berhasil menambahkan media unit", Toast.LENGTH_SHORT).show()
                     } else {
                         Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse: ${response.body()}")
+                        Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 2: ${response.errorBody()?.string()}")
+                        Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 3: ${response.message()}")
+                        Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 4: ${response.raw()}")
+                        Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 5: ${response.code()}")
+                        Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 6: ${response.headers()}")
+
                         Toast.makeText(requireActivity(), "Gagal menambahkan mediaunit", Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -486,12 +493,11 @@ class CreateUnitMediaFragment : Fragment() {
 
     private fun photosPreviewObserver() {
         unitMediaViewModdel.unitPhoto.observe(viewLifecycleOwner) {
-            Log.d("CreateUnitMediaFragment", "photosPreviewObserver: $it")
-
-            photosAdapter.photosList = it ?: emptyList()
+            val sortedPhotos = it.sortedByDescending { photo -> photo.isCover }
+            photosAdapter.photosList = sortedPhotos
             binding.recyclerViewListUnggahFoto.adapter = photosAdapter
 
-            if (it != null && it.isNotEmpty()) {
+            if (sortedPhotos.isNotEmpty()) {
                 binding.recyclerViewListUnggahFoto.visibility = View.VISIBLE
             } else {
                 binding.recyclerViewListUnggahFoto.visibility = View.GONE
