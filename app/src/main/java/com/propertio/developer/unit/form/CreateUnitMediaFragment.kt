@@ -56,6 +56,7 @@ class CreateUnitMediaFragment : Fragment() {
     private val unitMediaViewModdel : UnitMediaViewModel by activityViewModels()
 
     private lateinit var photosAdapter: UnggahFotoAdapter
+    private lateinit var denahAdapter: UnggahFotoAdapter
 
     private var documentUri : Uri? = null
     private var documentLauncher = registerForActivityResult(
@@ -93,12 +94,55 @@ class CreateUnitMediaFragment : Fragment() {
         }
     }
 
+    private var denahUri : Uri? = null
+    private val denahLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            denahUri = result.data?.data
+
+            if (denahUri == null) {
+                Log.e("CreateUnitMediaFragment", "denahUri is null")
+                return@registerForActivityResult
+            }
+
+            Log.d("CreateUnitMediaFragment", "denahUri: $denahUri")
+            uploadDenah(denahUri!!)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         photosAdapter = UnggahFotoAdapter(
             photosList = unitMediaViewModdel.unitPhoto.value ?: listOf(),
+            onClickButtonCover = {
+                if (it.projectId != null && it.id != null) {
+                    updateCoverPhoto(it.projectId, it.id)
+                } else {
+                    Toast.makeText(context, "Gagal Mengubah Cover photo", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onClickDelete = {
+                if (it.projectId != null && it.id != null) {
+                    Log.d("CreateUnitMediaFragment", "onCreateView: ${it.projectId} and ${it.id}")
+                    deletePhoto(it.projectId, it.id)
+                } else {
+                    Toast.makeText(context, "Gagal Menghapus Photo", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onClickSaveCaption = {
+                if (it.projectId != null && it.id != null && it.caption != null) {
+                    updateCaption(it.projectId, it.id, it.caption!!)
+                } else {
+                    Toast.makeText(context, "Gagal Mengubah Caption", Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
+
+        denahAdapter = UnggahFotoAdapter(
+            photosList = unitMediaViewModdel.unitDenah.value ?: listOf(),
             onClickButtonCover = {
                 if (it.projectId != null && it.id != null) {
                     updateCoverPhoto(it.projectId, it.id)
@@ -224,8 +268,13 @@ class CreateUnitMediaFragment : Fragment() {
             pickPhoto()
         }
 
+        binding.buttonUnggahDenahUnit.setOnClickListener{
+            pickDenah()
+        }
+
         setListUnggahFotoRecycler()
         photosPreviewObserver()
+        denahPreviewObserver()
 
         binding.linkTextViewUnitPhotoDelete.setOnClickListener{
             deleteAllPhotos()
@@ -398,7 +447,9 @@ class CreateUnitMediaFragment : Fragment() {
                     ) {
                         if (response.isSuccessful) {
                             Log.d("CreateUnitMediaFragment", "onResponse: ${response.body()}")
+                            Log.d("CreateUnitMediaFragment", "Data yang dikirim unit photo: $files and $projectIdBody and $unitIdBody")
                             Log.d("CreateUnitMediaFragment", "projectId yang dikirim: $projectId and unitId: $unitId")
+                            Log.d("CreateUnitMediaFragment", "Response code: ${response.code()}")
                             lifecycleScope.launch {
                                 fetchUnitPhotos(projectId, formActivity?.unitId ?: 0)
                                 imageUri = null
@@ -426,6 +477,111 @@ class CreateUnitMediaFragment : Fragment() {
         }
     }
 
+    private fun uploadDenah(uri: Uri) {
+        Log.d("CreateUnitMediaFragment", "uploadDenah: $uri")
+
+        val unitId = formActivity?.unitId ?: 0
+        val unitIdBody = unitId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+
+        val projectId = formActivity?.unitFormViewModel?.projectId?.value ?: 0
+        val projectIdBody = projectId.toString()
+
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+
+                val fileDir = requireContext().applicationContext.filesDir
+                val file = File(fileDir, "unit_denah.jpg")
+                val fileInputStream = requireContext().contentResolver.openInputStream(uri)
+                val fileOutputStream = FileOutputStream(file)
+                fileInputStream!!.copyTo(fileOutputStream)
+                fileInputStream.close()
+                fileOutputStream.close()
+
+                val fileSizeInBytes = file.length()
+                val fileSizeInKB = fileSizeInBytes / 1024
+                val fileSizeInMB = fileSizeInKB / 1024
+
+                val maxFileSizeInMb = 5
+
+                if (fileSizeInMB > maxFileSizeInMb) {
+                    Toast.makeText(requireContext(), "File terlalu besar", Toast.LENGTH_SHORT)
+                        .show()
+                    return@withContext
+                }
+
+                val files = MultipartBody.Part.createFormData(
+                    "photo_file[]",
+                    file.name,
+                    file.asRequestBody("image/*".toMediaTypeOrNull())
+                )
+
+                Log.d("CreateUnitMediaFragment", "uploadDenah: $files and $projectIdBody and $unitIdBody")
+
+                developerApi.uploadUnitPlanImage(
+                    projectId = projectIdBody,
+                    unitId = unitIdBody,
+                    type = "denah",
+                    files = listOf(files)
+                ).enqueue(object : Callback<PostStoreUnitPhotoResponse> {
+                    override fun onResponse(
+                        call: Call<PostStoreUnitPhotoResponse>,
+                        response: Response<PostStoreUnitPhotoResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.d("CreateUnitMediaFragment", "onResponse: ${response.body()}")
+                            Log.d("CreateUnitMediaFragment", "Response code: ${response.code()}")
+                            Log.d("CreateUnitMediaFragment", "Response headers: ${response.headers()}")
+                            Log.d("CreateUnitMediaFragment", "projectId yang dikirim: $projectId and unitId: $unitId")
+                            Log.d("CreateUnitMediaFragment", "Data yang dikirim: $files and $projectIdBody and $unitIdBody")
+                            Log.d("CreateUnitMediaFragment", "Response raw: ${response.raw()}")
+                            Log.d("CreateUnitMediaFragment", "Response message: ${response.message()}")
+                            Log.d("CreateUnitMediaFragment", "Response errorBody: ${response.errorBody()}")
+                            Log.d("CreateUnitMediaFragment", "unitDenah value: ${unitMediaViewModdel.unitDenah.value}")
+                            lifecycleScope.launch {
+                                fetchUnitPhotos(projectId, formActivity?.unitId ?: 0)
+                                Log.d("CreateUnitMediaFragment", "onResponse: ${response.body()}")
+                            }
+                        } else {
+                            Log.e("CreateUnitMediaFragment", "onResponse gagal: ${response.body()}")
+                            Log.e(
+                                "CreateUnitMediaFragment",
+                                "onResponse gagal 2: ${response.errorBody()?.string()}"
+                            )
+                            Log.e(
+                                "CreateUnitMediaFragment",
+                                "onResponse gagal 3: ${response.message()}"
+                            )
+                            Log.e(
+                                "CreateUnitMediaFragment",
+                                "onResponse gagal 4: ${response.raw()}"
+                            )
+                            Log.e(
+                                "CreateUnitMediaFragment",
+                                "onResponse gagal 5: ${response.code()}"
+                            )
+                            Log.e(
+                                "CreateUnitMediaFragment",
+                                "onResponse gagal 6: ${response.headers()}"
+                            )
+                            Log.d(
+                                "CreateUnitMediaFragment",
+                                "projectId: $projectId and unitId: $unitId"
+                            )
+
+                            Toast.makeText(context, "Gagal Mengunggah Denah", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<PostStoreUnitPhotoResponse>, t: Throwable) {
+                        Log.e("CreateUnitMediaFragment", "onFailure: ${t.message}")
+                        Toast.makeText(context, "Gagal Mengunggah Denah", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+        }
+    }
+
     private suspend fun fetchUnitPhotos(projectId: Int, unitId: Int) {
         withContext(Dispatchers.IO) {
             developerApi.getUnitDetail(projectId, unitId).enqueue(object : Callback<UnitDetailResponse> {
@@ -439,16 +595,30 @@ class CreateUnitMediaFragment : Fragment() {
                         val data = response.body()?.data
                         val photos = data?.unitPhotos
                         if (photos != null) {
-                            unitMediaViewModdel.unitPhoto.value = photos.map {
+                            val unitPhotos = photos.filter { it.type == "photo" }
+                            val denahPhotos = photos.filter { it.type == "denah" }
+                            unitMediaViewModdel.unitPhoto.value = unitPhotos.map {
                                 LitePhotosModel(
                                     id = it.id,
                                     projectId = formActivity?.unitFormViewModel?.projectId?.value.toString(),
                                     filePath = it.filename,
                                     isCover = it.isCover!!.toInt(),
+                                    type = it.type,
                                     caption = it.caption
                                 )
                             }
-
+                            unitMediaViewModdel.unitDenah.value = denahPhotos.map {
+                                LitePhotosModel(
+                                    id = it.id,
+                                    projectId = formActivity?.unitFormViewModel?.projectId?.value.toString(),
+                                    filePath = it.filename,
+                                    isCover = it.isCover!!.toInt(),
+                                    type = it.type,
+                                    caption = it.caption
+                                )
+                            }
+                            Log.d("CreateUnitMediaFragment", "Foto dengan tipe photo ditemukan: ${unitMediaViewModdel.unitPhoto.value}")
+                            Log.d("CreateUnitMediaFragment", "Foto dengan tipe denah ditemukan: ${unitMediaViewModdel.unitDenah.value}")
                             Log.d(
                                 "CreateUnitMediaFragment",
                                 "onResponse: ${unitMediaViewModdel.unitPhoto.value}"
@@ -505,9 +675,28 @@ class CreateUnitMediaFragment : Fragment() {
         }
     }
 
+    private fun denahPreviewObserver() {
+        unitMediaViewModdel.unitDenah.observe(viewLifecycleOwner) {
+            val sortedPlan = it.sortedByDescending { plan -> plan.isCover  }
+            denahAdapter.photosList = sortedPlan
+            binding.recyclerViewListUnggahDenah.adapter = denahAdapter
+
+            if (sortedPlan.isNotEmpty()) {
+                binding.recyclerViewListUnggahDenah.visibility = View.VISIBLE
+            } else {
+                binding.recyclerViewListUnggahDenah.visibility = View.GONE
+            }
+        }
+    }
+
     private fun setListUnggahFotoRecycler() {
         binding.recyclerViewListUnggahFoto.apply {
             adapter = photosAdapter
+            layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
+        }
+
+        binding.recyclerViewListUnggahDenah.apply {
+            adapter = denahAdapter
             layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
         }
     }
@@ -518,6 +707,15 @@ class CreateUnitMediaFragment : Fragment() {
         }
         imageLauncher.launch(imageStoreIntent)
     }
+
+    private fun pickDenah() {
+        val imageStoreIntent = Intent(Intent.ACTION_PICK).apply {
+            setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+        }
+        denahLauncher.launch(imageStoreIntent)
+    }
+
+
 
     private fun pickDocument() {
         val documentStoreIntent = Intent(Intent.ACTION_GET_CONTENT).apply {

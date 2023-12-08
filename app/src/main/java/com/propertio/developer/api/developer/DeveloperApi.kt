@@ -120,6 +120,15 @@ interface DeveloperApi {
         @Part files: List<MultipartBody.Part>
     ): Call<PostStoreUnitPhotoResponse>
 
+    @Multipart
+    @POST("v1/cms/project-management/{project_id}/unit-plan-image")
+    fun uploadUnitPlanImage(
+        @Path("project_id") projectId : String,
+        @Part("unit_id") unitId: RequestBody,
+        @Part ("type") type: String? = null,
+        @Part files: List<MultipartBody.Part>
+    ): Call<PostStoreUnitPhotoResponse>
+
 
 
     @Multipart
