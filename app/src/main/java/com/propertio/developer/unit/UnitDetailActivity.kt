@@ -220,23 +220,33 @@ class UnitDetailActivity : AppCompatActivity() {
 
     private fun loadTextBased(data: UnitDetailResponse.Unit) {
         with(binding) {
-            textViewUnitCode.text = data.unitCode
-            textViewTitleUnitDetail.text = data.title
-            textViewDescriptionUnit.text = data.description
-            textViewPropertyType.text = data.propertyType
+            val buildingArea = data.buildingArea
+            val surfaceArea = data.surfaceArea
+            val garage = data.garage
+            val powerSupply = data.powerSupply
+            val interior = data.interior
+            val roadAccess = data.roadAccess
+            val price = data.price
+            val floor = data.floor
+            val water = data.waterSupply
 
-            textViewBuildingArea.text = NumericalUnitConverter.meterSquareFormatter(data.buildingArea ?: "0")
-            textViewSurfaceArea.text = NumericalUnitConverter.meterSquareFormatter(data.surfaceArea ?: "0")
-            textViewStaircase.text = data.floor
-            textViewBed.text = data.bedroom
-            textViewBath.text = data.bathroom
-            textViewGarage.text = data.garage
-            textViewPower.text = data.powerSupply
-            textViewWater.text = data.waterSupply
-            textViewInterior.text = data.interior
-            textViewRoad.text = data.roadAccess
+            textViewUnitCode.text = data.unitCode ?: "Tidak Ada Informasi"
+            textViewTitleUnitDetail.text = data.title ?: "Tidak Ada Informasi"
+            textViewDescriptionUnit.text = data.description ?: "Tidak Ada Informasi"
+            textViewPropertyType.text = data.propertyType ?: "Tidak Ada Informasi"
 
-            textViewPriceUnit.text = NumericalUnitConverter.unitFormatter(data.price ?: "0", true)
+            textViewBuildingArea.text = if (buildingArea == null || buildingArea == "0" || buildingArea.startsWith("Pilih")) "Tidak Ada Informasi" else NumericalUnitConverter.meterSquareFormatter(buildingArea)
+            textViewSurfaceArea.text = if (surfaceArea == null || surfaceArea == "0" || surfaceArea.startsWith("Pilih")) "Tidak Ada Informasi" else NumericalUnitConverter.meterSquareFormatter(surfaceArea)
+            textViewStaircase.text = if (floor == null || floor == "0" || floor.startsWith("Pilih")) "Tidak Ada Informasi" else floor
+            textViewBed.text = data.bedroom ?: "Tidak Ada Informasi"
+            textViewBath.text = data.bathroom ?: "Tidak Ada Informasi"
+            textViewGarage.text = if (garage == null || garage == "0" || garage.startsWith("Pilih")) "Tidak Ada Informasi" else garage
+            textViewPower.text = if (powerSupply == null || powerSupply == "0" || powerSupply.startsWith("Pilih")) "Tidak Ada Informasi" else powerSupply
+            textViewWater.text = if (water == null || water == "0" || water.startsWith("Pilih")) "Tidak Ada Informasi" else water
+            textViewInterior.text = if (interior == null || interior == "0" || interior.startsWith("Pilih")) "Tidak Ada Informasi" else interior
+            textViewRoad.text = if (roadAccess == null || roadAccess == "0" || roadAccess.startsWith("Pilih")) "Tidak Ada Informasi" else roadAccess
+
+            textViewPriceUnit.text = if (price == null || price == "0" || price.startsWith("Pilih")) "Tidak Ada Informasi" else NumericalUnitConverter.unitFormatter(price, true)
         }
     }
 }

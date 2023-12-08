@@ -5,5 +5,6 @@ data class LitePhotosModel (
     val projectId : String? = null,
     var filePath : String? = null,
     var isCover : Int = 0,
+    var type : String? = null,
     var caption : String? = null,
 )
