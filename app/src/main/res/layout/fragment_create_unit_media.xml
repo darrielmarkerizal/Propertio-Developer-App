@@ -79,7 +79,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:paddingStart="28.5dp"
             android:scrollbars="horizontal"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
@@ -138,7 +137,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:paddingStart="28.5dp"
             android:scrollbars="horizontal"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
@@ -195,7 +193,7 @@
             android:layout_width="0dp"
             style="@style/DesignSystem.TextInputEditText"
             android:layout_marginTop="8dp"
-            android:hint="Nama Virtual Tour"
+            android:hint="Masukkan Nama Virtual Tour"
             app:layout_constraintEnd_toEndOf="@+id/text_title_unit_media"
             app:layout_constraintStart_toStartOf="@+id/text_title_unit_media"
             app:layout_constraintTop_toBottomOf="@+id/text_nama_virtual_tour_unit_label" />
@@ -215,7 +213,7 @@
             style="@style/DesignSystem.TextInputEditText"
             android:layout_width="0dp"
             android:layout_marginTop="8dp"
-            android:hint="Masukkan nama virtual tour"
+            android:hint="Masukkan Link Virtual Tour"
             app:layout_constraintEnd_toEndOf="@+id/text_title_unit_media"
             app:layout_constraintStart_toStartOf="@+id/text_link_virtual_tour_label_unit"
             app:layout_constraintTop_toBottomOf="@+id/text_link_virtual_tour_label_unit" />

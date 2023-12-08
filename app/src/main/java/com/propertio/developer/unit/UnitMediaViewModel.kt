@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.first
 
 class UnitMediaViewModel : ViewModel() {
     var unitPhoto : MutableLiveData<List<LitePhotosModel>> = MutableLiveData(emptyList())
+    var unitDenah : MutableLiveData<List<LitePhotosModel>> = MutableLiveData(emptyList())
     var videoLink : String? = null
     var virtualTourName : String? = null
     var virtualTourLink : String? = null
