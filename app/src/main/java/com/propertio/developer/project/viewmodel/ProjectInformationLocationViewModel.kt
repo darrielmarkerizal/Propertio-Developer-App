@@ -37,21 +37,18 @@ class ProjectInformationLocationViewModel : ViewModel() {
     var savedDistrict : DistrictsModel? = null
 
 
-    fun printLog() {
+    fun printLog(msg : String = "") {
         Log.d( "ViewModel",
-            "loadTextData:" +
-                    "\n $headline " +
-                    "\n $title " +
-                    "\n $description " +
-                    "\n $completedAt " +
-                    "\n $propertyTypeName " +
-                    "\n $certificate " +
-                    "\n ${province?.provinceId} " +
-                    "\n ${province?.provinceName} " +
-                    "\n ${city?.citiesId} " +
-                    "\n ${city?.citiesName} " +
-                    "\n ${district?.districtsId} " +
-                    "\n ${district?.districtsName} "
+            "loadTextData $msg:" +
+                    "\n headline     : $headline " +
+                    "\n title        : $title " +
+                    "\n description  : $description " +
+                    "\n complete_at  : $completedAt " +
+                    "\n property_type: $propertyTypeId $propertyTypeName " +
+                    "\n certificate  : $certificate " +
+                    "\n province     : ${province?.provinceId} ${province?.provinceName}" +
+                    "\n city         : ${city?.citiesId} ${city?.citiesName}" +
+                    "\n district     : ${district?.districtsId} ${district?.districtsName}"
         )
 
     }

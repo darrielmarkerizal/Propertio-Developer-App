@@ -21,6 +21,7 @@ import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.projectmanagement.PostStoreProjectLocationResponse
+import com.propertio.developer.database.MasterDataDeveloperPropertio.certificate
 import com.propertio.developer.databinding.FragmentCreateProjectLokasiBinding
 import com.propertio.developer.dialog.CitiesSheetFragment
 import com.propertio.developer.dialog.DistrictsSheetFragment
@@ -70,8 +71,8 @@ class CreateProjectLokasiFragment : Fragment() {
 
 
     // Location
-    private var latitude : Double? = null
-    private var longitude : Double? = null
+    private var latitude : Double = 0.0
+    private var longitude : Double = 0.0
 
 
     // Siteplan/Masterplan
@@ -88,14 +89,14 @@ class CreateProjectLokasiFragment : Fragment() {
             val filename = getPathFromUri(imageUri).split("/").last()
             binding.cardFileThumbnail.textViewFilename.text = filename
 
-            Toast.makeText(requireContext(), "Berhasil menambahkan gambar", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireActivity(), "Berhasil menambahkan gambar", Toast.LENGTH_SHORT).show()
         }
 
     }
 
     // developerApi
     private val developerApi by lazy {
-        Retro(TokenManager(requireContext()).token)
+        Retro(TokenManager(requireActivity()).token)
             .getRetroClientInstance()
             .create(DeveloperApi::class.java)
     }
@@ -215,6 +216,7 @@ class CreateProjectLokasiFragment : Fragment() {
 
         activityBinding.floatingButtonNext.setOnClickListener {
             projectInformationLocationViewModel.printLog()
+
             if (!isProvinceSelected && !isCitySelected && !isDistrictSelected) {
                 binding.spinnerProvinceProject.error = "Wajib diisi"
                 binding.spinnerCityProject.error = "Wajib diisi"
@@ -224,114 +226,17 @@ class CreateProjectLokasiFragment : Fragment() {
             }
 
 
-            // get Text
-            val headline = projectInformationLocationViewModel.headline!!
-            val title = projectInformationLocationViewModel.title!!
-            val propertyTypeId = projectInformationLocationViewModel.propertyTypeId!!
-            val description = projectInformationLocationViewModel.description
-            val completedAt = projectInformationLocationViewModel.completedAt
-            val certificate = projectInformationLocationViewModel.certificate!!
-
-            val province = provinceViewModel.provinceData.value?.provinceName!!
-            val city = cityViewModel.citiesData.value?.citiesName!!
-            val district = districtViewModel.districtsData.value?.districtsName!!
-            val address = binding.editTextAddressProject.text.toString()
-            val postalCode = binding.editTextPosProject.text.toString()
-            val longitude = longitude
-            val latitude = latitude
-            val immersiveSiteplan = binding.editTextLinkImmersiveProject.text.toString()
-            val immersiveApps = binding.editTextLinkImmersiveAppsProject.text.toString()
 
 
-            // Image Request Body
-            val headlineBody = headline.toRequestBody("text/plain".toMediaTypeOrNull())
-            val titleBody = title.toRequestBody("text/plain".toMediaTypeOrNull())
-            val propertyTypeIdBody = propertyTypeId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-            val descriptionBody = description?.toRequestBody("text/plain".toMediaTypeOrNull())
-            val completedAtBody = completedAt?.toRequestBody("text/plain".toMediaTypeOrNull())
-            val certificateBody = certificate.toRequestBody("text/plain".toMediaTypeOrNull())
-            val provinceBody = province.toRequestBody("text/plain".toMediaTypeOrNull())
-            val cityBody = city.toRequestBody("text/plain".toMediaTypeOrNull())
-            val districtBody = district.toRequestBody("text/plain".toMediaTypeOrNull())
-            val addressBody = address.toRequestBody("text/plain".toMediaTypeOrNull())
-            val postalCodeBody = postalCode.toRequestBody("text/plain".toMediaTypeOrNull())
-            val longitudeBody = longitude.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-            val latitudeBody = latitude.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-            val immersiveSiteplanBody = immersiveSiteplan.toRequestBody("text/plain".toMediaTypeOrNull())
-            val immersiveAppsBody = immersiveApps.toRequestBody("text/plain".toMediaTypeOrNull())
 
-            var siteplanImage : MultipartBody.Part? = null
-
-            if (imageUri != null) {
-                Log.d("CreateProjectLokasiFragment", "onViewCreated: $imageUri")
-                val fileDir = requireContext().applicationContext.filesDir
-                val file = File(fileDir, "siteplan_image_create_project.jpg")
-                val fileInputStream = requireContext().contentResolver.openInputStream(imageUri!!)
-                val fileOutputStream = FileOutputStream(file)
-                fileInputStream!!.copyTo(fileOutputStream)
-                fileInputStream.close()
-                fileOutputStream.close()
-
-                val fileSizeInBytes = file.length()
-                val fileSizeInKB = fileSizeInBytes / 1024
-                val fileSizeInMB = fileSizeInKB / 1024
-
-                val maxFileSizeInMB = 4 // MB
-
-                if (fileSizeInMB > maxFileSizeInMB) {
-                    Toast.makeText(requireContext(), "Ukuran gambar terlalu besar (diatas 4MB)", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-
-                siteplanImage = MultipartBody.Part.createFormData(
-                    "siteplan_image",
-                    file.name,
-                    file.asRequestBody("image/*".toMediaTypeOrNull())
-                )
-
-            }
 
 
             // Form Request
             Log.d("CreateProjectLokasiFragment", "Update or Edit: ${projectInformationLocationViewModel.isUploaded}")
             if (projectInformationLocationViewModel.isUploaded) {
-                updateProjectLocation(
-                    headlineBody,
-                    titleBody,
-                    propertyTypeIdBody,
-                    certificateBody,
-                    provinceBody,
-                    cityBody,
-                    districtBody,
-                    descriptionBody,
-                    completedAtBody,
-                    addressBody,
-                    postalCodeBody,
-                    longitudeBody,
-                    latitudeBody,
-                    immersiveSiteplanBody,
-                    immersiveAppsBody,
-                    siteplanImage
-                )
+                updateProjectLocation()
             } else {
-                createProjectLocation(
-                    headlineBody,
-                    titleBody,
-                    propertyTypeIdBody,
-                    certificateBody,
-                    provinceBody,
-                    cityBody,
-                    districtBody,
-                    descriptionBody,
-                    completedAtBody,
-                    addressBody,
-                    postalCodeBody,
-                    longitudeBody,
-                    latitudeBody,
-                    immersiveSiteplanBody,
-                    immersiveAppsBody,
-                    siteplanImage
-                )
+                createProjectLocation()
             }
 
 
@@ -357,24 +262,77 @@ class CreateProjectLokasiFragment : Fragment() {
         projectInformationLocationViewModel.printLog()
     }
 
-    private fun updateProjectLocation(
-        headlineBody: RequestBody,
-        titleBody: RequestBody,
-        propertyTypeIdBody: RequestBody,
-        certificateBody: RequestBody,
-        provinceBody: RequestBody,
-        cityBody: RequestBody,
-        districtBody: RequestBody,
-        descriptionBody: RequestBody?,
-        completedAtBody: RequestBody?,
-        addressBody: RequestBody?,
-        postalCodeBody: RequestBody?,
-        longitudeBody: RequestBody?,
-        latitudeBody: RequestBody?,
-        immersiveSiteplanBody: RequestBody?,
-        immersiveAppsBody: RequestBody?,
-        siteplanImage: MultipartBody.Part?
-    ) {
+    private fun updateProjectLocation() {
+
+        // get Text
+        val headline = projectInformationLocationViewModel.headline!!
+        val title = projectInformationLocationViewModel.title!!
+        val propertyTypeId = projectInformationLocationViewModel.propertyTypeId!!
+        val description = projectInformationLocationViewModel.description
+        val completedAt = projectInformationLocationViewModel.completedAt
+        val certificate = projectInformationLocationViewModel.certificate!!
+
+        val province = provinceViewModel.provinceData.value?.provinceName!!
+        val city = cityViewModel.citiesData.value?.citiesName!!
+        val district = districtViewModel.districtsData.value?.districtsName!!
+        val address = binding.editTextAddressProject.text.toString()
+        val postalCode = binding.editTextPosProject.text.toString()
+        val longitude = longitude?.toString()
+        val latitude = latitude?.toString()
+        val immersiveSiteplan = binding.editTextLinkImmersiveProject.text.toString()
+        val immersiveApps = binding.editTextLinkImmersiveAppsProject.text.toString()
+
+        projectInformationLocationViewModel.printLog("when click next button $propertyTypeId.toString()")
+
+
+        // Image Request Body
+        val headlineBody = headline.toRequestBody("text/plain".toMediaTypeOrNull())
+        val titleBody = title.toRequestBody("text/plain".toMediaTypeOrNull())
+        val propertyTypeIdBody = propertyTypeId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        val descriptionBody = description?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val completedAtBody = completedAt?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val certificateBody = certificate.toRequestBody("text/plain".toMediaTypeOrNull())
+        val provinceBody = province.toRequestBody("text/plain".toMediaTypeOrNull())
+        val cityBody = city.toRequestBody("text/plain".toMediaTypeOrNull())
+        val districtBody = district.toRequestBody("text/plain".toMediaTypeOrNull())
+        val addressBody = address.toRequestBody("text/plain".toMediaTypeOrNull())
+        val postalCodeBody = postalCode.toRequestBody("text/plain".toMediaTypeOrNull())
+        val longitudeBody = longitude?.toString()?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val latitudeBody = latitude?.toString()?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val immersiveSiteplanBody = immersiveSiteplan.toRequestBody("text/plain".toMediaTypeOrNull())
+        val immersiveAppsBody = immersiveApps.toRequestBody("text/plain".toMediaTypeOrNull())
+
+        var siteplanImage : MultipartBody.Part? = null
+
+        if (imageUri != null) {
+            Log.d("CreateProjectLokasiFragment", "onViewCreated: $imageUri")
+            val fileDir = requireContext().applicationContext.filesDir
+            val file = File(fileDir, "siteplan_image_create_project.jpg")
+            val fileInputStream = requireContext().contentResolver.openInputStream(imageUri!!)
+            val fileOutputStream = FileOutputStream(file)
+            fileInputStream!!.copyTo(fileOutputStream)
+            fileInputStream.close()
+            fileOutputStream.close()
+
+            val fileSizeInBytes = file.length()
+            val fileSizeInKB = fileSizeInBytes / 1024
+            val fileSizeInMB = fileSizeInKB / 1024
+
+            val maxFileSizeInMB = 4 // MB
+
+            if (fileSizeInMB > maxFileSizeInMB) {
+                Toast.makeText(requireContext(), "Ukuran gambar terlalu besar (diatas 4MB)", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            siteplanImage = MultipartBody.Part.createFormData(
+                "siteplan_image",
+                file.name,
+                file.asRequestBody("image/*".toMediaTypeOrNull())
+            )
+
+        }
+
         developerApi.updateProjectLocation(
             id = formActivity.projectId!!,
             headline = headlineBody,
@@ -433,24 +391,76 @@ class CreateProjectLokasiFragment : Fragment() {
         })
     }
 
-    private fun createProjectLocation(
-        headlineBody: RequestBody,
-        titleBody: RequestBody,
-        propertyTypeIdBody: RequestBody,
-        certificateBody: RequestBody,
-        provinceBody: RequestBody,
-        cityBody: RequestBody,
-        districtBody: RequestBody,
-        descriptionBody: RequestBody?,
-        completedAtBody: RequestBody?,
-        addressBody: RequestBody?,
-        postalCodeBody: RequestBody?,
-        longitudeBody: RequestBody?,
-        latitudeBody: RequestBody?,
-        immersiveSiteplanBody: RequestBody?,
-        immersiveAppsBody: RequestBody?,
-        siteplanImage: MultipartBody.Part?
-    ) {
+    private fun createProjectLocation() {
+
+        // get Text
+        val headline = projectInformationLocationViewModel.headline!!
+        val title = projectInformationLocationViewModel.title!!
+        val propertyTypeId = projectInformationLocationViewModel.propertyTypeId!!
+        val description = projectInformationLocationViewModel.description
+        val completedAt = projectInformationLocationViewModel.completedAt
+        val certificate = projectInformationLocationViewModel.certificate!!
+
+        val province = provinceViewModel.provinceData.value?.provinceName!!
+        val city = cityViewModel.citiesData.value?.citiesName!!
+        val district = districtViewModel.districtsData.value?.districtsName!!
+        val address = binding.editTextAddressProject.text.toString()
+        val postalCode = binding.editTextPosProject.text.toString()
+        val immersiveSiteplan = binding.editTextLinkImmersiveProject.text.toString()
+        val immersiveApps = binding.editTextLinkImmersiveAppsProject.text.toString()
+
+        projectInformationLocationViewModel.printLog("when click next button $propertyTypeId.toString()")
+
+
+        // Image Request Body
+        val headlineBody = headline.toRequestBody("text/plain".toMediaTypeOrNull())
+        val titleBody = title.toRequestBody("text/plain".toMediaTypeOrNull())
+        val propertyTypeIdBody = propertyTypeId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        val descriptionBody = description?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val completedAtBody = completedAt?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val certificateBody = certificate.toRequestBody("text/plain".toMediaTypeOrNull())
+        val provinceBody = province.toRequestBody("text/plain".toMediaTypeOrNull())
+        val cityBody = city.toRequestBody("text/plain".toMediaTypeOrNull())
+        val districtBody = district.toRequestBody("text/plain".toMediaTypeOrNull())
+        val addressBody = address.toRequestBody("text/plain".toMediaTypeOrNull())
+        val postalCodeBody = postalCode.toRequestBody("text/plain".toMediaTypeOrNull())
+        val longitudeBody = longitude?.toString()?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val latitudeBody = latitude?.toString()?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val immersiveSiteplanBody = immersiveSiteplan.toRequestBody("text/plain".toMediaTypeOrNull())
+        val immersiveAppsBody = immersiveApps.toRequestBody("text/plain".toMediaTypeOrNull())
+
+        var siteplanImage : MultipartBody.Part? = null
+
+        if (imageUri != null) {
+            Log.d("CreateProjectLokasiFragment", "onViewCreated: $imageUri")
+            val fileDir = requireContext().applicationContext.filesDir
+            val file = File(fileDir, "siteplan_image_create_project.jpg")
+            val fileInputStream = requireContext().contentResolver.openInputStream(imageUri!!)
+            val fileOutputStream = FileOutputStream(file)
+            fileInputStream!!.copyTo(fileOutputStream)
+            fileInputStream.close()
+            fileOutputStream.close()
+
+            val fileSizeInBytes = file.length()
+            val fileSizeInKB = fileSizeInBytes / 1024
+            val fileSizeInMB = fileSizeInKB / 1024
+
+            val maxFileSizeInMB = 4 // MB
+
+            if (fileSizeInMB > maxFileSizeInMB) {
+                Toast.makeText(requireContext(), "Ukuran gambar terlalu besar (diatas 4MB)", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            siteplanImage = MultipartBody.Part.createFormData(
+                "siteplan_image",
+                file.name,
+                file.asRequestBody("image/*".toMediaTypeOrNull())
+            )
+
+        }
+
+
         developerApi.uploadProjectLocation(
             headline = headlineBody,
             title = titleBody,
@@ -487,17 +497,25 @@ class CreateProjectLokasiFragment : Fragment() {
                     }
                 } else {
                     // Mendapatkan Error Message
+                    Log.w("CreateProjectLokasiFragment", "onResponse Create Error: ${response.errorBody()?.string() ?: "Unknown Error"}")
+                    Log.w("CreateProjectLokasiFragment", "onResponse Create Error Not Successful: " +
+                            "\n\tResponse Code ${response.code()}" +
+                            "\n\t${response.body()?.status}" +
+                            "\n\t${response.body()?.message}" +
+                            "\n\t${response.body()?.data}"
+                    )
+
                     var errorMessage = response.errorBody()?.string()
                     errorMessage = errorMessage?.split("\"data\":")?.last()
                     errorMessage = errorMessage?.trim('{', '}')
 
-                    Log.w("CreateProjectLokasiFragment", "onResponse Error: ${response.errorBody()?.string()}")
+
                     if (errorMessage != null) {
                         for (error in errorMessage.split(',')){
                             Toast.makeText(requireActivity(), "Gagal membuat project: ${error}", Toast.LENGTH_SHORT).show()
                         }
                     }
-                    Log.w("CreateProjectLokasiFragment", "onResponse Error: ${response.body()?.message}")
+                    Log.w("CreateProjectLokasiFragment", "onResponse Create Error: ${response.body()?.message}")
                 }
             }
 
@@ -679,8 +697,8 @@ class CreateProjectLokasiFragment : Fragment() {
         val latLong = extractLatLongFromUrl(resolvedUrl) // Implement this function to extract the lat long from the URL
         Log.d("CreateProjectLokasiFragment", "resolveShortUrlAndRetrieveDetails: $latLong")
 
-        latitude = latLong?.first
-        longitude = latLong?.second
+        latitude = latLong?.first ?: 0.0
+        longitude = latLong?.second ?: 0.0
         Log.d("CreateProjectLokasiFragment","https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}")
         return "https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}"
     }

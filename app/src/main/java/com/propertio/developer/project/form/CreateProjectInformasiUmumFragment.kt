@@ -60,6 +60,7 @@ class CreateProjectInformasiUmumFragment : Fragment() {
 
         projectInformationLocationViewModel.isAlreadyUploaded.observe(viewLifecycleOwner) {
             if (it) {
+                Log.d("CreateProjectInformasiUmumFragment", "onViewCreated Updated: $it")
                 loadTextData()
                 projectInformationLocationViewModel.isUploaded = it
             }

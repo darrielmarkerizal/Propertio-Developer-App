@@ -8,8 +8,8 @@ import androidx.room.Update
 @Dao
 interface ProfileTableDao {
 
-    @get:Query("SELECT * FROM profile_table LIMIT 1")
-    val localProfile: ProfileTable
+    @Query("SELECT * FROM profile_table LIMIT 1")
+    suspend fun localProfile (): ProfileTable
 
     @Update
     suspend fun update(profileTable: ProfileTable)
