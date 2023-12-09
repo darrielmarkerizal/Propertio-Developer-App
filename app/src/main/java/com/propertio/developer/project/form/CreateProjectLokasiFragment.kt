@@ -165,6 +165,14 @@ class CreateProjectLokasiFragment : Fragment() {
             checkSpinnerData()
         }
 
+        binding.buttonHubungiKamiLokasiProyek.setOnClickListener {
+            openContactUs()
+        }
+
+        binding.buttonContohImmersiveLokasiProyek.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://immersive.propertio.id/siteplan-model/sp-000001/index.html"))
+            startActivity(intent)
+        }
 
 
 
@@ -242,6 +250,15 @@ class CreateProjectLokasiFragment : Fragment() {
         }
 
 
+    }
+
+
+    private fun openContactUs() {
+        // intent to whatsapp
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse("https://wa.me/6285702750455")
+        }
+        startActivity(intent)
     }
 
 

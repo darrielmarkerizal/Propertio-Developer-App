@@ -255,7 +255,7 @@ class CreateProjectMediaFragment : Fragment() {
             binding.cardDocumentProyekPropertyThumbnail.textViewFilename.text = projectMediaViewModel.document?.name
             binding.cardDocumentProyekPropertyThumbnail.textViewDescriptionDocument.text = projectMediaViewModel.document?.type?.uppercase()
         }
-        loadViewModelData()
+
 
 
         // Image
@@ -307,7 +307,8 @@ class CreateProjectMediaFragment : Fragment() {
             }
         }
 
-
+        // Load Data
+        loadViewModelData()
 
         // Navgiation Button
 
@@ -568,12 +569,15 @@ class CreateProjectMediaFragment : Fragment() {
     }
 
     private fun openContactUs() {
-        // TOOD: Do something here
-        Toast.makeText(context, "Open Contact Us : Belum Tersedia", Toast.LENGTH_SHORT).show()
+        // intent to whatsapp
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse("https://wa.me/6285702750455")
+        }
+        startActivity(intent)
     }
 
     private fun openTutorialVideo() {
-        // TOOD: Do something here
+        // TODO: Do something here
         Toast.makeText(context, "Open Tutorial Video : Belum Tersedia", Toast.LENGTH_SHORT).show()
     }
 

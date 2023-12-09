@@ -78,9 +78,15 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
+        projectInformationLocationViewModel.clear()
         val idFromIntent = intent.getIntExtra("EDIT_PROJECT", 0)
         intent.removeExtra("EDIT_PROJECT")
+
+
+        val bindingToolbar = binding.toolbarContainerProjectForm
+
+        setToolbarToCreate(bindingToolbar)
+
         if (idFromIntent != 0) {
             lifecycleScope.launch {
                 Log.d("ViewModel", "onCreate: $idFromIntent")
@@ -88,13 +94,13 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
                 fetchDataProjectDetail(projectId!!)
             }
 
+        } else {
+            setInitialFragment()
         }
 
-        val bindingToolbar = binding.toolbarContainerProjectForm
 
-        setToolbarToCreate(bindingToolbar)
 
-        setInitialFragment()
+
 
     }
 
@@ -120,7 +126,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
         }
     }
 
-    private fun fetchDataProjectDetail(projectId: Int) {
+    private suspend fun fetchDataProjectDetail(projectId: Int) {
         developerApi.getProjectDetail(projectId).enqueue(object : Callback<ProjectDetail> {
             override fun onResponse(call: Call<ProjectDetail>, response: Response<ProjectDetail>) {
                 if (response.isSuccessful) {
@@ -130,6 +136,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
                         Log.d("ProjectFormActivity", "onResponse: $data")
                         lifecycleScope.launch {
                             loadDataToViewModel(data)
+                            setInitialFragment()
                         }
                     } else {
                         Log.w("ProjectFormActivity", "onResponse: data is null")
@@ -207,7 +214,8 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
         }
     }
 
-    private fun setAddressList(address: ProjectDetail.ProjectDeveloper.ProjectAddress?) {
+    private suspend fun setAddressList(address: ProjectDetail.ProjectDeveloper.ProjectAddress?) {
+        projectInformationLocationViewModel.printLog("before add address")
         lifecycleScope.launch {
             val provinceName = address?.province
             val provinceId = withContext(Dispatchers.IO) {getProvinceId(provinceName) }
@@ -222,7 +230,11 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
                 ),
             )
             val cityName = address.city
-            val cityId = getCityId(cityName, provinceId) ?: return@launch
+            val cityId = withContext(Dispatchers.IO) {getCityId(cityName, provinceId) }
+            if (cityId == null) {
+                Log.d("ProjectFormActivity", "onResponse: cityId is null")
+                return@launch
+            }
             projectInformationLocationViewModel.addAdresss(
                 city = CitiesModel(
                     cityId,
@@ -230,8 +242,12 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
                     cityName!!
                 )
             )
-            val districtName = address?.district
-            val districtId = getDistrictId(districtName, cityId) ?: return@launch
+            val districtName = address.district
+            val districtId = withContext(Dispatchers.IO) {getDistrictId(districtName, cityId) }
+            if (districtId == null) {
+                Log.d("ProjectFormActivity", "onResponse: districtId is null")
+                return@launch
+            }
             projectInformationLocationViewModel.addAdresss(
                 district = DistrictsModel(
                     districtId,
@@ -239,7 +255,9 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
                     districtName!!
                 )
             )
+            projectInformationLocationViewModel.printLog("after add address")
         }
+
 
     }
 

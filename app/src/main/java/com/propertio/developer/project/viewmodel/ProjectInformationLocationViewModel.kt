@@ -76,6 +76,12 @@ class ProjectInformationLocationViewModel : ViewModel() {
         status = null
         listingClass = null
         siteplanImageURL = null
+
+        isAddressNotEdited = false
+        savedProvince = null
+        savedCity = null
+        savedDistrict = null
+        isUploaded = false
     }
 
     fun add(
