@@ -17,6 +17,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.propertio.developer.TokenManager
+import com.propertio.developer.api.DomainURL.DOMAIN
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.projectmanagement.PostStoreProjectPhotoResponse
@@ -67,6 +68,12 @@ class CreateProjectMediaFragment : Fragment() {
         if (result.resultCode == RESULT_OK) {
             documentUri = result.data?.data
 
+            if (projectMediaViewModel.isDocumentNotEdited) {
+                deletePreviousDocument()
+            }
+
+            projectMediaViewModel.isDocumentNotEdited = false
+
             if (documentUri == null) {
                 Log.e("CreateProjectMedia", "documentUri is null")
                 return@registerForActivityResult
@@ -80,6 +87,23 @@ class CreateProjectMediaFragment : Fragment() {
 
         }
 
+    }
+
+    private fun deletePreviousDocument() {
+        developerApi.deleteProjectDocument(projectMediaViewModel.document!!.id!!).enqueue(object : Callback<UpdateProjectResponse> {
+            override fun onResponse(call: Call<UpdateProjectResponse>, response: Response<UpdateProjectResponse>) {
+                if (response.isSuccessful) {
+                    Log.d("CreateProjectMedia", "onResponse: ${response.body()}")
+                } else {
+                    Log.e("CreateProjectMedia", "onResponse: ${response.body()}")
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateProjectResponse>, t: Throwable) {
+                Log.e("CreateProjectMedia", "onFailure: ${t.message}")
+            }
+
+        })
     }
 
     // Image
@@ -207,14 +231,31 @@ class CreateProjectMediaFragment : Fragment() {
         }
     }
 
+    private fun loadViewModelData() {
+        binding.editTextLinkYoutubeMediaProject.setText(projectMediaViewModel.videoLink)
+        binding.editTextNamaVirtualTour.setText(projectMediaViewModel.virtualTourName)
+        binding.editTextLinkVirtualTourProject.setText(projectMediaViewModel.virtualTourLink)
+
+        Log.d("CreateProjectMedia", "loadViewModelData: ${projectMediaViewModel.videoLink}")
+        Log.d("CreateProjectMedia", "loadViewModelData: ${projectMediaViewModel.virtualTourName}")
+        Log.d("CreateProjectMedia", "loadViewModelData: ${projectMediaViewModel.virtualTourLink}")
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         // Check if there is a document
         if (documentUri == null) {
             binding.cardDocumentProyekPropertyThumbnail.root.visibility = View.GONE
         }
+
+        if (projectMediaViewModel.document != null && projectMediaViewModel.isDocumentNotEdited) {
+            binding.cardDocumentProyekPropertyThumbnail.root.visibility = View.VISIBLE
+            binding.cardDocumentProyekPropertyThumbnail.textViewFilename.text = projectMediaViewModel.document?.name
+            binding.cardDocumentProyekPropertyThumbnail.textViewDescriptionDocument.text = projectMediaViewModel.document?.type?.uppercase()
+        }
+        loadViewModelData()
 
 
         // Image
@@ -249,6 +290,23 @@ class CreateProjectMediaFragment : Fragment() {
             pickDocument()
         }
 
+        // Document Card
+        binding.cardDocumentProyekPropertyThumbnail.cardFileThumbnail.setOnClickListener {
+            // oppen document
+            if (documentUri != null) {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndType(documentUri, "application/pdf")
+                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                }
+                startActivity(intent)
+            } else if (projectMediaViewModel.document?.filename != null) {
+                val documentURL = DOMAIN + projectMediaViewModel.document!!.filename
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse(documentURL)
+                }
+            }
+        }
+
 
 
         // Navgiation Button
@@ -262,15 +320,6 @@ class CreateProjectMediaFragment : Fragment() {
         }
 
         activityBinding?.floatingButtonNext?.setOnClickListener {
-            //TODO: Delete this two line below
-            formActivity?.onNextButtonProjectManagementClick()
-            return@setOnClickListener
-
-
-            val retro = Retro(TokenManager(requireContext()).token)
-                .getRetroClientInstance()
-                .create(DeveloperApi::class.java)
-
 
             val projectId = formActivity?.projectId
             val youtubeLink = binding.editTextLinkYoutubeMediaProject.text.toString()
@@ -324,7 +373,7 @@ class CreateProjectMediaFragment : Fragment() {
             }
 
 
-            retro.uploadAnotherProjectMedia(
+            developerApi.uploadAnotherProjectMedia(
                 projectId = projectIdBody,
                 videoLink = youtubeLinkBody,
                 virtualTourName = virtualTourBody,

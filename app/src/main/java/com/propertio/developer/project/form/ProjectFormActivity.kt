@@ -3,7 +3,6 @@ package com.propertio.developer.project.form
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -12,9 +11,6 @@ import com.propertio.developer.R
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.common.address.AddressApi
-import com.propertio.developer.api.common.address.City
-import com.propertio.developer.api.common.address.District
-import com.propertio.developer.api.common.address.Province
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
 import com.propertio.developer.databinding.ActivityProjectFormBinding
@@ -23,6 +19,7 @@ import com.propertio.developer.dialog.model.CitiesModel
 import com.propertio.developer.dialog.model.DistrictsModel
 import com.propertio.developer.dialog.model.ProvinceModel
 import com.propertio.developer.model.LitePhotosModel
+import com.propertio.developer.model.ProjectDocument
 import com.propertio.developer.project.viewmodel.ProjectFacilityViewModel
 import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
 import com.propertio.developer.project.viewmodel.ProjectMediaViewModel
@@ -186,8 +183,16 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
                 virtualTourLink = data.projectVirtualTours?.linkVirtualTourURL,
             )
             if (data.projectDocuments?.isNotEmpty() == true) {
+                projectMedia.isDocumentNotEdited = true
                 projectMedia.add(
-                    documentFilePath = data.projectDocuments?.first()?.filename
+                    document = ProjectDocument(
+                        id = data.projectDocuments?.get(0)?.id,
+                        projectId = data.projectDocuments?.get(0)?.projectId,
+                        name = data.projectDocuments?.get(0)?.name,
+                        filename = data.projectDocuments?.get(0)?.filename,
+                        createdAt = data.projectDocuments?.get(0)?.createdAt,
+                        updatedAt = data.projectDocuments?.get(0)?.updatedAt,
+                    )
                 )
             }
 

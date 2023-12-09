@@ -112,6 +112,12 @@ interface DeveloperApi {
         @Part files: List<MultipartBody.Part>
     ): Call<PostStoreProjectPhotoResponse>
 
+
+    @DELETE("v1/cms/project-management/project-other-media/{document_id}/document")
+    fun deleteProjectDocument(
+        @Path("document_id") documentId : Int
+    ) : Call<UpdateProjectResponse>
+
     @Multipart
     @POST("v1/cms/project-management/{project_id}/unit-photo")
     fun uploadUnitPhoto(
