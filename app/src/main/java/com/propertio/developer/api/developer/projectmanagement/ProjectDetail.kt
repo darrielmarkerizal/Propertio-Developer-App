@@ -63,7 +63,7 @@ class ProjectDetail : DefaultResponse() {
 
         @SerializedName("project_virtual_tours")
         @Expose
-        var projectVirtualTours: List<ProjectVirtualTour>? = null
+        var projectVirtualTours: ProjectVirtualTour? = null
 
         @SerializedName("project_documents")
         @Expose

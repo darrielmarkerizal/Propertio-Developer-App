@@ -3,6 +3,7 @@ package com.propertio.developer.project.list
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.PictureDrawable
+import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,6 +26,8 @@ import com.propertio.developer.databinding.TemplateCardProjectBinding
 //import com.propertio.developer.lib.SvgSoftwareLayerSetter
 import com.propertio.developer.project.ProjectDetailActivity
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_ID
+import java.util.Date
+import java.util.Locale
 
 
 class ProjectAdapter(
@@ -65,7 +68,6 @@ class ProjectAdapter(
                 textViewProjectCode.text = data.projectCode
 
 
-                // Image
                 val imageURL: String = DomainURL.DOMAIN + data.photo
                 loadImage(imageURL)
 
@@ -165,10 +167,14 @@ class ProjectAdapter(
         }
 
         private fun loadImage(imageURL: String) {
+            val dateFormat = SimpleDateFormat("yyyyMMddHHmm", Locale.getDefault())
+            val timestamp = dateFormat.format(Date())
+            val uniqueURL = "$imageURL?$timestamp"
             with(binding) {
                 Log.d("ProjectAdapter", "imageURL: $imageURL")
-                imageViewThumbnail.load(imageURL) {
+                imageViewThumbnail.load(uniqueURL) {
                     crossfade(true)
+                    crossfade(500)
                     placeholder(R.drawable.placeholder)
                     error(R.drawable.placeholder)
                 }

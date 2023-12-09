@@ -7,4 +7,7 @@ class ProjectFacilityViewModel : ViewModel() {
     val selectedFacilities = mutableListOf<String>()
     val facilityTypeList = mutableListOf<GeneralType>()
 
+    fun addSelectedFacilities(facilityId: String) {
+        selectedFacilities.add(facilityId)
+    }
 }
