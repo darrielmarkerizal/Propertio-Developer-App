@@ -55,7 +55,44 @@ import retrofit2.create
 
 class ProjectFragment : Fragment() {
     private lateinit var projectViewModel: ProjectViewModel
-    private lateinit var projectAdapter: ProjectAdapter
+    private val projectAdapter by lazy {
+        ProjectAdapter(
+            context = requireActivity(),
+            onClickRincian = { data ->
+                Log.d("ProjectAdapter", "Repost button clicked")
+                val intentToDetailProject = Intent(context, ProjectDetailActivity::class.java)
+                intentToDetailProject.putExtra(ProjectDetailActivity.PROJECT_ID, data.id)
+                intentToDetailProject.putExtra("Property Type", data.propertyTypeName)
+                launcherToRincian.launch(intentToDetailProject)
+            },
+            onClickMore = { data, button ->
+                horizontalMoreButtonPopUp(data, button)
+            },
+            onClickRepost = {data ->
+                developerApi.repostProject(data.id).enqueue(object : Callback<UpdateProjectResponse> {
+                    override fun onResponse(
+                        call: Call<UpdateProjectResponse>,
+                        response: Response<UpdateProjectResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.d("ProjectFragment", "onResponse: ${response.body()?.message}")
+                            lifecycleScope.launch {
+                                refreshRecyclerListAdapter()
+                            }
+
+                        } else {
+                            Log.d("ProjectFragment", "onResponse: ${response.errorBody()?.string()}")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UpdateProjectResponse>, t: Throwable) {
+                        Log.e("ProjectFragment", "onFailure: ", t)
+                    }
+
+                })
+            }
+        )
+    }
 
     private var visibleThreshold : Int = 5
     private val cardHeight = 500
@@ -80,8 +117,13 @@ class ProjectFragment : Fragment() {
     ) {
         if (it.resultCode == RESULT_OK) {
             Log.d("ProjectFragment Launcher", "Result OK")
-
+            refreshRecyclerListAdapter()
         }
+    }
+
+    private fun refreshRecyclerListAdapter() {
+        Log.d("ProjectFragment", "refreshRecyclerListAdapter: ")
+        projectViewModel.fetchLiteProject(TokenManager(requireContext()).token!!)
     }
 
     private val launcherToRincian = registerForActivityResult(
@@ -103,54 +145,12 @@ class ProjectFragment : Fragment() {
     }
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-        val factory = ProjectViewModelFactory(
-            (requireActivity().application as PropertioDeveloperApplication).repository
-        )
-        projectViewModel = ViewModelProvider(requireActivity(), factory)[ProjectViewModel::class.java]
-
-
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        projectAdapter = ProjectAdapter(
-            context = requireActivity(),
-            onClickRincian = { data ->
-                Log.d("ProjectAdapter", "Repost button clicked")
-                val intentToDetailProject = Intent(context, ProjectDetailActivity::class.java)
-                intentToDetailProject.putExtra(ProjectDetailActivity.PROJECT_ID, data.id)
-                intentToDetailProject.putExtra("Property Type", data.propertyTypeName)
-                launcherToRincian.launch(intentToDetailProject)
-            },
-            onClickMore = { data, button ->
-                horizontalMoreButtonPopUp(data, button)
-            },
-            onClickRepost = {data ->
-                developerApi.repostProject(data.id).enqueue(object : Callback<UpdateProjectResponse> {
-                    override fun onResponse(
-                        call: Call<UpdateProjectResponse>,
-                        response: Response<UpdateProjectResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            Log.d("ProjectFragment", "onResponse: ${response.body()?.message}")
-                        } else {
-                            Log.d("ProjectFragment", "onResponse: ${response.errorBody()?.string()}")
-                        }
-                    }
-
-                    override fun onFailure(call: Call<UpdateProjectResponse>, t: Throwable) {
-                        Log.e("ProjectFragment", "onFailure: ", t)
-                    }
-
-                })
-            }
-        )
         return binding.root
     }
 
@@ -278,9 +278,16 @@ class ProjectFragment : Fragment() {
         visibleThreshold = 5
         _isLoading.value = true
 
+        val factory = ProjectViewModelFactory(
+            (requireActivity().application as PropertioDeveloperApplication).repository
+        )
+        projectViewModel = ViewModelProvider(requireActivity(), factory)[ProjectViewModel::class.java]
+
+
+
         with(binding) {
             fabAddProject.setOnClickListener {
-                val intent = Intent(requireContext(), ProjectFormActivity::class.java)
+                val intent = Intent(requireActivity(), ProjectFormActivity::class.java)
                 launcherAddProject.launch(intent)
             }
 
@@ -304,32 +311,37 @@ class ProjectFragment : Fragment() {
 
         }
 
-        lifecycleScope.launch {
-
-            if (tabButtonViewModel.isActive()) {
+        tabButtonViewModel.tabActiveStatus.observe(viewLifecycleOwner) {
+            if (it) {
                 setTabToActive()
-
             } else {
                 setTabToDraf()
             }
+        }
 
+        binding.buttonSearch.setOnClickListener {
+            val filter = binding.textEditSearchFilter.text.toString()
+            visibleThreshold = 5
+            setRecyclerListProject(currentStatus, filter)
 
+//            lifecycleScope.launch {
+//
+//                if (tabButtonViewModel.isActive()) {
+//                    setTabToActive()
+//
+//                } else {
+//                    setTabToDraf()
+//                }
+//
+//            }
 
-            tabButtonViewModel.tabActiveStatus.observe(viewLifecycleOwner) {
-                if (it) {
-                    setTabToActive()
-                } else {
-                    setTabToDraf()
-                }
+        }
+
+        binding.swipeRefreshLayoutProjectList.setOnRefreshListener {
+            lifecycleScope.launch {
+                refreshRecyclerListAdapter()
+                binding.swipeRefreshLayoutProjectList.isRefreshing = false
             }
-
-
-            binding.buttonSearch.setOnClickListener {
-                val filter = binding.textEditSearchFilter.text.toString()
-                visibleThreshold = 5
-                setRecyclerListProject(currentStatus, filter)
-            }
-
         }
 
 

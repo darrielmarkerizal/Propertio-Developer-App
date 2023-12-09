@@ -116,9 +116,6 @@ class ProfileFragment : Fragment() {
         swipeRefreshHandler()
 
 
-        // Initialize View Model
-//        initializeViewModel()
-
 
         // fetch Data From Api
         lifecycleScope.launch {
@@ -545,10 +542,10 @@ class ProfileFragment : Fragment() {
     private fun useLocalData() {
         Log.d("ProfileFragment", "useLocalData: ")
         lifecycleScope.launch {
-            val data = profileDao.localProfile
+            val data = withContext(Dispatchers.IO) { profileDao.localProfile() }
             Log.d("ProfileFragment", "useLocalData: $data")
 
-            val localProfileData = ProfileResponse.ProfileData()
+            val localProfileData = withContext(Dispatchers.IO) { ProfileResponse.ProfileData() }
             localProfileData.accountId = data.idUser
             localProfileData.email = data.email
             localProfileData.userData = ProfileResponse.ProfileData.UserData().apply {
