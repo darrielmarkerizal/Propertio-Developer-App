@@ -11,9 +11,15 @@ class CreateUnitSuccessActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        with(binding) {
+            buttonKembaliKeDetailProyek.setOnClickListener {
+                finish()
+            }
+
         binding.buttonKembaliKeDetailProyek.setOnClickListener {
             setResult(RESULT_OK)
             finish()
+
         }
-    }
+    }}
 }
