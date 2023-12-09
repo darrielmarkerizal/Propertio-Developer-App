@@ -61,14 +61,5 @@ class CertificateTypeSheetFragment : BottomSheetDialogFragment() {
         }
     }
 
-//    private val listOfCertificate = listOf(
-//        "Hak Milik",
-//        "Hak Guna Bangunan",
-//        "Girik / Petok D",
-//        "Letter C",
-//        "Lainnya",
-//        "Strata"
-//    )
-
 
 }
