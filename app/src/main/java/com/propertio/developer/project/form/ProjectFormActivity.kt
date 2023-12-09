@@ -152,6 +152,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
 
     private suspend fun loadDataToViewModel(data: ProjectDetail.ProjectDeveloper) {
         withContext(Dispatchers.IO) {
+            projectInformationLocationViewModel.isAddressNotEdited = true
             projectInformationLocationViewModel.add(
                 headline = data.headline,
                 title = data.title,
@@ -204,7 +205,11 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
     private fun setAddressList(address: ProjectDetail.ProjectDeveloper.ProjectAddress?) {
         lifecycleScope.launch {
             val provinceName = address?.province
-            val provinceId = getProvinceId(provinceName) ?: return@launch
+            val provinceId = withContext(Dispatchers.IO) {getProvinceId(provinceName) }
+            if (provinceId == null) {
+                Log.d("ProjectFormActivity", "onResponse: provinceId is null")
+                return@launch
+            }
             projectInformationLocationViewModel.addAdresss(
                 province = ProvinceModel(
                     provinceId = provinceId,
@@ -234,86 +239,90 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
     }
 
     private suspend fun getDistrictId(districtName: String?, cityId: String?): String? {
-        var id: String? = null
-        withContext(Dispatchers.IO) {
-            addressApi.getDistricts(cityId!!).enqueue(object : Callback<List<District>> {
-                override fun onResponse(
-                    call: Call<List<District>>,
-                    response: Response<List<District>>
-                ) {
-                    if (response.isSuccessful) {
-                        val data = response.body()
-                        if (data != null) {
-                            val provinceId = data.find { it.name == districtName }?.id
-                            id = provinceId
-                        }
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = addressApi.getSuspendDistricts(cityId!!)
+                if (response.isSuccessful) {
+                    val data = response.body()
+
+                    if (data == null) {
+                        Log.e("ProjectFormActivity", "getDistrictId: data is null")
+                        return@withContext null
                     }
+                    Log.d("ProjectFormActivity", "getDistrictId: Try to get : ${data.find { it.name == districtName }?.id}")
+                    // Return Result
+                    data.find { it.name == districtName }?.id
+                } else {
+                    Log.e("ProjectFormActivity", "getDistrictId: ${response.message()}")
 
+                    // Return Result
+                    null
                 }
+            } catch (e: Exception) {
+                Log.e("ProjectFormActivity", "getDistrictId: ${e.message}")
 
-                override fun onFailure(call: Call<List<District>>, t: Throwable) {
-                    Log.e("ProjectFormActivity", "onFailure: ${t.message}")
-                }
-
-            })
+                // Return Result
+                null
+            }
         }
-        return id
     }
 
     private suspend fun getCityId(cityName: String?, provinceId: String?): String? {
-        var id: String? = null
-        withContext(Dispatchers.IO) {
-            addressApi.getCities(provinceId!!).enqueue(object : Callback<List<City>> {
-                override fun onResponse(
-                    call: Call<List<City>>,
-                    response: Response<List<City>>
-                ) {
-                    if (response.isSuccessful) {
-                        val data = response.body()
-                        if (data != null) {
-                            val provinceId = data.find { it.name == cityName }?.id
-                            id = provinceId
-                        }
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = addressApi.getSuspendCities(provinceId!!)
+                if (response.isSuccessful) {
+                    val data = response.body()
+
+                    if (data == null) {
+                        Log.e("ProjectFormActivity", "getCityId: data is null")
+                        return@withContext null
                     }
+                    Log.d("ProjectFormActivity", "getCityId: Try to get : ${data.find { it.name == cityName }?.id}")
+                    // Return Result
+                    data.find { it.name == cityName }?.id
+                } else {
+                    Log.w("ProjectFormActivity", "getCityId: ${response.message()}")
 
+                    // Return Result
+                    null
                 }
+            } catch (e: Exception) {
+                Log.e("ProjectFormActivity", "getCityId: ${e.message}")
 
-                override fun onFailure(call: Call<List<City>>, t: Throwable) {
-                    Log.e("ProjectFormActivity", "onFailure: ${t.message}")
-                }
-
-            })
+                // Return Result
+                null
+            }
         }
-        return id
     }
 
     private suspend fun getProvinceId(provinceName: String?): String? {
-        var id: String? = null
-        withContext(Dispatchers.IO) {
-            addressApi.getProvinces().enqueue(object : Callback<List<Province>> {
-                override fun onResponse(
-                    call: Call<List<Province>>,
-                    response: Response<List<Province>>
-                ) {
-                    if (response.isSuccessful) {
-                        val data = response.body()
-                        if (data != null) {
-                            val provinceId = data.find { it.name == provinceName }?.id
-                            id = provinceId
-                        }
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = addressApi.getSuspendProvinces()
+                if (response.isSuccessful) {
+                    val data = response.body()
+
+                    if (data == null) {
+                        Log.e("ProjectFormActivity", "getProvinceId: data is null")
+                        return@withContext null
                     }
+                    Log.d("ProjectFormActivity", "getProvinceId: Try to get : ${data.find { it.name == provinceName }?.id}")
+                    // Return Result
+                    data.find { it.name == provinceName }?.id
+                } else {
+                    Log.e("ProjectFormActivity", "getProvinceId: ${response.message()}")
 
+                    // Return Result
+                    null
                 }
+            } catch (e: Exception) {
+                Log.e("ProjectFormActivity", "getProvinceId: ${e.message}")
 
-                override fun onFailure(call: Call<List<Province>>, t: Throwable) {
-                    Log.e("ProjectFormActivity", "onFailure: ${t.message}")
-                }
-
-            })
+                // Return Result
+                null
+            }
         }
-        return id
-
-
     }
 
 

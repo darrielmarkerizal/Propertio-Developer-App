@@ -71,7 +71,7 @@ interface DeveloperApi {
     ) : Call<PostStoreProjectLocationResponse>
 
     @Multipart
-    @PUT("v1/cms/project-management/project-location/{id}")
+    @POST("v1/cms/project-management/project-location/{id}?_method=PUT")
     fun updateProjectLocation(
         @Path("id") id : Int,
         @Part("headline") headline: RequestBody,
