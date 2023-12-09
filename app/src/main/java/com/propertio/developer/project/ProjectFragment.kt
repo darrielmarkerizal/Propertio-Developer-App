@@ -76,6 +76,10 @@ class ProjectFragment : Fragment() {
                     ) {
                         if (response.isSuccessful) {
                             Log.d("ProjectFragment", "onResponse: ${response.body()?.message}")
+                            lifecycleScope.launch {
+                                refreshRecyclerListAdapter()
+                            }
+
                         } else {
                             Log.d("ProjectFragment", "onResponse: ${response.errorBody()?.string()}")
                         }
@@ -113,8 +117,13 @@ class ProjectFragment : Fragment() {
     ) {
         if (it.resultCode == RESULT_OK) {
             Log.d("ProjectFragment Launcher", "Result OK")
-
+            refreshRecyclerListAdapter()
         }
+    }
+
+    private fun refreshRecyclerListAdapter() {
+        Log.d("ProjectFragment", "refreshRecyclerListAdapter: ")
+        projectViewModel.fetchLiteProject(TokenManager(requireContext()).token!!)
     }
 
     private val launcherToRincian = registerForActivityResult(
@@ -326,6 +335,13 @@ class ProjectFragment : Fragment() {
 //
 //            }
 
+        }
+
+        binding.swipeRefreshLayoutProjectList.setOnRefreshListener {
+            lifecycleScope.launch {
+                refreshRecyclerListAdapter()
+                binding.swipeRefreshLayoutProjectList.isRefreshing = false
+            }
         }
 
 

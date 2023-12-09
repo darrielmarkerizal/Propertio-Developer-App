@@ -7,238 +7,253 @@
     android:background="@color/white"
     android:orientation="horizontal">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nested_scroll_view_project_fragment"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout_project_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nested_scroll_view_project_fragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="32dp">
+            android:layout_height="0dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                style="@style/text.bold.size18"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Proyek" />
+                android:orientation="vertical"
+                android:paddingHorizontal="32dp">
 
-            <TextView
-                style="@style/text.regular.size12"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Monitor Proyek Anda Disini" />
+                <TextView
+                    style="@style/text.bold.size18"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Proyek" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                <TextView
+                    style="@style/text.regular.size12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Monitor Proyek Anda Disini" />
 
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraintLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/textView3"
+                            style="@style/text.medium.size12"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="26dp"
+                            android:layout_marginEnd="26dp"
+
+                            android:text="Ingin Kami buatkan iklan proyek properti Anda?"
+                            android:textColor="@color/primary"
+                            app:layout_constraintEnd_toStartOf="@+id/divider"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="133.52dp"
+                            android:layout_height="88dp"
+                            android:layout_marginTop="32dp"
+                            android:layout_marginBottom="32dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/divider"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/humaaans___study_online_2" />
+
+                        <View
+                            android:id="@+id/divider"
+                            android:layout_width="1dp"
+                            android:layout_height="0dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            style="@style/button.primary.s"
+                            android:layout_width="0dp"
+                            android:layout_height="25.6dp"
+                            android:layout_marginTop="20dp"
+                            android:text="Hubungi kami"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/textView3"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="@+id/textView3"
+                            app:layout_constraintTop_toBottomOf="@+id/textView3"
+                            app:layout_constraintVertical_bias="0.0" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </com.google.android.material.card.MaterialCardView>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="20dp">
 
-                    <TextView
-                        android:id="@+id/textView3"
-                        style="@style/text.medium.size12"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="26dp"
-                        android:layout_marginEnd="26dp"
-
-                        android:text="Ingin Kami buatkan iklan proyek properti Anda?"
-                        android:textColor="@color/primary"
-                        app:layout_constraintEnd_toStartOf="@+id/divider"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/imageView2" />
-
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="133.52dp"
-                        android:layout_height="88dp"
-                        android:layout_marginTop="32dp"
-                        android:layout_marginBottom="32dp"
+                        android:layout_marginEnd="-10dp"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:endIconMode="clear_text"
+                        app:hintEnabled="false"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/divider"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/humaaans___study_online_2" />
+                        app:layout_constraintEnd_toStartOf="@+id/button_search"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                    <View
-                        android:id="@+id/divider"
-                        android:layout_width="1dp"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/text_edit_search_filter"
+                            style="@style/DesignSystem.TextInputEditText"
+                            android:layout_width="match_parent"
+                            android:backgroundTint="@color/grey_50"
+                            android:hint="Cari Proyek" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/button_search"
+                        android:layout_width="50dp"
                         android:layout_height="0dp"
+                        android:background="@drawable/button_primary_rounded_rectangle"
+                        android:src="@drawable/baseline_search_24"
+                        android:tint="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        style="@style/button.primary.s"
-                        android:layout_width="0dp"
-                        android:layout_height="25.6dp"
-                        android:layout_marginTop="20dp"
-                        android:text="Hubungi kami"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/textView3"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="@+id/textView3"
-                        app:layout_constraintTop_toBottomOf="@+id/textView3"
-                        app:layout_constraintVertical_bias="0.0" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            </com.google.android.material.card.MaterialCardView>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="20dp">
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="-10dp"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:endIconMode="clear_text"
-                    app:hintEnabled="false"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/button_search"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/text_edit_search_filter"
-                        style="@style/DesignSystem.TextInputEditText"
-                        android:layout_width="match_parent"
-                        android:backgroundTint="@color/grey_50"
-                        android:hint="Cari Proyek" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/button_search"
-                    android:layout_width="50dp"
-                    android:layout_height="0dp"
-                    android:background="@drawable/button_primary_rounded_rectangle"
-                    android:src="@drawable/baseline_search_24"
-                    android:tint="@color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="50dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="2dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/button_aktif"
+                    <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="32dp"
-                        android:minWidth="101dp"
-                        android:text="Aktif"
-                        android:textColor="@color/white"
-                        android:layout_marginTop="0dp"
-                        android:textAppearance="@style/text.medium.size12"
-                        android:background="@drawable/button_radio_secondary_rounded"
-                        android:layout_marginEnd="12dp"/>
+                        android:layout_height="wrap_content"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/button_draf"
-                        android:layout_width="wrap_content"
-                        android:layout_height="32dp"
-                        android:minWidth="101dp"
-                        android:text="Draf"
-                        android:layout_marginTop="0dp"
-                        android:textAppearance="@style/text.medium.size12"
-                        android:background="@drawable/button_radio_secondary_rounded"/>
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/button_aktif"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:minWidth="101dp"
+                            android:text="Aktif"
+                            android:textColor="@color/white"
+                            android:layout_marginTop="0dp"
+                            android:textAppearance="@style/text.medium.size12"
+                            android:background="@drawable/button_radio_secondary_rounded"
+                            android:layout_marginEnd="12dp"/>
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/button_draf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:minWidth="101dp"
+                            android:text="Draf"
+                            android:layout_marginTop="0dp"
+                            android:textAppearance="@style/text.medium.size12"
+                            android:background="@drawable/button_radio_secondary_rounded"/>
 
 
 
-                </LinearLayout>
+                    </LinearLayout>
 
-            </HorizontalScrollView>
+                </HorizontalScrollView>
 
-            <FrameLayout
-                android:id="@+id/frameLayout_belum_ada_proyek"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="100dp"
-                android:visibility="visible">
-
-                <LinearLayout
+                <FrameLayout
+                    android:id="@+id/frameLayout_belum_ada_proyek"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:paddingVertical="100dp"
+                    android:visibility="visible">
 
-                    <ImageView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_simple_line_docs" />
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-                    <TextView
-                        style="@style/text.medium.size14"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="38dp"
-                        android:text="Belum ada proyek" />
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_simple_line_docs" />
 
-
-                </LinearLayout>
-
-            </FrameLayout>
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyler_view_projects"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:itemCount="2"
-                tools:listitem="@layout/template_card_project" />
-
-            <ProgressBar
-                android:id="@+id/progress_bar_project"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"/>
-
-        </LinearLayout>
+                        <TextView
+                            style="@style/text.medium.size14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="38dp"
+                            android:text="Belum ada proyek" />
 
 
-    </androidx.core.widget.NestedScrollView>
+                    </LinearLayout>
+
+                </FrameLayout>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyler_view_projects"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:itemCount="2"
+                    tools:listitem="@layout/template_card_project" />
+
+                <ProgressBar
+                    android:id="@+id/progress_bar_project"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="32dp"/>
+
+            </LinearLayout>
+
+
+        </androidx.core.widget.NestedScrollView>
+
+
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
