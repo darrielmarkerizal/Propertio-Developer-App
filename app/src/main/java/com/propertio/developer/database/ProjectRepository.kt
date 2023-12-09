@@ -28,9 +28,10 @@ class ProjectRepository(
         return projectTableDao.getProjectById(id).filterNotNull().first()
     }
 
-    fun isNotIdTaken(id: Int): Boolean {
+    suspend fun isNotIdTaken(id: Int): Boolean {
         Log.d("Repository", "isIdTaken: $id")
-        return projectTableDao.checkId(id).asLiveData().value?.isEmpty() ?: true
+        val projectList = projectTableDao.checkId(id).first()
+        return projectList.isEmpty()
     }
 
     // Methods

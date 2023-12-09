@@ -71,7 +71,7 @@ interface DeveloperApi {
     ) : Call<PostStoreProjectLocationResponse>
 
     @Multipart
-    @PUT("v1/cms/project-management/project-location/{id}")
+    @POST("v1/cms/project-management/project-location/{id}?_method=PUT")
     fun updateProjectLocation(
         @Path("id") id : Int,
         @Part("headline") headline: RequestBody,
@@ -111,6 +111,12 @@ interface DeveloperApi {
         @Part("project_id") projectId: RequestBody,
         @Part files: List<MultipartBody.Part>
     ): Call<PostStoreProjectPhotoResponse>
+
+
+    @DELETE("v1/cms/project-management/project-other-media/{document_id}/document")
+    fun deleteProjectDocument(
+        @Path("document_id") documentId : Int
+    ) : Call<UpdateProjectResponse>
 
     @Multipart
     @POST("v1/cms/project-management/{project_id}/unit-photo")

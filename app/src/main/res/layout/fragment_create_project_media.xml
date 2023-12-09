@@ -170,7 +170,7 @@
             app:layout_constraintTop_toBottomOf="@+id/edit_text_nama_virtual_tour" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/edit_text_link_virtual_tour_project"
             style="@style/DesignSystem.TextInputEditText"
             android:layout_width="0dp"
             android:layout_marginTop="8dp"
@@ -221,7 +221,7 @@
             android:textAppearance="@style/text.semi_bold.size14"
             android:text="Dokumen Proyek Properti"
             app:layout_constraintStart_toStartOf="@+id/text_link_virtual_tour_label"
-            app:layout_constraintTop_toBottomOf="@+id/editText" />
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_link_virtual_tour_project" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_tambahkan_dokumen_project"
