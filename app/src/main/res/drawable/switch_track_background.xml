@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:state_checked="true"
+        android:state_enabled="true"
+        >
+
+        <shape android:shape="rectangle">
+            <corners android:radius="1000dp" />
+            <solid android:color="#04A620" />
+        </shape>
+    </item>
+
+    <item
+        android:state_checked="false"
+        android:state_enabled="true"
+        >
+        <shape android:shape="rectangle">
+            <corners android:radius="1000dp" />
+            <solid android:color="@color/button_secondary" />
+        </shape>
+
+    </item>
+
+    <item
+        android:state_checked="true"
+        android:state_enabled="false"
+        >
+
+        <shape android:shape="rectangle">
+            <corners android:radius="1000dp" />
+            <solid android:color="#04A620" />
+        </shape>
+    </item>
+
+    <item
+        android:state_checked="false"
+        android:state_enabled="false"
+        >
+        <shape android:shape="rectangle">
+            <corners android:radius="1000dp" />
+            <solid android:color="@color/button_secondary" />
+        </shape>
+
+    </item>
+
+
+</selector>

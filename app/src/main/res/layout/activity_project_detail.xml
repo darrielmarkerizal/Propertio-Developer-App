@@ -280,6 +280,17 @@
 
             </androidx.cardview.widget.CardView>
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/container_card_file_thumbnail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="@+id/card_view_address"
+                app:layout_constraintStart_toStartOf="@+id/card_view_address"
+                app:layout_constraintTop_toBottomOf="@+id/card_view_address"
+                tools:itemCount="2"
+                tools:listitem="@layout/card_file_thumbnail" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_open_maps"
                 style="@style/button.secondary.s"
@@ -295,7 +306,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/card_view_address"
-                app:layout_constraintTop_toBottomOf="@+id/card_view_address" />
+                app:layout_constraintTop_toBottomOf="@+id/container_card_file_thumbnail" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/group_video_detailProject"

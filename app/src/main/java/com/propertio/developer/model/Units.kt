@@ -42,3 +42,12 @@ data class UnitPhoto(
     var createdAt: String? = null,
     var updatedAt: String? = null,
 )
+
+data class UnitVirtualTour(
+    var id: Int? = null,
+    var unitId: String? = null,
+    var name: String? = null,
+    var linkVirtualTourURL: String? = null,
+    var createdAt: String? = null,
+    var updatedAt: String? = null,
+)

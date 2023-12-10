@@ -17,7 +17,7 @@ import com.propertio.developer.model.Chat
 import kotlinx.coroutines.launch
 
 class ChatFragment : Fragment() {
-    private lateinit var binding : FragmentChatBinding
+    private val binding by lazy { FragmentChatBinding.inflate(layoutInflater) }
     val listChat by lazy { mutableListOf<Chat>() }
     private val launcher = registerForActivityResult(ActivityResultContracts.
         StartActivityForResult()){}
@@ -28,8 +28,7 @@ class ChatFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentChatBinding.inflate(inflater)
+    ): View {
         return binding.root
     }
 
@@ -48,7 +47,7 @@ class ChatFragment : Fragment() {
 
     private fun loadMessage(viewModelFactory: ChatViewModelFactory?) {
         val viewModel = viewModelFactory?.let {
-            ViewModelProvider(this@ChatFragment, it)
+            ViewModelProvider(requireActivity(), it)
         }?.get(ChatViewModel::class.java)
 
 
@@ -80,7 +79,10 @@ class ChatFragment : Fragment() {
             viewModel?.getAllMessage()
 
             chatSwipeRefreshLayout.setOnRefreshListener {
-                viewModel?.fetchNewData()
+                lifecycleScope.launch {
+                    viewModel?.fetchNewData()
+                }
+
             }
 
             viewModel?.isRefreshing?.observe(viewLifecycleOwner, Observer { isRefreshing ->

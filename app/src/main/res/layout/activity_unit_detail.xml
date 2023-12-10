@@ -167,10 +167,10 @@
 
 
                     <TextView
-                        android:id="@+id/text_view_unit_type"
+                        android:id="@+id/text_view_unit_code"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Tipe 00"
+                        android:text="Code"
                         android:textAppearance="@style/text.medium.size12" />
 
                 </LinearLayout>
@@ -287,6 +287,250 @@
                 android:textAppearance="@style/text.medium.size14"
                 app:layout_constraintStart_toStartOf="@+id/text_view_video_label"
                 app:layout_constraintTop_toBottomOf="@+id/video_frame_container" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_facilities_unit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:cardBackgroundColor="@color/grey_50"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:contentPaddingBottom="16dp"
+                app:contentPaddingLeft="11dp"
+                app:contentPaddingRight="11dp"
+                app:contentPaddingTop="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/text_view_description_unit"
+                app:layout_constraintStart_toStartOf="@+id/text_view_alamat_unit_label"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_fasilitas_label">
+
+               <androidx.constraintlayout.widget.ConstraintLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+
+                   <ImageView
+                       android:id="@+id/ic_volume"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/cube_20"
+                       app:layout_constraintStart_toStartOf="parent"
+                       app:layout_constraintTop_toTopOf="parent" />
+
+                   <ImageView
+                       android:id="@+id/ic_area"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/ic_unit_surface_area"
+                       app:layout_constraintEnd_toEndOf="parent"
+                       app:layout_constraintHorizontal_bias="0.35"
+                       app:layout_constraintStart_toEndOf="@+id/ic_volume"
+                       app:layout_constraintTop_toTopOf="parent" />
+
+                   <ImageView
+                       android:id="@+id/ic_bedroom"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginTop="40dp"
+                       android:src="@drawable/ic_unit_bed"
+                       app:layout_constraintStart_toStartOf="@+id/ic_volume"
+                       app:layout_constraintTop_toBottomOf="@+id/ic_volume" />
+
+                   <ImageView
+                       android:id="@+id/ic_staircase"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/staircase_20"
+                       app:layout_constraintStart_toStartOf="@+id/ic_garage"
+                       app:layout_constraintTop_toTopOf="@+id/ic_bath" />
+
+                   <ImageView
+                       android:id="@+id/ic_power"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginTop="40dp"
+                       android:src="@drawable/meter_electric_outline_20"
+                       app:layout_constraintStart_toStartOf="@+id/ic_volume"
+                       app:layout_constraintTop_toBottomOf="@+id/ic_bedroom" />
+
+                   <ImageView
+                       android:id="@+id/ic_garage"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="49dp"
+                       android:src="@drawable/garage_20"
+                       app:layout_constraintEnd_toEndOf="parent"
+                       app:layout_constraintHorizontal_bias="0.35"
+                       app:layout_constraintStart_toEndOf="@+id/ic_area"
+                       app:layout_constraintTop_toTopOf="@+id/ic_volume" />
+
+
+                   <ImageView
+                       android:id="@+id/ic_furniture"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/table_furniture_20"
+                       app:layout_constraintEnd_toEndOf="parent"
+                       app:layout_constraintStart_toEndOf="@+id/ic_power"
+                       app:layout_constraintTop_toTopOf="@+id/ic_power" />
+
+                   <ImageView
+                       android:id="@+id/ic_road"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginTop="40dp"
+                       android:src="@drawable/mdi_road_20"
+                       app:layout_constraintStart_toStartOf="@+id/ic_volume"
+                       app:layout_constraintTop_toBottomOf="@+id/ic_water_supply" />
+
+                   <ImageView
+                       android:id="@+id/ic_bath"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/ic_unit_bathroom"
+                       app:layout_constraintStart_toStartOf="@+id/ic_area"
+                       app:layout_constraintTop_toTopOf="@+id/ic_bedroom" />
+
+                   <ImageView
+                       android:id="@+id/ic_water_supply"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginTop="40dp"
+                       android:src="@drawable/water_20"
+                       app:layout_constraintStart_toStartOf="@+id/ic_volume"
+                       app:layout_constraintTop_toBottomOf="@+id/ic_power" />
+
+                   <TextView
+                       android:id="@+id/text_view_building_area"
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="8dp"
+                       android:layout_marginEnd="16dp"
+                       android:text="999 m2"
+                       android:textAppearance="@style/text.medium.size11"
+                       app:layout_constraintEnd_toStartOf="@+id/ic_area"
+                       app:layout_constraintHorizontal_bias="0.0"
+                       app:layout_constraintStart_toEndOf="@+id/ic_volume"
+                       app:layout_constraintTop_toTopOf="@+id/ic_volume" />
+
+                   <TextView
+                       android:id="@+id/text_view_bed"
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="8dp"
+                       android:layout_marginEnd="16dp"
+                       android:text="999"
+                       android:textAppearance="@style/text.medium.size11"
+                       app:layout_constraintEnd_toStartOf="@+id/ic_bath"
+                       app:layout_constraintHorizontal_bias="0.0"
+                       app:layout_constraintStart_toEndOf="@+id/ic_bedroom"
+                       app:layout_constraintTop_toTopOf="@+id/ic_bedroom" />
+
+                   <TextView
+                       android:id="@+id/text_view_staircase"
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="8dp"
+                       android:layout_marginEnd="16dp"
+                       android:text="999"
+                       android:textAppearance="@style/text.medium.size11"
+                       app:layout_constraintEnd_toEndOf="parent"
+                       app:layout_constraintStart_toEndOf="@+id/ic_staircase"
+                       app:layout_constraintTop_toTopOf="@+id/ic_staircase" />
+
+                   <TextView
+                       android:id="@+id/text_view_garage"
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="8dp"
+                       android:layout_marginEnd="16dp"
+                       android:text="9 mobil"
+                       android:textAppearance="@style/text.medium.size11"
+                       app:layout_constraintEnd_toEndOf="parent"
+                       app:layout_constraintHorizontal_bias="0.0"
+                       app:layout_constraintStart_toEndOf="@+id/ic_garage"
+                       app:layout_constraintTop_toTopOf="@+id/ic_garage" />
+
+                   <TextView
+                       android:id="@+id/text_view_interior"
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="8dp"
+                       android:layout_marginEnd="16dp"
+                       android:text="Sebagian"
+                       android:textAppearance="@style/text.medium.size11"
+                       app:layout_constraintEnd_toEndOf="parent"
+                       app:layout_constraintHorizontal_bias="0.0"
+                       app:layout_constraintStart_toEndOf="@+id/ic_furniture"
+                       app:layout_constraintTop_toTopOf="@+id/ic_furniture" />
+
+                   <TextView
+                       android:id="@+id/text_view_road"
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="8dp"
+                       android:layout_marginEnd="16dp"
+                       android:text="Lorem Ipsum Dolor Sit Amet"
+                       android:textAppearance="@style/text.medium.size11"
+                       app:layout_constraintEnd_toEndOf="parent"
+                       app:layout_constraintHorizontal_bias="0.0"
+                       app:layout_constraintStart_toEndOf="@+id/ic_road"
+                       app:layout_constraintTop_toTopOf="@+id/ic_road" />
+
+                   <TextView
+                       android:id="@+id/text_view_surface_area"
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="8dp"
+                       android:layout_marginEnd="16dp"
+                       android:text="999 m2"
+                       android:textAppearance="@style/text.medium.size11"
+                       app:layout_constraintEnd_toStartOf="@+id/ic_garage"
+                       app:layout_constraintHorizontal_bias="0.0"
+                       app:layout_constraintStart_toEndOf="@+id/ic_area"
+                       app:layout_constraintTop_toTopOf="@+id/ic_area" />
+
+                   <TextView
+                       android:id="@+id/text_view_bath"
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="8dp"
+                       android:layout_marginEnd="16dp"
+                       android:text="999"
+                       android:textAppearance="@style/text.medium.size11"
+                       app:layout_constraintEnd_toStartOf="@+id/ic_staircase"
+                       app:layout_constraintHorizontal_bias="0.0"
+                       app:layout_constraintStart_toEndOf="@+id/ic_bath"
+                       app:layout_constraintTop_toTopOf="@+id/ic_bath" />
+
+                   <TextView
+                       android:id="@+id/text_view_power"
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="8dp"
+                       android:layout_marginEnd="16dp"
+                       android:text="95000 Watt"
+                       android:textAppearance="@style/text.medium.size11"
+                       app:layout_constraintEnd_toStartOf="@+id/ic_furniture"
+                       app:layout_constraintHorizontal_bias="0.0"
+                       app:layout_constraintStart_toEndOf="@+id/ic_power"
+                       app:layout_constraintTop_toTopOf="@+id/ic_power" />
+
+                   <TextView
+                       android:id="@+id/text_view_water"
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"
+                       android:layout_marginStart="8dp"
+                       android:layout_marginEnd="16dp"
+                       android:text="PDAM dan Sumur"
+                       android:textAppearance="@style/text.medium.size11"
+                       app:layout_constraintEnd_toEndOf="parent"
+                       app:layout_constraintStart_toEndOf="@+id/ic_water_supply"
+                       app:layout_constraintTop_toTopOf="@+id/ic_water_supply" />
+
+               </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

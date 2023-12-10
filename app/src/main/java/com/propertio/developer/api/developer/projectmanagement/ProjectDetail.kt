@@ -57,13 +57,13 @@ class ProjectDetail : DefaultResponse() {
         @Expose
         var projectPhotos: List<ProjectPhoto>? = null
 
-        @SerializedName("project_videos")
+        @SerializedName("project_video")
         @Expose
-        var projectVideos: List<ProjectVideo>? = null
+        var projectVideos: ProjectVideo? = null
 
         @SerializedName("project_virtual_tours")
         @Expose
-        var projectVirtualTours: List<ProjectVirtualTour>? = null
+        var projectVirtualTours: ProjectVirtualTour? = null
 
         @SerializedName("project_documents")
         @Expose

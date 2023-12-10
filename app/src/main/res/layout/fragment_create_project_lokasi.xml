@@ -426,13 +426,6 @@
             app:layout_constraintTop_toBottomOf="@id/container_input_immersive_siteplan_project"
             />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/btn_hubungi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/txt_note_membuat_immersive_project"
-                tools:ignore="MissingConstraints" />
-
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_hubungi_kami_lokasi_proyek"
             android:layout_width="wrap_content"

@@ -1,15 +1,19 @@
 package com.propertio.developer.unit.form.type
 
-import android.media.session.MediaSession.Token
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
+import com.propertio.developer.TokenManager
+import com.propertio.developer.api.Retro
+import com.propertio.developer.api.developer.DeveloperApi
+import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
+import com.propertio.developer.api.developer.unitmanagement.UnitRequest
 import com.propertio.developer.databinding.FragmentUnitDataRumahBinding
 import com.propertio.developer.dialog.ElectricitySheetFragment
 import com.propertio.developer.dialog.InteriorSheetFragment
@@ -23,13 +27,6 @@ import com.propertio.developer.dialog.viewmodel.RoadAccessTypeSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.WaterTypeSpinnerViewModel
 import com.propertio.developer.unit.form.UnitFormActivity
 import com.propertio.developer.unit.form.UnitFormViewModel
-import com.propertio.developer.TokenManager
-import com.propertio.developer.api.Retro
-import com.propertio.developer.api.developer.DeveloperApi
-import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
-import com.propertio.developer.api.developer.unitmanagement.UnitRequest
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -53,14 +50,14 @@ class UnitDataRumahFragment : Fragment() {
     private var isRoadAccessTypeSpinnerSelected = false
     private val roadAccessTypeViewModel by lazy { ViewModelProvider(requireActivity())[RoadAccessTypeSpinnerViewModel::class.java] }
 
-    private val binding by lazy {
-        FragmentUnitDataRumahBinding.inflate(layoutInflater)
-    }
+    private val binding by lazy { FragmentUnitDataRumahBinding.inflate(layoutInflater) }
+    private val formActivity by lazy { activity as UnitFormActivity }
+    private val activityBinding by lazy { formActivity.binding }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -70,9 +67,6 @@ class UnitDataRumahFragment : Fragment() {
 
         unitFormViewModel = ViewModelProvider(requireActivity())[UnitFormViewModel::class.java]
         Log.d("UnitDataRumahFragment", "onViewCreated: $unitFormViewModel")
-
-        val activity = activity as? UnitFormActivity
-        val activityBinding = activity?.binding
 
         observeLiveData(unitFormViewModel.projectId) { projectId ->
             Log.d("UnitDataRumahFragment", "Observed projectId in ViewModel: $projectId")
@@ -124,11 +118,33 @@ class UnitDataRumahFragment : Fragment() {
         interiorTypeSpinner()
         roadAccessTypeSpinner()
 
-        activityBinding?.floatingButtonBack?.setOnClickListener {
-            activity.onBackButtonUnitManagementClick()
+        activityBinding.floatingButtonBack.setOnClickListener {
+            val luas_tanah = binding.editLuasTanahRumah.text.toString()
+            val luas_bangunan = binding.editLuasBangunanRumah.text.toString()
+            val jumlah_lantai = binding.editJumlahLantaiRumah.text.toString()
+            val jumlah_kamar_tidur = binding.editKamarMandiRumah.text.toString()
+            val jumlah_kamar_mandi = binding.editKamarMandiRumah.text.toString()
+            val parking_type = binding.spinnerTempatParkirRumah.text.toString()
+            val electricity_type = binding.spinnerDayaListrikRumah.text.toString()
+            val water_type = binding.spinnerJenisAirRumah.text.toString()
+            val interior_type = binding.spinnerInteriorRumah.text.toString()
+            val road_access_type = binding.spinnerAksesJalanRumah.text.toString()
+
+            formActivity.unitFormViewModel.updateLuasTanah(luas_tanah)
+            formActivity.unitFormViewModel.updateLuasBangunan(luas_bangunan)
+            formActivity.unitFormViewModel.updateJumlahLantai(jumlah_lantai)
+            formActivity.unitFormViewModel.updateJumlahKamar(jumlah_kamar_tidur)
+            formActivity.unitFormViewModel.updateJumlahKamarMandi(jumlah_kamar_mandi)
+            formActivity.unitFormViewModel.updateParkingType(parking_type)
+            formActivity.unitFormViewModel.updateElectricityType(electricity_type)
+            formActivity.unitFormViewModel.updateWaterType(water_type)
+            formActivity.unitFormViewModel.updateInteriorType(interior_type)
+            formActivity.unitFormViewModel.updateRoadAccessType(road_access_type)
+
+            formActivity.onBackButtonUnitManagementClick()
         }
 
-        activityBinding?.floatingButtonNext?.setOnClickListener {
+        activityBinding.floatingButtonNext.setOnClickListener {
             Log.d("UnitDataRumahFragment", "Next button clicked")
 
             val projectId = unitFormViewModel.projectId.value ?: 0
@@ -147,18 +163,18 @@ class UnitDataRumahFragment : Fragment() {
             val interior_type = binding.spinnerInteriorRumah.text.toString()
             val road_access_type = binding.spinnerAksesJalanRumah.text.toString()
 
-            activity?.unitFormViewModel?.updateLuasTanah(luas_tanah)
-            activity?.unitFormViewModel?.updateLuasBangunan(luas_bangunan)
-            activity?.unitFormViewModel?.updateJumlahLantai(jumlah_lantai)
-            activity?.unitFormViewModel?.updateJumlahKamar(jumlah_kamar_tidur)
-            activity?.unitFormViewModel?.updateJumlahKamarMandi(jumlah_kamar_mandi)
-            activity?.unitFormViewModel?.updateParkingType(parking_type)
-            activity?.unitFormViewModel?.updateElectricityType(electricity_type)
-            activity?.unitFormViewModel?.updateWaterType(water_type)
-            activity?.unitFormViewModel?.updateInteriorType(interior_type)
-            activity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
+            formActivity.unitFormViewModel.updateLuasTanah(luas_tanah)
+            formActivity.unitFormViewModel.updateLuasBangunan(luas_bangunan)
+            formActivity.unitFormViewModel.updateJumlahLantai(jumlah_lantai)
+            formActivity.unitFormViewModel.updateJumlahKamar(jumlah_kamar_tidur)
+            formActivity.unitFormViewModel.updateJumlahKamarMandi(jumlah_kamar_mandi)
+            formActivity.unitFormViewModel.updateParkingType(parking_type)
+            formActivity.unitFormViewModel.updateElectricityType(electricity_type)
+            formActivity.unitFormViewModel.updateWaterType(water_type)
+            formActivity.unitFormViewModel.updateInteriorType(interior_type)
+            formActivity.unitFormViewModel.updateRoadAccessType(road_access_type)
 
-            val retro = Retro(TokenManager(requireActivity()).token)
+            val retro = Retro(TokenManager(requireContext()).token)
                 .getRetroClientInstance()
                 .create(DeveloperApi::class.java)
 
@@ -180,6 +196,8 @@ class UnitDataRumahFragment : Fragment() {
                 order = null
             )
 
+            Log.d("UnitDataRumahFragment", "onViewCreated: $unitRequest")
+
             retro.postStoreUnit(
                 id = projectId,
                 unitRequest = unitRequest
@@ -192,8 +210,23 @@ class UnitDataRumahFragment : Fragment() {
                         val responseData = response.body()?.data
                         if (responseData != null) {
                             Log.d("UnitDataRumahFragment", "onResponse: $responseData")
-                            Toast.makeText(requireContext(), "Unit berhasil ditambahkan", Toast.LENGTH_SHORT).show()
-                            activity.onNextButtonUnitManagementClick()
+
+
+
+
+                            //TODO: Tambahkan kode seperti ini untuk setiap tipe unit
+                            formActivity.unitId = responseData.id
+                            if (formActivity.unitId != null || formActivity.unitId != 0) {
+                                Toast.makeText(requireContext(), "Unit berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+                                formActivity.onNextButtonUnitManagementClick()
+                            } else {
+                                Log.e("UnitDataRumahFragment", "onResponse: Unit ID is null or 0")
+                                Toast.makeText(requireContext(), "Gagal menambahkan unit", Toast.LENGTH_SHORT).show()
+                            }
+
+
+
+
                         }
                     } else {
                         var errorMessage = response.errorBody()?.string()

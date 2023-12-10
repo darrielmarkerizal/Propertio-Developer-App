@@ -1,7 +1,5 @@
 package com.propertio.developer.unit.list
 
-import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,19 +7,17 @@ import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.bumptech.glide.Glide
 import com.propertio.developer.NumericalUnitConverter
 import com.propertio.developer.R
 import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
 import com.propertio.developer.databinding.TemplateCardUnitBinding
-import com.propertio.developer.unit.UnitDetailActivity
 
 class UnitAdapter(
-    private val context: Context,
-    private val unitsList : LiveData<List<ProjectDetail.ProjectDeveloper.ProjectUnit>>
+    private val unitsList : LiveData<List<ProjectDetail.ProjectDeveloper.ProjectUnit>>,
+    private val onClickUnit: (ProjectDetail.ProjectDeveloper.ProjectUnit) -> Unit
 ) : RecyclerView.Adapter<UnitAdapter.ItemUnitViewHolder>(){
     inner class ItemUnitViewHolder(
-        private val binding : TemplateCardUnitBinding
+        private val binding : TemplateCardUnitBinding,
     ) : RecyclerView.ViewHolder(binding.root){
         fun bind(unit: ProjectDetail.ProjectDeveloper.ProjectUnit) {
             with(binding) {
@@ -35,12 +31,8 @@ class UnitAdapter(
                 loadImage(unit.photoURL)
 
                 cardViewUnit.setOnClickListener {
-                    Log.d("UnitAdapter", "bind: ${unit.title}")
-                    val intentToDetailUnit = Intent(context, UnitDetailActivity::class.java)
-
-                    //TODO: send data to detail activity
-
-                    context.startActivity(intentToDetailUnit)
+                    Log.d("onClickUnitCard", "Unit is clicked: ${unit.id}")
+                    onClickUnit(unit)
                 }
 
 
