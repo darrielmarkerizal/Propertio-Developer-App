@@ -7,6 +7,7 @@ import com.propertio.developer.api.models.UnitMinimum
 import com.propertio.developer.model.ProjectVideo
 import com.propertio.developer.model.ProjectVirtualTour
 import com.propertio.developer.model.UnitVirtualTour
+import java.io.Serial
 
 class UnitDetailResponse : DefaultResponse() {
     @SerializedName("data")
@@ -24,12 +25,11 @@ class UnitDetailResponse : DefaultResponse() {
 
         @SerializedName("unitModel")
         @Expose
-        var unitModel: String? = null
+        var unitModel: UnitModel? = null
 
         @SerializedName("unitVirtualTour")
         @Expose
-        var unitVirtualTour: List<UnitVirtualTour>? = null
-        // TODO: Define type of unitVirtualTour
+        var unitVirtualTour: UnitVirtualTour? = null
 
         @SerializedName("unitVideo")
         @Expose
@@ -74,6 +74,34 @@ class UnitDetailResponse : DefaultResponse() {
             @Expose
             var updatedAt: String? = null
         }
+
+        data class UnitModel(
+            @SerializedName("id")
+            val id: Int,
+            @SerializedName("unit_id")
+            val unitId: String,
+            @SerializedName("link")
+            val link: String,
+            @SerializedName("created_at")
+            val createdAt: String,
+            @SerializedName("updated_at")
+            val updatedAt: String
+        )
+
+        data class UnitVirtualTour(
+            @SerializedName("id")
+            val id: Int,
+            @SerializedName("unit_id")
+            val unitId: String,
+            @SerializedName("name")
+            val name: String,
+            @SerializedName("link")
+            val link: String,
+            @SerializedName("created_at")
+            val createdAt: String,
+            @SerializedName("updated_at")
+            val updatedAt: String
+        )
 
     }
 }
