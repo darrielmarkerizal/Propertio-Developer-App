@@ -35,6 +35,7 @@
         app:itemBackground="@color/navbar_color"
         app:itemIconTint="@drawable/bottom_nav_icon_color"
         app:itemTextColor="@drawable/bottom_nav_icon_color"
+        app:itemActiveIndicatorStyle="@style/CustomIndicatorBottomNavigation"
         app:labelVisibilityMode="labeled"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

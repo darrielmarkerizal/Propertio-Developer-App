@@ -16,4 +16,8 @@
     <style name="AlertDialogButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">#b91c1c</item>
     </style>
+
+    <style name="CustomIndicatorBottomNavigation" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">#00000000</item>
+    </style>
 </resources>
