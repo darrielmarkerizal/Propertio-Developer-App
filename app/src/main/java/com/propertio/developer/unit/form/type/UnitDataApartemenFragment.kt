@@ -59,6 +59,7 @@ class UnitDataApartemenFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        unitFormViewModel = ViewModelProvider(this).get(UnitFormViewModel::class.java)
         // Inflate the layout for this fragment
         return binding.root
     }

@@ -168,7 +168,31 @@ class ProjectViewModel(
             } else {
                 val projectTable = getProjectById(it.id!!)
 
-                if (projectTable != newProject){
+                if (projectTable.title != newProject.title
+                    || projectTable.headline != newProject.headline
+
+                    || projectTable.addressAddress != newProject.addressAddress
+                    || projectTable.addressDistrict != newProject.addressDistrict
+                    || projectTable.addressCity != newProject.addressCity
+                    || projectTable.addressProvince != newProject.addressProvince
+                    || projectTable.addressLongitude != newProject.addressLongitude
+                    || projectTable.addressLatitude != newProject.addressLatitude
+                    || projectTable.addressPostalCode != newProject.addressPostalCode
+
+                    || projectTable.propertyTypeName != newProject.propertyTypeName
+                    || projectTable.propertyTypeIcon != newProject.propertyTypeIcon
+                    || projectTable.description != newProject.description
+                    || projectTable.certificate != newProject.certificate
+                    || projectTable.projectCode != newProject.projectCode
+                    || projectTable.status != newProject.status
+                    || projectTable.postedAt != newProject.postedAt
+                    || projectTable.countUnit != newProject.countUnit
+                    || projectTable.price != newProject.price
+                    || projectTable.photo != newProject.photo
+                    || projectTable.countViews != newProject.countViews
+                    || projectTable.countLeads != newProject.countLeads
+                    || projectTable.createdAt != newProject.createdAt
+                ) {
                     Log.i("ProjectViewModel", "syncToLocalDatabase Update Project: from :\n $projectTable :\nto:\n $newProject")
                     updateLocalProject(newProject)
                 }
