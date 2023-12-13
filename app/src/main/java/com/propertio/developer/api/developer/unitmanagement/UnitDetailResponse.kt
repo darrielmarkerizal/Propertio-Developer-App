@@ -29,7 +29,7 @@ class UnitDetailResponse : DefaultResponse() {
 
         @SerializedName("unitVirtualTour")
         @Expose
-        var unitVirtualTour: UnitVirtualTour? = null
+        var unitVirtualTour: List<UnitVirtualTour>? = null
 
         @SerializedName("unitVideo")
         @Expose

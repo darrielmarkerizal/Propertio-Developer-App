@@ -71,6 +71,8 @@ class UnitDetailActivity : AppCompatActivity() {
         projectId = intent.getIntExtra(PROJECT_DETAIL_PID, 0)
 
         binding.buttonEdit.setOnClickListener {
+            binding.toolbarContainer.textViewTitle.text = "Edit Unit"
+
             val intent = Intent(this, UnitFormActivity::class.java)
             intent.putExtra(PROJECT_DETAIL_UID, unitId)
             intent.putExtra(PROJECT_DETAIL_PID, projectId)

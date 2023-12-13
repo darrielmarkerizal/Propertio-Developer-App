@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.TokenManager
@@ -29,7 +30,7 @@ import retrofit2.Response
 
 
 class UnitDataGudangFragment : Fragment() {
-    private lateinit var unitFormViewModel: UnitFormViewModel
+    private val unitFormViewModel : UnitFormViewModel by activityViewModels()
     private var isParkingTypeSpinnerSelected = false
     private val parkingTypeViewModel by lazy { ViewModelProvider(requireActivity())[ParkingTypeSpinnerViewModel::class.java] }
     
@@ -53,7 +54,6 @@ class UnitDataGudangFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return binding.root
     }
     
@@ -65,30 +65,6 @@ class UnitDataGudangFragment : Fragment() {
         electricityTypeSpinner()
         roadAccessTypeSpinner()
 
-        observeLiveData(unitFormViewModel.projectId) {
-            Log.d("UnitDataGudangFragment", "onViewCreated: $it")
-        }
-
-        observeLiveData(unitFormViewModel.luasBangunan) {
-            binding.editLuasBangunanGudang.setText(it)
-        }
-
-        observeLiveData(unitFormViewModel.luasTanah) {
-            binding.editLuasTanahGudang.setText(it)
-        }
-
-        observeLiveData(unitFormViewModel.jumlahParkir) {
-            binding.spinnerTempatParkirGudang.text = it
-        }
-
-        observeLiveData(unitFormViewModel.electricityType) {
-            binding.spinnerDayaListrikGudang.text = it
-        }
-
-        observeLiveData(unitFormViewModel.roadAccessType) {
-            binding.spinnerAksesJalanGudang.text = it
-        }
-
         activityBinding?.floatingButtonBack?.setOnClickListener {
             val luas_bangunan = binding.editLuasBangunanGudang.text.toString()
             val luas_tanah = binding.editLuasTanahGudang.text.toString()
@@ -96,32 +72,32 @@ class UnitDataGudangFragment : Fragment() {
             val electricity_type = binding.spinnerDayaListrikGudang.text.toString()
             val road_access_type = binding.spinnerAksesJalanGudang.text.toString()
 
-            formActivity?.unitFormViewModel?.updateLuasBangunan(luas_bangunan)
-            formActivity?.unitFormViewModel?.updateLuasTanah(luas_tanah)
-            formActivity?.unitFormViewModel?.updateParkingType(parking_type)
-            formActivity?.unitFormViewModel?.updateElectricityType(electricity_type)
-            formActivity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
+            formActivity?.unitFormViewModel?.luasBangunan = luas_bangunan
+            formActivity?.unitFormViewModel?.luasTanah = luas_tanah
+            formActivity?.unitFormViewModel?.jumlahParkir = parking_type
+            formActivity?.unitFormViewModel?.electricityType = electricity_type
+            formActivity?.unitFormViewModel?.roadAccessType = road_access_type
 
             formActivity.onBackButtonUnitManagementClick()
         }
         
         activityBinding?.floatingButtonNext?.setOnClickListener {
-            val projectId = unitFormViewModel.projectId.value ?: 0
-            val title = unitFormViewModel.namaUnit.value ?: ""
-            val description = unitFormViewModel.deskripsiUnit.value
-            val stock = unitFormViewModel.stokUnit.value
-            val price = unitFormViewModel.hargaUnit.value ?: ""
+            val projectId = unitFormViewModel.projectId ?: 0
+            val title = unitFormViewModel.namaUnit ?: ""
+            val description = unitFormViewModel.deskripsiUnit ?: ""
+            val stock = unitFormViewModel.stokUnit ?: ""
+            val price = unitFormViewModel.hargaUnit ?: ""
             val luas_bangunan = binding.editLuasBangunanGudang.text.toString()
             val luas_tanah = binding.editLuasTanahGudang.text.toString()
             val parking_type = binding.spinnerTempatParkirGudang.text.toString()
             val electricity_type = binding.spinnerDayaListrikGudang.text.toString()
             val road_access_type = binding.spinnerAksesJalanGudang.text.toString()
 
-            formActivity?.unitFormViewModel?.updateLuasBangunan(luas_bangunan)
-            formActivity?.unitFormViewModel?.updateLuasTanah(luas_tanah)
-            formActivity?.unitFormViewModel?.updateParkingType(parking_type)
-            formActivity?.unitFormViewModel?.updateElectricityType(electricity_type)
-            formActivity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
+            formActivity?.unitFormViewModel?.luasBangunan = luas_bangunan
+            formActivity?.unitFormViewModel?.luasTanah = luas_tanah
+            formActivity?.unitFormViewModel?.jumlahParkir = parking_type
+            formActivity?.unitFormViewModel?.electricityType = electricity_type
+            formActivity?.unitFormViewModel?.roadAccessType = road_access_type
 
             val retro = Retro(TokenManager(requireContext()).token)
                 .getRetroClientInstance()
@@ -248,11 +224,12 @@ class UnitDataGudangFragment : Fragment() {
         }
     }
 
-    private fun <T> observeLiveData(liveData: LiveData<T>, updateUI: (T) -> Unit) {
-        liveData.observe(viewLifecycleOwner) { value ->
-            updateUI(value)
-        }
+    private fun loadTextData(){
+        UnitFormViewModel().printLog()
+        binding.editLuasBangunanGudang.setText(unitFormViewModel.luasBangunan)
+        binding.editLuasTanahGudang.setText(unitFormViewModel.luasTanah)
+        binding.spinnerTempatParkirGudang.setText(unitFormViewModel.jumlahParkir)
+        binding.spinnerDayaListrikGudang.setText(unitFormViewModel.electricityType)
+        binding.spinnerAksesJalanGudang.setText(unitFormViewModel.roadAccessType)
     }
-
-
 }

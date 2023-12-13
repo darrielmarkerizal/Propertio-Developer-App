@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.TokenManager
@@ -33,7 +34,7 @@ import retrofit2.Response
 
 
 class UnitDataKantorFragment : Fragment() {
-    private lateinit var unitFormViewModel: UnitFormViewModel
+    private val unitFormViewModel : UnitFormViewModel by activityViewModels()
 
     private var isParkingTypeSpinnerSelected = false
     private val parkingTypeViewModel by lazy { ViewModelProvider(requireActivity())[ParkingTypeSpinnerViewModel::class.java] }
@@ -77,50 +78,6 @@ class UnitDataKantorFragment : Fragment() {
         interiorTypeSpinner()
         roadAccessTypeSpinner()
 
-        observeLiveData(unitFormViewModel.projectId) {
-            Log.d("UnitDataKantorFragment", "onViewCreated: $it")
-        }
-
-        observeLiveData(unitFormViewModel.luasBangunan) {
-            binding.editLuasBangunanKantor.setText(it)
-        }
-
-        observeLiveData(unitFormViewModel.luasTanah) {
-            binding.editLuasTanahKantor.setText(it)
-        }
-
-        observeLiveData(unitFormViewModel.jumlahLantai) {
-            binding.edtJumlahLantaiKantor.setText(it)
-        }
-
-        observeLiveData(unitFormViewModel.jumlahKamarTidur) {
-            binding.edtKamarKantor.setText(it)
-        }
-
-        observeLiveData(unitFormViewModel.jumlahKamarMandi) {
-            binding.edtKamarMandiKantor.setText(it)
-        }
-
-        observeLiveData(unitFormViewModel.jumlahParkir) {
-            binding.spinnerTempatParkirKantor.text = it
-        }
-
-        observeLiveData(unitFormViewModel.electricityType) {
-            binding.spinnerDayaListrikKantor.text = it
-        }
-
-        observeLiveData(unitFormViewModel.waterType) {
-            binding.spinnerJenisAirKantor.text = it
-        }
-
-        observeLiveData(unitFormViewModel.interiorType) {
-            binding.spinnerInteriorKantor.text = it
-        }
-
-        observeLiveData(unitFormViewModel.roadAccessType) {
-            binding.spinnerAksesJalanKantor.text = it
-        }
-
         
         activityBinding?.floatingButtonBack?.setOnClickListener {
             val luas_tanah = binding.editLuasTanahKantor.text.toString()
@@ -134,27 +91,28 @@ class UnitDataKantorFragment : Fragment() {
             val interior_type = binding.spinnerInteriorKantor.text.toString()
             val road_access_type = binding.spinnerAksesJalanKantor.text.toString()
 
-            formActivity?.unitFormViewModel?.updateLuasBangunan(luas_bangunan)
-            formActivity?.unitFormViewModel?.updateLuasTanah(luas_tanah)
-            formActivity?.unitFormViewModel?.updateJumlahLantai(lantai)
-            formActivity?.unitFormViewModel?.updateJumlahKamar(kamar)
-            formActivity?.unitFormViewModel?.updateJumlahKamarMandi(kamar_mandi)
-            formActivity?.unitFormViewModel?.updateParkingType(parking_type)
-            formActivity?.unitFormViewModel?.updateElectricityType(electricity_type)
-            formActivity?.unitFormViewModel?.updateWaterType(water_type)
-            formActivity?.unitFormViewModel?.updateInteriorType(interior_type)
-            formActivity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
+            formActivity?.unitFormViewModel?.luasBangunan = luas_bangunan
+            formActivity?.unitFormViewModel?.luasTanah = luas_tanah
+            formActivity?.unitFormViewModel?.jumlahLantai = lantai
+            formActivity?.unitFormViewModel?.jumlahKamarTidur = kamar
+            formActivity?.unitFormViewModel?.jumlahKamarMandi = kamar_mandi
+            formActivity?.unitFormViewModel?.jumlahParkir = parking_type
+            formActivity?.unitFormViewModel?.electricityType = electricity_type
+            formActivity?.unitFormViewModel?.waterType = water_type
+            formActivity?.unitFormViewModel?.interiorType = interior_type
+            formActivity?.unitFormViewModel?.roadAccessType = road_access_type
+
 
             formActivity.onBackButtonUnitManagementClick()
         }
         
         activityBinding?.floatingButtonNext?.setOnClickListener {
 
-            val projectId = unitFormViewModel.projectId.value ?: 0
-            val title = unitFormViewModel.namaUnit.value ?: ""
-            val description = unitFormViewModel.deskripsiUnit.value
-            val stock = unitFormViewModel.stokUnit.value
-            val price = unitFormViewModel.hargaUnit.value ?: ""
+            val projectId = unitFormViewModel.projectId ?: 0
+            val title = unitFormViewModel.namaUnit ?: ""
+            val description = unitFormViewModel.deskripsiUnit ?: ""
+            val stock = unitFormViewModel.stokUnit ?: ""
+            val price = unitFormViewModel.hargaUnit ?: ""
             val luas_tanah = binding.editLuasTanahKantor.text.toString()
             val luas_bangunan = binding.editLuasBangunanKantor.text.toString()
             val lantai = binding.edtJumlahLantaiKantor.text.toString()
@@ -166,16 +124,16 @@ class UnitDataKantorFragment : Fragment() {
             val interior_type = binding.spinnerInteriorKantor.text.toString()
             val road_access_type = binding.spinnerAksesJalanKantor.text.toString()
 
-            formActivity?.unitFormViewModel?.updateLuasBangunan(luas_bangunan)
-            formActivity?.unitFormViewModel?.updateLuasTanah(luas_tanah)
-            formActivity?.unitFormViewModel?.updateJumlahLantai(lantai)
-            formActivity?.unitFormViewModel?.updateJumlahKamar(kamar)
-            formActivity?.unitFormViewModel?.updateJumlahKamarMandi(kamar_mandi)
-            formActivity?.unitFormViewModel?.updateParkingType(parking_type)
-            formActivity?.unitFormViewModel?.updateElectricityType(electricity_type)
-            formActivity?.unitFormViewModel?.updateWaterType(water_type)
-            formActivity?.unitFormViewModel?.updateInteriorType(interior_type)
-            formActivity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
+            formActivity?.unitFormViewModel?.luasBangunan = luas_bangunan
+            formActivity?.unitFormViewModel?.luasTanah = luas_tanah
+            formActivity?.unitFormViewModel?.jumlahLantai = lantai
+            formActivity?.unitFormViewModel?.jumlahKamarTidur = kamar
+            formActivity?.unitFormViewModel?.jumlahKamarMandi = kamar_mandi
+            formActivity?.unitFormViewModel?.jumlahParkir = parking_type
+            formActivity?.unitFormViewModel?.electricityType = electricity_type
+            formActivity?.unitFormViewModel?.waterType = water_type
+            formActivity?.unitFormViewModel?.interiorType = interior_type
+            formActivity?.unitFormViewModel?.roadAccessType = road_access_type
 
             val retro = Retro(TokenManager(requireContext()).token)
                 .getRetroClientInstance()
@@ -333,10 +291,18 @@ class UnitDataKantorFragment : Fragment() {
         }
     }
 
-    private fun <T> observeLiveData(liveData: LiveData<T>, updateUI: (T) -> Unit) {
-        liveData.observe(viewLifecycleOwner) { value ->
-            updateUI(value)
-        }
+    private fun loadTextData() {
+        UnitFormViewModel().printLog()
+        binding.editLuasTanahKantor.setText(unitFormViewModel.luasTanah)
+        binding.editLuasBangunanKantor.setText(unitFormViewModel.luasBangunan)
+        binding.edtJumlahLantaiKantor.setText(unitFormViewModel.jumlahLantai)
+        binding.edtKamarKantor.setText(unitFormViewModel.jumlahKamarTidur)
+        binding.edtKamarMandiKantor.setText(unitFormViewModel.jumlahKamarMandi)
+        binding.spinnerTempatParkirKantor.setText(unitFormViewModel.jumlahParkir)
+        binding.spinnerDayaListrikKantor.setText(unitFormViewModel.electricityType)
+        binding.spinnerJenisAirKantor.setText(unitFormViewModel.waterType)
+        binding.spinnerInteriorKantor.setText(unitFormViewModel.interiorType)
+        binding.spinnerAksesJalanKantor.setText(unitFormViewModel.roadAccessType)
     }
 
 }
