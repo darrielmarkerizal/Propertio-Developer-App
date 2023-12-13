@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.TokenManager
@@ -25,7 +26,7 @@ import retrofit2.Response
 
 
 class UnitDataTanahFragment : Fragment() {
-    private lateinit var unitFormViewModel: UnitFormViewModel
+    private val unitFormViewModel : UnitFormViewModel by activityViewModels()
 
     private var isRoadAccessTypeSpinnerSelected = false
     private val roadAccessTypeViewModel by lazy { ViewModelProvider(requireActivity())[RoadAccessTypeSpinnerViewModel::class.java] }
@@ -55,40 +56,28 @@ class UnitDataTanahFragment : Fragment() {
 
         roadAccessTypeSpinner()
 
-        observeLiveData(unitFormViewModel.projectId) { projectId ->
-            Log.d("UnitDataApartemenFragment", "Observed projectId in ViewModel: $projectId")
-        }
-
-        observeLiveData(unitFormViewModel.luasTanah) { luasTanah ->
-            binding.editLuasTanahTanah.setText(luasTanah)
-        }
-
-        observeLiveData(unitFormViewModel.roadAccessType) { roadAccessType ->
-            binding.spinnerAksesJalanTanah.text = roadAccessType
-        }
-
         activityBinding.floatingButtonBack.setOnClickListener {
             val luas_tanah = binding.editLuasTanahTanah.text.toString()
             val road_access_type = binding.spinnerAksesJalanTanah.text.toString()
 
-            formActivity.unitFormViewModel.updateLuasTanah(luas_tanah)
-            formActivity.unitFormViewModel.updateRoadAccessType(road_access_type)
+            formActivity.unitFormViewModel.luasTanah = luas_tanah
+            formActivity.unitFormViewModel.roadAccessType = road_access_type
 
             formActivity.onBackButtonUnitManagementClick()
         }
 
         activityBinding.floatingButtonNext.setOnClickListener {
 
-            val projectId = unitFormViewModel.projectId.value ?: 0
-            val title = unitFormViewModel.namaUnit.value ?: ""
-            val description = unitFormViewModel.deskripsiUnit.value
-            val stock = unitFormViewModel.stokUnit.value
-            val price = unitFormViewModel.hargaUnit.value ?: ""
+            val projectId = unitFormViewModel.projectId ?: 0
+            val title = unitFormViewModel.namaUnit ?: ""
+            val description = unitFormViewModel.deskripsiUnit ?: ""
+            val stock = unitFormViewModel.stokUnit ?: ""
+            val price = unitFormViewModel.hargaUnit ?: ""
             val luas_tanah = binding.editLuasTanahTanah.text.toString()
             val road_access_type = binding.spinnerAksesJalanTanah.text.toString()
 
-            formActivity.unitFormViewModel.updateLuasTanah(luas_tanah)
-            formActivity.unitFormViewModel.updateRoadAccessType(road_access_type)
+            formActivity.unitFormViewModel.luasTanah = luas_tanah
+            formActivity.unitFormViewModel.roadAccessType = road_access_type
 
             val retro = Retro(TokenManager(requireContext()).token)
                 .getRetroClientInstance()
@@ -186,10 +175,10 @@ class UnitDataTanahFragment : Fragment() {
         }
     }
 
-    private fun <T> observeLiveData(liveData: LiveData<T>, updateUI: (T) -> Unit) {
-        liveData.observe(viewLifecycleOwner) { value ->
-            updateUI(value)
-        }
+    private fun loadTextData() {
+        unitFormViewModel.printLog()
+        binding.editLuasTanahTanah.setText(unitFormViewModel.luasTanah)
+        binding.spinnerAksesJalanTanah.setText(unitFormViewModel.roadAccessType)
     }
 
 }

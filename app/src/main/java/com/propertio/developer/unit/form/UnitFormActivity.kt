@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.propertio.developer.R
@@ -16,6 +18,7 @@ import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
 import com.propertio.developer.auth.RegisterActivity
 import com.propertio.developer.databinding.ActivityUnitFormBinding
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_ID
+import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
 import com.propertio.developer.unit_management.ButtonNavigationUnitManagementClickListener
 import com.propertio.developer.unit.form.type.UnitDataApartemenFragment
 import com.propertio.developer.unit.form.type.UnitDataGudangFragment
@@ -41,9 +44,7 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
             .create(DeveloperApi::class.java)
     }
 
-    val unitFormViewModel : UnitFormViewModel by lazy {
-        ViewModelProvider(this).get(UnitFormViewModel::class.java)
-    }
+    internal val unitFormViewModel : UnitFormViewModel by viewModels()
 
     val binding by lazy {
         Log.d("UnitFormActivity", "Inflating layout")
@@ -79,6 +80,12 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
 
         val propertyType = intent.getStringExtra("Property Type")
         val projectId = intent.getIntExtra(PROJECT_ID, 0)
+        if (projectId != 0) {
+            unitFormViewModel.projectId = projectId
+            Log.d("UnitFormActivity", "onCreate: projectId: $projectId")
+        } else {
+            Log.e("UnitFormActivity", "onCreate: projectId is null")
+        }
 
         val unitIdFromIntent = intent.getIntExtra(PROJECT_DETAIL_UID, 0)
         val projectIdFromIntent = intent.getIntExtra(PROJECT_DETAIL_PID, 0)
@@ -161,35 +168,35 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
             ) {
                 if (response.isSuccessful) {
                     val data = response.body()?.data
-                    Log.d("UnitFormActivity", "onResponse : $data")
-
                     if (data != null) {
-                        unitFormViewModel.updateUnitDetail(data)
-                        Log.d("UnitFormActivity", "onResponse: $data")
-                        Log.d("UnitFormActivity", "onResponse: ${data.title}")
-                        Log.d("UnitFormActivity", "onResponse: ${data.description}")
-                        Log.d("UnitFormActivity", "onResponse: ${data.stock}")
-                        Log.d("UnitFormActivity", "onResponse: ${data.price}")
-                        Log.d("UnitFormActivity", "onResponse: ${data.projectId}")
+                        unitFormViewModel.add(
+                            namaUnit = data.title.toString(),
+                            deskripsiUnit = data.description.toString(),
+                            stokUnit = data.stock.toString(),
+                            hargaUnit = data.price.toString(),
+                            luasTanah = data.surfaceArea.toString(),
+                            luasBangunan = data.buildingArea.toString(),
+                            jumlahKamar = data.bedroom.toString(),
+                            jumlahKamarMandi = data.bathroom.toString(),
+                            jumlahLantai = data.floor.toString(),
+                            interiorType = data.interior.toString(),
+                            roadAccessType = data.roadAccess.toString(),
+                            parkingType = data.garage.toString(),
+                            electricityType = data.powerSupply.toString(),
+                            waterType = data.waterSupply.toString(),
+                            projectId = data.projectId!!.toInt(),
+                            unitId = data.id!!.toInt()
+                        )
                     } else {
                         Log.e("UnitFormActivity", "onResponse: data is null")
                     }
                 } else {
                     Log.e("UnitFormActivity", "onResponse: ${response.errorBody()}")
-                    Log.e("UnitFormActivity", "onResponse: ${response.message()}")
-                    Log.e("UnitFormActivity", "onResponse: ${response.code()}")
-                    Log.e("UnitFormActivity", "onResponse: ${response.raw()}")
-                    Log.e("UnitFormActivity", "onResponse: ${response.headers()}")
-                    Log.e("UnitFormActivity", "onResponse: ${response.body()}")
                 }
             }
 
             override fun onFailure(call: Call<UnitDetailResponse>, t: Throwable) {
                 Log.e("UnitFormActivity", "onFailure: ${t.message}")
-                Log.e("UnitFormActivity", "onFailure: ${t.cause}")
-                Log.e("UnitFormActivity", "onFailure: ${t.stackTrace}")
-                Log.e("UnitFormActivity", "onFailure: ${t.localizedMessage}")
-
             }
         })
     }
