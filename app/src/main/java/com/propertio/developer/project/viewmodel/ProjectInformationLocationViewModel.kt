@@ -32,6 +32,7 @@ class ProjectInformationLocationViewModel : ViewModel() {
 
 
     // NOTE : Jangan pakai selain untuk edit form
+    var isAddressNotEdited : Boolean = false
     var savedProvince : ProvinceModel? = null
     var savedCity : CitiesModel? = null
     var savedDistrict : DistrictsModel? = null
@@ -46,9 +47,9 @@ class ProjectInformationLocationViewModel : ViewModel() {
                     "\n complete_at  : $completedAt " +
                     "\n property_type: $propertyTypeId $propertyTypeName " +
                     "\n certificate  : $certificate " +
-                    "\n province     : ${province?.provinceId} ${province?.provinceName}" +
-                    "\n city         : ${city?.citiesId} ${city?.citiesName}" +
-                    "\n district     : ${district?.districtsId} ${district?.districtsName}"
+                    "\n province     : ${province?.provinceId} ${province?.provinceName} <- saved : $savedProvince" +
+                    "\n city         : ${city?.citiesId} ${city?.citiesName} <- saved : $savedCity" +
+                    "\n district     : ${district?.districtsId} ${district?.districtsName} <- saved : $savedDistrict"
         )
 
     }
@@ -75,6 +76,12 @@ class ProjectInformationLocationViewModel : ViewModel() {
         status = null
         listingClass = null
         siteplanImageURL = null
+
+        isAddressNotEdited = false
+        savedProvince = null
+        savedCity = null
+        savedDistrict = null
+        isUploaded = false
     }
 
     fun add(
@@ -120,7 +127,10 @@ class ProjectInformationLocationViewModel : ViewModel() {
         district : DistrictsModel? = this.district,
     ) {
         this.savedProvince = province
+        this.province = province
         this.savedCity = city
+        this.city = city
         this.savedDistrict = district
+        this.district = district
     }
 }

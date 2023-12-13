@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
 
 class UnitFormViewModel : ViewModel() {
 
@@ -125,5 +126,22 @@ class UnitFormViewModel : ViewModel() {
     fun updateRoadAccessType(roadAccessType: String) {
         _roadAccessType.value = roadAccessType
         Log.d("UnitFormViewModel", "updateRoadAccessType: $roadAccessType")
+    }
+
+    fun updateUnitDetail(data: UnitDetailResponse.Unit) {
+        updateNamaUnit(data.title ?: "")
+        updateDeskripsiUnit(data.description ?: "")
+        updateStokUnit(data.stock ?: "")
+        updateHargaUnit(data.price ?: "")
+        updateLuasTanah(data.surfaceArea ?: "")
+        updateLuasBangunan(data.buildingArea ?: "")
+        updateJumlahLantai(data.floor ?: "")
+        updateJumlahKamar(data.bedroom ?: "")
+        updateJumlahKamarMandi(data.bathroom ?: "")
+        updateParkingType(data.garage ?: "")
+        updateElectricityType(data.powerSupply ?: "")
+        updateWaterType(data.waterType ?: "")
+        updateInteriorType(data.interior ?: "")
+        updateRoadAccessType(data.roadAccess ?: "")
     }
 }

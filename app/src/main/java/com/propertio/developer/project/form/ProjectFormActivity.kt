@@ -3,7 +3,6 @@ package com.propertio.developer.project.form
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -12,9 +11,6 @@ import com.propertio.developer.R
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.common.address.AddressApi
-import com.propertio.developer.api.common.address.City
-import com.propertio.developer.api.common.address.District
-import com.propertio.developer.api.common.address.Province
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
 import com.propertio.developer.databinding.ActivityProjectFormBinding
@@ -23,6 +19,7 @@ import com.propertio.developer.dialog.model.CitiesModel
 import com.propertio.developer.dialog.model.DistrictsModel
 import com.propertio.developer.dialog.model.ProvinceModel
 import com.propertio.developer.model.LitePhotosModel
+import com.propertio.developer.model.ProjectDocument
 import com.propertio.developer.project.viewmodel.ProjectFacilityViewModel
 import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
 import com.propertio.developer.project.viewmodel.ProjectMediaViewModel
@@ -81,9 +78,15 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
+        projectInformationLocationViewModel.clear()
         val idFromIntent = intent.getIntExtra("EDIT_PROJECT", 0)
         intent.removeExtra("EDIT_PROJECT")
+
+
+        val bindingToolbar = binding.toolbarContainerProjectForm
+
+        setToolbarToCreate(bindingToolbar)
+
         if (idFromIntent != 0) {
             lifecycleScope.launch {
                 Log.d("ViewModel", "onCreate: $idFromIntent")
@@ -91,13 +94,13 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
                 fetchDataProjectDetail(projectId!!)
             }
 
+        } else {
+            setInitialFragment()
         }
 
-        val bindingToolbar = binding.toolbarContainerProjectForm
 
-        setToolbarToCreate(bindingToolbar)
 
-        setInitialFragment()
+
 
     }
 
@@ -123,7 +126,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
         }
     }
 
-    private fun fetchDataProjectDetail(projectId: Int) {
+    private suspend fun fetchDataProjectDetail(projectId: Int) {
         developerApi.getProjectDetail(projectId).enqueue(object : Callback<ProjectDetail> {
             override fun onResponse(call: Call<ProjectDetail>, response: Response<ProjectDetail>) {
                 if (response.isSuccessful) {
@@ -133,6 +136,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
                         Log.d("ProjectFormActivity", "onResponse: $data")
                         lifecycleScope.launch {
                             loadDataToViewModel(data)
+                            setInitialFragment()
                         }
                     } else {
                         Log.w("ProjectFormActivity", "onResponse: data is null")
@@ -152,6 +156,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
 
     private suspend fun loadDataToViewModel(data: ProjectDetail.ProjectDeveloper) {
         withContext(Dispatchers.IO) {
+            projectInformationLocationViewModel.isAddressNotEdited = true
             projectInformationLocationViewModel.add(
                 headline = data.headline,
                 title = data.title,
@@ -185,8 +190,16 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
                 virtualTourLink = data.projectVirtualTours?.linkVirtualTourURL,
             )
             if (data.projectDocuments?.isNotEmpty() == true) {
+                projectMedia.isDocumentNotEdited = true
                 projectMedia.add(
-                    documentFilePath = data.projectDocuments?.first()?.filename
+                    document = ProjectDocument(
+                        id = data.projectDocuments?.get(0)?.id,
+                        projectId = data.projectDocuments?.get(0)?.projectId,
+                        name = data.projectDocuments?.get(0)?.name,
+                        filename = data.projectDocuments?.get(0)?.filename,
+                        createdAt = data.projectDocuments?.get(0)?.createdAt,
+                        updatedAt = data.projectDocuments?.get(0)?.updatedAt,
+                    )
                 )
             }
 
@@ -201,10 +214,15 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
         }
     }
 
-    private fun setAddressList(address: ProjectDetail.ProjectDeveloper.ProjectAddress?) {
+    private suspend fun setAddressList(address: ProjectDetail.ProjectDeveloper.ProjectAddress?) {
+        projectInformationLocationViewModel.printLog("before add address")
         lifecycleScope.launch {
             val provinceName = address?.province
-            val provinceId = getProvinceId(provinceName) ?: return@launch
+            val provinceId = withContext(Dispatchers.IO) {getProvinceId(provinceName) }
+            if (provinceId == null) {
+                Log.d("ProjectFormActivity", "onResponse: provinceId is null")
+                return@launch
+            }
             projectInformationLocationViewModel.addAdresss(
                 province = ProvinceModel(
                     provinceId = provinceId,
@@ -212,7 +230,11 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
                 ),
             )
             val cityName = address.city
-            val cityId = getCityId(cityName, provinceId) ?: return@launch
+            val cityId = withContext(Dispatchers.IO) {getCityId(cityName, provinceId) }
+            if (cityId == null) {
+                Log.d("ProjectFormActivity", "onResponse: cityId is null")
+                return@launch
+            }
             projectInformationLocationViewModel.addAdresss(
                 city = CitiesModel(
                     cityId,
@@ -220,8 +242,12 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
                     cityName!!
                 )
             )
-            val districtName = address?.district
-            val districtId = getDistrictId(districtName, cityId) ?: return@launch
+            val districtName = address.district
+            val districtId = withContext(Dispatchers.IO) {getDistrictId(districtName, cityId) }
+            if (districtId == null) {
+                Log.d("ProjectFormActivity", "onResponse: districtId is null")
+                return@launch
+            }
             projectInformationLocationViewModel.addAdresss(
                 district = DistrictsModel(
                     districtId,
@@ -229,91 +255,97 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
                     districtName!!
                 )
             )
+            projectInformationLocationViewModel.printLog("after add address")
         }
+
 
     }
 
     private suspend fun getDistrictId(districtName: String?, cityId: String?): String? {
-        var id: String? = null
-        withContext(Dispatchers.IO) {
-            addressApi.getDistricts(cityId!!).enqueue(object : Callback<List<District>> {
-                override fun onResponse(
-                    call: Call<List<District>>,
-                    response: Response<List<District>>
-                ) {
-                    if (response.isSuccessful) {
-                        val data = response.body()
-                        if (data != null) {
-                            val provinceId = data.find { it.name == districtName }?.id
-                            id = provinceId
-                        }
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = addressApi.getSuspendDistricts(cityId!!)
+                if (response.isSuccessful) {
+                    val data = response.body()
+
+                    if (data == null) {
+                        Log.e("ProjectFormActivity", "getDistrictId: data is null")
+                        return@withContext null
                     }
+                    Log.d("ProjectFormActivity", "getDistrictId: Try to get : ${data.find { it.name == districtName }?.id}")
+                    // Return Result
+                    data.find { it.name == districtName }?.id
+                } else {
+                    Log.e("ProjectFormActivity", "getDistrictId: ${response.message()}")
 
+                    // Return Result
+                    null
                 }
+            } catch (e: Exception) {
+                Log.e("ProjectFormActivity", "getDistrictId: ${e.message}")
 
-                override fun onFailure(call: Call<List<District>>, t: Throwable) {
-                    Log.e("ProjectFormActivity", "onFailure: ${t.message}")
-                }
-
-            })
+                // Return Result
+                null
+            }
         }
-        return id
     }
 
     private suspend fun getCityId(cityName: String?, provinceId: String?): String? {
-        var id: String? = null
-        withContext(Dispatchers.IO) {
-            addressApi.getCities(provinceId!!).enqueue(object : Callback<List<City>> {
-                override fun onResponse(
-                    call: Call<List<City>>,
-                    response: Response<List<City>>
-                ) {
-                    if (response.isSuccessful) {
-                        val data = response.body()
-                        if (data != null) {
-                            val provinceId = data.find { it.name == cityName }?.id
-                            id = provinceId
-                        }
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = addressApi.getSuspendCities(provinceId!!)
+                if (response.isSuccessful) {
+                    val data = response.body()
+
+                    if (data == null) {
+                        Log.e("ProjectFormActivity", "getCityId: data is null")
+                        return@withContext null
                     }
+                    Log.d("ProjectFormActivity", "getCityId: Try to get : ${data.find { it.name == cityName }?.id}")
+                    // Return Result
+                    data.find { it.name == cityName }?.id
+                } else {
+                    Log.w("ProjectFormActivity", "getCityId: ${response.message()}")
 
+                    // Return Result
+                    null
                 }
+            } catch (e: Exception) {
+                Log.e("ProjectFormActivity", "getCityId: ${e.message}")
 
-                override fun onFailure(call: Call<List<City>>, t: Throwable) {
-                    Log.e("ProjectFormActivity", "onFailure: ${t.message}")
-                }
-
-            })
+                // Return Result
+                null
+            }
         }
-        return id
     }
 
     private suspend fun getProvinceId(provinceName: String?): String? {
-        var id: String? = null
-        withContext(Dispatchers.IO) {
-            addressApi.getProvinces().enqueue(object : Callback<List<Province>> {
-                override fun onResponse(
-                    call: Call<List<Province>>,
-                    response: Response<List<Province>>
-                ) {
-                    if (response.isSuccessful) {
-                        val data = response.body()
-                        if (data != null) {
-                            val provinceId = data.find { it.name == provinceName }?.id
-                            id = provinceId
-                        }
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = addressApi.getSuspendProvinces()
+                if (response.isSuccessful) {
+                    val data = response.body()
+
+                    if (data == null) {
+                        Log.e("ProjectFormActivity", "getProvinceId: data is null")
+                        return@withContext null
                     }
+                    Log.d("ProjectFormActivity", "getProvinceId: Try to get : ${data.find { it.name == provinceName }?.id}")
+                    // Return Result
+                    data.find { it.name == provinceName }?.id
+                } else {
+                    Log.e("ProjectFormActivity", "getProvinceId: ${response.message()}")
 
+                    // Return Result
+                    null
                 }
+            } catch (e: Exception) {
+                Log.e("ProjectFormActivity", "getProvinceId: ${e.message}")
 
-                override fun onFailure(call: Call<List<Province>>, t: Throwable) {
-                    Log.e("ProjectFormActivity", "onFailure: ${t.message}")
-                }
-
-            })
+                // Return Result
+                null
+            }
         }
-        return id
-
-
     }
 
 

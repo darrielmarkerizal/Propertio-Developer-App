@@ -161,10 +161,18 @@ class CreateProjectLokasiFragment : Fragment() {
         if (projectInformationLocationViewModel.isUploaded) {
             loadTextData()
             checkSpinnerData(true)
+        } else {
+            checkSpinnerData()
         }
 
-        checkSpinnerData()
+        binding.buttonHubungiKamiLokasiProyek.setOnClickListener {
+            openContactUs()
+        }
 
+        binding.buttonContohImmersiveLokasiProyek.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://immersive.propertio.id/siteplan-model/sp-000001/index.html"))
+            startActivity(intent)
+        }
 
 
 
@@ -217,7 +225,7 @@ class CreateProjectLokasiFragment : Fragment() {
         activityBinding.floatingButtonNext.setOnClickListener {
             projectInformationLocationViewModel.printLog()
 
-            if (!isProvinceSelected && !isCitySelected && !isDistrictSelected) {
+            if (!isProvinceSelected && !isCitySelected && !isDistrictSelected && !projectInformationLocationViewModel.isAddressNotEdited) {
                 binding.spinnerProvinceProject.error = "Wajib diisi"
                 binding.spinnerCityProject.error = "Wajib diisi"
                 binding.spinnerDistrictProject.error = "Wajib diisi"
@@ -225,11 +233,7 @@ class CreateProjectLokasiFragment : Fragment() {
                 return@setOnClickListener
             }
 
-
-
-
-
-
+            projectInformationLocationViewModel.printLog("when click next button")
 
             // Form Request
             Log.d("CreateProjectLokasiFragment", "Update or Edit: ${projectInformationLocationViewModel.isUploaded}")
@@ -246,6 +250,15 @@ class CreateProjectLokasiFragment : Fragment() {
         }
 
 
+    }
+
+
+    private fun openContactUs() {
+        // intent to whatsapp
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse("https://wa.me/6285702750455")
+        }
+        startActivity(intent)
     }
 
 
@@ -272,9 +285,19 @@ class CreateProjectLokasiFragment : Fragment() {
         val completedAt = projectInformationLocationViewModel.completedAt
         val certificate = projectInformationLocationViewModel.certificate!!
 
-        val province = provinceViewModel.provinceData.value?.provinceName!!
-        val city = cityViewModel.citiesData.value?.citiesName!!
-        val district = districtViewModel.districtsData.value?.districtsName!!
+        val province : String
+        val city : String
+        val district : String
+        if (projectInformationLocationViewModel.isAddressNotEdited) {
+            province = projectInformationLocationViewModel.savedProvince?.provinceName!!
+            city = projectInformationLocationViewModel.savedCity?.citiesName!!
+            district = projectInformationLocationViewModel.savedDistrict?.districtsName!!
+        } else {
+            province = provinceViewModel.provinceData.value?.provinceName!!
+            city = cityViewModel.citiesData.value?.citiesName!!
+            district = districtViewModel.districtsData.value?.districtsName!!
+        }
+
         val address = binding.editTextAddressProject.text.toString()
         val postalCode = binding.editTextPosProject.text.toString()
         val longitude = longitude?.toString()
@@ -543,11 +566,11 @@ class CreateProjectLokasiFragment : Fragment() {
             val province : ProvinceModel?
             val city : CitiesModel?
             val district : DistrictsModel?
-            if (isAlreadyUploaded) {
-                province = projectInformationLocationViewModel.savedProvince?.copy()
-                city = projectInformationLocationViewModel.savedCity?.copy()
-                district = projectInformationLocationViewModel.savedDistrict?.copy()
-
+            if (isAlreadyUploaded && projectInformationLocationViewModel.isAddressNotEdited) {
+                binding.spinnerProvinceProject.text = projectInformationLocationViewModel.savedProvince?.provinceName
+                binding.spinnerCityProject.text = projectInformationLocationViewModel.savedCity?.citiesName
+                binding.spinnerDistrictProject.text = projectInformationLocationViewModel.savedDistrict?.districtsName
+                return@launch
             } else {
                 province = projectInformationLocationViewModel.province?.copy()
                 city = projectInformationLocationViewModel.city?.copy()
@@ -605,6 +628,9 @@ class CreateProjectLokasiFragment : Fragment() {
         districtViewModel.districtsData.observe(viewLifecycleOwner) {
             binding.spinnerDistrictProject.text = it.districtsName
             binding.spinnerDistrictProject.error = null
+
+            projectInformationLocationViewModel.isAddressNotEdited = false
+
             isDistrictSelected = true
 
             projectInformationLocationViewModel.district = it
@@ -628,6 +654,8 @@ class CreateProjectLokasiFragment : Fragment() {
         cityViewModel.citiesData.observe(viewLifecycleOwner) {
             binding.spinnerCityProject.text = it.citiesName
             binding.spinnerCityProject.error = null
+
+            projectInformationLocationViewModel.isAddressNotEdited = false
 
             isCitySelected = true
             isDistrictSelected = false
@@ -659,6 +687,8 @@ class CreateProjectLokasiFragment : Fragment() {
             Log.d("CreateProjectLokasiFragment", "provinceSpinner: ${it.provinceName}")
             binding.spinnerProvinceProject.text = it.provinceName
             binding.spinnerProvinceProject.error = null
+
+            projectInformationLocationViewModel.isAddressNotEdited = false
 
             isProvinceSelected = true
             isCitySelected = false

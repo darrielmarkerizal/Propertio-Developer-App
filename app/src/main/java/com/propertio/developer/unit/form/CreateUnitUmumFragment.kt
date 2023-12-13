@@ -23,7 +23,7 @@ class CreateUnitUmumFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         return binding.root
     }
 
@@ -34,6 +34,7 @@ class CreateUnitUmumFragment : Fragment() {
 
         observeLiveData(unitFormViewModel.namaUnit) { namaUnit ->
             binding.editNamaUnit.setText(namaUnit)
+            Log.d("CreateUnitUmumFragment", "Nama unit: $namaUnit")
         }
 
         observeLiveData(unitFormViewModel.deskripsiUnit) { deskripsiUnit ->
@@ -92,7 +93,12 @@ class CreateUnitUmumFragment : Fragment() {
 
     private fun <T> observeLiveData(liveData: LiveData<T>, updateUI: (T) -> Unit) {
         liveData.observe(viewLifecycleOwner) { value ->
-            updateUI(value)
+            Log.d("CreateUnitUmumFragment", "Observed value: $value")
+            if (value == null) {
+                Log.d("CreateUnitUmumFragment", "Value is null")
+            } else {
+                updateUI(value)
+            }
         }
     }
 }

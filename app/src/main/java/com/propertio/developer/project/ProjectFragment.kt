@@ -170,6 +170,13 @@ class ProjectFragment : Fragment() {
         val buttonRepost = popupView.findViewById<AppCompatButton>(R.id.button_repost_proyek_pop_up)
         val switchButton = popupView.findViewById<SwitchMaterial>(R.id.switch_proyek_pop_up)
 
+        switchButton.isChecked = if (data.status == "active") {
+            switchButton.text = "Tayangkan"
+            false
+        } else {
+            switchButton.text = "Draf"
+            true
+        }
 
         buttonEdit.setOnClickListener {
             Log.d(TAG, "horizontalMoreButtonPopUp: buttonEdit ${data.title}")
@@ -189,6 +196,7 @@ class ProjectFragment : Fragment() {
                 ) {
                     if (response.isSuccessful) {
                         Log.d(TAG, "onResponse: ${response.body()?.message}")
+                        refreshRecyclerListAdapter()
                     } else {
                         Log.d(TAG, "onResponse: ${response.errorBody()?.string()}")
                     }
@@ -249,6 +257,7 @@ class ProjectFragment : Fragment() {
                 })
 
             }
+            refreshRecyclerListAdapter()
 
 
         }
