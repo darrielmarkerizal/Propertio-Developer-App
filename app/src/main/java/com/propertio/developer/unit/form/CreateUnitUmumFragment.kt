@@ -35,52 +35,63 @@ class CreateUnitUmumFragment : Fragment() {
             if (it) {
                 Log.d("CreateProjectInformasiUmumFragment", "onViewCreated Updated: $it")
                 loadTextData()
+                binding.textTitleUnit.text = "Edit Unit"
                 unitFormViewModel.isUploaded = it
             }
         }
 
         activityBinding?.floatingButtonBack?.setOnClickListener {
-            activity.onBackButtonUnitManagementClick()
+            activity?.onBackButtonUnitManagementClick()
         }
 
         activityBinding?.floatingButtonNext?.setOnClickListener {
-            if (!validateEditText(binding.editNamaUnit, "Nama unit tidak boleh kosong")) return@setOnClickListener
-            if (!validateNumberEditText(binding.editStokUnit, "Stok unit harus berupa angka dan tidak boleh ada koma")) return@setOnClickListener
-            if (!validateEditText(binding.editHargaUnit, "Harga unit tidak boleh kosong")) return@setOnClickListener
-            if (!validateNumberEditText(binding.editHargaUnit, "Harga unit harus berupa angka dan tidak boleh ada koma")) return@setOnClickListener
+            with(binding) {
+                if (!validateEditText(editNamaUnit, "Nama unit tidak boleh kosong")) return@setOnClickListener
+                if (!validateNumberEditText(editStokUnit, "Stok unit harus berupa angka dan tidak boleh ada koma")) return@setOnClickListener
+                if (!validateEditText(editHargaUnit, "Harga unit tidak boleh kosong")) return@setOnClickListener
+                if (!validateNumberEditText(editHargaUnit, "Harga unit harus berupa angka dan tidak boleh ada koma")) return@setOnClickListener
 
-            unitFormViewModel.namaUnit = binding.editNamaUnit.text.toString()
-            unitFormViewModel.deskripsiUnit = binding.editDeskripsiUnit.text.toString()
-            unitFormViewModel.stokUnit = binding.editStokUnit.text.toString()
-            unitFormViewModel.hargaUnit = binding.editHargaUnit.text.toString()
+                unitFormViewModel.apply {
+                    namaUnit = editNamaUnit.text.toString()
+                    deskripsiUnit = editDeskripsiUnit.text.toString()
+                    stokUnit = editStokUnit.text.toString()
+                    hargaUnit = editHargaUnit.text.toString()
+                }
+            }
 
-            activity.onNextButtonUnitManagementClick()
+            activity?.onNextButtonUnitManagementClick()
         }
     }
 
     private fun validateEditText(editText: EditText, errorMessage: String): Boolean {
-        val text = editText.text.toString()
-        if (text.isEmpty()) {
-            editText.error = errorMessage
-            return false
+        return editText.text.toString().let { text ->
+            if (text.isEmpty()) {
+                editText.error = errorMessage
+                false
+            } else {
+                true
+            }
         }
-        return true
     }
 
     private fun validateNumberEditText(editText: EditText, errorMessage: String): Boolean {
-        val text = editText.text.toString()
-        if (!text.all { it.isDigit() }) {
-            editText.error = errorMessage
-            return false
+        return editText.text.toString().let { text ->
+            if (!text.all { it.isDigit() }) {
+                editText.error = errorMessage
+                false
+            } else {
+                true
+            }
         }
-        return true
     }
 
     private fun loadTextData() {
-        UnitFormViewModel().printLog()
-        binding.editNamaUnit.setText(unitFormViewModel.namaUnit)
-        binding.editDeskripsiUnit.setText(unitFormViewModel.deskripsiUnit)
-        binding.editStokUnit.setText(unitFormViewModel.stokUnit)
-        binding.editHargaUnit.setText(unitFormViewModel.hargaUnit)
+        unitFormViewModel.printLog()
+        with(binding) {
+            editNamaUnit.setText(unitFormViewModel.namaUnit)
+            editDeskripsiUnit.setText(unitFormViewModel.deskripsiUnit)
+            editStokUnit.setText(unitFormViewModel.stokUnit)
+            editHargaUnit.setText(unitFormViewModel.hargaUnit)
+        }
     }
 }

@@ -15,7 +15,7 @@ class UnitDetailResponse : DefaultResponse() {
     var data: Unit? = null
 
     class Unit : UnitMinimum() {
-        @SerializedName("property_type")
+        @SerializedName("propertyType")
         @Expose
         var propertyType: String? = null
 
