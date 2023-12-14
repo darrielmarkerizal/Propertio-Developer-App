@@ -63,7 +63,7 @@ class ProjectDetailActivity : AppCompatActivity() {
     ) { result ->
         if (result.resultCode == RESULT_OK) {
             fetchDetailData(projectId!!)
-            setUnitRecycler()
+            unitRecycler(projectId!!)
             Log.d("ProjectDetailActivity", "Unit updated successfully")
         }
     }
