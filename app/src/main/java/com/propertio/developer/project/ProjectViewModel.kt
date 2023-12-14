@@ -2,7 +2,6 @@ package com.propertio.developer.project
 
 import android.util.Log
 import androidx.annotation.WorkerThread
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -10,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.projectmanagement.ProjectListResponse
-import com.propertio.developer.database.ProjectRepository
+import com.propertio.developer.database.PropertiORepository
 import com.propertio.developer.database.project.ProjectTable
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -19,34 +18,34 @@ import retrofit2.Response
 
 
 class ProjectViewModel(
-    private val projectRepository: ProjectRepository
+    private val propertiORepository: PropertiORepository
 ) : ViewModel() {
 
-    val projectList : MutableLiveData<List<ProjectTable>> = projectRepository.listProject.asLiveData() as MutableLiveData<List<ProjectTable>>
+    val projectList : MutableLiveData<List<ProjectTable>> = propertiORepository.listProject.asLiveData() as MutableLiveData<List<ProjectTable>>
 
     fun allProjectsPaginated(limit: Int, offset: Int = 0, theStatus: Boolean, filter: String = ""): MutableLiveData<List<ProjectTable>> {
         Log.d("ProjectViewModel", "allProjectsPaginated: from $limit to $offset")
         val status = if (theStatus) "active" else "not_active"
 
-        return projectRepository.allProjectsPaginated(limit, offset, status, filter).asLiveData() as MutableLiveData<List<ProjectTable>>
+        return propertiORepository.allProjectsPaginated(limit, offset, status, filter).asLiveData() as MutableLiveData<List<ProjectTable>>
     }
 
     suspend fun getProjectById(id: Int): ProjectTable {
         Log.d("ProjectViewModel", "getProjectById: $id")
-        return projectRepository.getProjectById(id)
+        return propertiORepository.getProjectById(id)
     }
 
 
     fun insertLocalProject(projectTable: ProjectTable) {
         viewModelScope.launch {
-            projectRepository.insertProject(projectTable)
+            propertiORepository.insertProject(projectTable)
             Log.w("ProjectViewModel", "insertLocalProject: $projectTable")
         }
     }
 
     fun updateLocalProject(projectTable: ProjectTable) {
         viewModelScope.launch {
-            projectRepository.updateProject(projectTable)
+            propertiORepository.updateProject(projectTable)
             Log.w("ProjectViewModel", "updateLocalProject: $projectTable")
         }
     }
@@ -61,7 +60,7 @@ class ProjectViewModel(
         addressLongitude: String
     ) {
         viewModelScope.launch {
-            projectRepository.updateProject(
+            propertiORepository.updateProject(
                 id,
                 headline,
                 description,
@@ -76,7 +75,7 @@ class ProjectViewModel(
 
     fun deleteAllLocalProjects() {
         viewModelScope.launch {
-            projectRepository.deleteAll()
+            propertiORepository.deleteAll()
             Log.w("ProjectViewModel", "deleteAllLocalProjects: ")
         }
     }
@@ -161,7 +160,7 @@ class ProjectViewModel(
                 createdAt = it.createdAt,
             )
 
-            if(projectRepository.isNotIdTaken(it.id!!)) {
+            if(propertiORepository.isNotIdTaken(it.id!!)) {
                 Log.i("ProjectViewModel", "syncToLocalDatabase Create New Project: $newProject")
                 insertLocalProject(newProject)
 

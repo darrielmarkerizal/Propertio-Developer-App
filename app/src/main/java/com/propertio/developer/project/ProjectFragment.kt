@@ -333,17 +333,6 @@ class ProjectFragment : Fragment() {
             visibleThreshold = 5
             setRecyclerListProject(currentStatus, filter)
 
-//            lifecycleScope.launch {
-//
-//                if (tabButtonViewModel.isActive()) {
-//                    setTabToActive()
-//
-//                } else {
-//                    setTabToDraf()
-//                }
-//
-//            }
-
         }
 
         binding.swipeRefreshLayoutProjectList.setOnRefreshListener {

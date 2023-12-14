@@ -35,7 +35,6 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:paddingVertical="16dp"
                     android:paddingHorizontal="20dp"
                     android:orientation="horizontal">
 
@@ -58,9 +57,9 @@
                                 android:id="@+id/nn_tv_jumlah_listing_proyek"
                                 style="@style/card.dashboard.text_title"
                                 android:text="Jumlah listing proyek"
-                                app:layout_constraintHorizontal_bias="0.0"
                                 app:layout_constraintBottom_toBottomOf="@+id/image_view_box_icon"
                                 app:layout_constraintEnd_toStartOf="@+id/icon_informational_jumlah_listing_proyek"
+                                app:layout_constraintHorizontal_bias="0.0"
                                 app:layout_constraintStart_toEndOf="@+id/image_view_box_icon"
                                 app:layout_constraintTop_toTopOf="@+id/image_view_box_icon" />
 

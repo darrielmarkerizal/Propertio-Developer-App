@@ -1,20 +1,12 @@
 package com.propertio.developer.pesan
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.propertio.developer.R
-import com.propertio.developer.api.Retro
-import com.propertio.developer.api.common.message.MessageApi
-import com.propertio.developer.api.common.message.MessageResponse
 import com.propertio.developer.databinding.ActivityDetailChatBinding
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class DetailChatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailChatBinding
@@ -23,6 +15,8 @@ class DetailChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
 
         // Toolbar
         val bindingToolbar = binding.toolbarContainer
