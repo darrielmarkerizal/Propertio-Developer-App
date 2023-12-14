@@ -7,7 +7,7 @@ import androidx.room.Query
 @Dao
 interface ChatTableDao {
 
-    @Query("SELECT * FROM chat_table")
+    @Query("SELECT * FROM chat_table ORDER BY create_at DESC")
     suspend fun getAll(): List<ChatTable>
 
     @Query("SELECT * FROM chat_table WHERE id = :id LIMIT 1")
@@ -19,7 +19,7 @@ interface ChatTableDao {
     @Query("SELECT COUNT(*) FROM chat_table")
     suspend fun countAll(): Int
 
-    @Query("SELECT * FROM chat_table LIMIT :limit OFFSET :offset")
+    @Query("SELECT * FROM chat_table ORDER BY create_at DESC LIMIT :limit OFFSET :offset")
     suspend fun getAllPaginated(limit: Int, offset: Int): List<ChatTable>
 
 
@@ -29,7 +29,7 @@ interface ChatTableDao {
     @Insert(onConflict = androidx.room.OnConflictStrategy.REPLACE)
     suspend fun insert(chatTable: ChatTable)
 
-    @Query("SELECT * FROM chat_table WHERE name LIKE :search OR subject LIKE :search OR email LIKE :search OR phone LIKE :search OR message LIKE :search LIMIT :limit OFFSET :offset")
+    @Query("SELECT * FROM chat_table WHERE name LIKE :search OR subject LIKE :search OR email LIKE :search OR phone LIKE :search OR message LIKE :search ORDER BY create_at DESC LIMIT  :limit OFFSET :offset")
     suspend fun search(search: String, limit: Int, offset: Int): List<ChatTable>
 
 
