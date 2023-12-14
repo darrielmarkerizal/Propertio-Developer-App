@@ -81,6 +81,7 @@ class UnitDataRumahFragment : Fragment() {
                 Log.d("UnitDataRumahFragment", "onViewCreated Updated: $it")
                 loadTextData()
                 unitFormViewModel.isUploaded = it
+                activityBinding?.toolbarContainerUnitForm?.textViewTitle?.text = "Edit Unit"
             }
         }
 
