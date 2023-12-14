@@ -123,6 +123,7 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
 
     override fun onNextButtonUnitManagementClick() {
         if (currentFragmentIndex == formsFragment.size - 1) {
+            binding.progressIndicatorUnitForm.setProgressCompat(100, true)
             val intentToSuccess = Intent(this, CreateUnitSuccessActivity::class.java)
             launcherToSuccess.launch(intentToSuccess)
             return
@@ -130,6 +131,8 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
 
         currentFragmentIndex++
         Log.d("UnitFormActivity", "Next button clicked, currentFragmentIndex: $currentFragmentIndex")
+        val progressValue: Double = currentFragmentIndex.toDouble() / formsFragment.size.toDouble() * 100.0
+        binding.progressIndicatorUnitForm.setProgressCompat(progressValue.toInt(), true)
         replaceFragment(formsFragment[currentFragmentIndex])
 
 
@@ -138,6 +141,7 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
 
     override fun onBackButtonUnitManagementClick() {
         if (currentFragmentIndex <= 0) {
+            binding.progressIndicatorUnitForm.setProgressCompat(0, true)
             Log.d("UnitFormActivity", "Navigating to ProjectDetailActivity")
             setResult(RESULT_OK)
             finish()
@@ -145,6 +149,8 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
         }
         currentFragmentIndex--
         Log.d("UnitFormActivity", "Back button clicked, currentFragmentIndex: $currentFragmentIndex")
+        val progressValue: Double = currentFragmentIndex.toDouble() / formsFragment.size.toDouble() * 100.0
+        binding.progressIndicatorUnitForm.setProgressCompat(progressValue.toInt(), true)
         replaceFragment(formsFragment[currentFragmentIndex])
     }
 
