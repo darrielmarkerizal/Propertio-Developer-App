@@ -232,4 +232,10 @@ interface DeveloperApi {
         @Path("projectId") projectId : Int,
         @Path("unitId") unitId : Int
     ) : Call<UnitDetailResponse>
+
+    @DELETE("v1/cms/project-management/{projectId}/unit/{unitId}")
+    fun deleteUnit(
+        @Path("projectId") projectId : Int,
+        @Path("unitId") unitId : Int
+    ) : Call<UpdateUnitResponse>
 }
