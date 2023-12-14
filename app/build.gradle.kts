@@ -72,14 +72,12 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
-    //TODO: Remove Glide Kapt and SVG
-    // Glide
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    kapt("com.github.bumptech.glide:compiler:4.16.0")
+    // Navigation
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
 
-    // SVG
-//    implementation("com.caverock:androidsvg-aar:1.4")
-//    implementation("com.caverock:androidsvg:1.4")
+    //Glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
     // Coil
     implementation("io.coil-kt:coil:2.5.0")

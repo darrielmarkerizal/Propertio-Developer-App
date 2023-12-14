@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.propertio.developer.dasbor.DashboardFragment
 import com.propertio.developer.databinding.ActivityMainBinding
 import com.propertio.developer.pesan.ChatFragment
@@ -17,11 +19,6 @@ import com.propertio.developer.project.ProjectViewModelFactory
 
 class MainActivity : AppCompatActivity() {
     private var toastMessage : String? = null
-
-    private val dashboardFragment = DashboardFragment()
-    private val projectFragment = ProjectFragment()
-    private val chatFragment = ChatFragment()
-    private val profileFragment = ProfileFragment()
 
     private lateinit var projectViewModel: ProjectViewModel
 
@@ -47,56 +44,41 @@ class MainActivity : AppCompatActivity() {
         val theToolbar = binding.toolbarContainer.root
 
 
-        replaceFragment(DashboardFragment())
-
         toastMessage = intent.getStringExtra("toastMessage")
 
+        // Nav Graph
+        with(binding) {
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            val navController = navHostFragment.navController
 
-
-
-        binding.bottomNavigation.setOnItemSelectedListener {
-            when(it.itemId) {
-                R.id.dashboard -> {
-                    theToolbar.visibility = View.GONE
-
-
-                    replaceFragment(dashboardFragment)
-                }
-                R.id.project -> {
-                    theToolbar.visibility = View.VISIBLE
-                    toolbar.textViewTitle.text = "Proyek Saya"
-
-                    replaceFragment(projectFragment)
-                }
-                R.id.message -> {
-                    theToolbar.visibility = View.VISIBLE
-                    toolbar.textViewTitle.text = "Pesan"
-
-                    val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
-                    val fragment = supportFragmentManager.findFragmentByTag("ChatFragment")
-                    if (fragment == null) {
-                        supportFragmentManager.beginTransaction()
-                            .hide(currentFragment!!)
-                            .add(R.id.frame_layout, chatFragment, "ChatFragment")
-                            .commit()
-                    } else {
-                        supportFragmentManager.beginTransaction()
-                            .hide(currentFragment!!)
-                            .show(fragment)
-                            .commit()
+            bottomNavigation.setOnItemSelectedListener {
+                when(it.itemId) {
+                    R.id.dashboardFragment -> {
+                        navController.navigate(R.id.dashboardFragment)
+                        toolbarContainer.root.visibility = View.GONE
+                        true
                     }
-                }
-                R.id.profile_setting -> {
-                    theToolbar.visibility = View.GONE
+                    R.id.projectFragment -> {
+                        navController.navigate(R.id.projectFragment)
+                        toolbarContainer.root.visibility = View.VISIBLE
+                        toolbar.textViewTitle.text = "Proyek Saya"
+                        true
+                    }
+                    R.id.chatFragment -> {
+                        navController.navigate(R.id.chatFragment)
+                        toolbarContainer.root.visibility = View.VISIBLE
+                        toolbar.textViewTitle.text = "Pesan"
+                        true
+                    }
+                    R.id.profileFragment -> {
+                        navController.navigate(R.id.profileFragment)
+                        toolbarContainer.root.visibility = View.GONE
+                        true
+                    }
 
-                    replaceFragment(profileFragment)
-                }
-
-                else -> {
-
+                    else -> true
                 }
             }
-            true
         }
     }
 
@@ -117,7 +99,7 @@ class MainActivity : AppCompatActivity() {
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.frame_layout, fragment)
+        fragmentTransaction.replace(R.id.nav_host_fragment, fragment)
         fragmentTransaction.commit()
     }
 }
