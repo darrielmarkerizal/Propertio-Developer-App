@@ -17,6 +17,8 @@
         android:id="@+id/progress_indicator_unit_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:indicatorColor="@color/grey_500"
+        app:trackColor="@color/grey_50"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_container_unit_form" />
 
     <FrameLayout
