@@ -170,8 +170,23 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
                     val data = response.body()?.data
                     if (data != null) {
                         Log.d("UnitFormActivity", "onResponse: $data")
+                        Log.d("UnitFormActivity", "onResponse: ${data.propertyType}")
                         lifecycleScope.launch {
                             loadDataToViewModel(data)
+
+                            when (data.propertyType) {
+                                "Gudang" -> formsFragment.add(1, UnitDataGudangFragment())
+                                "Kantor" -> formsFragment.add(1, UnitDataKantorFragment())
+                                "Kondominium" -> formsFragment.add(1, UnitDataKondominiumFragment())
+                                "Pabrik" -> formsFragment.add(1, UnitDataPabrikFragment())
+                                "Ruang usaha" -> formsFragment.add(1, UnitDataRuangUsahaFragment())
+                                "Ruko" -> formsFragment.add(1, UnitDataRukoFragment())
+                                "Rumah" -> formsFragment.add(1, UnitDataRumahFragment())
+                                "Tanah" -> formsFragment.add(1, UnitDataTanahFragment())
+                                "Villa" -> formsFragment.add(1, UnitDataVillaFragment())
+                                "Apartemen" -> formsFragment.add(1, UnitDataApartemenFragment())
+                                else -> Log.e("UnitFormActivity", "Invalid property type: ${data.propertyType}")
+                            }
                         }
                     } else {
                         Log.e("UnitFormActivity", "onResponse: data is null")
