@@ -15,6 +15,7 @@ import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitRequest
+import com.propertio.developer.api.developer.unitmanagement.UpdateUnitRequest
 import com.propertio.developer.databinding.FragmentUnitDataVillaBinding
 import com.propertio.developer.dialog.ElectricitySheetFragment
 import com.propertio.developer.dialog.InteriorSheetFragment
@@ -28,6 +29,7 @@ import com.propertio.developer.dialog.viewmodel.RoadAccessTypeSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.WaterTypeSpinnerViewModel
 import com.propertio.developer.unit.form.UnitFormActivity
 import com.propertio.developer.unit.form.UnitFormViewModel
+import com.propertio.developer.unit_management.UpdateUnitResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -81,7 +83,7 @@ class UnitDataVillaFragment : Fragment() {
 
         unitFormViewModel.isAlreadyUploaded.observe(viewLifecycleOwner) {
             if (it) {
-                Log.d("UnitDataRumahFragment", "onViewCreated Updated: $it")
+                Log.d("UnitDataVillaFragment", "onViewCreated Updated: $it")
                 loadTextData()
                 unitFormViewModel.isUploaded = it
                 activityBinding?.toolbarContainerUnitForm?.textViewTitle?.text = "Edit Unit"
@@ -115,113 +117,153 @@ class UnitDataVillaFragment : Fragment() {
         }
 
         activityBinding.floatingButtonNext.setOnClickListener {
+            Log.d("UnitDataVillaFragment", "Next button clicked")
 
-            val projectId = unitFormViewModel.projectId ?: 0
-            val title = unitFormViewModel.namaUnit ?: ""
-            val description = unitFormViewModel.deskripsiUnit ?: ""
-            val stock = unitFormViewModel.stokUnit ?: ""
-            val price = unitFormViewModel.hargaUnit ?: ""
-            val luas_tanah = binding.editLuasTanahVilla.text.toString()
-            val luas_bangunan = binding.editLuasBangunanVilla.text.toString()
-            val jumlah_lantai = binding.editJumlahLantaiVilla.text.toString()
-            val jumlah_kamar_tidur = binding.editKamarVilla.text.toString()
-            val jumlah_kamar_mandi = binding.editKamarMandiVilla.text.toString()
-            val parking_type = binding.spinnerTempatParkirVilla.text.toString()
-            val electricity_type = binding.spinnerDayaListrikVilla.text.toString()
-            val water_type = binding.spinnerJenisAirVilla.text.toString()
-            val interior_type = binding.spinnerInteriorVilla.text.toString()
-            val road_access_type = binding.spinnerAksesJalanVilla.text.toString()
+            updateViewModelFromForm()
+            val unitRequest = createUnitRequest()
 
-            formActivity?.unitFormViewModel?.luasTanah = luas_tanah
-            formActivity?.unitFormViewModel?.luasBangunan = luas_bangunan
-            formActivity?.unitFormViewModel?.jumlahLantai = jumlah_lantai
-            formActivity?.unitFormViewModel?.jumlahKamarTidur = jumlah_kamar_tidur
-            formActivity?.unitFormViewModel?.jumlahKamarMandi = jumlah_kamar_mandi
-            formActivity?.unitFormViewModel?.jumlahParkir = parking_type
-            formActivity?.unitFormViewModel?.electricityType = electricity_type
-            formActivity?.unitFormViewModel?.waterType = water_type
-            formActivity?.unitFormViewModel?.interiorType = interior_type
-            formActivity?.unitFormViewModel?.roadAccessType = road_access_type
+            if (unitFormViewModel.isUploaded == false) {
+                postUnit(unitRequest)
+            } else {
+                updateUnit(unitRequest)
+            }
+        }
+    }
 
-            val retro = Retro(TokenManager(requireContext()).token)
-                .getRetroClientInstance()
-                .create(DeveloperApi::class.java)
+    private fun updateViewModelFromForm() {
+        formActivity.unitFormViewModel.apply {
+            luasTanah = binding.editLuasTanahVilla.text.toString()
+            luasBangunan = binding.editLuasBangunanVilla.text.toString()
+            jumlahLantai = binding.editJumlahLantaiVilla.text.toString()
+            jumlahKamarTidur = binding.editKamarMandiVilla.text.toString()
+            jumlahKamarMandi = binding.editKamarMandiVilla.text.toString()
+            jumlahParkir = binding.spinnerTempatParkirVilla.text.toString()
+            electricityType = binding.spinnerDayaListrikVilla.text.toString()
+            waterType = binding.spinnerJenisAirVilla.text.toString()
+            interiorType = binding.spinnerInteriorVilla.text.toString()
+            roadAccessType = binding.spinnerAksesJalanVilla.text.toString()
+        }
+    }
 
-            val unitRequest = UnitRequest(
-                title = title,
-                price = price,
-                description = description,
-                stock = stock,
-                surfaceArea = luas_tanah,
-                buildingArea = luas_bangunan,
-                floor = jumlah_lantai,
-                bedroom = jumlah_kamar_tidur,
-                bathroom = jumlah_kamar_mandi,
-                garage = parking_type,
-                powerSupply = electricity_type,
-                waterType = water_type,
-                interior = interior_type,
-                roadAccess = road_access_type,
-                order = null
-            )
+    private fun createUnitRequest(): UnitRequest {
+        return UnitRequest(
+            title = unitFormViewModel.namaUnit ?: "",
+            price = unitFormViewModel.hargaUnit ?: "",
+            description = unitFormViewModel.deskripsiUnit ?: "",
+            stock = unitFormViewModel.stokUnit ?: "",
+            surfaceArea = unitFormViewModel.luasTanah,
+            buildingArea = unitFormViewModel.luasBangunan,
+            floor = unitFormViewModel.jumlahLantai,
+            bedroom = unitFormViewModel.jumlahKamarTidur,
+            bathroom = unitFormViewModel.jumlahKamarMandi,
+            garage = unitFormViewModel.jumlahParkir,
+            powerSupply = unitFormViewModel.electricityType,
+            waterType = unitFormViewModel.waterType,
+            interior = unitFormViewModel.interiorType,
+            roadAccess = unitFormViewModel.roadAccessType,
+            order = null
+        )
+    }
 
-            Log.d("UnitDataVillaFragment", "onViewCreated: $unitRequest")
+    private fun postUnit(unitRequest: UnitRequest) {
+        val retro = Retro(TokenManager(requireContext()).token)
+            .getRetroClientInstance()
+            .create(DeveloperApi::class.java)
 
-            retro.postStoreUnit(
-                id = projectId,
-                unitRequest = unitRequest
-            ).enqueue(object : Callback<PostUnitResponse> {
-                override fun onResponse(
-                    call: Call<PostUnitResponse>,
-                    response: Response<PostUnitResponse>
-                ) {
-                    if(response.isSuccessful) {
-                        val responseData = response.body()?.data
-                        if (responseData != null) {
-                            Log.d("UnitDataVillaFragment", "onResponse: $responseData")
+        retro.postStoreUnit(
+            id = unitFormViewModel.projectId ?: 0,
+            unitRequest = unitRequest
+        ).enqueue(object : Callback<PostUnitResponse> {
+            override fun onResponse(
+                call: Call<PostUnitResponse>,
+                response: Response<PostUnitResponse>
+            ) {
+                if(response.isSuccessful) {
+                    val responseData = response.body()?.data
+                    if (responseData != null) {
+                        Log.d("UnitDataVillaFragment", "onResponse: $responseData")
 
-
-
-
-                            //TODO: Tambahkan kode seperti ini untuk setiap tipe unit
-                            formActivity.unitId = responseData.id
-                            if (formActivity.unitId != null || formActivity.unitId != 0) {
-                                Toast.makeText(requireContext(), "Unit berhasil ditambahkan", Toast.LENGTH_SHORT).show()
-                                formActivity.onNextButtonUnitManagementClick()
-                            } else {
-                                Log.e("UnitDataVillaFragment", "onResponse: Unit ID is null or 0")
-                                Toast.makeText(requireContext(), "Gagal menambahkan unit", Toast.LENGTH_SHORT).show()
-                            }
-
-
-
-
-                        }
-                    } else {
-                        var errorMessage = response.errorBody()?.string()
-                        errorMessage = errorMessage?.split("\"data\":")?.last()
-                        errorMessage = errorMessage?.trim('{', '}')
-
-                        if (errorMessage != null) {
-                            for (error in errorMessage.split(",")) {
-                                Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
-                            }
-                        }
-                        Log.w("UnitDataVillaFragment", "onResponse: Error code: ${response.code()}, message: ${response.message()}, error body: $errorMessage")
-
-                        if (response.code() == 500) {
-                            Log.e("UnitDataVillaFragment", "Server error: Something went wrong on the server side.")
-                            // You can add more actions here, for example, show an error dialog or a specific message to the user
+                        //TODO: Tambahkan kode seperti ini untuk setiap tipe unit
+                        formActivity.unitId = responseData.id
+                        if (formActivity.unitId != null || formActivity.unitId != 0) {
+                            Toast.makeText(requireContext(), "Unit berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+                            formActivity.onNextButtonUnitManagementClick()
+                        } else {
+                            Log.e("UnitDataVillaFragment", "onResponse: Unit ID is null or 0")
+                            Toast.makeText(requireContext(), "Gagal menambahkan unit", Toast.LENGTH_SHORT).show()
                         }
                     }
-                }
+                } else {
+                    var errorMessage = response.errorBody()?.string()
+                    errorMessage = errorMessage?.split("\"data\":")?.last()
+                    errorMessage = errorMessage?.trim('{', '}')
 
-                override fun onFailure(call: Call<PostUnitResponse>, t: Throwable) {
-                    Log.e("UnitDataVillaFragment", "onFailure: ${t.message}", t)
-                    Toast.makeText(requireContext(), "Gagal menambahkan unit", Toast.LENGTH_SHORT).show()
+                    if (errorMessage != null) {
+                        for (error in errorMessage.split(",")) {
+                            Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+                        }
+                    }
+                    Log.w("UnitDataVillaFragment", "onResponse: Error code: ${response.code()}, message: ${response.message()}, error body: $errorMessage")
+
+                    if (response.code() == 500) {
+                        Log.e("UnitDataVillaFragment", "Server error: Something went wrong on the server side.")
+                    }
                 }
-            })
-        }
+            }
+
+            override fun onFailure(call: Call<PostUnitResponse>, t: Throwable) {
+                Log.e("UnitDataVillaFragment", "onFailure: ${t.message}", t)
+                Toast.makeText(requireContext(), "Gagal menambahkan unit", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun updateUnit(unitRequest: UnitRequest) {
+        val retro = Retro(TokenManager(requireContext()).token)
+            .getRetroClientInstance()
+            .create(DeveloperApi::class.java)
+
+        val updateUnitRequest = UpdateUnitRequest(
+            unitId = unitFormViewModel.unitId ?: 0,
+            title = unitRequest.title,
+            price = unitRequest.price,
+            description = unitRequest.description,
+            stock = unitRequest.stock,
+            surfaceArea = unitRequest.surfaceArea,
+            buildingArea = unitRequest.buildingArea,
+            floor = unitRequest.floor,
+            bedroom = unitRequest.bedroom,
+            bathroom = unitRequest.bathroom,
+            garage = unitRequest.garage,
+            powerSupply = unitRequest.powerSupply,
+            waterType = unitRequest.waterType,
+            interior = unitRequest.interior,
+            roadAccess = unitRequest.roadAccess,
+            order = null
+        )
+
+        retro.updateUnit(unitFormViewModel.projectId ?: 0, updateUnitRequest).enqueue(object : Callback<UpdateUnitResponse> {
+            override fun onResponse(
+                call: Call<UpdateUnitResponse>,
+                response: Response<UpdateUnitResponse>
+            ) {
+                if (isAdded) {
+                    if (response.isSuccessful) {
+                        Log.d("UnitDataVillaFragment", "onResponse: ${response.body()}")
+                        Toast.makeText(requireContext(), "Unit berhasil diupdate", Toast.LENGTH_SHORT).show()
+                        formActivity.onNextButtonUnitManagementClick()
+                    } else {
+                        Log.e("UnitDataVillaFragment", "onResponse: ${response.errorBody()}")
+                        Toast.makeText(requireContext(), "Unit gagal diupdate", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateUnitResponse>, t: Throwable) {
+                Log.e("UnitDataVillaFragment", "onFailure: ${t.message}")
+                Toast.makeText(requireContext(), "Unit gagal diupdate", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun parkingTypeSpinner() {
