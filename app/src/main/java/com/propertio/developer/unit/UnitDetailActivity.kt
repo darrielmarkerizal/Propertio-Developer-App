@@ -1,5 +1,6 @@
 package com.propertio.developer.unit
 
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -24,6 +25,7 @@ import com.propertio.developer.project.ProjectDetailActivity
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_DETAIL_PID
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_DETAIL_UID
 import com.propertio.developer.project.form.ProjectFormActivity
+import com.propertio.developer.unit.form.UnitFormActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
@@ -67,7 +69,18 @@ class UnitDetailActivity : AppCompatActivity() {
         // Check if is it valid unit id
         unitId = intent.getIntExtra(PROJECT_DETAIL_UID, 0)
         projectId = intent.getIntExtra(PROJECT_DETAIL_PID, 0)
+
+        binding.buttonEdit.setOnClickListener {
+            binding.toolbarContainer.textViewTitle.text = "Edit Unit"
+
+            val intent = Intent(this, UnitFormActivity::class.java)
+            intent.putExtra(PROJECT_DETAIL_UID, unitId)
+            intent.putExtra(PROJECT_DETAIL_PID, projectId)
+            startActivity(intent)
+        }
+
         Log.d("UnitDetailActivity", "onCreate: unitId $unitId")
+        Log.d("UnitDetailActivity", "onCreate projectId $projectId")
         intent.removeExtra(PROJECT_DETAIL_UID)
         intent.removeExtra(PROJECT_DETAIL_PID)
         if (unitId == 0 && projectId == 0) {

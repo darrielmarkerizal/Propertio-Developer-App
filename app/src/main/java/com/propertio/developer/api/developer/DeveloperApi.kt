@@ -190,6 +190,14 @@ interface DeveloperApi {
         @Path("id") id : Int,
         @Body unitRequest: UnitRequest
     ) : Call<PostUnitResponse>
+
+    @POST("v1/cms/project-management/{project_id}/unit?_method=PUT")
+    fun updateUnit(
+        @Path("project_id") projectId : String,
+        @Body unitId: RequestBody,
+        @Body unitRequest: UnitRequest
+    ) : Call<UpdateUnitResponse>
+
   
   @FormUrlEncoded
     @POST("v1/cms/project-management/project-facilities")
