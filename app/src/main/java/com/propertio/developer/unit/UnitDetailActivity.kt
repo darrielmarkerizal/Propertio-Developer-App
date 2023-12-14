@@ -158,6 +158,8 @@ class UnitDetailActivity : AppCompatActivity() {
     }
 
     private fun setIndicator() {
+        dots.clear()
+        binding.dotsIndicator.removeAllViews()
         for (i in 0 until carouselList.size) {
             dots.add(TextView(this))
             dots[i].text = Html.fromHtml("&#9679", Html.FROM_HTML_MODE_LEGACY).toString()
@@ -174,9 +176,16 @@ class UnitDetailActivity : AppCompatActivity() {
                 val imageURL: String = DomainURL.DOMAIN + photo.filename
                 Log.d("UnitDetailActivity", "imageURL: $imageURL")
 
-                carouselList.add(
-                    ImageData(imageURL)
-                )
+                if (!carouselList.any { it.id == photo.id.toString() }) {
+                    carouselList.add(
+                        ImageData(
+                            photo.id.toString(),
+                            imageURL
+                        )
+                    )
+                }
+
+
             }
 
         } else {
@@ -186,7 +195,10 @@ class UnitDetailActivity : AppCompatActivity() {
             val drawableUriString = drawableUri.toString()
 
             carouselList.add(
-                ImageData(drawableUriString)
+                ImageData(
+                    "Locale_PlaceHolder_DU",
+                    drawableUriString
+                )
             )
         }
     }
