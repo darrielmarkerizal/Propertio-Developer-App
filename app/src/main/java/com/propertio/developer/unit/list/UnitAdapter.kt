@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.propertio.developer.NumericalUnitConverter
 import com.propertio.developer.R
+import com.propertio.developer.api.DomainURL.DOMAIN
 import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
 import com.propertio.developer.databinding.TemplateCardUnitBinding
 
@@ -42,8 +43,10 @@ class UnitAdapter(
         @WorkerThread
         private fun loadImage(photoURL: String?) {
             Log.d("UnitAdapter", "loadImage: $photoURL")
+            if (photoURL == null) return
+            val imageUrl = if (photoURL.startsWith("http")) photoURL else "$DOMAIN$photoURL"
             with(binding) {
-                imageViewThumbnail.load(photoURL) {
+                imageViewThumbnail.load(imageUrl) {
                     crossfade(true)
                     placeholder(R.drawable.placeholder)
                     error(R.drawable.placeholder)
