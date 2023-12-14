@@ -9,7 +9,10 @@ import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
 class UnitFormViewModel : ViewModel() {
 
     var namaUnit: String? = null
+    var propertyType: String? = null
     var deskripsiUnit: String? = null
+    var isUploaded = false
+    var isAlreadyUploaded : MutableLiveData<Boolean> = MutableLiveData(false)
     var stokUnit: String? = null
     var hargaUnit: String? = null
     var projectId: Int? = null
@@ -29,6 +32,7 @@ class UnitFormViewModel : ViewModel() {
         Log.d( "ViewModel",
             "loadTextData $msg:" +
                     "\n namaUnit     : $namaUnit " +
+                    "\n propertyType : $propertyType " +
                     "\n deskripsiUnit: $deskripsiUnit " +
                     "\n stokUnit     : $stokUnit " +
                     "\n hargaUnit    : $hargaUnit " +
@@ -49,8 +53,10 @@ class UnitFormViewModel : ViewModel() {
     }
 
     fun add(
+        isAlreadyUploaded: Boolean = true,
         namaUnit: String?,
         deskripsiUnit: String?,
+        propertyType: String?,
         stokUnit: String?,
         hargaUnit: String?,
         projectId: Int?,
@@ -66,9 +72,11 @@ class UnitFormViewModel : ViewModel() {
         electricityType: String?,
         waterType: String?
     ) {
+        this.isAlreadyUploaded.postValue(isAlreadyUploaded)
         this.namaUnit = namaUnit
         this.deskripsiUnit = deskripsiUnit
         this.stokUnit = stokUnit
+        this.propertyType = propertyType
         this.hargaUnit = hargaUnit
         this.projectId = projectId
         this.unitId = unitId

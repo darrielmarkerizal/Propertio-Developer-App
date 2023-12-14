@@ -76,6 +76,14 @@ class UnitDataRumahFragment : Fragment() {
         interiorTypeSpinner()
         roadAccessTypeSpinner()
 
+        unitFormViewModel.isAlreadyUploaded.observe(viewLifecycleOwner) {
+            if (it) {
+                Log.d("UnitDataRumahFragment", "onViewCreated Updated: $it")
+                loadTextData()
+                unitFormViewModel.isUploaded = it
+            }
+        }
+
         activityBinding.floatingButtonBack.setOnClickListener {
             val luas_tanah = binding.editLuasTanahRumah.text.toString()
             val luas_bangunan = binding.editLuasBangunanRumah.text.toString()
