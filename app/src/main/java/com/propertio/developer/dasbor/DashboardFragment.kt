@@ -1,12 +1,17 @@
 package com.propertio.developer.dasbor
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.WorkerThread
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.propertio.developer.R
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.common.dashboard.DashboardApi
@@ -15,8 +20,6 @@ import com.propertio.developer.databinding.FragmentDashboardBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.create
-
 
 class DashboardFragment : Fragment() {
     private lateinit var binding: FragmentDashboardBinding
@@ -25,7 +28,6 @@ class DashboardFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentDashboardBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -34,7 +36,6 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         fetchData()
     }
-
 
     private fun fetchData() {
         val retro = Retro(requireActivity().getSharedPreferences("account_data", Context.MODE_PRIVATE).getString("token", null))
@@ -56,8 +57,9 @@ class DashboardFragment : Fragment() {
                         val leadCount: Int = dashboardResponse.data?.leadCount ?: 0
                         val messageCount: Int = dashboardResponse.data?.messageCount ?: 0
 
-
                         setCards(unitCount, projectCount, viewCount, leadCount, messageCount)
+                        setupViewChart(viewCount)
+                        setupLeadChart(leadCount)
                     }
                 }
             }
@@ -69,6 +71,46 @@ class DashboardFragment : Fragment() {
         })
     }
 
+    private fun setupViewChart(viewCount: Int) {
+        val entries = ArrayList<Entry>()
+        entries.add(Entry(0f, viewCount.toFloat()))
+
+        val dataSet = LineDataSet(entries, "Views")
+        dataSet.color = Color.RED
+
+        val lineData = LineData(dataSet)
+
+        binding.chartDilihat.data = lineData
+        binding.chartDilihat.invalidate()
+
+        // Set chart properties
+        val xAxis: XAxis = binding.chartDilihat.xAxis
+        val yAxisRight: YAxis = binding.chartDilihat.axisRight
+
+        xAxis.setDrawGridLines(false)
+        yAxisRight.setDrawLabels(false)
+    }
+
+    private fun setupLeadChart(leadCount: Int) {
+        val entries = ArrayList<Entry>()
+        entries.add(Entry(0f, leadCount.toFloat()))
+
+        val dataSet = LineDataSet(entries, "Leads")
+        dataSet.color = Color.BLUE
+
+        val lineData = LineData(dataSet)
+
+        binding.chartMenarik.data = lineData
+        binding.chartMenarik.invalidate()
+
+        // Set chart properties
+        val xAxis: XAxis = binding.chartMenarik.xAxis
+        val yAxisRight: YAxis = binding.chartMenarik.axisRight
+
+        xAxis.setDrawGridLines(false)
+        yAxisRight.setDrawLabels(false)
+    }
+
     private fun setCards(unitCount: Int, projectCount: Int, viewCount: Int, leadCount: Int, messageCount: Int) {
         with(binding) {
             textViewNumberJumlahListingProyek.text = unitCount.toString()
@@ -78,6 +120,4 @@ class DashboardFragment : Fragment() {
             textViewNumberJumlahPesanMasuk.text = messageCount.toString()
         }
     }
-
-
 }
