@@ -144,16 +144,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/property_type_container" />
 
-            <Button
-                android:id="@+id/button_edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Edit"
-                app:layout_constraintTop_toTopOf="@+id/text_view_title_unit_detail"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="@+id/text_view_title_unit_detail" />
-
-
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/materialCardView2"
                 android:layout_width="wrap_content"
