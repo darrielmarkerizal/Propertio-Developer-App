@@ -139,6 +139,7 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
     override fun onBackButtonUnitManagementClick() {
         if (currentFragmentIndex <= 0) {
             Log.d("UnitFormActivity", "Navigating to ProjectDetailActivity")
+            setResult(RESULT_OK)
             finish()
             return
         }

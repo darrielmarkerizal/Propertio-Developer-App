@@ -1,6 +1,8 @@
 package com.propertio.developer.project
 
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
@@ -262,9 +264,11 @@ class ProjectFragment : Fragment() {
 
         }
 
-
-        // Show the PopupWindow below the button
-        popupWindow.showAsDropDown(button)
+        val dpValue = 111 // width in dp
+        val scale = resources.displayMetrics.density
+        val px =0 - (dpValue * scale + 0.5f).toInt()
+        Log.d(TAG, "horizontalMoreButtonPopUp: px: $px")
+        popupWindow.showAsDropDown(button, px, 0)
 
         popupView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
@@ -274,7 +278,6 @@ class ProjectFragment : Fragment() {
                 // Calculate the x-offset
                 val xOffset = button.width - popupView.width
 
-                // Update the location of the PopupWindow
                 popupWindow.update(button, xOffset, 0, -1, -1)
             }
         })

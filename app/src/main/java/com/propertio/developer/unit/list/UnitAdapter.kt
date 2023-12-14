@@ -2,6 +2,7 @@ package com.propertio.developer.unit.list
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
@@ -15,7 +16,8 @@ import com.propertio.developer.databinding.TemplateCardUnitBinding
 
 class UnitAdapter(
     private val unitsList : LiveData<List<ProjectDetail.ProjectDeveloper.ProjectUnit>>,
-    private val onClickUnit: (ProjectDetail.ProjectDeveloper.ProjectUnit) -> Unit
+    private val onClickUnit: (ProjectDetail.ProjectDeveloper.ProjectUnit) -> Unit,
+    private val onClickMore: (ProjectDetail.ProjectDeveloper.ProjectUnit, View) -> Unit
 ) : RecyclerView.Adapter<UnitAdapter.ItemUnitViewHolder>(){
     inner class ItemUnitViewHolder(
         private val binding : TemplateCardUnitBinding,
@@ -34,6 +36,11 @@ class UnitAdapter(
                 cardViewUnit.setOnClickListener {
                     Log.d("onClickUnitCard", "Unit is clicked: ${unit.id}")
                     onClickUnit(unit)
+                }
+
+                buttonMoreHorizontal.setOnClickListener {
+                    Log.d("onClickMore", "More is clicked: ${unit.id}")
+                    onClickMore(unit, it)
                 }
 
 
