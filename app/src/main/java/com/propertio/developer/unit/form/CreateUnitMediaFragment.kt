@@ -23,6 +23,7 @@ import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.unitmanagement.PostStoreUnitPhotoResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
 import com.propertio.developer.databinding.FragmentCreateUnitMediaBinding
+import com.propertio.developer.dialog.TutorialYoutubeDialog
 import com.propertio.developer.model.Caption
 import com.propertio.developer.model.LitePhotosModel
 import com.propertio.developer.unit.UnitMediaViewModel
@@ -746,7 +747,7 @@ class CreateUnitMediaFragment : Fragment() {
     }
 
     private fun openTutorialVideo() {
-        // TOOD: Do something here
-        Toast.makeText(context, "Open Tutorial Video : Belum Tersedia", Toast.LENGTH_SHORT).show()
+        val dialogTutorial = TutorialYoutubeDialog()
+        dialogTutorial.show(childFragmentManager, "TutorialYoutubeDialog")
     }
 }

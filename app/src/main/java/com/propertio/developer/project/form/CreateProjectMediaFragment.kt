@@ -24,6 +24,7 @@ import com.propertio.developer.api.developer.projectmanagement.PostStoreProjectP
 import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
 import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResponse
 import com.propertio.developer.databinding.FragmentCreateProjectMediaBinding
+import com.propertio.developer.dialog.TutorialYoutubeDialog
 import com.propertio.developer.model.Caption
 import com.propertio.developer.model.LitePhotosModel
 import com.propertio.developer.project.list.UnggahFotoAdapter
@@ -577,8 +578,8 @@ class CreateProjectMediaFragment : Fragment() {
     }
 
     private fun openTutorialVideo() {
-        // TODO: Do something here
-        Toast.makeText(context, "Open Tutorial Video : Belum Tersedia", Toast.LENGTH_SHORT).show()
+        val dialogTutorial = TutorialYoutubeDialog()
+        dialogTutorial.show(childFragmentManager, "TutorialYoutubeDialog")
     }
 
     private fun validateYoutubeLinkObserver() {
