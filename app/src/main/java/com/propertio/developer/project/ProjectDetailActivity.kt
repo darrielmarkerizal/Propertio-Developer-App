@@ -581,7 +581,7 @@ class ProjectDetailActivity : AppCompatActivity() {
                     Toast.makeText(this@ProjectDetailActivity, "Unit deleted successfully", Toast.LENGTH_SHORT).show()
 
                     fetchDetailData(projectId)
-                    setUnitRecycler()
+                    unitRecycler(projectId)
                 } else {
                     Log.e("ProjectDetailActivity", "Failed to delete unit: ${response.errorBody()}")
                     Toast.makeText(this@ProjectDetailActivity, "Failed to delete unit", Toast.LENGTH_SHORT).show()
