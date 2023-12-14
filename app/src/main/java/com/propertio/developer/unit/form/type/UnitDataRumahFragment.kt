@@ -15,6 +15,7 @@ import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitRequest
+import com.propertio.developer.api.developer.unitmanagement.UpdateUnitRequest
 import com.propertio.developer.databinding.FragmentUnitDataRumahBinding
 import com.propertio.developer.dialog.ElectricitySheetFragment
 import com.propertio.developer.dialog.InteriorSheetFragment
@@ -29,6 +30,7 @@ import com.propertio.developer.dialog.viewmodel.WaterTypeSpinnerViewModel
 import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
 import com.propertio.developer.unit.form.UnitFormActivity
 import com.propertio.developer.unit.form.UnitFormViewModel
+import com.propertio.developer.unit_management.UpdateUnitResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -166,60 +168,96 @@ class UnitDataRumahFragment : Fragment() {
 
             Log.d("UnitDataRumahFragment", "onViewCreated: $unitRequest")
 
-            retro.postStoreUnit(
-                id = projectId,
-                unitRequest = unitRequest
-            ).enqueue(object : Callback<PostUnitResponse> {
-                override fun onResponse(
-                    call: Call<PostUnitResponse>,
-                    response: Response<PostUnitResponse>
-                ) {
-                    if(response.isSuccessful) {
-                        val responseData = response.body()?.data
-                        if (responseData != null) {
-                            Log.d("UnitDataRumahFragment", "onResponse: $responseData")
+            if (unitFormViewModel.isUploaded == false) {
+                retro.postStoreUnit(
+                    id = projectId,
+                    unitRequest = unitRequest
+                ).enqueue(object : Callback<PostUnitResponse> {
+                    override fun onResponse(
+                        call: Call<PostUnitResponse>,
+                        response: Response<PostUnitResponse>
+                    ) {
+                        if(response.isSuccessful) {
+                            val responseData = response.body()?.data
+                            if (responseData != null) {
+                                Log.d("UnitDataRumahFragment", "onResponse: $responseData")
 
-
-
-
-                            //TODO: Tambahkan kode seperti ini untuk setiap tipe unit
-                            formActivity.unitId = responseData.id
-                            if (formActivity.unitId != null || formActivity.unitId != 0) {
-                                Toast.makeText(requireContext(), "Unit berhasil ditambahkan", Toast.LENGTH_SHORT).show()
-                                formActivity.onNextButtonUnitManagementClick()
-                            } else {
-                                Log.e("UnitDataRumahFragment", "onResponse: Unit ID is null or 0")
-                                Toast.makeText(requireContext(), "Gagal menambahkan unit", Toast.LENGTH_SHORT).show()
+                                //TODO: Tambahkan kode seperti ini untuk setiap tipe unit
+                                formActivity.unitId = responseData.id
+                                if (formActivity.unitId != null || formActivity.unitId != 0) {
+                                    Toast.makeText(requireContext(), "Unit berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+                                    formActivity.onNextButtonUnitManagementClick()
+                                } else {
+                                    Log.e("UnitDataRumahFragment", "onResponse: Unit ID is null or 0")
+                                    Toast.makeText(requireContext(), "Gagal menambahkan unit", Toast.LENGTH_SHORT).show()
+                                }
                             }
+                        } else {
+                            var errorMessage = response.errorBody()?.string()
+                            errorMessage = errorMessage?.split("\"data\":")?.last()
+                            errorMessage = errorMessage?.trim('{', '}')
 
-
-
-
-                        }
-                    } else {
-                        var errorMessage = response.errorBody()?.string()
-                        errorMessage = errorMessage?.split("\"data\":")?.last()
-                        errorMessage = errorMessage?.trim('{', '}')
-
-                        if (errorMessage != null) {
-                            for (error in errorMessage.split(",")) {
-                                Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+                            if (errorMessage != null) {
+                                for (error in errorMessage.split(",")) {
+                                    Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+                                }
                             }
-                        }
-                        Log.w("UnitDataRumahFragment", "onResponse: Error code: ${response.code()}, message: ${response.message()}, error body: $errorMessage")
+                            Log.w("UnitDataRumahFragment", "onResponse: Error code: ${response.code()}, message: ${response.message()}, error body: $errorMessage")
 
-                        if (response.code() == 500) {
-                            Log.e("UnitDataRumahFragment", "Server error: Something went wrong on the server side.")
-                            // You can add more actions here, for example, show an error dialog or a specific message to the user
+                            if (response.code() == 500) {
+                                Log.e("UnitDataRumahFragment", "Server error: Something went wrong on the server side.")
+                                // You can add more actions here, for example, show an error dialog or a specific message to the user
+                            }
                         }
                     }
-                }
 
-                override fun onFailure(call: Call<PostUnitResponse>, t: Throwable) {
-                    Log.e("UnitDataRumahFragment", "onFailure: ${t.message}", t)
-                    Toast.makeText(requireContext(), "Gagal menambahkan unit", Toast.LENGTH_SHORT).show()
-                }
-            })
+                    override fun onFailure(call: Call<PostUnitResponse>, t: Throwable) {
+                        Log.e("UnitDataRumahFragment", "onFailure: ${t.message}", t)
+                        Toast.makeText(requireContext(), "Gagal menambahkan unit", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            } else {
+                val updateUnitRequest = UpdateUnitRequest(
+                    unitId = unitFormViewModel.unitId ?: 0,
+                    title = title,
+                    price = price,
+                    description = description,
+                    stock = stock,
+                    surfaceArea = luas_tanah,
+                    buildingArea = luas_bangunan,
+                    floor = jumlah_lantai,
+                    bedroom = jumlah_kamar_tidur,
+                    bathroom = jumlah_kamar_mandi,
+                    garage = parking_type,
+                    powerSupply = electricity_type,
+                    waterType = water_type,
+                    interior = interior_type,
+                    roadAccess = road_access_type,
+                    order = null
+                )
+
+                val unitId = unitFormViewModel.unitId ?: 0
+                retro.updateUnit(projectId, updateUnitRequest).enqueue(object : Callback<UpdateUnitResponse> {
+                    override fun onResponse(
+                        call: Call<UpdateUnitResponse>,
+                        response: Response<UpdateUnitResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.d("UnitDataRumahFragment", "onResponse: ${response.body()}")
+                            Toast.makeText(requireContext(), "Unit berhasil diupdate", Toast.LENGTH_SHORT).show()
+                            formActivity.onNextButtonUnitManagementClick()
+                        } else {
+                            Log.e("UnitDataRumahFragment", "onResponse: ${response.errorBody()}")
+                            Toast.makeText(requireContext(), "Unit gagal diupdate", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UpdateUnitResponse>, t: Throwable) {
+                        Log.e("UnitDataRumahFragment", "onFailure: ${t.message}")
+                        Toast.makeText(requireContext(), "Unit gagal diupdate", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
         }
     }
 

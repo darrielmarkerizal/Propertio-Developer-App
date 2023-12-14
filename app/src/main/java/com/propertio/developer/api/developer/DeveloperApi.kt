@@ -11,6 +11,7 @@ import com.propertio.developer.api.developer.unitmanagement.PostStoreUnitPhotoRe
 import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitRequest
+import com.propertio.developer.api.developer.unitmanagement.UpdateUnitRequest
 import com.propertio.developer.model.Caption
 import com.propertio.developer.model.StatusProject
 import com.propertio.developer.unit_management.UpdateUnitResponse
@@ -193,9 +194,8 @@ interface DeveloperApi {
 
     @POST("v1/cms/project-management/{project_id}/unit?_method=PUT")
     fun updateUnit(
-        @Path("project_id") projectId : String,
-        @Body unitId: RequestBody,
-        @Body unitRequest: UnitRequest
+        @Path("project_id") projectId : Int,
+        @Body updateUnitRequest: UpdateUnitRequest
     ) : Call<UpdateUnitResponse>
 
   
