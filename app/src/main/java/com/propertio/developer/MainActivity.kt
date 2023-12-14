@@ -7,20 +7,27 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.propertio.developer.dasbor.DashboardFragment
 import com.propertio.developer.databinding.ActivityMainBinding
 import com.propertio.developer.pesan.ChatFragment
+import com.propertio.developer.pesan.ChatViewModel
+import com.propertio.developer.pesan.ChatViewModelFactory
 import com.propertio.developer.profile.ProfileFragment
 import com.propertio.developer.project.ProjectFragment
 import com.propertio.developer.project.ProjectViewModel
 import com.propertio.developer.project.ProjectViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     private var toastMessage : String? = null
 
     private lateinit var projectViewModel: ProjectViewModel
+    private lateinit var chatViewModel: ChatViewModel
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +44,26 @@ class MainActivity : AppCompatActivity() {
         val factory = ProjectViewModelFactory((application as PropertioDeveloperApplication).repository)
         projectViewModel = ViewModelProvider(this, factory)[ProjectViewModel::class.java]
         fetchProjectListData(token!!)
+
+        var unreadChat : Int = 0
+        val chatBadges = binding.bottomNavigation.getOrCreateBadge(R.id.chatFragment)
+        val chatFactory = ChatViewModelFactory((application as PropertioDeveloperApplication).repository)
+        chatViewModel = ViewModelProvider(this, chatFactory)[ChatViewModel::class.java]
+
+        lifecycleScope.launch {
+            chatViewModel.fetchDataFromApi(token)
+            unreadChat = withContext(Dispatchers.IO) {
+                chatViewModel.countUnread()
+            }
+
+            chatViewModel.unreadChatCount.observe(this@MainActivity) { count ->
+                chatBadges.isVisible = count > 0
+                chatBadges.number = count
+            }
+        }
+
+
+
 
 
         // Toolbar

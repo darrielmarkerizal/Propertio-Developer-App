@@ -3,51 +3,56 @@ package com.propertio.developer.pesan
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.WorkerThread
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.propertio.developer.R
-import com.propertio.developer.TokenManager
-import com.propertio.developer.api.Retro
-import com.propertio.developer.api.common.message.MessageApi
-import com.propertio.developer.api.common.message.MessageDetailResponse
+import com.propertio.developer.database.chat.ChatTable
 import com.propertio.developer.databinding.ItemChatContainerBinding
-import com.propertio.developer.model.Chat
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
-typealias onClickChat = (Chat) -> Unit
+typealias OnClickChat = (ChatTable, View) -> Unit
 class ChatAdapter(
     private val context: Context,
-    var chatList: MutableList<Chat>,
-    private val onClickChat: onClickChat
-) : RecyclerView.Adapter<ChatAdapter.ItemChatViewHolder>()
+    private val onClickChat: OnClickChat
+) : ListAdapter<ChatTable, ChatAdapter.ItemChatViewHolder>(ChatDifCallback())
 {
+
+    class ChatDifCallback : DiffUtil.ItemCallback<ChatTable>() {
+        override fun areItemsTheSame(oldItem: ChatTable, newItem: ChatTable): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: ChatTable, newItem: ChatTable): Boolean {
+            return oldItem == newItem
+        }
+
+    }
+
     inner class ItemChatViewHolder(
         private val binding: ItemChatContainerBinding
     ) : RecyclerView.ViewHolder(binding.root)
     {
-        fun bind(data: Chat) {
+        fun bind(data: ChatTable) {
             with(binding) {
-                val date = dateFormat(data.time ?: "1970-01-01T05:18:39.000000Z")
+                val date = dateFormat(data.createAt ?: "1970-01-01T05:18:39.000000Z")
 
                 textSubject.text = data.subject
                 textName.text = data.name
                 textTime.text = date
 
 
-                iconUnreadNotification.visibility = if (data.read == 0) {
-                    android.view.View.VISIBLE
+                iconUnreadNotification.visibility = if (data.read == "0") {
+                    View.VISIBLE
                 } else {
-                    android.view.View.GONE
+                    View.GONE
                 }
 
 
                 itemView.setOnClickListener {
-                    updateChat(data, bindingAdapterPosition)
-                    onClickChat(data)
+                    onClickChat(data, iconUnreadNotification)
                 }
 
             }
@@ -56,6 +61,9 @@ class ChatAdapter(
 
     }
 
+
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemChatViewHolder {
         val binding = ItemChatContainerBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -63,10 +71,8 @@ class ChatAdapter(
         return ItemChatViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = chatList.size
-
     override fun onBindViewHolder(holder: ItemChatViewHolder, position: Int) {
-        holder.bind(chatList[position])
+        holder.bind(getItem(position))
     }
 
     private fun dateFormat(date: String): String {
@@ -76,8 +82,6 @@ class ChatAdapter(
         val dateString = _date[0].split("-") // yyyy-mm-dd
         val time = "${_time[0]}:${_time[1]}" // hh:mm
 
-//        Log.d("ChatAdapter", "dateFormat: $dateString")
-//        Log.d("ChatAdapter", "dateFormat: $time")
 
         // get today date
         val today = java.util.Calendar.getInstance()
@@ -112,40 +116,6 @@ class ChatAdapter(
         return "${dateString[2]} ${months[dateString[1].toInt() - 1]}"
     }
 
-    @WorkerThread
-    fun updateChat(data: Chat, bindingAdapterPosition: Int) {
-        Log.d("ChatAdapter", "updateChat: ${data.id}")
 
-        // API
-        val retro = Retro(TokenManager(context).token).getRetroClientInstance().create(MessageApi::class.java)
-
-        if (data.id != null) {
-            retro.getDetailMessage(data.id).enqueue(object : Callback<MessageDetailResponse> {
-
-                override fun onResponse(
-                    call: Call<MessageDetailResponse>,
-                    response: Response<MessageDetailResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val updatedChat = response.body()
-                        if (updatedChat != null) {
-                            // Update the chat
-                            data.read = updatedChat.data?.read
-                            // Notify the adapter about the change
-                            notifyItemChanged(bindingAdapterPosition)
-                        }
-                    }
-
-                }
-
-                override fun onFailure(
-                    call: Call<MessageDetailResponse>,
-                    t: Throwable
-                ) {
-                    // Handle failure
-                }
-            })
-        }
-    }
 }
 

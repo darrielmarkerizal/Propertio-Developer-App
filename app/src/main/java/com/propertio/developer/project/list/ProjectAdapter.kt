@@ -1,10 +1,7 @@
 package com.propertio.developer.project.list
 
 import android.content.Context
-import android.content.Intent
-import android.graphics.drawable.PictureDrawable
 import android.icu.text.SimpleDateFormat
-import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,20 +9,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.Coil
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.load
-import com.bumptech.glide.Glide
 import com.propertio.developer.NumericalUnitConverter
 import com.propertio.developer.R
 import com.propertio.developer.api.DomainURL
 import com.propertio.developer.database.project.ProjectTable
 import com.propertio.developer.databinding.TemplateCardProjectBinding
-//import com.propertio.developer.lib.GlideApp
-//import com.propertio.developer.lib.SvgSoftwareLayerSetter
-import com.propertio.developer.project.ProjectDetailActivity
-import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_ID
 import java.util.Date
 import java.util.Locale
 
