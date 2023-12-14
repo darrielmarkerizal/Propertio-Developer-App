@@ -22,10 +22,26 @@
             android:layout_height="wrap_content"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:text="Edit Proyek"
+            android:text="Edit Unit"
             android:drawablePadding="16dp"
             android:textAppearance="@style/text.medium.size16"
             android:drawableStart="@drawable/edit_fill0_wght400_grad0_opsz24"
+            android:background="@drawable/button_pop_up_rectangle_light"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_delete_unit_pop_up"
+            android:elevation="0dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="Hapus Unit"
+            android:drawablePadding="16dp"
+            android:textAppearance="@style/text.medium.size16"
+            android:drawableStart="@drawable/delete_fill0_wght400_grad0_opsz24"
             android:background="@drawable/button_pop_up_rectangle_light"
             />
 

@@ -70,13 +70,6 @@ class UnitDetailActivity : AppCompatActivity() {
         unitId = intent.getIntExtra(PROJECT_DETAIL_UID, 0)
         projectId = intent.getIntExtra(PROJECT_DETAIL_PID, 0)
 
-        binding.buttonEdit.setOnClickListener {
-            val intent = Intent(this, UnitFormActivity::class.java)
-            intent.putExtra(PROJECT_DETAIL_UID, unitId)
-            intent.putExtra(PROJECT_DETAIL_PID, projectId)
-            startActivity(intent)
-        }
-
         Log.d("UnitDetailActivity", "onCreate: unitId $unitId")
         Log.d("UnitDetailActivity", "onCreate projectId $projectId")
         intent.removeExtra(PROJECT_DETAIL_UID)

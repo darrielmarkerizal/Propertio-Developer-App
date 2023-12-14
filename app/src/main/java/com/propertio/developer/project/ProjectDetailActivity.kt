@@ -13,6 +13,7 @@ import android.webkit.WebView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
@@ -39,6 +40,7 @@ import com.propertio.developer.project.list.FileThumbnailAdapter
 import com.propertio.developer.unit.UnitDetailActivity
 import com.propertio.developer.unit.form.UnitFormActivity
 import com.propertio.developer.unit.list.UnitAdapter
+import com.propertio.developer.unit_management.UpdateUnitResponse
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -535,6 +537,14 @@ class ProjectDetailActivity : AppCompatActivity() {
             popupWindow.dismiss()
         }
 
+        val buttonDelete = popupView.findViewById<AppCompatButton>(R.id.button_delete_unit_pop_up)
+
+        buttonDelete.setOnClickListener {
+            Log.d(TAG, "horizontalMoreButtonPopUp: buttonDelete ${data.title}")
+            deleteUnit(projectId!!, data.id!!)
+            popupWindow.dismiss()
+        }
+
 
         val dpValue = 111 // width in dp
         val scale = resources.displayMetrics.density
@@ -561,6 +571,28 @@ class ProjectDetailActivity : AppCompatActivity() {
         const val PROJECT_ID = "project_id"
         const val PROJECT_DETAIL_UID = "project_detail_uid"
         const val PROJECT_DETAIL_PID = "project_detail_pid"
+    }
+
+    private fun deleteUnit(projectId: Int, unitId: Int) {
+        developerApi.deleteUnit(projectId, unitId).enqueue(object : Callback<UpdateUnitResponse> {
+            override fun onResponse(call: Call<UpdateUnitResponse>, response: Response<UpdateUnitResponse>) {
+                if (response.isSuccessful) {
+                    Log.d("ProjectDetailActivity", "Unit deleted successfully")
+                    Toast.makeText(this@ProjectDetailActivity, "Unit deleted successfully", Toast.LENGTH_SHORT).show()
+
+                    fetchDetailData(projectId)
+                    setUnitRecycler()
+                } else {
+                    Log.e("ProjectDetailActivity", "Failed to delete unit: ${response.errorBody()}")
+                    Toast.makeText(this@ProjectDetailActivity, "Failed to delete unit", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateUnitResponse>, t: Throwable) {
+                Log.e("ProjectDetailActivity", "Failed to delete unit: ${t.message}")
+                Toast.makeText(this@ProjectDetailActivity, "Failed to delete unit", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
 
