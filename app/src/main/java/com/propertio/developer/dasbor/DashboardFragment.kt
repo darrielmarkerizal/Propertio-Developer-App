@@ -12,6 +12,7 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.propertio.developer.R
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.common.dashboard.DashboardApi
@@ -77,6 +78,7 @@ class DashboardFragment : Fragment() {
 
         val dataSet = LineDataSet(entries, "Views")
         dataSet.color = Color.RED
+        dataSet.valueFormatter = IntegerValueFormatter()
 
         val lineData = LineData(dataSet)
 
@@ -85,9 +87,15 @@ class DashboardFragment : Fragment() {
 
         // Set chart properties
         val xAxis: XAxis = binding.chartDilihat.xAxis
+        val yAxisLeft: YAxis = binding.chartDilihat.axisLeft
         val yAxisRight: YAxis = binding.chartDilihat.axisRight
 
+        xAxis.valueFormatter = IntegerAxisValueFormatter()
+        yAxisLeft.valueFormatter = IntegerAxisValueFormatter()
+        yAxisRight.valueFormatter = IntegerAxisValueFormatter()
+
         xAxis.setDrawGridLines(false)
+        xAxis.setDrawLabels(false)
         yAxisRight.setDrawLabels(false)
     }
 
@@ -97,6 +105,7 @@ class DashboardFragment : Fragment() {
 
         val dataSet = LineDataSet(entries, "Leads")
         dataSet.color = Color.BLUE
+        dataSet.valueFormatter = IntegerValueFormatter()
 
         val lineData = LineData(dataSet)
 
@@ -105,9 +114,15 @@ class DashboardFragment : Fragment() {
 
         // Set chart properties
         val xAxis: XAxis = binding.chartMenarik.xAxis
+        val yAxisLeft: YAxis = binding.chartMenarik.axisLeft
         val yAxisRight: YAxis = binding.chartMenarik.axisRight
 
+        xAxis.valueFormatter = IntegerAxisValueFormatter()
+        yAxisLeft.valueFormatter = IntegerAxisValueFormatter()
+        yAxisRight.valueFormatter = IntegerAxisValueFormatter()
+
         xAxis.setDrawGridLines(false)
+        xAxis.setDrawLabels(false)
         yAxisRight.setDrawLabels(false)
     }
 
@@ -118,6 +133,18 @@ class DashboardFragment : Fragment() {
             textViewNumberJumlahMelihatListing.text = viewCount.toString()
             textViewNumberJumlahTertarik.text = leadCount.toString()
             textViewNumberJumlahPesanMasuk.text = messageCount.toString()
+        }
+    }
+
+    inner class IntegerValueFormatter : ValueFormatter() {
+        override fun getFormattedValue(value: Float): String {
+            return value.toInt().toString()
+        }
+    }
+
+    inner class IntegerAxisValueFormatter : ValueFormatter() {
+        override fun getFormattedValue(value: Float): String {
+            return value.toInt().toString()
         }
     }
 }
