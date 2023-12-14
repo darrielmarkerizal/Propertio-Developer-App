@@ -31,6 +31,14 @@ class CreateUnitUmumFragment : Fragment() {
         val activity = activity as? UnitFormActivity
         val activityBinding = activity?.binding
 
+        unitFormViewModel.isAlreadyUploaded.observe(viewLifecycleOwner) {
+            if (it) {
+                Log.d("CreateProjectInformasiUmumFragment", "onViewCreated Updated: $it")
+                loadTextData()
+                unitFormViewModel.isUploaded = it
+            }
+        }
+
         activityBinding?.floatingButtonBack?.setOnClickListener {
             activity.onBackButtonUnitManagementClick()
         }

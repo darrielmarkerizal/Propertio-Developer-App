@@ -78,6 +78,15 @@ class UnitDataKantorFragment : Fragment() {
         interiorTypeSpinner()
         roadAccessTypeSpinner()
 
+        unitFormViewModel.isAlreadyUploaded.observe(viewLifecycleOwner) {
+            if (it) {
+                Log.d("UnitDataRumahFragment", "onViewCreated Updated: $it")
+                loadTextData()
+                unitFormViewModel.isUploaded = it
+                activityBinding?.toolbarContainerUnitForm?.textViewTitle?.text = "Edit Unit"
+            }
+        }
+
         
         activityBinding?.floatingButtonBack?.setOnClickListener {
             val luas_tanah = binding.editLuasTanahKantor.text.toString()

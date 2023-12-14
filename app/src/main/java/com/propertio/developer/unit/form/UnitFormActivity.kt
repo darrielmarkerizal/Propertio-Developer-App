@@ -80,6 +80,7 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
 
         val propertyType = intent.getStringExtra("Property Type")
         val projectId = intent.getIntExtra(PROJECT_ID, 0)
+
         if (projectId != 0) {
             unitFormViewModel.projectId = projectId
             Log.d("UnitFormActivity", "onCreate: projectId: $projectId")
@@ -90,15 +91,14 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
         val unitIdFromIntent = intent.getIntExtra(PROJECT_DETAIL_UID, 0)
         val projectIdFromIntent = intent.getIntExtra(PROJECT_DETAIL_PID, 0)
 
-        if (unitIdFromIntent != 0 && projectIdFromIntent != 0) {
+        if (unitIdFromIntent != 0) {
             lifecycleScope.launch {
-                Log.d("UnitFormActivity", "onCreate: $unitIdFromIntent $projectIdFromIntent")
+                Log.d("UnitFormActivity", "onCreate Fetch Edit: $unitIdFromIntent")
                 unitId = unitIdFromIntent
-                idProject = projectIdFromIntent
-                fetchUnitDetail(idProject!!, unitId!!)
+                fetchUnitDetail(projectIdFromIntent!!, unitId!!)
             }
         } else {
-            Log.e("UnitFormActivity", "onCreate: unitId or projectId is null")
+            Log.e("UnitFormActivity", "onCreate: unitId is null")
         }
 
         when (propertyType) {
@@ -169,24 +169,10 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
                 if (response.isSuccessful) {
                     val data = response.body()?.data
                     if (data != null) {
-                        unitFormViewModel.add(
-                            namaUnit = data.title.toString(),
-                            deskripsiUnit = data.description.toString(),
-                            stokUnit = data.stock.toString(),
-                            hargaUnit = data.price.toString(),
-                            luasTanah = data.surfaceArea.toString(),
-                            luasBangunan = data.buildingArea.toString(),
-                            jumlahKamar = data.bedroom.toString(),
-                            jumlahKamarMandi = data.bathroom.toString(),
-                            jumlahLantai = data.floor.toString(),
-                            interiorType = data.interior.toString(),
-                            roadAccessType = data.roadAccess.toString(),
-                            parkingType = data.garage.toString(),
-                            electricityType = data.powerSupply.toString(),
-                            waterType = data.waterSupply.toString(),
-                            projectId = data.projectId!!.toInt(),
-                            unitId = data.id!!.toInt()
-                        )
+                        Log.d("UnitFormActivity", "onResponse: $data")
+                        lifecycleScope.launch {
+                            loadDataToViewModel(data)
+                        }
                     } else {
                         Log.e("UnitFormActivity", "onResponse: data is null")
                     }
@@ -199,5 +185,27 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
                 Log.e("UnitFormActivity", "onFailure: ${t.message}")
             }
         })
+    }
+
+    private suspend fun loadDataToViewModel(data : UnitDetailResponse.Unit) {
+        unitFormViewModel.add(
+            namaUnit = data.title.toString(),
+            propertyType = data.propertyType.toString(),
+            deskripsiUnit = data.description.toString(),
+            stokUnit = data.stock.toString(),
+            hargaUnit = data.price.toString(),
+            luasTanah = data.surfaceArea.toString(),
+            luasBangunan = data.buildingArea.toString(),
+            jumlahKamar = data.bedroom.toString(),
+            jumlahKamarMandi = data.bathroom.toString(),
+            jumlahLantai = data.floor.toString(),
+            interiorType = data.interior.toString(),
+            roadAccessType = data.roadAccess.toString(),
+            parkingType = data.garage.toString(),
+            electricityType = data.powerSupply.toString(),
+            waterType = data.waterSupply.toString(),
+            projectId = data.projectId!!.toInt(),
+            unitId = data.id!!.toInt()
+        )
     }
 }

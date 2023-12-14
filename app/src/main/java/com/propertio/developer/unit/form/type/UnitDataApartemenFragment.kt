@@ -73,6 +73,15 @@ class UnitDataApartemenFragment : Fragment() {
         interiorTypeSpinner()
         roadAccessTypeSpinner()
 
+        unitFormViewModel.isAlreadyUploaded.observe(viewLifecycleOwner) {
+            if (it) {
+                Log.d("UnitDataRumahFragment", "onViewCreated Updated: $it")
+                loadTextData()
+                unitFormViewModel.isUploaded = it
+                activityBinding?.toolbarContainerUnitForm?.textViewTitle?.text = "Edit Unit"
+            }
+        }
+
         activityBinding?.floatingButtonBack?.setOnClickListener {
             val luas_bangunan = binding.editLuasBangunanApartemen.text.toString()
             val kamar = binding.editKamarApartemen.text.toString()

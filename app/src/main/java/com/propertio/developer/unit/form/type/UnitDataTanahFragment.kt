@@ -56,6 +56,15 @@ class UnitDataTanahFragment : Fragment() {
 
         roadAccessTypeSpinner()
 
+        unitFormViewModel.isAlreadyUploaded.observe(viewLifecycleOwner) {
+            if (it) {
+                Log.d("UnitDataRumahFragment", "onViewCreated Updated: $it")
+                loadTextData()
+                unitFormViewModel.isUploaded = it
+                activityBinding?.toolbarContainerUnitForm?.textViewTitle?.text = "Edit Unit"
+            }
+        }
+
         activityBinding.floatingButtonBack.setOnClickListener {
             val luas_tanah = binding.editLuasTanahTanah.text.toString()
             val road_access_type = binding.spinnerAksesJalanTanah.text.toString()
