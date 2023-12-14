@@ -165,7 +165,7 @@ class ProjectAdapter(
                 Log.d("ProjectAdapter", "imageURL: $imageURL")
                 imageViewThumbnail.load(uniqueURL) {
                     crossfade(true)
-                    crossfade(500)
+                    crossfade(100)
                     placeholder(R.drawable.placeholder)
                     error(R.drawable.placeholder)
                 }
