@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.propertio.developer.R
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
@@ -30,6 +31,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.time.times
 
 class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManagementClickListener {
 
@@ -352,13 +354,15 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
 
     override fun onNextButtonProjectManagementClick() {
         if (currentFragmentIndex == formsFragment.size - 1) {
+            binding.progressIndicatorProjectForm.setProgressCompat(100, true)
             val intent = Intent(this, CreateProjectSuccessActivity::class.java)
             startActivity(intent)
             finish()
             return
         }
-
         currentFragmentIndex++
+        val progressValue: Double = currentFragmentIndex.toDouble() / formsFragment.size.toDouble() * 100.0
+        binding.progressIndicatorProjectForm.setProgressCompat(progressValue.toInt(), true)
         replaceFragment(formsFragment[currentFragmentIndex])
     }
 
@@ -366,11 +370,13 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
     override fun onBackButtonProjectManagementClick() {
         if (currentFragmentIndex <= 0) {
             Log.d("ProjectForm", "Exit From Project Form")
+            binding.progressIndicatorProjectForm.setProgressCompat(0, true)
             finish()
             return
         }
-
         currentFragmentIndex--
+        val progressValue: Double = currentFragmentIndex.toDouble() / formsFragment.size.toDouble() * 100.0
+        binding.progressIndicatorProjectForm.setProgressCompat(progressValue.toInt(), true)
         replaceFragment(formsFragment[currentFragmentIndex])
     }
 

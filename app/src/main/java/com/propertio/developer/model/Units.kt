@@ -51,3 +51,13 @@ data class UnitVirtualTour(
     var createdAt: String? = null,
     var updatedAt: String? = null,
 )
+
+data class UnitDocument(
+    var id: Int? = null,
+    var unitId: String? = null,
+    var name: String? = null,
+    val type: String? = null,
+    var filename: String? = null,
+    var createdAt: String? = null,
+    var updatedAt: String? = null,
+)

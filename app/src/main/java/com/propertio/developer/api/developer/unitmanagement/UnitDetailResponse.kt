@@ -15,7 +15,7 @@ class UnitDetailResponse : DefaultResponse() {
     var data: Unit? = null
 
     class Unit : UnitMinimum() {
-        @SerializedName("property_type")
+        @SerializedName("propertyType")
         @Expose
         var propertyType: String? = null
 
@@ -29,7 +29,7 @@ class UnitDetailResponse : DefaultResponse() {
 
         @SerializedName("unitVirtualTour")
         @Expose
-        var unitVirtualTour: UnitVirtualTour? = null
+        var unitVirtualTour: List<UnitVirtualTour>? = null
 
         @SerializedName("unitVideo")
         @Expose
@@ -37,7 +37,7 @@ class UnitDetailResponse : DefaultResponse() {
 
         @SerializedName("unitDocuments")
         @Expose
-        var unitDocuments: List<*>? = null
+        var unitDocuments: List<UnitDocument>? = null
         // TODO: Define type of unitDocuments
 
 
@@ -65,6 +65,36 @@ class UnitDetailResponse : DefaultResponse() {
             @SerializedName("type")
             @Expose
             var type: String? = null
+
+            @SerializedName("created_at")
+            @Expose
+            var createdAt: String? = null
+
+            @SerializedName("updated_at")
+            @Expose
+            var updatedAt: String? = null
+        }
+
+        class UnitDocument {
+            @SerializedName("id")
+            @Expose
+            var id: Int? = null
+
+            @SerializedName("unit_id")
+            @Expose
+            var unitId: String? = null
+
+            @SerializedName("name")
+            @Expose
+            var name: String? = null
+
+            @SerializedName("type")
+            @Expose
+            var type: String? = null
+
+            @SerializedName("filename")
+            @Expose
+            var filename: String? = null
 
             @SerializedName("created_at")
             @Expose

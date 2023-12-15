@@ -70,13 +70,6 @@ class UnitDetailActivity : AppCompatActivity() {
         unitId = intent.getIntExtra(PROJECT_DETAIL_UID, 0)
         projectId = intent.getIntExtra(PROJECT_DETAIL_PID, 0)
 
-        binding.buttonEdit.setOnClickListener {
-            val intent = Intent(this, UnitFormActivity::class.java)
-            intent.putExtra(PROJECT_DETAIL_UID, unitId)
-            intent.putExtra(PROJECT_DETAIL_PID, projectId)
-            startActivity(intent)
-        }
-
         Log.d("UnitDetailActivity", "onCreate: unitId $unitId")
         Log.d("UnitDetailActivity", "onCreate projectId $projectId")
         intent.removeExtra(PROJECT_DETAIL_UID)
@@ -158,6 +151,8 @@ class UnitDetailActivity : AppCompatActivity() {
     }
 
     private fun setIndicator() {
+        dots.clear()
+        binding.dotsIndicator.removeAllViews()
         for (i in 0 until carouselList.size) {
             dots.add(TextView(this))
             dots[i].text = Html.fromHtml("&#9679", Html.FROM_HTML_MODE_LEGACY).toString()
@@ -174,9 +169,16 @@ class UnitDetailActivity : AppCompatActivity() {
                 val imageURL: String = DomainURL.DOMAIN + photo.filename
                 Log.d("UnitDetailActivity", "imageURL: $imageURL")
 
-                carouselList.add(
-                    ImageData(imageURL)
-                )
+                if (!carouselList.any { it.id == photo.id.toString() }) {
+                    carouselList.add(
+                        ImageData(
+                            photo.id.toString(),
+                            imageURL
+                        )
+                    )
+                }
+
+
             }
 
         } else {
@@ -186,7 +188,10 @@ class UnitDetailActivity : AppCompatActivity() {
             val drawableUriString = drawableUri.toString()
 
             carouselList.add(
-                ImageData(drawableUriString)
+                ImageData(
+                    "Locale_PlaceHolder_DU",
+                    drawableUriString
+                )
             )
         }
     }

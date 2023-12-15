@@ -1,15 +1,22 @@
 package com.propertio.developer
 
 import android.app.Application
-import com.propertio.developer.database.ProjectRepository
+import com.propertio.developer.database.PropertiORepository
+import com.propertio.developer.database.chat.ChatDatabase
 import com.propertio.developer.database.project.ProjectDatabase
 
 class PropertioDeveloperApplication : Application() {
-    private val database by lazy {
+    private val projectDb by lazy {
         ProjectDatabase.getDatabase(this)
+    }
+    private val chatDb by lazy {
+        ChatDatabase.getDatabase(this)
     }
 
     val repository by lazy {
-        ProjectRepository(database.projectTableDao())
+        PropertiORepository(
+            projectDb.projectTableDao(),
+            chatDb.chatTableDao()
+        )
     }
 }
