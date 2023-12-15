@@ -35,7 +35,7 @@ class ResetPasswordFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reset_password, container, false)
+        return inflater.inflate(R.layout.activity_reset_password, container, false)
     }
 
     companion object {
