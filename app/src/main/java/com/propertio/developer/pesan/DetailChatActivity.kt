@@ -26,7 +26,7 @@ class DetailChatActivity : AppCompatActivity() {
             buttonBack.setOnClickListener {
                 finish()
             }
-            buttonDelete.visibility = android.view.View.VISIBLE
+            buttonDelete.visibility = android.view.View.INVISIBLE
             buttonDelete.setOnClickListener {
                 // TODO: Create Delete Message
                 Toast.makeText(this@DetailChatActivity, "Delete", Toast.LENGTH_SHORT).show()
