@@ -69,6 +69,9 @@ class CreateUnitMediaFragment : Fragment() {
             if (unitMediaViewModdel.isDocumentNotEdited) {
                 deletePreviousDocument()
             }
+
+            unitMediaViewModdel.isDocumentNotEdited = false
+
             if (documentUri == null) {
                Log.e("CreateUnitMediaFragment", "documentUri is null")
                return@registerForActivityResult
@@ -266,6 +269,12 @@ class CreateUnitMediaFragment : Fragment() {
 
         if (documentUri == null) {
             binding.cardDocumentUnitPropertyThumbnail.root.visibility = View.GONE
+        }
+
+        if (unitMediaViewModdel.document != null && unitMediaViewModdel.isDocumentNotEdited) {
+            binding.cardDocumentUnitPropertyThumbnail.root.visibility = View.VISIBLE
+            binding.cardDocumentUnitPropertyThumbnail.textViewFilename.text = unitMediaViewModdel.document?.name
+            binding.cardDocumentUnitPropertyThumbnail.textViewDescriptionDocument.text = unitMediaViewModdel.document?.type?.uppercase()
         }
 
         binding.buttonUnggahPhotoUnit.setOnClickListener{
