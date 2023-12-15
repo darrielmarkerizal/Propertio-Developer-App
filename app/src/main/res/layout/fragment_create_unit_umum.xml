@@ -97,15 +97,11 @@
 
         <EditText
             android:id="@+id/edit_deskripsi_unit"
-            style="@style/DesignSystem.TextInputEditText"
+            style="@style/DesignSystem.TextInputTextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="100dp"
             android:hint="Masukkan Deskripsi Unit"
             android:layout_marginTop="8dp"
-            android:paddingTop="8dp"
-            android:paddingStart="8dp"
-            android:gravity="top"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_deskripsi_unit" />
 
