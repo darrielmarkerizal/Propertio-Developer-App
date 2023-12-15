@@ -17,7 +17,8 @@ import com.propertio.developer.databinding.TemplateCardUnitBinding
 class UnitAdapter(
     private val unitsList : LiveData<List<ProjectDetail.ProjectDeveloper.ProjectUnit>>,
     private val onClickUnit: (ProjectDetail.ProjectDeveloper.ProjectUnit) -> Unit,
-    private val onClickMore: (ProjectDetail.ProjectDeveloper.ProjectUnit, View) -> Unit
+    private val onClickMore: (ProjectDetail.ProjectDeveloper.ProjectUnit, View) -> Unit,
+    private val onDelete: (ProjectDetail.ProjectDeveloper.ProjectUnit) -> Unit
 ) : RecyclerView.Adapter<UnitAdapter.ItemUnitViewHolder>(){
     inner class ItemUnitViewHolder(
         private val binding : TemplateCardUnitBinding,
@@ -30,6 +31,10 @@ class UnitAdapter(
                 textViewBathroomCount.text = unit.bathroom.toString()
                 textViewSurfaceAreaAndBuildingArea.text = "${NumericalUnitConverter.meterSquareFormatter(unit.surfaceArea ?: "0")} / ${NumericalUnitConverter.meterSquareFormatter(unit.buildingArea ?: "0")}"
                 textViewStock.text = unit.stock.toString()
+
+                buttonDelete.setOnClickListener(View.OnClickListener {
+                    onDelete(unit)
+                })
 
                 loadImage(unit.photoURL)
 

@@ -108,8 +108,8 @@ class UnitDataGudangFragment : Fragment() {
 
     private fun updateViewModelFromForm() {
         formActivity.unitFormViewModel.apply {
-            luasTanah = binding.editLuasTanahGudang.text.toString()
-            luasBangunan = binding.editLuasBangunanGudang.text.toString()
+            luasTanah = if (binding.editLuasTanahGudang.text.toString().isEmpty()) "0" else binding.editLuasTanahGudang.text.toString()
+            luasBangunan = if (binding.editLuasBangunanGudang.text.toString().isEmpty()) "0" else binding.editLuasBangunanGudang.text.toString()
             jumlahParkir = binding.spinnerTempatParkirGudang.text.toString()
             electricityType = binding.spinnerDayaListrikGudang.text.toString()
             roadAccessType = binding.spinnerAksesJalanGudang.text.toString()
