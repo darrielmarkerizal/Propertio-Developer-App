@@ -392,7 +392,6 @@
                         android:id="@+id/chart_dilihat"
                         android:layout_width="259dp"
                         android:layout_height="159dp"
-
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/nn_tv_card_title_proyek_dilihat"
