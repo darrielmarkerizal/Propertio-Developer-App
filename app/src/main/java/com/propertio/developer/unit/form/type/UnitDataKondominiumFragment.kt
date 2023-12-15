@@ -129,8 +129,8 @@ class UnitDataKondominiumFragment : Fragment() {
 
     private fun updateViewModelFromForm() {
         formActivity.unitFormViewModel.apply {
-            luasBangunan = binding.editLuasBangunanKondominium.text.toString()
-            jumlahParkir = binding.spinnerTempatParkirKondominium.text.toString()
+            luasBangunan = if (binding.editLuasBangunanKondominium.text.toString().isEmpty()) "0" else binding.editLuasBangunanKondominium.text.toString()
+            jumlahParkir = if (binding.spinnerTempatParkirKondominium.text.toString().isEmpty()) "0" else binding.spinnerTempatParkirKondominium.text.toString()
             electricityType = binding.spinnerDayaListrikKondominium.text.toString()
             waterType = binding.spinnerJenisAirKondominium.text.toString()
             interiorType = binding.spinnerInteriorKondominium.text.toString()
