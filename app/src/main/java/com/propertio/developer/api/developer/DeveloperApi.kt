@@ -119,6 +119,12 @@ interface DeveloperApi {
         @Path("document_id") documentId : Int
     ) : Call<UpdateProjectResponse>
 
+    @DELETE("v1/cms/project-management/{project-id}/unit-document/{document_id}")
+    fun deleteUnitDocument(
+        @Path("project-id") projectId : String,
+        @Path("document_id") documentId : Int
+    ) : Call<UpdateUnitResponse>
+
     @Multipart
     @POST("v1/cms/project-management/{project_id}/unit-photo")
     fun uploadUnitPhoto(

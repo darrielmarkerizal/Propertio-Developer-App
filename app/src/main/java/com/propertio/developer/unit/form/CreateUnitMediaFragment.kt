@@ -66,6 +66,9 @@ class CreateUnitMediaFragment : Fragment() {
         if (result.resultCode == RESULT_OK) {
             documentUri = result.data?.data
 
+            if (unitMediaViewModdel.isDocumentNotEdited) {
+                deletePreviousDocument()
+            }
             if (documentUri == null) {
                Log.e("CreateUnitMediaFragment", "documentUri is null")
                return@registerForActivityResult
@@ -749,5 +752,25 @@ class CreateUnitMediaFragment : Fragment() {
     private fun openTutorialVideo() {
         val dialogTutorial = TutorialYoutubeDialog()
         dialogTutorial.show(childFragmentManager, "TutorialYoutubeDialog")
+    }
+
+    private fun deletePreviousDocument() {
+        val projectId = formActivity?.unitFormViewModel?.projectId.toString()
+        developerApi.deleteUnitDocument(projectId, unitMediaViewModdel.document!!.id!!).enqueue(object : Callback<UpdateUnitResponse> {
+            override fun onResponse(
+                call: Call<UpdateUnitResponse>,
+                response: Response<UpdateUnitResponse>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d("CreateUnitMediaFragment", "onResponse: ${response.body()}")
+                } else {
+                    Log.e("CreateUnitMediaFragment", "onResponse: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateUnitResponse>, t: Throwable) {
+                Log.e("CreateUnitMediaFragment", "onFailure: ${t.message}")
+            }
+        })
     }
 }
