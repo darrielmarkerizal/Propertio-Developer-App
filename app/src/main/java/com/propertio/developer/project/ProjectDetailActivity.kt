@@ -254,6 +254,10 @@ class ProjectDetailActivity : AppCompatActivity() {
             onClickMore = { data, buttonBinding ->
                 Log.d("onClickMore", "More clicked: ${data.id}")
                 horizontalMoreButtonPopUp(data, buttonBinding)
+            },
+            onDelete = { data ->
+                Log.d("onClickDelete", "Delete clicked: ${data.id}")
+                deleteUnit(projectId!!, data.id!!)
             }
         )
         binding.recyclerViewUnit.apply {

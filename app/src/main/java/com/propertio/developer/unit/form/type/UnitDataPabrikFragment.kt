@@ -129,8 +129,8 @@ class UnitDataPabrikFragment : Fragment() {
 
     private fun updateViewModelFromForm() {
         formActivity.unitFormViewModel.apply {
-            luasTanah = binding.editLuasTanahPabrik.text.toString()
-            luasBangunan = binding.editLuasBangunanPabrik.text.toString()
+            luasTanah = if (binding.editLuasTanahPabrik.text.toString().isEmpty()) "0" else binding.editLuasTanahPabrik.text.toString()
+            luasBangunan = if (binding.editLuasBangunanPabrik.text.toString().isEmpty()) "0" else binding.editLuasBangunanPabrik.text.toString()
             jumlahParkir = binding.spinnerTempatParkirPabrik.text.toString()
             electricityType = binding.spinnerDayaListrikPabrik.text.toString()
             waterType = binding.spinnerJenisAirPabrik.text.toString()

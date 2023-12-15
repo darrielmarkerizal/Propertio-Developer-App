@@ -93,7 +93,7 @@ class UnitDataTanahFragment : Fragment() {
 
     private fun updateViewModelFromForm() {
         formActivity.unitFormViewModel.apply {
-            luasTanah = binding.editLuasTanahTanah.text.toString()
+            luasTanah = if (binding.editLuasTanahTanah.text.toString().isEmpty()) "0" else binding.editLuasTanahTanah.text.toString()
             roadAccessType = binding.spinnerAksesJalanTanah.text.toString()
         }
     }

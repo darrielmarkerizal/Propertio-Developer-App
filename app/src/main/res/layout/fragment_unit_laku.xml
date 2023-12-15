@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/white"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="309dp"
+        android:layout_height="301dp"
+        android:padding="30dp"
+        >
+
+        <TextView
+            android:id="@+id/text_view_isi_unit_laku"
+            style="@style/text.semi_bold.size20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Memasukkan Unit Laku"
+            android:textAlignment="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <LinearLayout
+            android:id="@+id/container_stok_unit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_view_isi_unit_laku">
+
+            <TextView
+                android:id="@+id/txt_stok_unit"
+                style="@style/text.regular.size16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stok Unit"
+                />
+
+            <TextView
+                android:id="@+id/txt_pembatas"
+                style="@style/text.regular.size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":"
+                android:layout_marginLeft="4dp"
+                />
+
+            <TextView
+                android:id="@+id/txt_jumlah_stok"
+                android:layout_width="0dp"
+                style="@style/text.regular.size16"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:text="50"
+                android:layout_marginLeft="4dp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/container_input_laku"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/container_stok_unit">
+
+            <TextView
+                android:id="@+id/txt_nama_unit"
+                style="@style/text.regular.size14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nama Unit"
+                />
+
+            <TextView
+                android:id="@+id/next_txt_nama_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:nextFocusLeft="@id/txt_headline_project"
+                android:text="*"
+                android:textColor="@color/red_badges"
+                />
+
+            <TextView
+                android:id="@+id/txt_pembatas_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:nextFocusLeft="@id/txt_headline_project"
+                android:text=":"
+                android:layout_marginLeft="4dp"
+                android:textColor="@color/red_badges"
+                />
+
+            <EditText
+                android:id="@+id/edit_nama_unit"
+                style="@style/DesignSystem.TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:maxLines="1"
+                android:layout_marginLeft="4dp"
+                android:inputType="number"
+                android:hint="Jumlah Unit Laku" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

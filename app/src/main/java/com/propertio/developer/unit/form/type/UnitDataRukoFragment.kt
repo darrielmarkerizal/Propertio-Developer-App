@@ -135,8 +135,8 @@ class UnitDataRukoFragment : Fragment() {
 
     private fun updateViewModelFromForm() {
         formActivity.unitFormViewModel.apply {
-            luasTanah = binding.editLuasTanahRuko.text.toString()
-            luasBangunan = binding.editLuasBangunanRuko.text.toString()
+            luasTanah = if (binding.editLuasTanahRuko.text.toString().isEmpty()) "0" else binding.editLuasTanahRuko.text.toString()
+            luasBangunan = if (binding.editLuasBangunanRuko.text.toString().isEmpty()) "0" else binding.editLuasBangunanRuko.text.toString()
             jumlahParkir = binding.spinnerTempatParkirRuko.text.toString()
             electricityType = binding.spinnerDayaListrikRuko.text.toString()
             waterType = binding.spinnerJenisAirRuko.text.toString()

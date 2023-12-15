@@ -30,7 +30,7 @@
             />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button_edit_unit_pop_up"
+            android:id="@+id/button_isi_unit_laku_pop_up"
             android:elevation="0dp"
             android:maxLines="1"
             android:ellipsize="end"

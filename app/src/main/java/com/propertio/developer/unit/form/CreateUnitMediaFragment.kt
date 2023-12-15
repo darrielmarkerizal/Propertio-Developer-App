@@ -123,6 +123,7 @@ class CreateUnitMediaFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         photosAdapter = UnggahFotoAdapter(
+            showCoverButton = true,
             photosList = unitMediaViewModdel.unitPhoto.value ?: listOf(),
             onClickButtonCover = {
                 if (it.projectId != null && it.id != null) {
@@ -149,6 +150,7 @@ class CreateUnitMediaFragment : Fragment() {
         )
 
         denahAdapter = UnggahFotoAdapter(
+            showCoverButton = false,
             photosList = unitMediaViewModdel.unitDenah.value ?: listOf(),
             onClickButtonCover = {
                 if (it.projectId != null && it.id != null) {
