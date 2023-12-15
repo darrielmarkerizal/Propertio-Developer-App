@@ -246,8 +246,8 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
                 )
             } ?: emptyList(),
             videoLink = data.unitVideo?.linkVideoURL,
-            virtualTourName = data.unitVirtualTour?.get(0)?.name,
-            virtualTourLink = data.unitVirtualTour?.get(0)?.link,
+            virtualTourName = if (data.unitVirtualTour?.isNotEmpty() == true) data.unitVirtualTour?.get(0)?.name else null,
+            virtualTourLink = if (data.unitVirtualTour?.isNotEmpty() == true) data.unitVirtualTour?.get(0)?.link else null
         )
 
         if (data.unitDocuments?.isNotEmpty() == true) {
