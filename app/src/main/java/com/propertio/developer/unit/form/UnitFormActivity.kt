@@ -17,8 +17,11 @@ import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
 import com.propertio.developer.auth.RegisterActivity
 import com.propertio.developer.databinding.ActivityUnitFormBinding
+import com.propertio.developer.model.LitePhotosModel
+import com.propertio.developer.model.UnitDocument
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_ID
 import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
+import com.propertio.developer.unit.UnitMediaViewModel
 import com.propertio.developer.unit_management.ButtonNavigationUnitManagementClickListener
 import com.propertio.developer.unit.form.type.UnitDataApartemenFragment
 import com.propertio.developer.unit.form.type.UnitDataGudangFragment
@@ -45,6 +48,7 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
     }
 
     internal val unitFormViewModel : UnitFormViewModel by viewModels()
+    internal val unitMedia : UnitMediaViewModel by viewModels()
 
     val binding by lazy {
         Log.d("UnitFormActivity", "Inflating layout")
@@ -229,5 +233,36 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
             projectId = data.projectId!!.toInt(),
             unitId = data.id!!.toInt()
         )
+
+        unitMedia.add(
+            unitPhoto = data.unitPhotos?.map {
+                LitePhotosModel(
+                    id = it.id,
+                    projectId = it.unitId,
+                    filePath = it.filename,
+                    isCover = it.isCover!!.toInt() ?: 0,
+                    type = it.type,
+                    caption = it.caption
+                )
+            } ?: emptyList(),
+            videoLink = data.unitVideo?.linkVideoURL,
+            virtualTourName = data.unitVirtualTour?.get(0)?.name,
+            virtualTourLink = data.unitVirtualTour?.get(0)?.link,
+        )
+
+        if (data.unitDocuments?.isNotEmpty() == true) {
+            unitMedia.isDocumentNotEdited = true
+            unitMedia.add(
+                document = UnitDocument(
+                    id = data.unitDocuments?.get(0)?.id,
+                    unitId = data.unitDocuments?.get(0)?.unitId,
+                    name = data.unitDocuments?.get(0)?.name,
+                    type = data.unitDocuments?.get(0)?.type,
+                    filename = data.unitDocuments?.get(0)?.filename,
+                    createdAt = data.unitDocuments?.get(0)?.createdAt,
+                    updatedAt = data.unitDocuments?.get(0)?.updatedAt,
+                )
+            )
+        }
     }
 }
