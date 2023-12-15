@@ -1,5 +1,6 @@
 package com.propertio.developer.unit
 
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -24,6 +25,7 @@ import com.propertio.developer.project.ProjectDetailActivity
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_DETAIL_PID
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_DETAIL_UID
 import com.propertio.developer.project.form.ProjectFormActivity
+import com.propertio.developer.unit.form.UnitFormActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
@@ -67,7 +69,9 @@ class UnitDetailActivity : AppCompatActivity() {
         // Check if is it valid unit id
         unitId = intent.getIntExtra(PROJECT_DETAIL_UID, 0)
         projectId = intent.getIntExtra(PROJECT_DETAIL_PID, 0)
+
         Log.d("UnitDetailActivity", "onCreate: unitId $unitId")
+        Log.d("UnitDetailActivity", "onCreate projectId $projectId")
         intent.removeExtra(PROJECT_DETAIL_UID)
         intent.removeExtra(PROJECT_DETAIL_PID)
         if (unitId == 0 && projectId == 0) {
@@ -147,6 +151,8 @@ class UnitDetailActivity : AppCompatActivity() {
     }
 
     private fun setIndicator() {
+        dots.clear()
+        binding.dotsIndicator.removeAllViews()
         for (i in 0 until carouselList.size) {
             dots.add(TextView(this))
             dots[i].text = Html.fromHtml("&#9679", Html.FROM_HTML_MODE_LEGACY).toString()
@@ -163,9 +169,16 @@ class UnitDetailActivity : AppCompatActivity() {
                 val imageURL: String = DomainURL.DOMAIN + photo.filename
                 Log.d("UnitDetailActivity", "imageURL: $imageURL")
 
-                carouselList.add(
-                    ImageData(imageURL)
-                )
+                if (!carouselList.any { it.id == photo.id.toString() }) {
+                    carouselList.add(
+                        ImageData(
+                            photo.id.toString(),
+                            imageURL
+                        )
+                    )
+                }
+
+
             }
 
         } else {
@@ -175,7 +188,10 @@ class UnitDetailActivity : AppCompatActivity() {
             val drawableUriString = drawableUri.toString()
 
             carouselList.add(
-                ImageData(drawableUriString)
+                ImageData(
+                    "Locale_PlaceHolder_DU",
+                    drawableUriString
+                )
             )
         }
     }

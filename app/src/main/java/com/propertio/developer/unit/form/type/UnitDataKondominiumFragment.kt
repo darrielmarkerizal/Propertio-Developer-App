@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.TokenManager
@@ -14,6 +15,7 @@ import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitRequest
+import com.propertio.developer.api.developer.unitmanagement.UpdateUnitRequest
 import com.propertio.developer.databinding.FragmentUnitDataKondominiumBinding
 import com.propertio.developer.dialog.ElectricitySheetFragment
 import com.propertio.developer.dialog.InteriorSheetFragment
@@ -27,13 +29,14 @@ import com.propertio.developer.dialog.viewmodel.RoadAccessTypeSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.WaterTypeSpinnerViewModel
 import com.propertio.developer.unit.form.UnitFormActivity
 import com.propertio.developer.unit.form.UnitFormViewModel
+import com.propertio.developer.unit_management.UpdateUnitResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
 class UnitDataKondominiumFragment : Fragment() {
-    private lateinit var unitFormViewModel: UnitFormViewModel
+    private val unitFormViewModel : UnitFormViewModel by activityViewModels()
 
     private var isParkingTypeSpinnerSelected = false
     private val parkingTypeViewModel by lazy { ViewModelProvider(requireActivity())[ParkingTypeSpinnerViewModel::class.java] }
@@ -78,40 +81,13 @@ class UnitDataKondominiumFragment : Fragment() {
         interiorTypeSpinner()
         roadAccessTypeSpinner()
 
-        observeLiveData(unitFormViewModel.projectId) { projectId ->
-            Log.d("UnitDataApartemenFragment", "Observed projectId in ViewModel: $projectId")
-        }
-
-        observeLiveData(unitFormViewModel.luasBangunan) {
-            binding.editLuasBangunanKondominium.setText(it)
-        }
-
-        observeLiveData(unitFormViewModel.jumlahKamarTidur) {
-            binding.edtJumlahKamarKondominium.setText(it)
-        }
-
-        observeLiveData(unitFormViewModel.jumlahKamarMandi) {
-            binding.edtJumlahKamarMandiKondominium.setText(it)
-        }
-
-        observeLiveData(unitFormViewModel.jumlahParkir) {
-            binding.spinnerTempatParkirKondominium.text = it
-        }
-
-        observeLiveData(unitFormViewModel.electricityType) {
-            binding.spinnerDayaListrikKondominium.text = it
-        }
-
-        observeLiveData(unitFormViewModel.waterType) {
-            binding.spinnerJenisAirKondominium.text = it
-        }
-
-        observeLiveData(unitFormViewModel.interiorType) {
-            binding.spinnerInteriorKondominium.text = it
-        }
-
-        observeLiveData(unitFormViewModel.roadAccessType) {
-            binding.spinnerAksesJalanKondominium.text = it
+        unitFormViewModel.isAlreadyUploaded.observe(viewLifecycleOwner) {
+            if (it) {
+                Log.d("UnitDataKondominiumFragment", "onViewCreated Updated: $it")
+                loadTextData()
+                unitFormViewModel.isUploaded = it
+                activityBinding?.toolbarContainerUnitForm?.textViewTitle?.text = "Edit Unit"
+            }
         }
         
         activityBinding.floatingButtonBack.setOnClickListener {
@@ -124,125 +100,165 @@ class UnitDataKondominiumFragment : Fragment() {
             val interior_type = binding.spinnerInteriorKondominium.text.toString()
             val road_access_type = binding.spinnerAksesJalanKondominium.text.toString()
 
-            formActivity?.unitFormViewModel?.updateLuasBangunan(luas_bangunan)
-            formActivity?.unitFormViewModel?.updateJumlahKamar(kamar)
-            formActivity?.unitFormViewModel?.updateJumlahKamarMandi(kamar_mandi)
-            formActivity?.unitFormViewModel?.updateParkingType(parking_type)
-            formActivity?.unitFormViewModel?.updateElectricityType(electricity_type)
-            formActivity?.unitFormViewModel?.updateWaterType(water_type)
-            formActivity?.unitFormViewModel?.updateInteriorType(interior_type)
-            formActivity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
+            formActivity?.unitFormViewModel?.luasBangunan = luas_bangunan
+            formActivity?.unitFormViewModel?.jumlahKamarTidur = kamar
+            formActivity?.unitFormViewModel?.jumlahKamarMandi = kamar_mandi
+            formActivity?.unitFormViewModel?.jumlahParkir = parking_type
+            formActivity?.unitFormViewModel?.electricityType = electricity_type
+            formActivity?.unitFormViewModel?.waterType = water_type
+            formActivity?.unitFormViewModel?.interiorType = interior_type
+            formActivity?.unitFormViewModel?.roadAccessType = road_access_type
+
 
             formActivity.onBackButtonUnitManagementClick()
         }
-        
+
         activityBinding.floatingButtonNext.setOnClickListener {
+            Log.d("UnitDataKondominiumFragment", "Next button clicked")
 
-            val projectId = unitFormViewModel.projectId.value ?: 0
-            val title = unitFormViewModel.namaUnit.value ?: ""
-            val description = unitFormViewModel.deskripsiUnit.value
-            val stock = unitFormViewModel.stokUnit.value
-            val price = unitFormViewModel.hargaUnit.value ?: ""
-            val luas_bangunan = binding.editLuasBangunanKondominium.text.toString()
-            val kamar = binding.edtJumlahKamarKondominium.text.toString()
-            val kamar_mandi = binding.edtJumlahKamarMandiKondominium.text.toString()
-            val parking_type = binding.spinnerTempatParkirKondominium.text.toString()
-            val electricity_type = binding.spinnerDayaListrikKondominium.text.toString()
-            val water_type = binding.spinnerJenisAirKondominium.text.toString()
-            val interior_type = binding.spinnerInteriorKondominium.text.toString()
-            val road_access_type = binding.spinnerAksesJalanKondominium.text.toString()
+            updateViewModelFromForm()
+            val unitRequest = createUnitRequest()
 
-            formActivity?.unitFormViewModel?.updateLuasBangunan(luas_bangunan)
-            formActivity?.unitFormViewModel?.updateJumlahKamar(kamar)
-            formActivity?.unitFormViewModel?.updateJumlahKamarMandi(kamar_mandi)
-            formActivity?.unitFormViewModel?.updateParkingType(parking_type)
-            formActivity?.unitFormViewModel?.updateElectricityType(electricity_type)
-            formActivity?.unitFormViewModel?.updateWaterType(water_type)
-            formActivity?.unitFormViewModel?.updateInteriorType(interior_type)
-            formActivity?.unitFormViewModel?.updateRoadAccessType(road_access_type)
-
-
-            val retro = Retro(TokenManager(requireContext()).token)
-                .getRetroClientInstance()
-                .create(DeveloperApi::class.java)
-            
-            val unitRequest = UnitRequest(
-                title = title,
-                price = price,
-                description = description,
-                stock = stock,
-                buildingArea = luas_bangunan,
-                bedroom = kamar,
-                bathroom = kamar_mandi,
-                garage = parking_type,
-                powerSupply = electricity_type,
-                waterType = water_type,
-                interior = interior_type,
-                roadAccess = road_access_type,
-                floor = null,
-                order = null,
-                surfaceArea = null,
-            )
-
-            Log.d("UnitDataKondominiumFragment", "onViewCreated: $unitRequest")
-
-            retro.postStoreUnit(
-                id = projectId,
-                unitRequest = unitRequest
-            ).enqueue(object : Callback<PostUnitResponse> {
-                override fun onResponse(
-                    call: Call<PostUnitResponse>,
-                    response: Response<PostUnitResponse>
-                ) {
-                    if(response.isSuccessful) {
-                        val responseData = response.body()?.data
-                        if (responseData != null) {
-                            Log.d("UnitDataKondominiumFragment", "onResponse: $responseData")
-
-
-
-
-                            //TODO: Tambahkan kode seperti ini untuk setiap tipe unit
-                            formActivity.unitId = responseData.id
-                            if (formActivity.unitId != null || formActivity.unitId != 0) {
-                                Toast.makeText(requireContext(), "Unit berhasil ditambahkan", Toast.LENGTH_SHORT).show()
-                                formActivity.onNextButtonUnitManagementClick()
-                            } else {
-                                Log.e("UnitDataKondominiumFragment", "onResponse: Unit ID is null or 0")
-                                Toast.makeText(requireContext(), "Gagal menambahkan unit", Toast.LENGTH_SHORT).show()
-                            }
-
-
-
-
-                        }
-                    } else {
-                        var errorMessage = response.errorBody()?.string()
-                        errorMessage = errorMessage?.split("\"data\":")?.last()
-                        errorMessage = errorMessage?.trim('{', '}')
-
-                        if (errorMessage != null) {
-                            for (error in errorMessage.split(",")) {
-                                Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
-                            }
-                        }
-                        Log.w("UnitDataKondominiumFragment", "onResponse: Error code: ${response.code()}, message: ${response.message()}, error body: $errorMessage")
-
-                        if (response.code() == 500) {
-                            Log.e("UnitDataKondominiumFragment", "Server error: Something went wrong on the server side.")
-                            // You can add more actions here, for example, show an error dialog or a specific message to the user
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<PostUnitResponse>, t: Throwable) {
-                    Log.e("UnitDataKondominiumFragment", "onFailure: ${t.message}", t)
-                    Toast.makeText(requireContext(), "Gagal menambahkan unit", Toast.LENGTH_SHORT).show()
-                }
-            })
+            if (unitFormViewModel.isUploaded == false) {
+                postUnit(unitRequest)
+            } else {
+                updateUnit(unitRequest)
+            }
         }
     }
 
+    private fun updateViewModelFromForm() {
+        formActivity.unitFormViewModel.apply {
+            luasBangunan = binding.editLuasBangunanKondominium.text.toString()
+            jumlahParkir = binding.spinnerTempatParkirKondominium.text.toString()
+            electricityType = binding.spinnerDayaListrikKondominium.text.toString()
+            waterType = binding.spinnerJenisAirKondominium.text.toString()
+            interiorType = binding.spinnerInteriorKondominium.text.toString()
+            roadAccessType = binding.spinnerAksesJalanKondominium.text.toString()
+        }
+    }
+
+    private fun createUnitRequest(): UnitRequest {
+        return UnitRequest(
+            title = unitFormViewModel.namaUnit ?: "",
+            price = unitFormViewModel.hargaUnit ?: "",
+            description = unitFormViewModel.deskripsiUnit ?: "",
+            stock = unitFormViewModel.stokUnit ?: "",
+            surfaceArea = unitFormViewModel.luasTanah,
+            buildingArea = unitFormViewModel.luasBangunan,
+            floor = unitFormViewModel.jumlahLantai,
+            bedroom = unitFormViewModel.jumlahKamarTidur,
+            bathroom = unitFormViewModel.jumlahKamarMandi,
+            garage = unitFormViewModel.jumlahParkir,
+            powerSupply = unitFormViewModel.electricityType,
+            waterType = unitFormViewModel.waterType,
+            interior = unitFormViewModel.interiorType,
+            roadAccess = unitFormViewModel.roadAccessType,
+            order = null
+        )
+    }
+
+    private fun postUnit(unitRequest: UnitRequest) {
+        val retro = Retro(TokenManager(requireContext()).token)
+            .getRetroClientInstance()
+            .create(DeveloperApi::class.java)
+
+        retro.postStoreUnit(
+            id = unitFormViewModel.projectId ?: 0,
+            unitRequest = unitRequest
+        ).enqueue(object : Callback<PostUnitResponse> {
+            override fun onResponse(
+                call: Call<PostUnitResponse>,
+                response: Response<PostUnitResponse>
+            ) {
+                if(response.isSuccessful) {
+                    val responseData = response.body()?.data
+                    if (responseData != null) {
+                        Log.d("UnitDataKondominiumFragment", "onResponse: $responseData")
+
+                        //TODO: Tambahkan kode seperti ini untuk setiap tipe unit
+                        formActivity.unitId = responseData.id
+                        if (formActivity.unitId != null || formActivity.unitId != 0) {
+                            Toast.makeText(requireContext(), "Unit berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+                            formActivity.onNextButtonUnitManagementClick()
+                        } else {
+                            Log.e("UnitDataKondominiumFragment", "onResponse: Unit ID is null or 0")
+                            Toast.makeText(requireContext(), "Gagal menambahkan unit", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } else {
+                    var errorMessage = response.errorBody()?.string()
+                    errorMessage = errorMessage?.split("\"data\":")?.last()
+                    errorMessage = errorMessage?.trim('{', '}')
+
+                    if (errorMessage != null) {
+                        for (error in errorMessage.split(",")) {
+                            Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+                        }
+                    }
+                    Log.w("UnitDataKondominiumFragment", "onResponse: Error code: ${response.code()}, message: ${response.message()}, error body: $errorMessage")
+
+                    if (response.code() == 500) {
+                        Log.e("UnitDataKondominiumFragment", "Server error: Something went wrong on the server side.")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<PostUnitResponse>, t: Throwable) {
+                Log.e("UnitDataKondominiumFragment", "onFailure: ${t.message}", t)
+                Toast.makeText(requireContext(), "Gagal menambahkan unit", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun updateUnit(unitRequest: UnitRequest) {
+        val retro = Retro(TokenManager(requireContext()).token)
+            .getRetroClientInstance()
+            .create(DeveloperApi::class.java)
+
+        val updateUnitRequest = UpdateUnitRequest(
+            unitId = unitFormViewModel.unitId ?: 0,
+            title = unitRequest.title,
+            price = unitRequest.price,
+            description = unitRequest.description,
+            stock = unitRequest.stock,
+            surfaceArea = unitRequest.surfaceArea,
+            buildingArea = unitRequest.buildingArea,
+            floor = unitRequest.floor,
+            bedroom = unitRequest.bedroom,
+            bathroom = unitRequest.bathroom,
+            garage = unitRequest.garage,
+            powerSupply = unitRequest.powerSupply,
+            waterType = unitRequest.waterType,
+            interior = unitRequest.interior,
+            roadAccess = unitRequest.roadAccess,
+            order = null
+        )
+
+        retro.updateUnit(unitFormViewModel.projectId ?: 0, updateUnitRequest).enqueue(object : Callback<UpdateUnitResponse> {
+            override fun onResponse(
+                call: Call<UpdateUnitResponse>,
+                response: Response<UpdateUnitResponse>
+            ) {
+                if (isAdded) {
+                    if (response.isSuccessful) {
+                        Log.d("UnitDataKondominiumFragment", "onResponse: ${response.body()}")
+                        Toast.makeText(requireContext(), "Unit berhasil diupdate", Toast.LENGTH_SHORT).show()
+                        formActivity.onNextButtonUnitManagementClick()
+                    } else {
+                        Log.e("UnitDataKondominiumFragment", "onResponse: ${response.errorBody()}")
+                        Toast.makeText(requireContext(), "Unit gagal diupdate", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateUnitResponse>, t: Throwable) {
+                Log.e("UnitDataKondominiumFragment", "onFailure: ${t.message}")
+                Toast.makeText(requireContext(), "Unit gagal diupdate", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+    
     private fun parkingTypeSpinner() {
         binding.spinnerTempatParkirKondominium.setOnClickListener {
             binding.spinnerTempatParkirKondominium.isEnabled = true
@@ -318,10 +334,16 @@ class UnitDataKondominiumFragment : Fragment() {
         }
     }
 
-    private fun <T> observeLiveData(liveData: LiveData<T>, updateUI: (T) -> Unit) {
-        liveData.observe(viewLifecycleOwner) { value ->
-            updateUI(value)
-        }
+    private fun loadTextData() {
+        UnitFormViewModel().printLog()
+        binding.editLuasBangunanKondominium.setText(unitFormViewModel.luasBangunan)
+        binding.edtJumlahKamarKondominium.setText(unitFormViewModel.jumlahKamarTidur)
+        binding.edtJumlahKamarMandiKondominium.setText(unitFormViewModel.jumlahKamarMandi)
+        binding.spinnerTempatParkirKondominium.setText(unitFormViewModel.jumlahParkir)
+        binding.spinnerDayaListrikKondominium.setText(unitFormViewModel.electricityType)
+        binding.spinnerJenisAirKondominium.setText(unitFormViewModel.waterType)
+        binding.spinnerInteriorKondominium.setText(unitFormViewModel.interiorType)
+        binding.spinnerAksesJalanKondominium.setText(unitFormViewModel.roadAccessType)
     }
 
 }

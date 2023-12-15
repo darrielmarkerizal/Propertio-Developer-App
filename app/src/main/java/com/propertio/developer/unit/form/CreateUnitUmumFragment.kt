@@ -7,14 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.databinding.FragmentCreateUnitUmumBinding
 
 class CreateUnitUmumFragment : Fragment() {
-    val unitFormViewModel : UnitFormViewModel by lazy {
-        ViewModelProvider(this).get(UnitFormViewModel::class.java)
-    }
+    private val unitFormViewModel : UnitFormViewModel by activityViewModels()
 
     private val binding by lazy {
         FragmentCreateUnitUmumBinding.inflate(layoutInflater)
@@ -23,7 +22,7 @@ class CreateUnitUmumFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         return binding.root
     }
 
@@ -32,67 +31,67 @@ class CreateUnitUmumFragment : Fragment() {
         val activity = activity as? UnitFormActivity
         val activityBinding = activity?.binding
 
-        observeLiveData(unitFormViewModel.namaUnit) { namaUnit ->
-            binding.editNamaUnit.setText(namaUnit)
-        }
-
-        observeLiveData(unitFormViewModel.deskripsiUnit) { deskripsiUnit ->
-            binding.editDeskripsiUnit.setText(deskripsiUnit)
-        }
-
-        observeLiveData(unitFormViewModel.stokUnit) { stokUnit ->
-            binding.editStokUnit.setText(stokUnit)
-        }
-
-        observeLiveData(unitFormViewModel.hargaUnit) { hargaUnit ->
-            binding.editHargaUnit.setText(hargaUnit)
+        unitFormViewModel.isAlreadyUploaded.observe(viewLifecycleOwner) {
+            if (it) {
+                Log.d("CreateProjectInformasiUmumFragment", "onViewCreated Updated: $it")
+                loadTextData()
+                binding.textTitleUnit.text = "Edit Unit"
+                unitFormViewModel.isUploaded = it
+            }
         }
 
         activityBinding?.floatingButtonBack?.setOnClickListener {
-            activity.onBackButtonUnitManagementClick()
+            activity?.onBackButtonUnitManagementClick()
         }
 
         activityBinding?.floatingButtonNext?.setOnClickListener {
-            if (!validateEditText(binding.editNamaUnit, "Nama unit tidak boleh kosong")) return@setOnClickListener
-            if (!validateNumberEditText(binding.editStokUnit, "Stok unit harus berupa angka dan tidak boleh ada koma")) return@setOnClickListener
-            if (!validateEditText(binding.editHargaUnit, "Harga unit tidak boleh kosong")) return@setOnClickListener
-            if (!validateNumberEditText(binding.editHargaUnit, "Harga unit harus berupa angka dan tidak boleh ada koma")) return@setOnClickListener
+            with(binding) {
+                if (!validateEditText(editNamaUnit, "Nama unit tidak boleh kosong")) return@setOnClickListener
+                if (!validateNumberEditText(editStokUnit, "Stok unit harus berupa angka dan tidak boleh ada koma")) return@setOnClickListener
+                if (!validateEditText(editHargaUnit, "Harga unit tidak boleh kosong")) return@setOnClickListener
+                if (!validateNumberEditText(editHargaUnit, "Harga unit harus berupa angka dan tidak boleh ada koma")) return@setOnClickListener
 
-            Log.d("CreateUnitUmumFragment", "Nama unit: ${binding.editNamaUnit.text}")
-            Log.d("CreateUnitUmumFragment", "Deskripsi unit: ${binding.editDeskripsiUnit.text}")
-            Log.d("CreateUnitUmumFragment", "Stok unit: ${binding.editStokUnit.text}")
-            Log.d("CreateUnitUmumFragment", "Harga unit: ${binding.editHargaUnit.text}")
+                unitFormViewModel.apply {
+                    namaUnit = editNamaUnit.text.toString()
+                    deskripsiUnit = editDeskripsiUnit.text.toString()
+                    stokUnit = editStokUnit.text.toString()
+                    hargaUnit = editHargaUnit.text.toString()
+                }
+            }
 
-            activity?.unitFormViewModel?.updateNamaUnit(binding.editNamaUnit.text.toString())
-            activity?.unitFormViewModel?.updateDeskripsiUnit(binding.editDeskripsiUnit.text.toString())
-            activity?.unitFormViewModel?.updateStokUnit(binding.editStokUnit.text.toString())
-            activity?.unitFormViewModel?.updateHargaUnit(binding.editHargaUnit.text.toString())
-
-            activity.onNextButtonUnitManagementClick()
+            activity?.onNextButtonUnitManagementClick()
         }
     }
 
     private fun validateEditText(editText: EditText, errorMessage: String): Boolean {
-        val text = editText.text.toString()
-        if (text.isEmpty()) {
-            editText.error = errorMessage
-            return false
+        return editText.text.toString().let { text ->
+            if (text.isEmpty()) {
+                editText.error = errorMessage
+                false
+            } else {
+                true
+            }
         }
-        return true
     }
 
     private fun validateNumberEditText(editText: EditText, errorMessage: String): Boolean {
-        val text = editText.text.toString()
-        if (!text.all { it.isDigit() }) {
-            editText.error = errorMessage
-            return false
+        return editText.text.toString().let { text ->
+            if (!text.all { it.isDigit() }) {
+                editText.error = errorMessage
+                false
+            } else {
+                true
+            }
         }
-        return true
     }
 
-    private fun <T> observeLiveData(liveData: LiveData<T>, updateUI: (T) -> Unit) {
-        liveData.observe(viewLifecycleOwner) { value ->
-            updateUI(value)
+    private fun loadTextData() {
+        unitFormViewModel.printLog()
+        with(binding) {
+            editNamaUnit.setText(unitFormViewModel.namaUnit)
+            editDeskripsiUnit.setText(unitFormViewModel.deskripsiUnit)
+            editStokUnit.setText(unitFormViewModel.stokUnit)
+            editHargaUnit.setText(unitFormViewModel.hargaUnit)
         }
     }
 }

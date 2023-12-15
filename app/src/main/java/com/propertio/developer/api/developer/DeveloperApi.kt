@@ -11,6 +11,7 @@ import com.propertio.developer.api.developer.unitmanagement.PostStoreUnitPhotoRe
 import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitRequest
+import com.propertio.developer.api.developer.unitmanagement.UpdateUnitRequest
 import com.propertio.developer.model.Caption
 import com.propertio.developer.model.StatusProject
 import com.propertio.developer.unit_management.UpdateUnitResponse
@@ -118,6 +119,12 @@ interface DeveloperApi {
         @Path("document_id") documentId : Int
     ) : Call<UpdateProjectResponse>
 
+    @DELETE("v1/cms/project-management/{project-id}/unit-document/{document_id}")
+    fun deleteUnitDocument(
+        @Path("project-id") projectId : String,
+        @Path("document_id") documentId : Int
+    ) : Call<UpdateUnitResponse>
+
     @Multipart
     @POST("v1/cms/project-management/{project_id}/unit-photo")
     fun uploadUnitPhoto(
@@ -190,6 +197,13 @@ interface DeveloperApi {
         @Path("id") id : Int,
         @Body unitRequest: UnitRequest
     ) : Call<PostUnitResponse>
+
+    @POST("v1/cms/project-management/{project_id}/unit?_method=PUT")
+    fun updateUnit(
+        @Path("project_id") projectId : Int,
+        @Body updateUnitRequest: UpdateUnitRequest
+    ) : Call<UpdateUnitResponse>
+
   
   @FormUrlEncoded
     @POST("v1/cms/project-management/project-facilities")
@@ -224,4 +238,10 @@ interface DeveloperApi {
         @Path("projectId") projectId : Int,
         @Path("unitId") unitId : Int
     ) : Call<UnitDetailResponse>
+
+    @DELETE("v1/cms/project-management/{projectId}/unit/{unitId}")
+    fun deleteUnit(
+        @Path("projectId") projectId : Int,
+        @Path("unitId") unitId : Int
+    ) : Call<UpdateUnitResponse>
 }

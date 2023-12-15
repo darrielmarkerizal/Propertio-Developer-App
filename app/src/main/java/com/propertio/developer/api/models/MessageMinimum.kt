@@ -30,7 +30,7 @@ abstract class MessageMinimum {
 
     @SerializedName("read")
     @Expose
-    var read: Int? = 0
+    var read: String? = "0"
 
     @SerializedName("subject")
     @Expose

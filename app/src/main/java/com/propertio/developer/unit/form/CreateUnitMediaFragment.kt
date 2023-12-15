@@ -23,6 +23,7 @@ import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.unitmanagement.PostStoreUnitPhotoResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
 import com.propertio.developer.databinding.FragmentCreateUnitMediaBinding
+import com.propertio.developer.dialog.TutorialYoutubeDialog
 import com.propertio.developer.model.Caption
 import com.propertio.developer.model.LitePhotosModel
 import com.propertio.developer.unit.UnitMediaViewModel
@@ -65,6 +66,9 @@ class CreateUnitMediaFragment : Fragment() {
         if (result.resultCode == RESULT_OK) {
             documentUri = result.data?.data
 
+            if (unitMediaViewModdel.isDocumentNotEdited) {
+                deletePreviousDocument()
+            }
             if (documentUri == null) {
                Log.e("CreateUnitMediaFragment", "documentUri is null")
                return@registerForActivityResult
@@ -307,7 +311,7 @@ class CreateUnitMediaFragment : Fragment() {
                 .getRetroClientInstance()
                 .create(DeveloperApi::class.java)
 
-            val projectId = formActivity?.unitFormViewModel?.projectId?.value.toString()
+            val projectId = formActivity?.unitFormViewModel?.projectId.toString()
             val unitId = formActivity?.unitId ?: 0
             val youtubeLink = binding.editTextLinkYoutubeMediaUnit.text.toString()
             val virtualTour = binding.editLinkVirtualTourUnit.text.toString()
@@ -405,7 +409,7 @@ class CreateUnitMediaFragment : Fragment() {
         val unitId = formActivity?.unitId ?: 0
         val unitIdBody = unitId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
-        val projectId = formActivity?.unitFormViewModel?.projectId?.value ?: 0
+        val projectId = formActivity?.unitFormViewModel?.projectId?: 0
         val projectIdBody = projectId.toString()
 
         lifecycleScope.launch {
@@ -483,7 +487,7 @@ class CreateUnitMediaFragment : Fragment() {
         val unitId = formActivity?.unitId ?: 0
         val unitIdBody = unitId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
-        val projectId = formActivity?.unitFormViewModel?.projectId?.value ?: 0
+        val projectId = formActivity?.unitFormViewModel?.projectId ?: 0
         val projectIdBody = projectId.toString()
 
         lifecycleScope.launch {
@@ -600,7 +604,7 @@ class CreateUnitMediaFragment : Fragment() {
                             unitMediaViewModdel.unitPhoto.value = unitPhotos.map {
                                 LitePhotosModel(
                                     id = it.id,
-                                    projectId = formActivity?.unitFormViewModel?.projectId?.value.toString(),
+                                    projectId = formActivity?.unitFormViewModel?.projectId?.toString(),
                                     filePath = it.filename,
                                     isCover = it.isCover!!.toInt(),
                                     type = it.type,
@@ -610,7 +614,7 @@ class CreateUnitMediaFragment : Fragment() {
                             unitMediaViewModdel.unitDenah.value = denahPhotos.map {
                                 LitePhotosModel(
                                     id = it.id,
-                                    projectId = formActivity?.unitFormViewModel?.projectId?.value.toString(),
+                                    projectId = formActivity?.unitFormViewModel?.projectId?.toString(),
                                     filePath = it.filename,
                                     isCover = it.isCover!!.toInt(),
                                     type = it.type,
@@ -746,7 +750,27 @@ class CreateUnitMediaFragment : Fragment() {
     }
 
     private fun openTutorialVideo() {
-        // TOOD: Do something here
-        Toast.makeText(context, "Open Tutorial Video : Belum Tersedia", Toast.LENGTH_SHORT).show()
+        val dialogTutorial = TutorialYoutubeDialog()
+        dialogTutorial.show(childFragmentManager, "TutorialYoutubeDialog")
+    }
+
+    private fun deletePreviousDocument() {
+        val projectId = formActivity?.unitFormViewModel?.projectId.toString()
+        developerApi.deleteUnitDocument(projectId, unitMediaViewModdel.document!!.id!!).enqueue(object : Callback<UpdateUnitResponse> {
+            override fun onResponse(
+                call: Call<UpdateUnitResponse>,
+                response: Response<UpdateUnitResponse>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d("CreateUnitMediaFragment", "onResponse: ${response.body()}")
+                } else {
+                    Log.e("CreateUnitMediaFragment", "onResponse: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<UpdateUnitResponse>, t: Throwable) {
+                Log.e("CreateUnitMediaFragment", "onFailure: ${t.message}")
+            }
+        })
     }
 }
