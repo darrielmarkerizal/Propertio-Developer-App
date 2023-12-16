@@ -269,6 +269,13 @@ class CreateUnitMediaFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+        binding.buttonContohModelMediaUnit.setOnClickListener{
+            val url = "https://immersive.propertio.id/unit-model/u-000001/index.html"
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(url)
+            startActivity(intent)
+        }
+
         if (documentUri == null) {
             binding.cardDocumentUnitPropertyThumbnail.root.visibility = View.GONE
         }
