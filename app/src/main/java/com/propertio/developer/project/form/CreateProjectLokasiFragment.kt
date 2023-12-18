@@ -583,26 +583,39 @@ class CreateProjectLokasiFragment : Fragment() {
 
 
             if (province != null) {
-                Log.d("CreateProjectLokasiFragment", "checkSpinnerData: ${province}")
-                provinceViewModel.provinceData.postValue(province)
-                isProvinceSelected = true
-                binding.spinnerProvinceProject.text = province.provinceName
+                for (i in 0 .. 3) {
+                    provinceViewModel.provinceData.value = province
+                    isProvinceSelected = true
+                    binding.spinnerProvinceProject.text = province.provinceName
 
-                delay(50)
+                    if (provinceViewModel.getProvinceData().provinceId == province.provinceId) {
+                        break
+                    }
+                }
+                for (i in 0 .. 3) {
+                    if (city == null) {
+                        break
+                    }
 
-                if (city != null) {
-                    Log.d("CreateProjectLokasiFragment", "checkSpinnerData: ${city}")
-                    cityViewModel.citiesData.postValue(city)
+                    cityViewModel.citiesData.value = city
                     isCitySelected = true
                     binding.spinnerCityProject.text = city.citiesName
 
-                    delay(50)
+                    if (cityViewModel.getCitiesData().citiesId == city.citiesId) {
+                        break
+                    }
+                }
+                for (i in 0 .. 3) {
+                    if (district == null) {
+                        break
+                    }
 
-                    if (district != null) {
-                        Log.d("CreateProjectLokasiFragment", "checkSpinnerData: ${district}")
-                        districtViewModel.districtsData.postValue(district)
-                        isDistrictSelected = true
-                        binding.spinnerDistrictProject.text = district.districtsName
+                    districtViewModel.districtsData.value = district
+                    isDistrictSelected = true
+                    binding.spinnerDistrictProject.text = district.districtsName
+
+                    if (districtViewModel.getDistrictsData().districtsId == district.districtsId) {
+                        break
                     }
                 }
             }

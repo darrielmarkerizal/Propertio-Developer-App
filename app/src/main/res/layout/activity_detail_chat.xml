@@ -128,15 +128,33 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/text_view_message"
+                android:id="@+id/text_view_1_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="33dp"
+                style="@style/text.regular.size14"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button"
+                style="@style/button.primary.s"
+                android:layout_marginLeft="33dp"
+                android:layout_marginVertical="30dp"
+                android:paddingHorizontal="24dp"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lihat Detail Proyek" />
+
+            <TextView
+                android:id="@+id/text_view_2_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="33dp"
                 android:paddingBottom="70dp"
-                android:paddingTop="12dp"
-                android:text="@string/lorem_ipsum"
                 style="@style/text.regular.size14"
                 />
+
 
         </LinearLayout>
 
