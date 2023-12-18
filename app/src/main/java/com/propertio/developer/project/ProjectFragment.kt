@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.ViewCompat
 import androidx.core.widget.NestedScrollView
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
@@ -331,11 +332,24 @@ class ProjectFragment : Fragment() {
             }
         }
 
-        binding.buttonSearch.setOnClickListener {
-            val filter = binding.textEditSearchFilter.text.toString()
-            visibleThreshold = 5
-            setRecyclerListProject(currentStatus, filter)
 
+        binding.textEditSearchFilter.doAfterTextChanged { text ->
+            if (text.toString().isEmpty()) {
+                visibleThreshold = 5
+                setRecyclerListProject(currentStatus)
+            } else {
+                val filter = binding.textEditSearchFilter.text.toString()
+                visibleThreshold = 5
+                setRecyclerListProject(currentStatus, filter)
+            }
+        }
+
+        binding.textInputSearchLayout.setEndIconOnClickListener {
+            binding.textEditSearchFilter.text?.clear()
+            visibleThreshold = 5
+            setRecyclerListProject(currentStatus)
+
+            binding.textEditSearchFilter.clearFocus()
         }
 
         binding.swipeRefreshLayoutProjectList.setOnRefreshListener {
