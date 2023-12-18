@@ -6,8 +6,10 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.progressindicator.LinearProgressIndicator
+import com.propertio.developer.PropertioDeveloperApplication
 import com.propertio.developer.R
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
@@ -21,6 +23,8 @@ import com.propertio.developer.dialog.model.DistrictsModel
 import com.propertio.developer.dialog.model.ProvinceModel
 import com.propertio.developer.model.LitePhotosModel
 import com.propertio.developer.model.ProjectDocument
+import com.propertio.developer.project.ProjectViewModelFactory
+import com.propertio.developer.project.list.FacilityTypeViewModel
 import com.propertio.developer.project.viewmodel.ProjectFacilityViewModel
 import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
 import com.propertio.developer.project.viewmodel.ProjectMediaViewModel
@@ -44,6 +48,8 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
     internal val projectMedia : ProjectMediaViewModel by viewModels()
     internal val projectFacility : ProjectFacilityViewModel by viewModels()
     internal var projectId: Int? = null
+
+    internal lateinit var facilityTypeViewModel : FacilityTypeViewModel
 
     internal val formsFragment = listOf(
         CreateProjectInformasiUmumFragment(),
