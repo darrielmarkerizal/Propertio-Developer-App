@@ -587,7 +587,7 @@ class CreateProjectMediaFragment : Fragment() {
 
     private fun validateYoutubeLinkObserver() {
         binding.editTextLinkYoutubeMediaProject.doAfterTextChanged { inputUrl ->
-            if (inputUrl != null) {
+            if (inputUrl != null && inputUrl.toString() != "") {
                 if (inputUrl.contains("youtube.com") || inputUrl.contains("youtu.be")) {
                     binding.editTextLinkYoutubeMediaProject.error = null
                 } else {
