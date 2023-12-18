@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.propertio.developer.TokenManager
@@ -123,6 +124,7 @@ class CreateUnitMediaFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         photosAdapter = UnggahFotoAdapter(
+            showCoverButton = true,
             photosList = unitMediaViewModdel.unitPhoto.value ?: listOf(),
             onClickButtonCover = {
                 if (it.projectId != null && it.id != null) {
@@ -149,6 +151,7 @@ class CreateUnitMediaFragment : Fragment() {
         )
 
         denahAdapter = UnggahFotoAdapter(
+            showCoverButton = false,
             photosList = unitMediaViewModdel.unitDenah.value ?: listOf(),
             onClickButtonCover = {
                 if (it.projectId != null && it.id != null) {
@@ -266,6 +269,20 @@ class CreateUnitMediaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val viewModel = ViewModelProvider(this).get(UnitFormViewModel::class.java)
+
+        if (viewModel.isAlreadyUploaded.value == true) {
+            lifecycleScope.launch {
+                fetchUnitPhotos(viewModel.projectId ?: 0, viewModel.unitId ?: 0)
+            }
+        }
+
+        binding.buttonContohModelMediaUnit.setOnClickListener{
+            val url = "https://immersive.propertio.id/unit-model/u-000001/index.html"
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(url)
+            startActivity(intent)
+        }
 
         if (documentUri == null) {
             binding.cardDocumentUnitPropertyThumbnail.root.visibility = View.GONE

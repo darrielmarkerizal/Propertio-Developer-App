@@ -129,11 +129,11 @@ class UnitDataRumahFragment : Fragment() {
 
     private fun updateViewModelFromForm() {
         formActivity.unitFormViewModel.apply {
-            luasTanah = binding.editLuasTanahRumah.text.toString()
-            luasBangunan = binding.editLuasBangunanRumah.text.toString()
-            jumlahLantai = binding.editJumlahLantaiRumah.text.toString()
-            jumlahKamarTidur = binding.editKamarMandiRumah.text.toString()
-            jumlahKamarMandi = binding.editKamarMandiRumah.text.toString()
+            luasTanah = if (binding.editLuasTanahRumah.text.toString().isEmpty()) "0" else binding.editLuasTanahRumah.text.toString()
+            luasBangunan = if (binding.editLuasBangunanRumah.text.toString().isEmpty()) "0" else binding.editLuasBangunanRumah.text.toString()
+            jumlahLantai = if (binding.editJumlahLantaiRumah.text.toString().isEmpty()) "0" else binding.editJumlahLantaiRumah.text.toString()
+            jumlahKamarTidur = if (binding.editKamarMandiRumah.text.toString().isEmpty()) "0" else binding.editKamarMandiRumah.text.toString()
+            jumlahKamarMandi = if (binding.editKamarMandiRumah.text.toString().isEmpty()) "0" else binding.editKamarMandiRumah.text.toString()
             jumlahParkir = binding.spinnerTempatParkirRumah.text.toString()
             electricityType = binding.spinnerDayaListrikRumah.text.toString()
             waterType = binding.spinnerJenisAirRumah.text.toString()

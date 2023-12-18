@@ -124,9 +124,8 @@ class UnitDataRuangUsahaFragment : Fragment() {
 
     private fun updateViewModelFromForm() {
         formActivity.unitFormViewModel.apply {
-            luasBangunan = binding.editLuasBangunanRuangUsaha.text.toString()
-            jumlahKamarTidur = binding.editKamarMandiRuangUsaha.text.toString()
-            jumlahKamarMandi = binding.editKamarMandiRuangUsaha.text.toString()
+            luasBangunan = if (binding.editLuasBangunanRuangUsaha.text.toString().isEmpty()) "0" else binding.editLuasBangunanRuangUsaha.text.toString()
+            jumlahKamarMandi = if (binding.editKamarMandiRuangUsaha.text.toString().isEmpty()) "0" else binding.editKamarMandiRuangUsaha.text.toString()
             jumlahParkir = binding.spinnerTempatParkirRuangUsaha.text.toString()
             electricityType = binding.spinnerDayaListrikRuangUsaha.text.toString()
             waterType = binding.spinnerJenisAirRuangUsaha.text.toString()
