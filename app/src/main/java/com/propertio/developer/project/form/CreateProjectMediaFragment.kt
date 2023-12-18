@@ -332,7 +332,7 @@ class CreateProjectMediaFragment : Fragment() {
             val projectId = formActivity?.projectId
             val youtubeLink = binding.editTextLinkYoutubeMediaProject.text.toString()
             val virtualTour = binding.editTextNamaVirtualTour.text.toString()
-            val virtualTourLink = binding.textLinkVirtualTourLabel.text.toString()
+            val virtualTourLink = binding.editTextLinkVirtualTourProject.text.toString()
 
 
             val projectIdBody = projectId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
@@ -394,7 +394,6 @@ class CreateProjectMediaFragment : Fragment() {
                 ) {
                     if (response.isSuccessful) {
                         Log.d("CreateProjectMedia", "onResponse: ${response.body()}")
-                        Toast.makeText(requireActivity(), "Berhasil Menambahkan Media Proyek", Toast.LENGTH_SHORT).show()
                     } else {
                         Log.e("CreateProjectMedia", "onResponse: ${response.body()}")
                         Toast.makeText(requireActivity(), "Gagal Menambahkan Media Proyek", Toast.LENGTH_SHORT).show()
