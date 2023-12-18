@@ -11,20 +11,21 @@ import coil.load
 import com.propertio.developer.R
 import com.propertio.developer.api.DomainURL.DOMAIN
 import com.propertio.developer.api.models.GeneralType
+import com.propertio.developer.database.facility.FacilityTable
 import com.propertio.developer.databinding.ItemFasilitasBinding
 
-typealias OnClickItemFacilityTypeListener = (GeneralType) -> Unit
+typealias OnClickItemFacilityTypeListener = (FacilityTable) -> Unit
 class FacilityTypeAdapter(
     private val context : Context,
-    private val facilityTypeList: List<GeneralType>,
-    private val selectedFacilities: List<String>,
+    private val facilityTypeList: MutableList<FacilityTable>,
+    private val selectedFacilities: MutableList<String>,
     private val onSelectItemFacilityType: OnClickItemFacilityTypeListener,
     private val onDeselectItemFacilityType : OnClickItemFacilityTypeListener
 ) : RecyclerView.Adapter<FacilityTypeAdapter.FacilityTypeViewHolder>(){
     inner class FacilityTypeViewHolder(
         private val binding : ItemFasilitasBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(facility: GeneralType) {
+        fun bind(facility: FacilityTable) {
             Log.d("FacilityTypeAdapter", "bind: $facility")
 
             with(binding) {
@@ -91,6 +92,18 @@ class FacilityTypeAdapter(
 
         }
 
+    }
+
+    fun updateFacilityTypeList(newFacilityTypeList : List<FacilityTable>) {
+        facilityTypeList.clear()
+        facilityTypeList.addAll(newFacilityTypeList)
+        notifyDataSetChanged()
+    }
+
+    fun updateSelectedFacilities(newSelectedFacilities : List<String>) {
+        selectedFacilities.clear()
+        selectedFacilities.addAll(newSelectedFacilities)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FacilityTypeViewHolder {

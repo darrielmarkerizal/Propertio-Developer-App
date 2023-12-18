@@ -14,5 +14,9 @@ data class GeneralType(
 
     @SerializedName("icon")
     @Expose
-    var icon: String? = null
+    var icon: String? = null,
+
+    @SerializedName("category")
+    @Expose
+    var category: String? = null
 )

@@ -3,6 +3,8 @@ package com.propertio.developer.database
 import android.util.Log
 import com.propertio.developer.database.chat.ChatTable
 import com.propertio.developer.database.chat.ChatTableDao
+import com.propertio.developer.database.facility.FacilityTable
+import com.propertio.developer.database.facility.FacilityTableDao
 import com.propertio.developer.database.project.ProjectTable
 import com.propertio.developer.database.project.ProjectTableDao
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +18,7 @@ import java.util.concurrent.Executors
 class PropertiORepository(
     private val projectTableDao: ProjectTableDao,
     private val chatTableDao: ChatTableDao,
+    private val facilityTableDao: FacilityTableDao
 ) {
 
     val listProject :Flow<List<ProjectTable>> = projectTableDao.allProjects
@@ -168,6 +171,54 @@ class PropertiORepository(
     }
 
 
+    // Facility
+
+    suspend fun getAllFacility(): List<FacilityTable> {
+        return withContext(Dispatchers.IO) {
+            facilityTableDao.getAll()
+        }
+    }
+
+    suspend fun getAllFacilityByCategory(category: String): List<FacilityTable> {
+        return withContext(Dispatchers.IO) {
+            facilityTableDao.getAllByCategory(category)
+        }
+    }
+
+    suspend fun searchFacility(search: String): List<FacilityTable> {
+        return withContext(Dispatchers.IO) {
+            facilityTableDao.search(search = "%$search%")
+        }
+    }
+
+    suspend fun insertFacility(
+        id: Int,
+        name: String,
+        category: String,
+        icon: String,
+    ) {
+        withContext(Dispatchers.IO) {
+            facilityTableDao.insert(
+                FacilityTable(
+                    id = id,
+                    name = name,
+                    category = category,
+                    icon = icon,
+                )
+            )
+        }
+    }
+    suspend fun updateSelectedFacility(id: Int, isSelected: Boolean = false) {
+        return withContext(Dispatchers.IO) {
+            facilityTableDao.updateSelectedFacility(id, isSelected)
+        }
+    }
+
+    suspend fun deleteAllFacility() {
+        return withContext(Dispatchers.IO) {
+            facilityTableDao.deleteAll()
+        }
+    }
 
 
 
