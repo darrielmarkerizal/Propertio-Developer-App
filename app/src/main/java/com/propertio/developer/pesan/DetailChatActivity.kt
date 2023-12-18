@@ -3,6 +3,7 @@ package com.propertio.developer.pesan
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.propertio.developer.R
@@ -10,6 +11,8 @@ import com.propertio.developer.databinding.ActivityDetailChatBinding
 
 class DetailChatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailChatBinding
+
+    private var buttonLink = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +42,7 @@ class DetailChatActivity : AppCompatActivity() {
             textViewEmail.text = intent.getStringExtra(EXTRA_EMAIL)
             textViewPhone.text = intent.getStringExtra(EXTRA_PHONE)
             textViewSubject.text = intent.getStringExtra(EXTRA_SUBJECT)
-            textViewMessage.text = intent.getStringExtra(EXTRA_MESSAGE)
+            textView1Message.text = intent.getStringExtra(EXTRA_MESSAGE)
 
             val _date = intent.getStringExtra(EXTRA_TIME)?.split("T")
             val _time = _date?.get(1)?.split(".")?.get(0)?.split(":") // hh:mm:ss
@@ -59,16 +62,68 @@ class DetailChatActivity : AppCompatActivity() {
                 startActivity(intentToWhatsapp)
             }
 
-            setPreviewHTMLMessage(textViewMessage.text.toString())
+            if (textView1Message.text.toString().contains("<p>")) {
+                button.visibility = View.VISIBLE
+                textView2Message.visibility = View.VISIBLE
+                textFormatter(textView1Message.text.toString())
+            } else {
+                button.visibility = View.GONE
+                textView2Message.visibility = View.GONE
+            }
+
+
         }
 
 
     }
 
-    private fun setPreviewHTMLMessage(message: String) {
-        binding.webViewPesanDetail.loadData(message, "text/html", "UTF-8")
+    private fun textFormatter(msg: String) {
+        binding.textView1Message.text = ""
+        val paragraf = msg.split("<p>")
+        var isText1 = true
+        for (sentence in paragraf) {
+            if (sentence.contains("href=")) {
+                val rawLink = sentence.split("href=")[1].split(" ")
+                var oreLink = ""
+
+                for (ore in rawLink) {
+                    if (ore.contains("http")) {
+                        oreLink = ore
+                    }
+                }
+                val link = oreLink.trim('\'', '"')
+                buttonLink = link
+
+                val text = sentence.split("href=")[0].split("</p>")[0]
+                appendTextOne(text, true)
+                isText1 = false
+                continue
+            }
+            val text = sentence.split("</p>")[0]
+            if (isText1) {
+                appendTextOne(text)
+            } else {
+                appendTextTwo(text)
+            }
+        }
+    }
+
+    private fun appendTextTwo(text: String) {
+        val temp = binding.textView2Message.text.toString() + text + "\n\n"
+        binding.textView2Message.text = temp
+    }
+
+    private fun appendTextOne(text: String, isEnd : Boolean = false) {
+        val endString = if (isEnd) {
+            ""
+        } else {
+            "\n\n"
+        }
+        val temp = binding.textView1Message.text.toString() + text + endString
+        binding.textView1Message.text = temp
 
     }
+
 
     companion object {
         const val EXTRA_ID = "extra_id"
