@@ -58,8 +58,15 @@ class DetailChatActivity : AppCompatActivity() {
                 intentToWhatsapp.data = Uri.parse("https://wa.me/${textViewPhone.text}")
                 startActivity(intentToWhatsapp)
             }
+
+            setPreviewHTMLMessage(textViewMessage.text.toString())
         }
 
+
+    }
+
+    private fun setPreviewHTMLMessage(message: String) {
+        binding.webViewPesanDetail.loadData(message, "text/html", "UTF-8")
 
     }
 
