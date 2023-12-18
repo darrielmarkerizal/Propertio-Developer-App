@@ -6,19 +6,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.propertio.developer.PropertioDeveloperApplication
+import com.propertio.developer.R
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResponse
 import com.propertio.developer.api.developer.type.GeneralTypeResponse
+import com.propertio.developer.database.facility.FacilityTable
 import com.propertio.developer.databinding.FragmentCreateProjectFasilitasBinding
+import com.propertio.developer.pesan.ChatViewModel
+import com.propertio.developer.project.ProjectViewModelFactory
 import com.propertio.developer.project.list.FacilityTypeAdapter
+import com.propertio.developer.project.list.FacilityTypeViewModel
+import com.propertio.developer.project.viewmodel.FacilityViewModelFactory
 import com.propertio.developer.project.viewmodel.ProjectFacilityViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -31,12 +44,36 @@ class CreateProjectFasilitasFragment : Fragment() {
     private val binding by lazy { FragmentCreateProjectFasilitasBinding.inflate(layoutInflater) }
     private val formActivity by lazy { activity as ProjectFormActivity }
     private val activityBinding by lazy { formActivity.binding }
+    private val currentTab : MutableLiveData<Int> = MutableLiveData(0)
     private val projectFacilityViewModel : ProjectFacilityViewModel by activityViewModels()
     private val developerApi by lazy {
         Retro(TokenManager(requireContext()).token!!)
             .getRetroClientInstance()
             .create(DeveloperApi::class.java)
     }
+
+    private lateinit var facilityTypeViewModel: FacilityTypeViewModel
+    private val facilityTypeAdapter by lazy {
+        FacilityTypeAdapter(
+            context = requireContext(),
+            facilityTypeList = emptyList<FacilityTable>().toMutableList(),
+            selectedFacilities = projectFacilityViewModel.selectedFacilities,
+            onSelectItemFacilityType = { facilityType ->
+                if (!projectFacilityViewModel.selectedFacilities.contains(facilityType.id.toString())) {
+                    projectFacilityViewModel.selectedFacilities.add(facilityType.id.toString())
+                    Log.d("CreateProjectFasilitasFragment", "Select facilityType: $facilityType")
+                } else {
+                    Log.d("CreateProjectFasilitasFragment", "Duplicated Select facilityType: $facilityType")
+                }
+
+            },
+            onDeselectItemFacilityType = { facilityType ->
+                val result = projectFacilityViewModel.selectedFacilities.remove(facilityType.id.toString())
+                Log.d("CreateProjectFasilitasFragment", "Deselect facilityType: $result")
+            }
+        )
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +92,51 @@ class CreateProjectFasilitasFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+        val factory = FacilityViewModelFactory((requireActivity().application as PropertioDeveloperApplication).repository)
+        facilityTypeViewModel = ViewModelProvider(requireActivity(), factory)[FacilityTypeViewModel::class.java]
+
+
         setRecyclerCategoryFacility()
+
+        binding.buttonFasilitas.setOnClickListener {
+            lifecycleScope.launch {
+                if (currentTab.asFlow().first() != 1) {
+                    changeCategoryFacility("fasilitas")
+                    currentTab.value = 1
+                } else{
+                    currentTab.value = 0
+                    updateRecyclerList(facilityTypeViewModel.getAllFacilityType())
+
+                }
+            }
+
+        }
+        binding.buttonKeunggulan.setOnClickListener {
+            lifecycleScope.launch {
+                if (currentTab.asFlow().first() != 2) {
+                    changeCategoryFacility("keunggulan")
+                    currentTab.value = 2
+                } else{
+                    currentTab.value = 0
+                    updateRecyclerList(facilityTypeViewModel.getAllFacilityType())
+
+                }
+            }
+        }
+        binding.buttonPerabot.setOnClickListener {
+            lifecycleScope.launch {
+                if (currentTab.asFlow().first() != 3) {
+                    changeCategoryFacility("perabot")
+                    currentTab.value = 3
+                } else{
+                    currentTab.value = 0
+                    updateRecyclerList(facilityTypeViewModel.getAllFacilityType())
+
+                }
+            }
+        }
+        tabObserver()
+        setupSearchFeature()
 
 
         activityBinding.floatingButtonBack.setOnClickListener {
@@ -65,15 +146,13 @@ class CreateProjectFasilitasFragment : Fragment() {
         }
 
         activityBinding.floatingButtonNext.setOnClickListener {
-            //TODO: Delete this two line below
-            formActivity.onNextButtonProjectManagementClick()
-            return@setOnClickListener
 
             Log.d("CreateProjectFasilitasFragment", "next: ${projectFacilityViewModel.selectedFacilities}")
 
             val facilitiesMap = mutableMapOf<String, String>()
             projectFacilityViewModel.selectedFacilities.forEachIndexed { index, facility ->
                 Log.d("CreateProjectFasilitasFragment", "now: $index $facility")
+                facilitiesMap["facilities[$index]"] = facility
             }
 
             developerApi.sendFacilities(formActivity.projectId.toString(), facilitiesMap).enqueue(object : Callback<UpdateProjectResponse> {
@@ -99,6 +178,90 @@ class CreateProjectFasilitasFragment : Fragment() {
         }
     }
 
+    private fun setupSearchFeature() {
+        binding.textinputCariFasilitas.doAfterTextChanged {
+            binding.containerButtonCategory.visibility = View.GONE
+
+            val query = it.toString()
+            if (query.isNotEmpty()) {
+                lifecycleScope.launch {
+                    val facilityList = withContext(Dispatchers.IO) {
+                        facilityTypeViewModel.searchFacility(query)
+                    }
+                    updateRecyclerList(facilityList)
+                }
+            } else {
+                lifecycleScope.launch {
+                    val facilityList = withContext(Dispatchers.IO) {
+                        facilityTypeViewModel.getAllFacilityType()
+                    }
+
+                    updateRecyclerList(facilityList)
+                }
+            }
+        }
+
+        binding.textInputLayoutFasilitas.setEndIconOnClickListener {
+            binding.textinputCariFasilitas.text?.clear()
+            binding.textinputCariFasilitas.clearFocus()
+
+            binding.containerButtonCategory.visibility = View.VISIBLE
+            currentTab.value = 0
+        }
+    }
+
+    private fun tabObserver() {
+        // initial state
+        binding.buttonPerabot.isActivated = true
+        binding.buttonKeunggulan.isActivated = true
+        binding.buttonFasilitas.isActivated = true
+
+        binding.buttonPerabot.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+        binding.buttonKeunggulan.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+        binding.buttonFasilitas.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+
+        currentTab.observe(viewLifecycleOwner) {
+            when (it) {
+                0 -> {
+                    binding.buttonPerabot.isActivated = true
+                    binding.buttonKeunggulan.isActivated = true
+                    binding.buttonFasilitas.isActivated = true
+
+                    binding.buttonPerabot.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    binding.buttonKeunggulan.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    binding.buttonFasilitas.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                }
+                1 -> {
+                    binding.buttonPerabot.isActivated = false
+                    binding.buttonKeunggulan.isActivated = false
+                    binding.buttonFasilitas.isActivated = true
+
+                    binding.buttonPerabot.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                    binding.buttonKeunggulan.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                    binding.buttonFasilitas.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                }
+                2 -> {
+                    binding.buttonPerabot.isActivated = false
+                    binding.buttonKeunggulan.isActivated = true
+                    binding.buttonFasilitas.isActivated = false
+
+                    binding.buttonPerabot.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                    binding.buttonKeunggulan.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    binding.buttonFasilitas.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                }
+                3 -> {
+                    binding.buttonPerabot.isActivated = true
+                    binding.buttonKeunggulan.isActivated = false
+                    binding.buttonFasilitas.isActivated = false
+
+                    binding.buttonPerabot.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    binding.buttonKeunggulan.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                    binding.buttonFasilitas.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                }
+            }
+        }
+    }
+
     private fun setRecyclerCategoryFacility() {
         val retro = Retro(TokenManager(requireContext()).token!!)
             .getRetroClientInstance()
@@ -106,6 +269,16 @@ class CreateProjectFasilitasFragment : Fragment() {
 
         lifecycleScope.launch {
             fetchFacilityType(retro)
+        }
+    }
+
+    private fun changeCategoryFacility(category: String) {
+        lifecycleScope.launch {
+            val facilityList = withContext(Dispatchers.IO) {
+                facilityTypeViewModel.getAllFacilityByCategory(category)
+            }
+
+            updateRecyclerList(facilityList)
         }
     }
 
@@ -122,7 +295,19 @@ class CreateProjectFasilitasFragment : Fragment() {
                         if (facilities != null) {
                             Log.d("CreateProjectFasilitasFragment", "onResponse Success: $facilities")
 
-                            projectFacilityViewModel.facilityTypeList.addAll(facilities)
+//                            projectFacilityViewModel.facilityTypeList.addAll(facilities)
+                            lifecycleScope.launch {
+                                facilities.forEach {
+                                    facilityTypeViewModel.insertFacility(
+                                        id = it.id!!,
+                                        name = it.name!!,
+                                        category = it.category!!,
+                                        icon = it.icon ?: "",
+                                    )
+                                }
+                                updateRecyclerList(facilityTypeViewModel.getAllFacilityType())
+                            }
+
                             insertRecyclerList()
 
 
@@ -152,29 +337,20 @@ class CreateProjectFasilitasFragment : Fragment() {
 
     private fun insertRecyclerList() {
         with(binding) {
-            recyclerViewFasilitas.apply {
-                adapter = FacilityTypeAdapter(
-                    context = requireContext(),
-                    facilityTypeList = projectFacilityViewModel.facilityTypeList,
-                    selectedFacilities = projectFacilityViewModel.selectedFacilities,
-                    onSelectItemFacilityType = { facilityType ->
-                        if (!projectFacilityViewModel.selectedFacilities.contains(facilityType.id.toString())) {
-                            projectFacilityViewModel.selectedFacilities.add(facilityType.id.toString())
-                            Log.d("CreateProjectFasilitasFragment", "Select facilityType: $facilityType")
-                        } else {
-                            Log.d("CreateProjectFasilitasFragment", "Duplicated Select facilityType: $facilityType")
-                        }
+            lifecycleScope.launch {
+                recyclerViewFasilitas.apply {
+                    adapter = facilityTypeAdapter
+                    layoutManager = LinearLayoutManager(requireContext())
 
-                    },
-                    onDeselectItemFacilityType = { facilityType ->
-                        val result = projectFacilityViewModel.selectedFacilities.remove(facilityType.id.toString())
-                        Log.d("CreateProjectFasilitasFragment", "Deselect facilityType: $result")
-                    }
-                )
-
-                layoutManager = LinearLayoutManager(requireContext())
-
+                }
             }
+
+        }
+    }
+
+    private fun updateRecyclerList(facilityList : List<FacilityTable>) {
+        lifecycleScope.launch {
+            facilityTypeAdapter.updateFacilityTypeList(facilityList)
         }
     }
 }

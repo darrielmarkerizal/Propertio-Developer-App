@@ -1,17 +1,17 @@
-package com.propertio.developer.project
+package com.propertio.developer.project.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.database.PropertiORepository
-import com.propertio.developer.pesan.ChatViewModelFactory
+import com.propertio.developer.project.list.FacilityTypeViewModel
 
-class ProjectViewModelFactory(
+class FacilityViewModelFactory(
     private val propertiORepository: PropertiORepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ProjectViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(FacilityTypeViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ProjectViewModel(propertiORepository) as T
+            return FacilityTypeViewModel(propertiORepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

@@ -3,6 +3,7 @@ package com.propertio.developer
 import android.app.Application
 import com.propertio.developer.database.PropertiORepository
 import com.propertio.developer.database.chat.ChatDatabase
+import com.propertio.developer.database.facility.FacilityDatabase
 import com.propertio.developer.database.project.ProjectDatabase
 
 class PropertioDeveloperApplication : Application() {
@@ -12,11 +13,15 @@ class PropertioDeveloperApplication : Application() {
     private val chatDb by lazy {
         ChatDatabase.getDatabase(this)
     }
+    private val facilityDb by lazy {
+        FacilityDatabase.getDatabase(this)
+    }
 
     val repository by lazy {
         PropertiORepository(
             projectDb.projectTableDao(),
-            chatDb.chatTableDao()
+            chatDb.chatTableDao(),
+            facilityDb.facilityTableDao()
         )
     }
 }
