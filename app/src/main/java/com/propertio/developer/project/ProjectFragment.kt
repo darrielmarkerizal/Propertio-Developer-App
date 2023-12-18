@@ -30,6 +30,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -48,6 +49,8 @@ import com.propertio.developer.project.form.ProjectFormActivity
 import com.propertio.developer.project.list.ProjectAdapter
 import com.propertio.developer.project.viewmodel.ProjectTabButtonViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -80,7 +83,7 @@ class ProjectFragment : Fragment() {
                         if (response.isSuccessful) {
                             Log.d("ProjectFragment", "onResponse: ${response.body()?.message}")
                             lifecycleScope.launch {
-                                refreshRecyclerListAdapter()
+                                forceRefreshRecyclerListAdapter()
                             }
 
                         } else {
@@ -95,6 +98,13 @@ class ProjectFragment : Fragment() {
                 })
             }
         )
+    }
+
+    private fun forceRefreshRecyclerListAdapter() {
+        lifecycleScope.launch {
+            projectAdapter.submitList(emptyList())
+            refreshRecyclerListAdapter()
+        }
     }
 
     private var visibleThreshold : Int = 5
@@ -199,7 +209,7 @@ class ProjectFragment : Fragment() {
                 ) {
                     if (response.isSuccessful) {
                         Log.d(TAG, "onResponse: ${response.body()?.message}")
-                        refreshRecyclerListAdapter()
+                        forceRefreshRecyclerListAdapter()
                     } else {
                         Log.d(TAG, "onResponse: ${response.errorBody()?.string()}")
                     }
@@ -225,7 +235,7 @@ class ProjectFragment : Fragment() {
                     ) {
                         if (response.isSuccessful) {
                             Log.d("ProjectFragment", "onResponse: ${response.body()?.message}")
-                            setRecyclerListProject(currentStatus)
+                            setRecyclerListProject()
                         } else {
                             Log.d("ProjectFragment", "onResponse: ${response.errorBody()?.string()}")
                         }
@@ -247,7 +257,7 @@ class ProjectFragment : Fragment() {
                     ) {
                         if (response.isSuccessful) {
                             Log.d("ProjectFragment", "onResponse: ${response.body()?.message}")
-                            setRecyclerListProject(currentStatus)
+                            setRecyclerListProject()
                         } else {
                             Log.d("ProjectFragment", "onResponse: ${response.errorBody()?.string()}")
                         }
@@ -296,6 +306,11 @@ class ProjectFragment : Fragment() {
         )
         projectViewModel = ViewModelProvider(requireActivity(), factory)[ProjectViewModel::class.java]
 
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                setRecyclerListProject()
+            }
+        }
 
 
         with(binding) {
@@ -336,18 +351,18 @@ class ProjectFragment : Fragment() {
         binding.textEditSearchFilter.doAfterTextChanged { text ->
             if (text.toString().isEmpty()) {
                 visibleThreshold = 5
-                setRecyclerListProject(currentStatus)
+                setRecyclerListProject()
             } else {
                 val filter = binding.textEditSearchFilter.text.toString()
                 visibleThreshold = 5
-                setRecyclerListProject(currentStatus, filter)
+                setRecyclerListProject(filter)
             }
         }
 
         binding.textInputSearchLayout.setEndIconOnClickListener {
             binding.textEditSearchFilter.text?.clear()
             visibleThreshold = 5
-            setRecyclerListProject(currentStatus)
+            setRecyclerListProject()
 
             binding.textEditSearchFilter.clearFocus()
         }
@@ -371,8 +386,10 @@ class ProjectFragment : Fragment() {
         binding.buttonDraf.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
 
 
-        currentStatus = false
-        setRecyclerListProject(currentStatus)
+        lifecycleScope.launch {
+            currentStatus = false
+            setRecyclerListProject()
+        }
     }
 
     private fun setTabToActive() {
@@ -383,20 +400,22 @@ class ProjectFragment : Fragment() {
         binding.buttonDraf.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
 
 
-        currentStatus = true
-        setRecyclerListProject(currentStatus)
+        lifecycleScope.launch {
+            currentStatus = true
+            setRecyclerListProject()
+        }
     }
 
 
 
-    private fun setRecyclerListProject(status: Boolean, filter : String = "") {
+    private fun setRecyclerListProject(filter : String = "") {
 
         binding.recylerViewProjects.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = projectAdapter
 
             lifecycleScope.launch {
-                loadProjects(status, filter)
+                loadProjects(filter)
             }
 
         }
@@ -417,7 +436,7 @@ class ProjectFragment : Fragment() {
                         binding.progressBarProject.visibility = View.VISIBLE
 
                         lifecycleScope.launch {
-                            loadProjects(status, filter)
+                            loadProjects(filter)
                         }
                     }
                 }
@@ -428,25 +447,25 @@ class ProjectFragment : Fragment() {
     }
 
 
-    private suspend fun loadProjects(status : Boolean, filter : String = "") {
+    private suspend fun loadProjects(filter : String = "") {
         withContext(Dispatchers.Main) {
             Log.d("ProjectFragment", "loadProjects: visibleThreshold: $visibleThreshold")
             val projects = withContext(Dispatchers.IO) {
-                projectViewModel.allProjectsPaginated(visibleThreshold, 0, status, filter)
+                projectViewModel.allProjectsPaginated(visibleThreshold, 0, currentStatus, filter).asFlow().first()
             }
-            projects.observe(viewLifecycleOwner) { listProjects ->
-                if (listProjects.isEmpty()) {
-                    binding.frameLayoutBelumAdaProyek.visibility = View.VISIBLE
-                } else {
-                    binding.frameLayoutBelumAdaProyek.visibility = View.GONE
-                }
-
-                // Update the list of projects
-                projectAdapter.submitList(listProjects)
-
-                _isLoading.value = false
-                binding.progressBarProject.visibility = View.GONE
+            if (projects.isEmpty()) {
+                binding.frameLayoutBelumAdaProyek.visibility = View.VISIBLE
+            } else {
+                binding.frameLayoutBelumAdaProyek.visibility = View.GONE
             }
+
+
+            projectAdapter.submitList(projects)
+            projectAdapter.notifyDataSetChanged()
+
+            _isLoading.value = false
+            binding.progressBarProject.visibility = View.GONE
+            Log.d("ProjectFragment", "loadProjects: ${projects.size} ${projectAdapter.currentList.size}")
         }
 
     }
