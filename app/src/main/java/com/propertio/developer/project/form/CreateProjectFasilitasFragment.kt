@@ -295,7 +295,6 @@ class CreateProjectFasilitasFragment : Fragment() {
                         if (facilities != null) {
                             Log.d("CreateProjectFasilitasFragment", "onResponse Success: $facilities")
 
-//                            projectFacilityViewModel.facilityTypeList.addAll(facilities)
                             lifecycleScope.launch {
                                 facilities.forEach {
                                     facilityTypeViewModel.insertFacility(

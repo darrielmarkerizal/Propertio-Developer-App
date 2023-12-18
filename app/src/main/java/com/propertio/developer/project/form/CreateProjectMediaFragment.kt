@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.propertio.developer.TokenManager
@@ -30,6 +31,7 @@ import com.propertio.developer.model.LitePhotosModel
 import com.propertio.developer.project.list.UnggahFotoAdapter
 import com.propertio.developer.project.viewmodel.ProjectMediaViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -58,7 +60,32 @@ class CreateProjectMediaFragment : Fragment() {
     // Activity ViewModels
     private val projectMediaViewModel : ProjectMediaViewModel by activityViewModels()
 
-    private lateinit var photosAdapter : UnggahFotoAdapter
+    private val photosAdapter by lazy {
+        UnggahFotoAdapter(
+            photosList = emptyList<LitePhotosModel>().toMutableList(),
+            onClickButtonCover = {
+                if (it.id != null) {
+                    updateCoverPhoto(it.id)
+                } else {
+                    Toast.makeText(context, "Gagal Mengubah Cover Photo", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onClickDelete = {
+                if (it.id != null) {
+                    deletePhoto(it.id)
+                } else {
+                    Toast.makeText(context, "Gagal Menghapus Foto", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onClickSaveCaption = {
+                if (it.id != null && it.caption != null) {
+                    updateCaption(it.id, it.caption!!)
+                } else {
+                    Toast.makeText(context, "Gagal Menyimpan Caption", Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
+    }
 
 
     // Document
@@ -129,30 +156,6 @@ class CreateProjectMediaFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        photosAdapter = UnggahFotoAdapter(
-            photosList = projectMediaViewModel.projectPhotos.value ?: listOf(),
-            onClickButtonCover = {
-                if (it.id != null) {
-                    updateCoverPhoto(it.id)
-                } else {
-                    Toast.makeText(context, "Gagal Mengubah Cover Photo", Toast.LENGTH_SHORT).show()
-                }
-            },
-            onClickDelete = {
-                if (it.id != null) {
-                    deletePhoto(it.id)
-                } else {
-                    Toast.makeText(context, "Gagal Menghapus Foto", Toast.LENGTH_SHORT).show()
-                }
-            },
-            onClickSaveCaption = {
-                if (it.id != null && it.caption != null) {
-                    updateCaption(it.id, it.caption!!)
-                } else {
-                    Toast.makeText(context, "Gagal Menyimpan Caption", Toast.LENGTH_SHORT).show()
-                }
-            }
-        )
         return binding.root
     }
 
@@ -241,6 +244,9 @@ class CreateProjectMediaFragment : Fragment() {
         Log.d("CreateProjectMedia", "loadViewModelData: ${projectMediaViewModel.virtualTourName}")
         Log.d("CreateProjectMedia", "loadViewModelData: ${projectMediaViewModel.virtualTourLink}")
 
+        lifecycleScope.launch {
+            fetchProjectPhotos(formActivity?.projectId ?: 0)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -533,9 +539,7 @@ class CreateProjectMediaFragment : Fragment() {
         projectMediaViewModel.projectPhotos.observe(viewLifecycleOwner) {
             Log.d("CreateProjectMedia", "photosPreviewObserver: $it")
 
-
-            photosAdapter.photosList = it ?: emptyList()
-            binding.recyclerViewListUnggahFoto.adapter = photosAdapter
+            photosAdapter.updateList(it ?: emptyList())
 
             if (it != null && it.isNotEmpty()) {
                 binding.recyclerViewListUnggahFoto.visibility = View.VISIBLE
