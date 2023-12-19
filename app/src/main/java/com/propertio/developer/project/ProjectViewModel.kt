@@ -11,6 +11,7 @@ import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.projectmanagement.ProjectListResponse
 import com.propertio.developer.database.PropertiORepository
 import com.propertio.developer.database.project.ProjectTable
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -36,20 +37,23 @@ class ProjectViewModel(
     }
 
 
+    @WorkerThread
     fun insertLocalProject(projectTable: ProjectTable) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             propertiORepository.insertProject(projectTable)
             Log.w("ProjectViewModel", "insertLocalProject: $projectTable")
         }
     }
 
+    @WorkerThread
     fun updateLocalProject(projectTable: ProjectTable) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             propertiORepository.updateProject(projectTable)
             Log.w("ProjectViewModel", "updateLocalProject: $projectTable")
         }
     }
 
+    @WorkerThread
     fun updateLocalProject(
         id: Int,
         headline: String,
@@ -59,7 +63,7 @@ class ProjectViewModel(
         addressLatitude: String,
         addressLongitude: String
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             propertiORepository.updateProject(
                 id,
                 headline,
@@ -73,8 +77,9 @@ class ProjectViewModel(
         }
     }
 
+    @WorkerThread
     fun deleteAllLocalProjects() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             propertiORepository.deleteAll()
             Log.w("ProjectViewModel", "deleteAllLocalProjects: ")
         }
@@ -82,7 +87,7 @@ class ProjectViewModel(
 
     @WorkerThread
     fun fetchLiteProject(token: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             Log.d("ProjectViewModel ApiCall", "fetchAllProjects")
             val retro = Retro(token).getRetroClientInstance().create(DeveloperApi::class.java)
 
@@ -122,7 +127,7 @@ class ProjectViewModel(
 
     @WorkerThread
     private fun syncToLocalDatabase(simpleProjects: List<ProjectListResponse.ProjectDeveloper>) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             for (it in simpleProjects) {
                 if (it.id == null || it.id == 0) {
                     Log.wtf("ProjectViewModel", "syncToLocalDatabase: id is null")
@@ -139,7 +144,7 @@ class ProjectViewModel(
 
     @WorkerThread
     private fun compareAndUpdate(it : ProjectListResponse.ProjectDeveloper) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val newProject = ProjectTable(
                 id = it.id!!,
                 title = it.title,

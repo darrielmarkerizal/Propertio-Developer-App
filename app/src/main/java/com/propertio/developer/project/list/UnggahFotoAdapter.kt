@@ -16,7 +16,7 @@ import com.propertio.developer.databinding.ItemUnggahPhotoBinding
 import com.propertio.developer.model.LitePhotosModel
 
 class UnggahFotoAdapter(
-    var photosList : List<LitePhotosModel>,
+    private val photosList : MutableList<LitePhotosModel>,
     private val onClickButtonCover : (LitePhotosModel) -> Unit,
     private val onClickDelete : (LitePhotosModel) -> Unit,
     private val onClickSaveCaption : (LitePhotosModel) -> Unit,
@@ -83,6 +83,22 @@ class UnggahFotoAdapter(
 
         }
 
+    }
+
+    fun updateList(newList : List<LitePhotosModel>) {
+        photosList.clear()
+        // move cover to first index
+        val coverIndex = newList.indexOfFirst { it.isCover == 1 }
+        if (coverIndex != -1) {
+            val cover = newList[coverIndex]
+            val newListWithoutCover = newList.toMutableList()
+            newListWithoutCover.removeAt(coverIndex)
+            newListWithoutCover.add(0, cover)
+            photosList.addAll(newListWithoutCover)
+        } else {
+            photosList.addAll(newList)
+        }
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UnggahFotoViewHolder {

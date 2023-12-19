@@ -26,7 +26,7 @@ class PropertiORepository(
     private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
 
     fun allProjectsPaginated(limit: Int, offset: Int, status : String, filter : String = ""): Flow<List<ProjectTable>> {
-        Log.d("Repository", "allProjectsPaginated: from $limit to $offset")
+        Log.d("Repository", "allProjectsPaginated: from $limit to $offset where status is $status and filter is $filter")
         return projectTableDao.allProjectsPaginated(limit, offset, status, filter = "%$filter%")
     }
 
