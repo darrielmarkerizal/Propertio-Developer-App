@@ -29,23 +29,40 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progress_indicator_project_form"/>
+        app:layout_constraintTop_toBottomOf="@+id/progress_indicator_project_form">
+
+
+    </FrameLayout>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_button_back"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="48dp"
         style="@style/floating.action.BackButton"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginBottom="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline3"
+        app:layout_constraintVertical_bias="1.0" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/floating_button_next"
         style="@style/floating.action.TextButton"
-        android:text="Selanjutnya"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="32dp"
+        android:text="Selanjutnya"
         app:layout_constraintBottom_toBottomOf="@+id/floating_button_back"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline3"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

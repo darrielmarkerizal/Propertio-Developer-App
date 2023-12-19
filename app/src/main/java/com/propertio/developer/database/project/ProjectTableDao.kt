@@ -13,7 +13,7 @@ interface ProjectTableDao {
     @get:Query("SELECT * FROM project_table ORDER BY posted_at DESC")
     val allProjects: Flow<List<ProjectTable>>
 
-    @Query("SELECT * FROM project_table WHERE status = :status AND title LIKE :filter OR address_address LIKE :filter OR address_province LIKE :filter ORDER BY posted_at DESC LIMIT :limit OFFSET :offset")
+    @Query("SELECT * FROM project_table WHERE status = :status AND (title LIKE :filter OR address_address LIKE :filter OR address_province LIKE :filter) ORDER BY posted_at DESC LIMIT :limit OFFSET :offset")
     fun allProjectsPaginated(limit: Int, offset: Int, status: String, filter: String): Flow<List<ProjectTable>>
 
     @Query("SELECT * FROM project_table WHERE id = :id")
