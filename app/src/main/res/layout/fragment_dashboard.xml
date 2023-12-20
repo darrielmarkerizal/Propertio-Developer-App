@@ -390,7 +390,7 @@
 
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/chart_dilihat"
-                        android:layout_width="259dp"
+                        android:layout_width="match_parent"
                         android:layout_height="159dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -428,7 +428,7 @@
 
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/chart_menarik"
-                        android:layout_width="259dp"
+                        android:layout_width="match_parent"
                         android:layout_height="159dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
