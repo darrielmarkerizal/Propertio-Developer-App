@@ -110,12 +110,26 @@ class DashboardFragment : Fragment() {
         binding.chartDilihat.invalidate()
         binding.chartDilihat.description.isEnabled = false
 
+        binding.chartDilihat.setExtraOffsets(0f, 0f, 0f, 16f)
+
         // Set chart properties
         val xAxis: XAxis = binding.chartDilihat.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
 
         val yAxisLeft: YAxis = binding.chartDilihat.axisLeft
         val yAxisRight: YAxis = binding.chartDilihat.axisRight
+
+        val maxValue = entries.maxOfOrNull { it.y } ?: 0f
+
+        if (maxValue == 0f) {
+            yAxisLeft.axisMinimum = 0f
+            yAxisLeft.axisMaximum = 100f
+            yAxisLeft.setLabelCount(6, true)
+        } else {
+            yAxisLeft.resetAxisMinimum()
+            yAxisLeft.resetAxisMaximum()
+            yAxisLeft.setLabelCount(5, false)
+        }
 
         xAxis.valueFormatter = IndexAxisValueFormatter(last7Days.map { formatDate(it) })
         yAxisLeft.valueFormatter = IntegerAxisValueFormatter()
@@ -151,12 +165,25 @@ class DashboardFragment : Fragment() {
         binding.chartMenarik.invalidate()
         binding.chartMenarik.description.isEnabled = false
 
+        binding.chartMenarik.setExtraOffsets(0f, 0f, 0f, 16f)
+
         // Set chart properties
         val xAxis: XAxis = binding.chartMenarik.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
 
         val yAxisLeft: YAxis = binding.chartMenarik.axisLeft
         val yAxisRight: YAxis = binding.chartMenarik.axisRight
+
+        val maxValue = entries.maxOfOrNull { it.y } ?: 0f
+
+        if (maxValue == 0f) {
+            yAxisLeft.axisMinimum = 0f
+            yAxisLeft.axisMaximum = 100f
+            yAxisLeft.setLabelCount(6, true)
+        } else {
+            yAxisLeft.axisMinimum = 0f
+        }
+
 
         xAxis.valueFormatter = IndexAxisValueFormatter(last7Days.map { formatDate(it) })
         yAxisLeft.valueFormatter = IntegerAxisValueFormatter()
