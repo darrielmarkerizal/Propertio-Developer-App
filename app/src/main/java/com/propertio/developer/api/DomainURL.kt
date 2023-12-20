@@ -7,4 +7,6 @@ object DomainURL {
 
     val DOMAIN = "http://beta.propertio.id/"
     val HOST_API =  DOMAIN + "api/"
+
+    val BASE_GOOGLE_MAPS = "https://maps.googleapis.com/maps/api/"
 }

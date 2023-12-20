@@ -21,7 +21,8 @@ import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.projectmanagement.PostStoreProjectLocationResponse
-import com.propertio.developer.database.MasterDataDeveloperPropertio.certificate
+import com.propertio.developer.api.services.GeocodingApi
+import com.propertio.developer.api.services.GoogleGeoCoding
 import com.propertio.developer.databinding.FragmentCreateProjectLokasiBinding
 import com.propertio.developer.dialog.CitiesSheetFragment
 import com.propertio.developer.dialog.DistrictsSheetFragment
@@ -34,14 +35,12 @@ import com.propertio.developer.dialog.viewmodel.DistrictsSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.ProvinceSpinnerViewModel
 import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
@@ -188,10 +187,12 @@ class CreateProjectLokasiFragment : Fragment() {
 
         // Gmaps
         binding.buttonSearchMapsProject.setOnClickListener {
-            val tempURL = binding.editTextLinkMapsProject.text.toString()
+            val tempURL = binding.editTextLinkMapsProject.text.toString().trim()
 
             if (tempURL == "" || tempURL.isEmpty()) {
-                Toast.makeText(requireActivity(), "Mohon isi link google Maps terlebih dahulu", Toast.LENGTH_SHORT).show()
+                val intentToMaps = Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=${projectInformationLocationViewModel.latitude},${projectInformationLocationViewModel.longitude}"))
+                startActivity(intentToMaps)
+
                 return@setOnClickListener
             }
             // check if the tempURL is valid URL
@@ -300,8 +301,8 @@ class CreateProjectLokasiFragment : Fragment() {
 
         val address = binding.editTextAddressProject.text.toString()
         val postalCode = binding.editTextPosProject.text.toString()
-        val longitude = longitude?.toString()
-        val latitude = latitude?.toString()
+        val longitude = longitude.toString()
+        val latitude = latitude.toString()
         val immersiveSiteplan = binding.editTextLinkImmersiveProject.text.toString()
         val immersiveApps = binding.editTextLinkImmersiveAppsProject.text.toString()
 
@@ -320,8 +321,8 @@ class CreateProjectLokasiFragment : Fragment() {
         val districtBody = district.toRequestBody("text/plain".toMediaTypeOrNull())
         val addressBody = address.toRequestBody("text/plain".toMediaTypeOrNull())
         val postalCodeBody = postalCode.toRequestBody("text/plain".toMediaTypeOrNull())
-        val longitudeBody = longitude?.toString()?.toRequestBody("text/plain".toMediaTypeOrNull())
-        val latitudeBody = latitude?.toString()?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val longitudeBody = longitude.toRequestBody("text/plain".toMediaTypeOrNull())
+        val latitudeBody = latitude.toRequestBody("text/plain".toMediaTypeOrNull())
         val immersiveSiteplanBody = immersiveSiteplan.toRequestBody("text/plain".toMediaTypeOrNull())
         val immersiveAppsBody = immersiveApps.toRequestBody("text/plain".toMediaTypeOrNull())
 
@@ -399,7 +400,7 @@ class CreateProjectLokasiFragment : Fragment() {
 
                     if (errorMessage != null) {
                         for (error in errorMessage.split(',')){
-                            Toast.makeText(requireActivity(), "Gagal membuat project: ${error}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireActivity(), "Gagal membuat project: $error", Toast.LENGTH_SHORT).show()
                         }
                     }
                     Log.w("CreateProjectLokasiFragment", "onResponse Error: ${response.errorBody()?.string()}")
@@ -447,8 +448,8 @@ class CreateProjectLokasiFragment : Fragment() {
         val districtBody = district.toRequestBody("text/plain".toMediaTypeOrNull())
         val addressBody = address.toRequestBody("text/plain".toMediaTypeOrNull())
         val postalCodeBody = postalCode.toRequestBody("text/plain".toMediaTypeOrNull())
-        val longitudeBody = longitude?.toString()?.toRequestBody("text/plain".toMediaTypeOrNull())
-        val latitudeBody = latitude?.toString()?.toRequestBody("text/plain".toMediaTypeOrNull())
+        val longitudeBody = longitude.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        val latitudeBody = latitude.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         val immersiveSiteplanBody = immersiveSiteplan.toRequestBody("text/plain".toMediaTypeOrNull())
         val immersiveAppsBody = immersiveApps.toRequestBody("text/plain".toMediaTypeOrNull())
 
@@ -535,7 +536,7 @@ class CreateProjectLokasiFragment : Fragment() {
 
                     if (errorMessage != null) {
                         for (error in errorMessage.split(',')){
-                            Toast.makeText(requireActivity(), "Gagal membuat project: ${error}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireActivity(), "Gagal membuat project: $error", Toast.LENGTH_SHORT).show()
                         }
                     }
                     Log.w("CreateProjectLokasiFragment", "onResponse Create Error: ${response.body()?.message}")
@@ -738,7 +739,10 @@ class CreateProjectLokasiFragment : Fragment() {
 
         // Get Lat Long
         val latLong = extractLatLongFromUrl(resolvedUrl) // Implement this function to extract the lat long from the URL
-        Log.d("CreateProjectLokasiFragment", "resolveShortUrlAndRetrieveDetails: $latLong")
+        if (latLong == null) {
+            Log.e("CreateProjectLokasiFragment", "resolveShortUrlAndRetrieveDetails: latLong is null")
+        }
+        Log.d("CreateProjectLokasiFragment", "lat long: $latLong")
 
         latitude = latLong?.first ?: 0.0
         longitude = latLong?.second ?: 0.0
@@ -748,10 +752,46 @@ class CreateProjectLokasiFragment : Fragment() {
 
 
 
-    private fun extractLatLongFromUrl(url: String): Pair<Double, Double>? {
-        val latLongPattern = Regex("3d([-0-9.]+)!4d([-0-9.]+)")
+    private suspend fun extractLatLongFromUrl(url: String): Pair<Double, Double>? {
+        val latLongPattern = Regex("!3d([-0-9.]+).*!4d([-0-9.]+)")
         val matchResult = latLongPattern.find(url)
+        Log.d("CreateProjectLokasiFragment", "extractLatLongFromUrl: ${matchResult?.destructured}")
+        if (matchResult == null) {
+            Log.d("CreateProjectLokasiFragment", "extractLatLongFromUrl: null")
+            //TODO: Geocoding!! AIzaSyAN6a7kSklwRHnNojU72nDnCfhYGhrATh0
+            val geoRetrofit = GoogleGeoCoding()
+                .getGeocodingInstance()
+                .create(GeocodingApi::class.java)
+            val address = url.split("place/").last().split("/").first()
 
+            try {
+                val response = geoRetrofit.geocodeCoordinate(address, "AIzaSyAN6a7kSklwRHnNojU72nDnCfhYGhrATh0")
+                if (response.isSuccessful) {
+                    val data = response.body()
+                    if (data != null) {
+                        val location = data.results?.first()?.geometry?.location
+                        val lat = location?.lat
+                        val lng = location?.lng
+                        if (lat != null && lng != null) {
+                            return Pair(lat, lng)
+                        } else {
+                            Log.w("CreateProjectLokasiFragment", "extractLatLongFromUrl: location is null")
+                        }
+
+                    } else {
+                        Log.d("CreateProjectLokasiFragment", "extractLatLongFromUrl: data is null ${response.errorBody()?.string()}")
+
+                    }
+                } else {
+                    Log.e("CreateProjectLokasiFragment", "extractLatLongFromUrl: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                Log.e("CreateProjectLokasiFragment", "extractLatLongFromUrl: ${e.message}")
+            }
+
+
+
+        }
         return matchResult?.let {
             val (latitude, longitude) = it.destructured
             Pair(latitude.toDouble(), longitude.toDouble())

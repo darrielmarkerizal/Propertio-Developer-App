@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -24,6 +25,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.propertio.developer.NumericalUnitConverter
 import com.propertio.developer.PropertioDeveloperApplication
 import com.propertio.developer.R
@@ -32,10 +34,13 @@ import com.propertio.developer.api.DomainURL
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
+import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResponse
 import com.propertio.developer.carousel.CarouselAdapter
 import com.propertio.developer.carousel.ImageData
 import com.propertio.developer.database.project.ProjectTable
 import com.propertio.developer.databinding.ActivityProjectDetailBinding
+import com.propertio.developer.model.StatusProject
+import com.propertio.developer.project.form.ProjectFormActivity
 import com.propertio.developer.project.list.FileThumbnailAdapter
 import com.propertio.developer.unit.UnitDetailActivity
 import com.propertio.developer.unit.form.UnitFormActivity
@@ -67,6 +72,15 @@ class ProjectDetailActivity : AppCompatActivity() {
             fetchDetailData(projectId!!)
             unitRecycler(projectId!!)
             Log.d("ProjectDetailActivity", "Unit updated successfully")
+        }
+    }
+
+    private val launcherToEditProject = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            fetchDetailData(projectId!!)
+            Log.d("ProjectDetailActivity", "Project updated successfully")
         }
     }
 
@@ -153,6 +167,7 @@ class ProjectDetailActivity : AppCompatActivity() {
 
             projectData =  projectViewModel.getProjectById(idProject)
 
+            Log.d("ProjectDetailActivity", "projectData Location Coordinate: ${projectData.addressLatitude}, ${projectData.addressLongitude}")
             if ((projectData.addressLatitude != null) && (projectData.addressLongitude != null)) {
                 binding.buttonOpenMaps.setOnClickListener {
                     Log.d("ProjectDetailActivity", "Open Maps button clicked")
@@ -177,13 +192,21 @@ class ProjectDetailActivity : AppCompatActivity() {
         unitRecycler(idProject)
         observeUnits()
 
+        buttonMore()
 
 
 
 
 
 
+    }
 
+    private fun buttonMore() {
+        binding.toolbarContainer.buttonMore.visibility = View.VISIBLE
+
+        binding.toolbarContainer.buttonMore.setOnClickListener {
+            horizontalMoreButtonPopUpDetailProject(binding.toolbarContainer.buttonMore, 0)
+        }
     }
 
     private fun observeUnits() {
@@ -527,7 +550,7 @@ class ProjectDetailActivity : AppCompatActivity() {
     }
 
 
-    private fun horizontalMoreButtonPopUp(data: ProjectDetail.ProjectDeveloper.ProjectUnit, button: View, TAG : String = "PopUpMoreButton") {
+    private fun horizontalMoreButtonPopUp(data: ProjectDetail.ProjectDeveloper.ProjectUnit, button: View, dpValue : Int = 111, TAG : String = "PopUpMoreButton") {
         val popupInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = popupInflater.inflate(R.layout.dialog_pop_up_unit, null)
 
@@ -560,7 +583,82 @@ class ProjectDetailActivity : AppCompatActivity() {
         }
 
 
-        val dpValue = 111 // width in dp
+        val scale = resources.displayMetrics.density
+        val px =0 - (dpValue * scale + 0.5f).toInt()
+        Log.d(TAG, "horizontalMoreButtonPopUp: px: $px")
+        popupWindow.showAsDropDown(button, px, 0)
+
+        popupView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                // Remove the global layout listener
+                popupView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+
+                // Calculate the x-offset
+                val xOffset = button.width - popupView.width
+
+                popupWindow.update(button, xOffset, 0, -1, -1)
+            }
+        })
+    }
+
+    private fun horizontalMoreButtonPopUpDetailProject(button: View, dpValue : Int = 111, TAG : String = "PopUpMoreButton") {
+        val popupInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView = popupInflater.inflate(R.layout.dialog_pop_up_project, null)
+
+        // Create the PopupWindow
+        val popupWindow = PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+
+
+        popupWindow.isOutsideTouchable = true
+        popupWindow.isFocusable = true
+
+        popupView.findViewById<View>(R.id.divider_status_proyek_pop_up).visibility = View.GONE
+        popupView.findViewById<View>(R.id.text_view_status_proyek_pop_up).visibility = View.GONE
+        popupView.findViewById<View>(R.id.switch_proyek_pop_up).visibility = View.GONE
+
+
+        // Get the menu items
+        val buttonEdit = popupView.findViewById<AppCompatButton>(R.id.button_edit_proyek_pop_up)
+
+        buttonEdit.setOnClickListener {
+            Log.d(TAG, "horizontalMoreButtonPopUp: buttonEdit $projectId")
+
+            val intentToEdit = Intent(this@ProjectDetailActivity, ProjectFormActivity::class.java)
+            intentToEdit.putExtra("EDIT_PROJECT", projectId)
+            launcherToEditProject.launch(intentToEdit)
+            popupWindow.dismiss()
+        }
+
+        val buttonRepost = popupView.findViewById<AppCompatButton>(R.id.button_repost_proyek_pop_up)
+
+        buttonRepost.setOnClickListener {
+            popupWindow.dismiss()
+            projectId?.let {
+
+                developerApi.repostProject(projectId!!).enqueue(object : Callback<UpdateProjectResponse> {
+                    override fun onResponse(
+                        call: Call<UpdateProjectResponse>,
+                        response: Response<UpdateProjectResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.d(TAG, "onResponse: ${response.body()?.message}")
+                        } else {
+                            Log.d(TAG, "onResponse: ${response.errorBody()?.string()}")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UpdateProjectResponse>, t: Throwable) {
+                        Log.e(TAG, "onFailure: ", t)
+                    }
+
+                })
+
+            }
+
+
+        }
+
+
         val scale = resources.displayMetrics.density
         val px =0 - (dpValue * scale + 0.5f).toInt()
         Log.d(TAG, "horizontalMoreButtonPopUp: px: $px")
