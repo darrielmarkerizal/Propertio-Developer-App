@@ -26,6 +26,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 
 class DashboardFragment : Fragment() {
@@ -65,8 +66,16 @@ class DashboardFragment : Fragment() {
                         val messageCount: Int = dashboardResponse.data?.messageCount ?: 0
 
                         setCards(unitCount, projectCount, viewCount, leadCount, messageCount)
-                        setupViewChart(dashboardResponse.data?.views?.weekly ?: emptyList())
-                        setupLeadChart(dashboardResponse.data?.leads?.weekly ?: emptyList())
+
+                        val last7Days = generateLast7Days()
+                        val weeklyViews = dashboardResponse.data?.views?.weekly ?: emptyList()
+                        val weeklyLeads = dashboardResponse.data?.leads?.weekly ?: emptyList()
+
+                        val viewEntries = generateEntriesForLast7DaysViews(last7Days, weeklyViews)
+                        val leadEntries = generateEntriesForLast7DaysLeads(last7Days, weeklyLeads)
+
+                        setupViewChart(viewEntries, last7Days)
+                        setupLeadChart(leadEntries, last7Days)
                     }
                 }
             }
@@ -78,12 +87,7 @@ class DashboardFragment : Fragment() {
         })
     }
 
-    private fun setupViewChart(views: List<DashboardResponse.Data.Views.Weekly>) {
-        val entries = ArrayList<Entry>()
-        views.forEachIndexed { index, view ->
-            entries.add(Entry(index.toFloat(), view.total?.toFloat() ?: 0f))
-        }
-
+    private fun setupViewChart(entries: List<Entry>, last7Days: List<String>) {
         val gradientDrawable = GradientDrawable(
             GradientDrawable.Orientation.TOP_BOTTOM,
             intArrayOf(Color.RED, Color.TRANSPARENT)
@@ -106,15 +110,28 @@ class DashboardFragment : Fragment() {
         binding.chartDilihat.invalidate()
         binding.chartDilihat.description.isEnabled = false
 
+        binding.chartDilihat.setExtraOffsets(0f, 0f, 0f, 16f)
+
         // Set chart properties
         val xAxis: XAxis = binding.chartDilihat.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
 
-
         val yAxisLeft: YAxis = binding.chartDilihat.axisLeft
         val yAxisRight: YAxis = binding.chartDilihat.axisRight
 
-        xAxis.valueFormatter = IndexAxisValueFormatter(views.map { formatDate(it.date ?: "") })
+        val maxValue = entries.maxOfOrNull { it.y } ?: 0f
+
+        if (maxValue == 0f) {
+            yAxisLeft.axisMinimum = 0f
+            yAxisLeft.axisMaximum = 100f
+            yAxisLeft.setLabelCount(6, true)
+        } else {
+            yAxisLeft.resetAxisMinimum()
+            yAxisLeft.resetAxisMaximum()
+            yAxisLeft.setLabelCount(5, false)
+        }
+
+        xAxis.valueFormatter = IndexAxisValueFormatter(last7Days.map { formatDate(it) })
         yAxisLeft.valueFormatter = IntegerAxisValueFormatter()
         yAxisRight.setDrawLabels(false)
 
@@ -125,12 +142,7 @@ class DashboardFragment : Fragment() {
         yAxisRight.setDrawAxisLine(false)
     }
 
-    private fun setupLeadChart(leads: List<DashboardResponse.Data.Leads.Weekly>) {
-        val entries = ArrayList<Entry>()
-        leads.forEachIndexed { index, lead ->
-            entries.add(Entry(index.toFloat(), lead.total?.toFloat() ?: 0f))
-        }
-
+    private fun setupLeadChart(entries: List<Entry>, last7Days: List<String>) {
         val gradientDrawable = GradientDrawable(
             GradientDrawable.Orientation.TOP_BOTTOM,
             intArrayOf(Color.BLUE, Color.TRANSPARENT)
@@ -153,15 +165,27 @@ class DashboardFragment : Fragment() {
         binding.chartMenarik.invalidate()
         binding.chartMenarik.description.isEnabled = false
 
+        binding.chartMenarik.setExtraOffsets(0f, 0f, 0f, 16f)
+
         // Set chart properties
         val xAxis: XAxis = binding.chartMenarik.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
 
-
         val yAxisLeft: YAxis = binding.chartMenarik.axisLeft
         val yAxisRight: YAxis = binding.chartMenarik.axisRight
 
-        xAxis.valueFormatter = IndexAxisValueFormatter(leads.map { formatDate(it.date ?: "") })
+        val maxValue = entries.maxOfOrNull { it.y } ?: 0f
+
+        if (maxValue == 0f) {
+            yAxisLeft.axisMinimum = 0f
+            yAxisLeft.axisMaximum = 100f
+            yAxisLeft.setLabelCount(6, true)
+        } else {
+            yAxisLeft.axisMinimum = 0f
+        }
+
+
+        xAxis.valueFormatter = IndexAxisValueFormatter(last7Days.map { formatDate(it) })
         yAxisLeft.valueFormatter = IntegerAxisValueFormatter()
         yAxisRight.setDrawLabels(false)
 
@@ -199,5 +223,34 @@ class DashboardFragment : Fragment() {
         val outputFormat = SimpleDateFormat("dd/MM", Locale.getDefault())
         val date = inputFormat.parse(inputDate)
         return outputFormat.format(date)
+    }
+
+    private fun generateLast7Days(): List<String> {
+        val dates = mutableListOf<String>()
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        for (i in 0 until 7) {
+            dates.add(dateFormat.format(calendar.time))
+            calendar.add(Calendar.DAY_OF_YEAR, -1)
+        }
+        return dates.reversed()
+    }
+
+    private fun generateEntriesForLast7DaysViews(last7Days: List<String>, weeklyData: List<DashboardResponse.Data.Views.Weekly>): List<Entry> {
+        val entries = mutableListOf<Entry>()
+        last7Days.forEachIndexed { index, date ->
+            val dataForDay = weeklyData.find { it.date == date }
+            entries.add(Entry(index.toFloat(), dataForDay?.total?.toFloat() ?: 0f))
+        }
+        return entries
+    }
+
+    private fun generateEntriesForLast7DaysLeads(last7Days: List<String>, weeklyData: List<DashboardResponse.Data.Leads.Weekly>): List<Entry> {
+        val entries = mutableListOf<Entry>()
+        last7Days.forEachIndexed { index, date ->
+            val dataForDay = weeklyData.find { it.date == date }
+            entries.add(Entry(index.toFloat(), dataForDay?.total?.toFloat() ?: 0f))
+        }
+        return entries
     }
 }
