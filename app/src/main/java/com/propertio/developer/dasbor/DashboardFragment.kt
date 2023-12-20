@@ -2,6 +2,7 @@ package com.propertio.developer.dasbor
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.IFillFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.propertio.developer.R
@@ -82,7 +84,19 @@ class DashboardFragment : Fragment() {
             entries.add(Entry(index.toFloat(), view.total?.toFloat() ?: 0f))
         }
 
+        val gradientDrawable = GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(Color.RED, Color.TRANSPARENT)
+        )
+
         val dataSet = LineDataSet(entries, "Views")
+        dataSet.valueTextSize = 10f
+        dataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
+        dataSet.setDrawFilled(true)
+        dataSet.fillFormatter = IFillFormatter { _, _ -> binding.chartDilihat.axisLeft.axisMinimum }
+        dataSet.fillColor = Color.RED
+        dataSet.fillDrawable = gradientDrawable
+        dataSet.fillAlpha = 85
         dataSet.color = Color.RED
         dataSet.valueFormatter = IntegerValueFormatter()
 
@@ -95,18 +109,20 @@ class DashboardFragment : Fragment() {
         // Set chart properties
         val xAxis: XAxis = binding.chartDilihat.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.setLabelCount(7, true)
+
 
         val yAxisLeft: YAxis = binding.chartDilihat.axisLeft
         val yAxisRight: YAxis = binding.chartDilihat.axisRight
 
-        xAxis.valueFormatter = IndexAxisValueFormatter(views.mapIndexed { index, _ -> formatDate(views[index].date ?: "") })
+        xAxis.valueFormatter = IndexAxisValueFormatter(views.map { formatDate(it.date ?: "") })
         yAxisLeft.valueFormatter = IntegerAxisValueFormatter()
         yAxisRight.setDrawLabels(false)
 
         xAxis.setDrawGridLines(false)
         xAxis.setDrawLabels(true)
-        yAxisRight.setDrawLabels(false)
+        yAxisLeft.setDrawGridLines(false)
+        yAxisRight.setDrawGridLines(false)
+        yAxisRight.setDrawAxisLine(false)
     }
 
     private fun setupLeadChart(leads: List<DashboardResponse.Data.Leads.Weekly>) {
@@ -115,7 +131,19 @@ class DashboardFragment : Fragment() {
             entries.add(Entry(index.toFloat(), lead.total?.toFloat() ?: 0f))
         }
 
+        val gradientDrawable = GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(Color.BLUE, Color.TRANSPARENT)
+        )
+
         val dataSet = LineDataSet(entries, "Leads")
+        dataSet.valueTextSize = 10f
+        dataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
+        dataSet.setDrawFilled(true)
+        dataSet.fillFormatter = IFillFormatter { _, _ -> binding.chartMenarik.axisLeft.axisMinimum }
+        dataSet.fillColor = Color.BLUE
+        dataSet.fillDrawable = gradientDrawable
+        dataSet.fillAlpha = 85
         dataSet.color = Color.BLUE
         dataSet.valueFormatter = IntegerValueFormatter()
 
@@ -128,7 +156,6 @@ class DashboardFragment : Fragment() {
         // Set chart properties
         val xAxis: XAxis = binding.chartMenarik.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.setLabelCount(7, true)
 
 
         val yAxisLeft: YAxis = binding.chartMenarik.axisLeft
@@ -140,7 +167,9 @@ class DashboardFragment : Fragment() {
 
         xAxis.setDrawGridLines(false)
         xAxis.setDrawLabels(true)
-        yAxisRight.setDrawLabels(false)
+        yAxisLeft.setDrawGridLines(false)
+        yAxisRight.setDrawGridLines(false)
+        yAxisRight.setDrawAxisLine(false)
     }
 
     private fun setCards(unitCount: Int, projectCount: Int, viewCount: Int, leadCount: Int, messageCount: Int) {
