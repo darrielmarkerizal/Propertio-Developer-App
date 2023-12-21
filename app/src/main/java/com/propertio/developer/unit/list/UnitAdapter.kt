@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.propertio.developer.NumericalUnitConverter
@@ -15,11 +17,36 @@ import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
 import com.propertio.developer.databinding.TemplateCardUnitBinding
 
 class UnitAdapter(
-    private val unitsList : LiveData<List<ProjectDetail.ProjectDeveloper.ProjectUnit>>,
     private val onClickUnit: (ProjectDetail.ProjectDeveloper.ProjectUnit) -> Unit,
     private val onClickMore: (ProjectDetail.ProjectDeveloper.ProjectUnit, View) -> Unit,
-    private val onDelete: (ProjectDetail.ProjectDeveloper.ProjectUnit) -> Unit
-) : RecyclerView.Adapter<UnitAdapter.ItemUnitViewHolder>(){
+    private val onDelete: (ProjectDetail.ProjectDeveloper.ProjectUnit) -> Unit,
+    private val onClickUnitLaku : (ProjectDetail.ProjectDeveloper.ProjectUnit) -> Unit
+) : ListAdapter<ProjectDetail.ProjectDeveloper.ProjectUnit  , UnitAdapter.ItemUnitViewHolder>(UserDiffUtil()){
+
+    class UserDiffUtil : DiffUtil.ItemCallback<ProjectDetail.ProjectDeveloper.ProjectUnit>() {
+        override fun areItemsTheSame(oldItem: ProjectDetail.ProjectDeveloper.ProjectUnit, newItem: ProjectDetail.ProjectDeveloper.ProjectUnit): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(
+            oldItem: ProjectDetail.ProjectDeveloper.ProjectUnit,
+            newItem: ProjectDetail.ProjectDeveloper.ProjectUnit
+        ): Boolean {
+            return (
+                    oldItem.id == newItem.id &&
+                    oldItem.title == newItem.title &&
+                    oldItem.price == newItem.price &&
+                    oldItem.bedroom == newItem.bedroom &&
+                    oldItem.bathroom == newItem.bathroom &&
+                    oldItem.surfaceArea == newItem.surfaceArea &&
+                    oldItem.buildingArea == newItem.buildingArea &&
+                    oldItem.stock == newItem.stock &&
+                    oldItem.photoURL == newItem.photoURL
+                    )
+        }
+
+    }
+
     inner class ItemUnitViewHolder(
         private val binding : TemplateCardUnitBinding,
     ) : RecyclerView.ViewHolder(binding.root){
@@ -48,6 +75,10 @@ class UnitAdapter(
                     onClickMore(unit, it)
                 }
 
+                binding.buttonUnitLaku.setOnClickListener {
+                    onClickUnitLaku(unit)
+                }
+
 
             }
         }
@@ -72,7 +103,6 @@ class UnitAdapter(
 
 
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemUnitViewHolder {
         val binding = TemplateCardUnitBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -83,10 +113,8 @@ class UnitAdapter(
         return ItemUnitViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = unitsList.value?.size ?: 0
-
     override fun onBindViewHolder(holder: ItemUnitViewHolder, position: Int) {
-        holder.bind(unitsList.value!![position])
+        holder.bind(getItem(position))
     }
 
 

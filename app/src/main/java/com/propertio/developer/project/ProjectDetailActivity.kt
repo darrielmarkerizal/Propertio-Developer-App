@@ -35,10 +35,12 @@ import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
 import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResponse
+import com.propertio.developer.api.developer.unitmanagement.UnitOrderRequest
 import com.propertio.developer.carousel.CarouselAdapter
 import com.propertio.developer.carousel.ImageData
 import com.propertio.developer.database.project.ProjectTable
 import com.propertio.developer.databinding.ActivityProjectDetailBinding
+import com.propertio.developer.dialog.DialogUnitLaku
 import com.propertio.developer.model.StatusProject
 import com.propertio.developer.project.form.ProjectFormActivity
 import com.propertio.developer.project.list.FileThumbnailAdapter
@@ -46,7 +48,9 @@ import com.propertio.developer.unit.UnitDetailActivity
 import com.propertio.developer.unit.form.UnitFormActivity
 import com.propertio.developer.unit.list.UnitAdapter
 import com.propertio.developer.unit_management.UpdateUnitResponse
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -91,9 +95,60 @@ class ProjectDetailActivity : AppCompatActivity() {
     private lateinit var dots : ArrayList<TextView>
     private lateinit var projectViewModel: ProjectViewModel
 
-    private lateinit var unitAdapter: UnitAdapter
-    private val unitList : MutableLiveData<List<ProjectDetail.ProjectDeveloper.ProjectUnit>> by lazy {
-        MutableLiveData<List<ProjectDetail.ProjectDeveloper.ProjectUnit>>()
+    private val unitAdapter by lazy {
+        UnitAdapter(
+            onClickUnit = {
+                if (projectId != null) {
+                    Log.d("onClickUnitCard", "Unit clicked: ${it.id} & ${projectId}")
+                    val intentToDetail = Intent(this, UnitDetailActivity::class.java)
+                    intentToDetail.putExtra(PROJECT_DETAIL_UID, it.id)
+                    intentToDetail.putExtra(PROJECT_DETAIL_PID, projectId)
+                    launcherToDetailUnit.launch(intentToDetail)
+                } else {
+                    Log.w("onClickUnitCard", "projectId is null")
+                }
+            },
+            onClickMore = { data, buttonBinding ->
+                Log.d("onClickMore", "More clicked: ${data.id}")
+                horizontalMoreButtonPopUp(data, buttonBinding)
+            },
+            onDelete = { data ->
+                Log.d("onClickDelete", "Delete clicked: ${data.id}")
+                deleteUnit(projectId!!, data.id!!)
+            },
+            onClickUnitLaku = { data ->
+                Log.d("onClickUnitLaku", "Unit Laku clicked: ${data.id}")
+                val unitStock = data.stock ?: "0"
+
+                DialogUnitLaku(
+                    stokUnit = unitStock.toInt(),
+                    unitLakuListener = {
+                        lifecycleScope.launch {
+                            val unitOrderRequest = UnitOrderRequest(
+                                unitId = data.id!!,
+                                orderCount = it
+                            )
+
+                            try {
+                                val response = withContext(Dispatchers.IO) {developerApi.updateUnitOrder(projectId!!, unitOrderRequest).execute()}
+                                if (response.isSuccessful) {
+                                    Toast.makeText(this@ProjectDetailActivity, "Berhasil melakukan update Order Unit", Toast.LENGTH_SHORT).show()
+                                    updateUnit()
+                                } else {
+                                    Toast.makeText(this@ProjectDetailActivity, "Gagal melakukan update Order Unit", Toast.LENGTH_SHORT).show()
+                                    Log.e("ProjectDetailActivity", "Failed to update unit order: ${response.errorBody()}")
+                                }
+                            } catch (e: Exception) {
+                                Toast.makeText(this@ProjectDetailActivity, "Gagal melakukan update Order Unit", Toast.LENGTH_SHORT).show()
+                                Log.e("ProjectDetailActivity", "Failed to update unit order: ${e.message}")
+                            }
+
+
+                        }
+                    }
+                ).show(supportFragmentManager, "DialogUnitLaku")
+            }
+        )
     }
 
     private val launcherToCreateUnit = registerForActivityResult(
@@ -190,16 +245,31 @@ class ProjectDetailActivity : AppCompatActivity() {
 
 
         unitRecycler(idProject)
-        observeUnits()
 
         buttonMore()
 
 
 
+        binding.swipeRefreshLayoutDetailProject.setOnRefreshListener {
+            lifecycleScope.launch {
+                refreshPage()
+                binding.swipeRefreshLayoutDetailProject.isRefreshing = false
+            }
+        }
 
 
 
     }
+
+    private fun refreshPage() {
+        if (projectId == null) {
+            Log.w("ProjectDetailActivity", "projectId is null")
+            return
+        }
+        fetchDetailData(projectId!!)
+    }
+
+
 
     private fun buttonMore() {
         binding.toolbarContainer.buttonMore.visibility = View.VISIBLE
@@ -209,12 +279,38 @@ class ProjectDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeUnits() {
-        Log.d("ProjectDetailActivity", "observeUnits: $unitList")
-        unitList.observe(this) {
-            val adapter = unitAdapter
-            binding.recyclerViewUnit.adapter = adapter
-        }
+    private fun updateUnit() {
+        developerApi.getProjectDetail(projectId!!).enqueue(object: Callback<ProjectDetail> {
+            override fun onResponse(call: Call<ProjectDetail>, response: Response<ProjectDetail>) {
+
+                if (response.isSuccessful) {
+                    val project = response.body()?.data
+                    if (project != null) {
+                        unitAdapter.submitList(project.units)
+                        Log.i("ProjectDetailActivity", "Success adding unit. Units is not null ${project.units?.size} ${project.units?.size}")
+                    }
+                    else {
+                        Log.w("ProjectDetailActivity", "project is null")
+                    }
+                }
+                else {
+                    Log.w("ProjectDetailActivity", "response is not successful")
+                }
+
+
+            }
+
+            override fun onFailure(call: Call<ProjectDetail>, t: Throwable) {
+                // TODO: Handle Failure
+                Log.e("ProjectDetailActivity", "onFailure: $t")
+
+
+
+            }
+
+
+        })
+
     }
 
 
@@ -224,12 +320,11 @@ class ProjectDetailActivity : AppCompatActivity() {
 
         developerApi.getProjectDetail(id).enqueue(object: Callback<ProjectDetail> {
             override fun onResponse(call: Call<ProjectDetail>, response: Response<ProjectDetail>) {
-                // TODO: Handle Response
 
                 if (response.isSuccessful) {
                     val project = response.body()?.data
                     if (project != null) {
-                        unitList.postValue(project.units)
+                        unitAdapter.submitList(project.units)
                         setUnitRecycler()
                         Log.i("ProjectDetailActivity", "Success adding unit. Units is not null")
                     }
@@ -260,33 +355,11 @@ class ProjectDetailActivity : AppCompatActivity() {
 
 
     private fun setUnitRecycler() {
-        Log.d("ProjectDetailActivity", "setUnitRecycler: $unitList")
-        unitAdapter = UnitAdapter(
-            unitList,
-            onClickUnit = {
-                if (projectId != null) {
-                    Log.d("onClickUnitCard", "Unit clicked: ${it.id} & ${projectId}")
-                    val intentToDetail = Intent(this, UnitDetailActivity::class.java)
-                    intentToDetail.putExtra(PROJECT_DETAIL_UID, it.id)
-                    intentToDetail.putExtra(PROJECT_DETAIL_PID, projectId)
-                    launcherToDetailUnit.launch(intentToDetail)
-                } else {
-                    Log.w("onClickUnitCard", "projectId is null")
-                }
-            },
-            onClickMore = { data, buttonBinding ->
-                Log.d("onClickMore", "More clicked: ${data.id}")
-                horizontalMoreButtonPopUp(data, buttonBinding)
-            },
-            onDelete = { data ->
-                Log.d("onClickDelete", "Delete clicked: ${data.id}")
-                deleteUnit(projectId!!, data.id!!)
-            }
-        )
         binding.recyclerViewUnit.apply {
             adapter = unitAdapter
             layoutManager = LinearLayoutManager(this@ProjectDetailActivity)
         }
+        updateUnit()
     }
 
 
