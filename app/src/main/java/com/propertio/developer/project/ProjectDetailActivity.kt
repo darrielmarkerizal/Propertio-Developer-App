@@ -93,6 +93,7 @@ class ProjectDetailActivity : AppCompatActivity() {
     private val carouselList = ArrayList<ImageData>()
     private lateinit var dots : ArrayList<TextView>
     private lateinit var projectViewModel: ProjectViewModel
+    private var mapsLink: String = ""
 
     private val unitAdapter by lazy {
         UnitAdapter(
@@ -102,6 +103,7 @@ class ProjectDetailActivity : AppCompatActivity() {
                     val intentToDetail = Intent(this, UnitDetailActivity::class.java)
                     intentToDetail.putExtra(PROJECT_DETAIL_UID, it.id)
                     intentToDetail.putExtra(PROJECT_DETAIL_PID, projectId)
+                    intentToDetail.putExtra(PROJECT_MAPS_LINK, mapsLink)
                     launcherToDetailUnit.launch(intentToDetail)
                 } else {
                     Log.w("onClickUnitCard", "projectId is null")
@@ -219,16 +221,16 @@ class ProjectDetailActivity : AppCompatActivity() {
             fetchDetailData(projectData.id)
             // Refresh ProjectData
 
-            projectData =  projectViewModel.getProjectById(idProject)
+            projectData = withContext(Dispatchers.IO) {projectViewModel.getProjectById(idProject)}
 
             Log.d("ProjectDetailActivity", "projectData Location Coordinate: ${projectData.addressLatitude}, ${projectData.addressLongitude}")
             if ((projectData.addressLatitude != null) && (projectData.addressLongitude != null)) {
                 binding.buttonOpenMaps.setOnClickListener {
                     Log.d("ProjectDetailActivity", "Open Maps button clicked")
-
+                    mapsLink = "https://www.google.com/maps/search/?api=1&query=${projectData.addressLatitude},${projectData.addressLongitude}"
                     val intentToMaps = Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse("https://www.google.com/maps/search/?api=1&query=${projectData.addressLatitude},${projectData.addressLongitude}")
+                        Uri.parse(mapsLink)
                     )
                     Log.d("ProjectDetailActivity", "intentToMaps: ${projectData.addressLatitude}, ${projectData.addressLongitude}")
                     startActivity(intentToMaps)
@@ -391,6 +393,22 @@ class ProjectDetailActivity : AppCompatActivity() {
                         loadDocument(project.projectDocuments)
 
                         updateTable(project)
+
+                        if (project.address?.latitude != null && project.address?.longitude != null) {
+                            mapsLink = "https://www.google.com/maps/search/?api=1&query=${project.address!!.latitude!!},${project.address!!.longitude!!}"
+
+                            binding.buttonOpenMaps.setOnClickListener {
+                                Log.d("ProjectDetailActivity", "Open Maps button clicked")
+                                val intentToMaps = Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse(mapsLink)
+                                )
+                                startActivity(intentToMaps)
+                            }
+
+                        } else {
+                            Log.w("ProjectDetailActivity", "addressLatitude or addressLongitude is null")
+                        }
 
                         if (project.projectPhotos.isNullOrEmpty()) {
                             Log.w("ProjectDetailActivity", "projectPhotos is null")
@@ -792,6 +810,7 @@ class ProjectDetailActivity : AppCompatActivity() {
         const val PROJECT_ID = "project_id"
         const val PROJECT_DETAIL_UID = "project_detail_uid"
         const val PROJECT_DETAIL_PID = "project_detail_pid"
+        const val PROJECT_MAPS_LINK = "project_maps_link"
     }
 
     private fun deleteUnit(projectId: Int, unitId: Int) {
