@@ -32,7 +32,7 @@ class UnitDetailResponse : DefaultResponse() {
         @SerializedName("unitVirtualTour")
         @Expose
         private var _unitVirtualTour: JsonElement? = null
-
+        //TODO: Aslinya tipe data objek bukan Array, nunggu fix dari backend
         val unitVirtualTour: Any?
             get() {
                 return when {
@@ -51,12 +51,34 @@ class UnitDetailResponse : DefaultResponse() {
 
         @SerializedName("unitVideo")
         @Expose
-        var unitVideo: ProjectVideo? = null
+        var unitVideo: UnitVideo? = null
 
         @SerializedName("unitDocuments")
         @Expose
         var unitDocuments: List<UnitDocument>? = null
-        // TODO: Define type of unitDocuments
+
+        data class UnitVideo (
+            @SerializedName("id")
+            val id: Int,
+
+            @SerializedName("unit_id")
+            val unitId: String,
+
+            @SerializedName("vendor")
+            val vendor: String,
+
+            @SerializedName("link")
+            val link: String,
+
+            @SerializedName("thumbnail")
+            val thumbnail: String,
+
+            @SerializedName("created_at")
+            val createdAt: String,
+
+            @SerializedName("updated_at")
+            val updatedAt: String
+        )
 
 
         class UnitPhoto {

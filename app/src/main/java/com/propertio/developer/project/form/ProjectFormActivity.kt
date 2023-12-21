@@ -202,7 +202,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
             )
             if (data.projectDocuments?.isNotEmpty() == true) {
                 projectMedia.isDocumentNotEdited = true
-                projectMedia.add(
+                projectMedia.addDocument(
                     document = ProjectDocument(
                         id = data.projectDocuments?.get(0)?.id,
                         projectId = data.projectDocuments?.get(0)?.projectId,

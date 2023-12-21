@@ -20,6 +20,7 @@ class UnggahFotoAdapter(
     private val onClickButtonCover : (LitePhotosModel) -> Unit,
     private val onClickDelete : (LitePhotosModel) -> Unit,
     private val onClickSaveCaption : (LitePhotosModel) -> Unit,
+    private val showCoverButton : Boolean = true,
 ) : RecyclerView.Adapter<UnggahFotoAdapter.UnggahFotoViewHolder>() {
     inner class UnggahFotoViewHolder(
         private val binding : ItemUnggahPhotoBinding
@@ -57,7 +58,7 @@ class UnggahFotoAdapter(
                     editTextCaptionPhotoCard.setText(photosModel.caption)
                 }
 
-
+                buttonCoverPhotoCard.visibility = if (showCoverButton) View.VISIBLE else View.GONE
             }
         }
 

@@ -27,8 +27,8 @@ import com.propertio.developer.databinding.FragmentCreateUnitMediaBinding
 import com.propertio.developer.dialog.TutorialYoutubeDialog
 import com.propertio.developer.model.Caption
 import com.propertio.developer.model.LitePhotosModel
+import com.propertio.developer.project.list.UnggahFotoAdapter
 import com.propertio.developer.unit.UnitMediaViewModel
-import com.propertio.developer.unit.list.UnggahFotoAdapter
 import com.propertio.developer.unit_management.UpdateUnitResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -57,8 +57,62 @@ class CreateUnitMediaFragment : Fragment() {
 
     private val unitMediaViewModdel : UnitMediaViewModel by activityViewModels()
 
-    private lateinit var photosAdapter: UnggahFotoAdapter
-    private lateinit var denahAdapter: UnggahFotoAdapter
+    private val photosAdapter by lazy {
+        UnggahFotoAdapter(
+            photosList = emptyList<LitePhotosModel>().toMutableList(),
+            onClickButtonCover = {
+                if (it.projectId != null && it.id != null) {
+                    updateCoverPhoto(it.projectId, it.id)
+                } else {
+                    Toast.makeText(context, "Gagal Mengubah Cover photo", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onClickDelete = {
+                if (it.projectId != null && it.id != null) {
+                    Log.d("CreateUnitMediaFragment", "onCreateView: ${it.projectId} and ${it.id}")
+                    deletePhoto(it.projectId, it.id)
+                } else {
+                    Toast.makeText(context, "Gagal Menghapus Photo", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onClickSaveCaption = {
+                if (it.projectId != null && it.id != null && it.caption != null) {
+                    updateCaption(it.projectId, it.id, it.caption!!)
+                } else {
+                    Toast.makeText(context, "Gagal Mengubah Caption", Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
+    }
+
+    private val denahAdapter by lazy {
+        UnggahFotoAdapter(
+            showCoverButton = false,
+            photosList = emptyList<LitePhotosModel>().toMutableList(),
+            onClickButtonCover = {
+                if (it.projectId != null && it.id != null) {
+                    updateCoverPhoto(it.projectId, it.id)
+                } else {
+                    Toast.makeText(context, "Gagal Mengubah Cover photo", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onClickDelete = {
+                if (it.projectId != null && it.id != null) {
+                    Log.d("CreateUnitMediaFragment", "onCreateView: ${it.projectId} and ${it.id}")
+                    deletePhoto(it.projectId, it.id)
+                } else {
+                    Toast.makeText(context, "Gagal Menghapus Photo", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onClickSaveCaption = {
+                if (it.projectId != null && it.id != null && it.caption != null) {
+                    updateCaption(it.projectId, it.id, it.caption!!)
+                } else {
+                    Toast.makeText(context, "Gagal Mengubah Caption", Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
+    }
 
     private var documentUri : Uri? = null
     private var documentLauncher = registerForActivityResult(
@@ -122,60 +176,7 @@ class CreateUnitMediaFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        photosAdapter = UnggahFotoAdapter(
-            showCoverButton = true,
-            photosList = unitMediaViewModdel.unitPhoto.value ?: listOf(),
-            onClickButtonCover = {
-                if (it.projectId != null && it.id != null) {
-                    updateCoverPhoto(it.projectId, it.id)
-                } else {
-                    Toast.makeText(context, "Gagal Mengubah Cover photo", Toast.LENGTH_SHORT).show()
-                }
-            },
-            onClickDelete = {
-                if (it.projectId != null && it.id != null) {
-                    Log.d("CreateUnitMediaFragment", "onCreateView: ${it.projectId} and ${it.id}")
-                    deletePhoto(it.projectId, it.id)
-                } else {
-                    Toast.makeText(context, "Gagal Menghapus Photo", Toast.LENGTH_SHORT).show()
-                }
-            },
-            onClickSaveCaption = {
-                if (it.projectId != null && it.id != null && it.caption != null) {
-                    updateCaption(it.projectId, it.id, it.caption!!)
-                } else {
-                    Toast.makeText(context, "Gagal Mengubah Caption", Toast.LENGTH_SHORT).show()
-                }
-            }
-        )
-
-        denahAdapter = UnggahFotoAdapter(
-            showCoverButton = false,
-            photosList = unitMediaViewModdel.unitDenah.value ?: listOf(),
-            onClickButtonCover = {
-                if (it.projectId != null && it.id != null) {
-                    updateCoverPhoto(it.projectId, it.id)
-                } else {
-                    Toast.makeText(context, "Gagal Mengubah Cover photo", Toast.LENGTH_SHORT).show()
-                }
-            },
-            onClickDelete = {
-                if (it.projectId != null && it.id != null) {
-                    Log.d("CreateUnitMediaFragment", "onCreateView: ${it.projectId} and ${it.id}")
-                    deletePhoto(it.projectId, it.id)
-                } else {
-                    Toast.makeText(context, "Gagal Menghapus Photo", Toast.LENGTH_SHORT).show()
-                }
-            },
-            onClickSaveCaption = {
-                if (it.projectId != null && it.id != null && it.caption != null) {
-                    updateCaption(it.projectId, it.id, it.caption!!)
-                } else {
-                    Toast.makeText(context, "Gagal Mengubah Caption", Toast.LENGTH_SHORT).show()
-                }
-            }
-        )
+    ): View {
         return binding.root
     }
 
@@ -269,14 +270,6 @@ class CreateUnitMediaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModel = ViewModelProvider(this).get(UnitFormViewModel::class.java)
-
-        if (viewModel.isAlreadyUploaded.value == true) {
-            lifecycleScope.launch {
-                fetchUnitPhotos(viewModel.projectId ?: 0, viewModel.unitId ?: 0)
-            }
-        }
-
         binding.buttonContohModelMediaUnit.setOnClickListener{
             val url = "https://immersive.propertio.id/unit-model/u-000001/index.html"
             val intent = Intent(Intent.ACTION_VIEW)
@@ -328,17 +321,19 @@ class CreateUnitMediaFragment : Fragment() {
             pickDocument()
         }
 
-        activityBinding?.floatingButtonBack?.setOnClickListener {
-            formActivity?.onBackButtonUnitManagementClick()
+        loadViewModelData()
+
+        activityBinding.floatingButtonBack.setOnClickListener {
+            formActivity.onBackButtonUnitManagementClick()
         }
 
-        activityBinding?.floatingButtonNext?.setOnClickListener {
+        activityBinding.floatingButtonNext.setOnClickListener {
             val retro = Retro(TokenManager(requireContext()).token)
                 .getRetroClientInstance()
                 .create(DeveloperApi::class.java)
 
-            val projectId = formActivity?.unitFormViewModel?.projectId.toString()
-            val unitId = formActivity?.unitId ?: 0
+            val projectId = formActivity.unitFormViewModel.projectId.toString()
+            val unitId = formActivity.unitId ?: 0
             val youtubeLink = binding.editTextLinkYoutubeMediaUnit.text.toString()
             val virtualTour = binding.editLinkVirtualTourUnit.text.toString()
             val virtualTourLink = binding.editLinkVirtualTourUnit.text.toString()
@@ -429,13 +424,34 @@ class CreateUnitMediaFragment : Fragment() {
         }
     }
 
+    private fun loadViewModelData() {
+        binding.editTextNamaVirtualTourUnit.setText(unitMediaViewModdel.virtualTourName)
+        binding.editTextLinkYoutubeMediaUnit.setText(unitMediaViewModdel.videoLink)
+        binding.editLinkVirtualTourUnit.setText(unitMediaViewModdel.virtualTourLink)
+        binding.editLinkModelUnit.setText(unitMediaViewModdel.linkModel)
+
+        Log.d("CreateUnitMediaFragment", "loadViewModelData: ${unitMediaViewModdel.videoLink}")
+        Log.d("CreateUnitMediaFragment", "loadViewModelData: ${unitMediaViewModdel.virtualTourLink}")
+        Log.d("CreateUnitMediaFragment", "loadViewModelData: ${unitMediaViewModdel.linkModel}")
+
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                val projectId = formActivity.unitFormViewModel.projectId
+                val unitId = formActivity.unitId
+                if (projectId != null && unitId != null) {
+                    fetchUnitPhotos(projectId, unitId)
+                }
+            }
+        }
+    }
+
     private fun uploadPhotos(uri: Uri) {
         Log.d("CreateUnitMediaFragment", "uploadPhotos: $uri")
 
-        val unitId = formActivity?.unitId ?: 0
+        val unitId = formActivity.unitId ?: 0
         val unitIdBody = unitId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
-        val projectId = formActivity?.unitFormViewModel?.projectId?: 0
+        val projectId = formActivity.unitFormViewModel?.projectId?: 0
         val projectIdBody = projectId.toString()
 
         lifecycleScope.launch {
@@ -630,7 +646,7 @@ class CreateUnitMediaFragment : Fragment() {
                             unitMediaViewModdel.unitPhoto.value = unitPhotos.map {
                                 LitePhotosModel(
                                     id = it.id,
-                                    projectId = formActivity?.unitFormViewModel?.projectId?.toString(),
+                                    projectId = formActivity.unitFormViewModel.projectId?.toString(),
                                     filePath = it.filename,
                                     isCover = it.isCover!!.toInt(),
                                     type = it.type,
@@ -693,11 +709,10 @@ class CreateUnitMediaFragment : Fragment() {
 
     private fun photosPreviewObserver() {
         unitMediaViewModdel.unitPhoto.observe(viewLifecycleOwner) {
-            val sortedPhotos = it.sortedByDescending { photo -> photo.isCover }
-            photosAdapter.photosList = sortedPhotos
-            binding.recyclerViewListUnggahFoto.adapter = photosAdapter
 
-            if (sortedPhotos.isNotEmpty()) {
+            photosAdapter.updateList(it ?: emptyList())
+
+            if (it != null && it.isNotEmpty()) {
                 binding.recyclerViewListUnggahFoto.visibility = View.VISIBLE
             } else {
                 binding.recyclerViewListUnggahFoto.visibility = View.GONE
@@ -707,11 +722,10 @@ class CreateUnitMediaFragment : Fragment() {
 
     private fun denahPreviewObserver() {
         unitMediaViewModdel.unitDenah.observe(viewLifecycleOwner) {
-            val sortedPlan = it.sortedByDescending { plan -> plan.isCover  }
-            denahAdapter.photosList = sortedPlan
-            binding.recyclerViewListUnggahDenah.adapter = denahAdapter
 
-            if (sortedPlan.isNotEmpty()) {
+            denahAdapter.updateList(it ?: emptyList())
+
+            if (it != null && it.isNotEmpty()) {
                 binding.recyclerViewListUnggahDenah.visibility = View.VISIBLE
             } else {
                 binding.recyclerViewListUnggahDenah.visibility = View.GONE
@@ -781,8 +795,8 @@ class CreateUnitMediaFragment : Fragment() {
     }
 
     private fun deletePreviousDocument() {
-        val projectId = formActivity?.unitFormViewModel?.projectId.toString()
-        developerApi.deleteUnitDocument(projectId, unitMediaViewModdel.document!!.id!!).enqueue(object : Callback<UpdateUnitResponse> {
+        val unitId = formActivity.unitFormViewModel.unitId.toString()
+        developerApi.deleteUnitDocument(unitId, unitMediaViewModdel.document!!.id!!).enqueue(object : Callback<UpdateUnitResponse> {
             override fun onResponse(
                 call: Call<UpdateUnitResponse>,
                 response: Response<UpdateUnitResponse>

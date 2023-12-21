@@ -135,8 +135,8 @@ class UnitDetailActivity : AppCompatActivity() {
             loadImage(data.unitPhotos)
         }
         withContext(Dispatchers.Main) {
-            Log.d("UnitDetailActivity", "loadVideo: ${data.unitVideo?.linkVideoURL}")
-            loadVideo(data.unitVideo?.linkVideoURL)
+            Log.d("UnitDetailActivity", "loadVideo: ${data.unitVideo?.link}")
+            loadVideo(data.unitVideo?.link)
         }
     }
 
