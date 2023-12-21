@@ -654,6 +654,43 @@ class ProjectDetailActivity : AppCompatActivity() {
             popupWindow.dismiss()
         }
 
+        val isiUnitLaku = popupView.findViewById<TextView>(R.id.button_isi_unit_laku_pop_up)
+
+        isiUnitLaku.setOnClickListener {
+            popupWindow.dismiss()
+
+            val unitStock = data.stock ?: "0"
+
+            DialogUnitLaku(
+                stokUnit = unitStock.toInt(),
+                unitLakuListener = {
+                    lifecycleScope.launch {
+                        val unitOrderRequest = UnitOrderRequest(
+                            unitId = data.id!!,
+                            orderCount = it
+                        )
+
+                        try {
+                            val response = withContext(Dispatchers.IO) {developerApi.updateUnitOrder(projectId!!, unitOrderRequest).execute()}
+                            if (response.isSuccessful) {
+                                Toast.makeText(this@ProjectDetailActivity, "Berhasil melakukan update Order Unit", Toast.LENGTH_SHORT).show()
+                                updateUnit()
+                            } else {
+                                Toast.makeText(this@ProjectDetailActivity, "Gagal melakukan update Order Unit", Toast.LENGTH_SHORT).show()
+                                Log.e("ProjectDetailActivity", "Failed to update unit order: ${response.errorBody()}")
+                            }
+                        } catch (e: Exception) {
+                            Toast.makeText(this@ProjectDetailActivity, "Gagal melakukan update Order Unit", Toast.LENGTH_SHORT).show()
+                            Log.e("ProjectDetailActivity", "Failed to update unit order: ${e.message}")
+                        }
+
+
+                    }
+                }
+            ).show(supportFragmentManager, "DialogUnitLaku")
+
+        }
+
 
         val scale = resources.displayMetrics.density
         val px =0 - (dpValue * scale + 0.5f).toInt()
