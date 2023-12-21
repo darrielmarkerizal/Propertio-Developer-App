@@ -73,8 +73,7 @@ class ProjectDetailActivity : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
-            fetchDetailData(projectId!!)
-            unitRecycler(projectId!!)
+            updateUnit()
             Log.d("ProjectDetailActivity", "Unit updated successfully")
         }
     }
