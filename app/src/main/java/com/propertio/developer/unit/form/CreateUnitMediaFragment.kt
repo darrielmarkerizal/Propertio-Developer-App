@@ -400,7 +400,6 @@ class CreateUnitMediaFragment : Fragment() {
                 ) {
                     if (response.isSuccessful) {
                         Log.d("CreateUnitMediaFragment", "onResponse: ${response.body()}")
-                        Toast.makeText(requireActivity(), "Berhasil menambahkan media unit", Toast.LENGTH_SHORT).show()
                     } else {
                         Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse: ${response.body()}")
                         Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 2: ${response.errorBody()?.string()}")
