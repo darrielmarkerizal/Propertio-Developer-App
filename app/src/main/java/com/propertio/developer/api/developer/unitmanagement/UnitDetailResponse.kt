@@ -1,5 +1,7 @@
 package com.propertio.developer.api.developer.unitmanagement
 
+import com.google.gson.Gson
+import com.google.gson.JsonElement
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.propertio.developer.api.models.DefaultResponse
@@ -29,7 +31,23 @@ class UnitDetailResponse : DefaultResponse() {
 
         @SerializedName("unitVirtualTour")
         @Expose
-        var unitVirtualTour: List<UnitVirtualTour>? = null
+        private var _unitVirtualTour: JsonElement? = null
+
+        val unitVirtualTour: Any?
+            get() {
+                return when {
+                    _unitVirtualTour?.isJsonObject == true -> {
+                        val gson = Gson()
+                        gson.fromJson(_unitVirtualTour, UnitVirtualTour::class.java)
+                    }
+                    _unitVirtualTour?.isJsonArray == true -> {
+                        val gson = Gson()
+                        gson.fromJson(_unitVirtualTour, Array<UnitVirtualTour>::class.java)
+                    }
+                    else -> null
+                }
+            }
+
 
         @SerializedName("unitVideo")
         @Expose

@@ -95,7 +95,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
 
         val bindingToolbar = binding.toolbarContainerProjectForm
 
-        setToolbarToCreate(bindingToolbar)
+
 
         if (idFromIntent != 0) {
             lifecycleScope.launch {
@@ -108,7 +108,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
             setInitialFragment()
         }
 
-
+        setToolbarToCreate(bindingToolbar)
 
 
 
@@ -129,6 +129,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
 
 
     private fun setToolbarToCreate(bindingToolbar: ToolbarBinding) {
+        Log.d("ProjectFormActivity", "setToolbarToCreate: $projectId")
         if (projectId != null) {
             bindingToolbar.textViewTitle.text = "Edit Proyek"
         } else {

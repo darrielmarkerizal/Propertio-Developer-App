@@ -2,116 +2,123 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@color/white"
+    app:cardElevation="4dp"
+    android:layout_margin="48dp"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="309dp"
-        android:layout_height="301dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:padding="30dp"
         >
 
+
         <TextView
-            android:id="@+id/text_view_isi_unit_laku"
-            style="@style/text.semi_bold.size20"
+            android:id="@+id/text_view_judul_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Memasukkan Unit Laku"
-            android:textAlignment="center"
+            android:textAppearance="@style/text.semi_bold.size20"
+            android:textColor="@color/text_black"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/container_stok_unit"
+        <TextView
+            android:id="@+id/text_view_label_stok_unit_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Stok Unit :"
+            android:textAppearance="@style/text.regular.size16"
+            android:textColor="@color/text_black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_judul_dialog" />
+
+        <TextView
+            android:id="@+id/text_view_stock_unit_dialog"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="0"
+            android:singleLine="true"
+
+            android:textAppearance="@style/text.regular.size16"
+            android:textColor="@color/text_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/text_view_label_stok_unit_dialog"
+            app:layout_constraintTop_toTopOf="@+id/text_view_label_stok_unit_dialog" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_unit_laku_dialog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:helperText="Unit laku tidak boleh melebihi stok unit."
+            app:helperTextTextAppearance="@style/text.light.size11"
+            app:helperTextEnabled="true"
+            app:helperTextTextColor="@color/text_black"
+            android:textAlignment="textStart"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_view_isi_unit_laku">
+            app:layout_constraintTop_toBottomOf="@+id/text_view_label_stok_unit_dialog">
 
-            <TextView
-                android:id="@+id/txt_stok_unit"
-                style="@style/text.regular.size16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Stok Unit"
-                />
-
-            <TextView
-                android:id="@+id/txt_pembatas"
-                style="@style/text.regular.size14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=":"
-                android:layout_marginLeft="4dp"
-                />
-
-            <TextView
-                android:id="@+id/txt_jumlah_stok"
-                android:layout_width="0dp"
-                style="@style/text.regular.size16"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:maxLines="1"
-                android:text="50"
-                android:layout_marginLeft="4dp"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/container_input_laku"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/container_stok_unit">
-
-            <TextView
-                android:id="@+id/txt_nama_unit"
-                style="@style/text.regular.size14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nama Unit"
-                />
-
-            <TextView
-                android:id="@+id/next_txt_nama_unit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:nextFocusLeft="@id/txt_headline_project"
-                android:text="*"
-                android:textColor="@color/red_badges"
-                />
-
-            <TextView
-                android:id="@+id/txt_pembatas_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:nextFocusLeft="@id/txt_headline_project"
-                android:text=":"
-                android:layout_marginLeft="4dp"
-                android:textColor="@color/red_badges"
-                />
-
-            <EditText
-                android:id="@+id/edit_nama_unit"
-                style="@style/DesignSystem.TextInputEditText"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_text_unit_laku_dialog"
                 android:layout_height="50dp"
-                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                style="@style/Widget.Material3.TextInputEditText.OutlinedBox"
+                android:singleLine="true"
                 android:maxLines="1"
-                android:layout_marginLeft="4dp"
-                android:inputType="number"
-                android:hint="Jumlah Unit Laku" />
+                android:hint="Unit Laku"
+                android:textColor="@color/text_black"
+                android:inputType="number" />
 
-        </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_batal_dialog"
+            style="@style/button.tertiary.l"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="1dp"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="Batal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout_unit_laku_dialog"
+            app:layout_constraintVertical_bias="1.0" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_simpan_dialog"
+            style="@style/button.secondary.l"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Simpan"
+            android:maxLines="1"
+            android:singleLine="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toTopOf="@+id/button_batal_dialog" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
