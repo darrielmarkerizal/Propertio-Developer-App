@@ -386,7 +386,6 @@ class CreateProjectLokasiFragment : Fragment() {
                     if (responseData != null) {
                         formActivity.projectId = responseData.id
                         projectInformationLocationViewModel.isAlreadyUploaded.postValue(true)
-                        Toast.makeText(requireActivity(), "Berhasil membuat project", Toast.LENGTH_SHORT).show()
                         formActivity.onNextButtonProjectManagementClick()
                     } else {
                         Toast.makeText(requireActivity(), "Terjadi Kesalahan", Toast.LENGTH_SHORT).show()
@@ -513,7 +512,6 @@ class CreateProjectLokasiFragment : Fragment() {
                     if (responseData != null) {
                         formActivity.projectId = responseData.id
                         projectInformationLocationViewModel.isAlreadyUploaded.postValue(true)
-                        Toast.makeText(requireActivity(), "Berhasil membuat project", Toast.LENGTH_SHORT).show()
                         formActivity.onNextButtonProjectManagementClick()
                     } else {
                         Toast.makeText(requireActivity(), "Terjadi Kesalahan", Toast.LENGTH_SHORT).show()

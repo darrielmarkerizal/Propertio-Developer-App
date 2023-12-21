@@ -122,7 +122,7 @@ interface DeveloperApi {
 
     @DELETE("v1/cms/project-management/{project-id}/unit-document/{document_id}")
     fun deleteUnitDocument(
-        @Path("project-id") projectId : String,
+        @Path("project-id") unitId : String,
         @Path("document_id") documentId : Int
     ) : Call<UpdateUnitResponse>
 

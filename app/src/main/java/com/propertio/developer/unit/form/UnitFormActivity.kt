@@ -225,48 +225,6 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
             }
 
         }
-
-
-
-//        developerApi.getUnitDetail(projectId, unitId).enqueue(object : Callback<UnitDetailResponse> {
-//            override fun onResponse(
-//                call: Call<UnitDetailResponse>,
-//                response: Response<UnitDetailResponse>
-//            ) {
-//                if (response.isSuccessful) {
-//                    val data = response.body()?.data
-//                    if (data != null) {
-//                        Log.d("UnitFormActivity", "onResponse: $data")
-//                        Log.d("UnitFormActivity", "onResponse: ${data.propertyType}")
-//                        lifecycleScope.launch {
-//                            loadDataToViewModel(data)
-//
-//                            when (data.propertyType) {
-//                                "Gudang" -> formsFragment.add(1, UnitDataGudangFragment())
-//                                "Kantor" -> formsFragment.add(1, UnitDataKantorFragment())
-//                                "Kondominium" -> formsFragment.add(1, UnitDataKondominiumFragment())
-//                                "Pabrik" -> formsFragment.add(1, UnitDataPabrikFragment())
-//                                "Ruang usaha" -> formsFragment.add(1, UnitDataRuangUsahaFragment())
-//                                "Ruko" -> formsFragment.add(1, UnitDataRukoFragment())
-//                                "Rumah" -> formsFragment.add(1, UnitDataRumahFragment())
-//                                "Tanah" -> formsFragment.add(1, UnitDataTanahFragment())
-//                                "Villa" -> formsFragment.add(1, UnitDataVillaFragment())
-//                                "Apartemen" -> formsFragment.add(1, UnitDataApartemenFragment())
-//                                else -> Log.e("UnitFormActivity", "Invalid property type: ${data.propertyType}")
-//                            }
-//                        }
-//                    } else {
-//                        Log.e("UnitFormActivity", "onResponse: data is null")
-//                    }
-//                } else {
-//                    Log.e("UnitFormActivity", "onResponse: ${response.errorBody()}")
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<UnitDetailResponse>, t: Throwable) {
-//                Log.e("UnitFormActivity", "onFailure: ${t.message}")
-//            }
-//        })
     }
 
     private fun loadDataToViewModel(data : UnitDetailResponse.Unit) {
@@ -321,14 +279,18 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
                     caption = it.caption
                 )
             } ?: emptyList(),
-            videoLink = data.unitVideo?.linkVideoURL,
+            videoLink = data.unitVideo?.link        ,
             virtualTourName = virtualTourName,
-            virtualTourLink = virtualTourLink
+            virtualTourLink = virtualTourLink,
+            linkModel = data.unitModel?.link
         )
+
+
+        Log.d("UnitFormActivity", "loadDataToViewModel: ${data.unitVideo} ${data.unitVideo?.link}")
 
         if (data.unitDocuments?.isNotEmpty() == true) {
             unitMedia.isDocumentNotEdited = true
-            unitMedia.add(
+            unitMedia.addDocument(
                 document = UnitDocument(
                     id = data.unitDocuments?.get(0)?.id,
                     unitId = data.unitDocuments?.get(0)?.unitId,

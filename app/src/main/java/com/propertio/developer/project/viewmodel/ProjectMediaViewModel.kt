@@ -35,12 +35,16 @@ class ProjectMediaViewModel : ViewModel() {
         videoLink : String? = null,
         virtualTourName : String? = null,
         virtualTourLink : String? = null,
-        document : ProjectDocument? = null
     ){
         this.projectPhotos.postValue(projectPhotos)
         this.videoLink = videoLink
         this.virtualTourName = virtualTourName
         this.virtualTourLink = virtualTourLink
+    }
+
+    fun addDocument(
+        document: ProjectDocument
+    ) {
         this.document = document
     }
 

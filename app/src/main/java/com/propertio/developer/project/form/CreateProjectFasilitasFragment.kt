@@ -162,7 +162,6 @@ class CreateProjectFasilitasFragment : Fragment() {
                 ) {
                     if (response.isSuccessful) {
                         Log.d("CreateProjectFasilitasFragment", "onResponse: ${response.body()}")
-                        Toast.makeText(requireActivity(), "Berhasil menambahkan fasilitas", Toast.LENGTH_SHORT).show()
                         formActivity.onNextButtonProjectManagementClick()
                     } else {
                         Log.e("CreateProjectFasilitasFragment", "onResponse: ${response.errorBody()?.string()}")
