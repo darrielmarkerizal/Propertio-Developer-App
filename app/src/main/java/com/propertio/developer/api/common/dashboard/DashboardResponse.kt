@@ -65,7 +65,7 @@ class DashboardResponse : DefaultResponse()  {
             class Weekly {
                 @SerializedName("date")
                 @Expose
-                var year: String? = null
+                var date: String? = null
 
                 @SerializedName("total")
                 @Expose
@@ -99,7 +99,7 @@ class DashboardResponse : DefaultResponse()  {
             class Weekly {
                 @SerializedName("date")
                 @Expose
-                var year: String? = null
+                var date: String? = null
 
                 @SerializedName("total")
                 @Expose
