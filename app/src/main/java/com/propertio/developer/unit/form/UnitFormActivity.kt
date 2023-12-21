@@ -7,20 +7,17 @@ import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.propertio.developer.R
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
-import com.propertio.developer.auth.RegisterActivity
 import com.propertio.developer.databinding.ActivityUnitFormBinding
+import com.propertio.developer.databinding.ToolbarBinding
 import com.propertio.developer.model.LitePhotosModel
 import com.propertio.developer.model.UnitDocument
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_ID
-import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
 import com.propertio.developer.unit.UnitMediaViewModel
 import com.propertio.developer.unit_management.ButtonNavigationUnitManagementClickListener
 import com.propertio.developer.unit.form.type.UnitDataApartemenFragment
@@ -33,11 +30,9 @@ import com.propertio.developer.unit.form.type.UnitDataRukoFragment
 import com.propertio.developer.unit.form.type.UnitDataRumahFragment
 import com.propertio.developer.unit.form.type.UnitDataTanahFragment
 import com.propertio.developer.unit.form.type.UnitDataVillaFragment
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.jetbrains.annotations.Contract
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.withContext
 
 class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClickListener {
 
@@ -72,7 +67,6 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
 
     private var currentFragmentIndex = 0
     internal var unitId : Int? = null
-    internal var idProject : Int? = null
     internal var projectId : Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,30 +93,48 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
             lifecycleScope.launch {
                 Log.d("UnitFormActivity", "onCreate Fetch Edit: $unitIdFromIntent")
                 unitId = unitIdFromIntent
-                fetchUnitDetail(projectIdFromIntent!!, unitId!!)
+                fetchUnitDetail(projectIdFromIntent, unitId!!)
+                startUnitForm()
             }
         } else {
             Log.e("UnitFormActivity", "onCreate: unitId is null")
+
+            when (propertyType) {
+                "Gudang" -> formsFragment.add(1, UnitDataGudangFragment())
+                "Kantor" -> formsFragment.add(1, UnitDataKantorFragment())
+                "Kondominium" -> formsFragment.add(1, UnitDataKondominiumFragment())
+                "Pabrik" -> formsFragment.add(1, UnitDataPabrikFragment())
+                "Ruang usaha" -> formsFragment.add(1, UnitDataRuangUsahaFragment())
+                "Ruko" -> formsFragment.add(1, UnitDataRukoFragment())
+                "Rumah" -> formsFragment.add(1, UnitDataRumahFragment())
+                "Tanah" -> formsFragment.add(1, UnitDataTanahFragment())
+                "Villa" -> formsFragment.add(1, UnitDataVillaFragment())
+                "Apartemen" -> formsFragment.add(1, UnitDataApartemenFragment())
+                else -> Log.e("UnitFormActivity", "Invalid property type: $propertyType")
+            }
+
+            Log.d("UnitFormActivity", "Starting fragment transaction")
+            startUnitForm()
+
         }
 
-        when (propertyType) {
-            "Gudang" -> formsFragment.add(1, UnitDataGudangFragment())
-            "Kantor" -> formsFragment.add(1, UnitDataKantorFragment())
-            "Kondominium" -> formsFragment.add(1, UnitDataKondominiumFragment())
-            "Pabrik" -> formsFragment.add(1, UnitDataPabrikFragment())
-            "Ruang usaha" -> formsFragment.add(1, UnitDataRuangUsahaFragment())
-            "Ruko" -> formsFragment.add(1, UnitDataRukoFragment())
-            "Rumah" -> formsFragment.add(1, UnitDataRumahFragment())
-            "Tanah" -> formsFragment.add(1, UnitDataTanahFragment())
-            "Villa" -> formsFragment.add(1, UnitDataVillaFragment())
-            "Apartemen" -> formsFragment.add(1, UnitDataApartemenFragment())
-            else -> Log.e("UnitFormActivity", "Invalid property type: $propertyType")
-        }
+        setToolbarToCreate(binding.toolbarContainerUnitForm)
 
-        Log.d("UnitFormActivity", "Starting fragment transaction")
+    }
+
+    private fun startUnitForm() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.frame_container_unit_form, formsFragment[currentFragmentIndex])
             .commit()
+    }
+
+    private fun setToolbarToCreate(bindingToolbar: ToolbarBinding) {
+        Log.d("UnittFormActivity", "setToolbarToCreate: $unitId")
+        if (unitId != 0) {
+            bindingToolbar.textViewTitle.text = "Edit Unit"
+        } else {
+            bindingToolbar.textViewTitle.text = "Tambah Unit"
+        }
     }
 
     override fun onNextButtonUnitManagementClick() {
@@ -172,11 +184,10 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
     }
 
     private suspend fun fetchUnitDetail(projectId: Int, unitId: Int) {
-        developerApi.getUnitDetail(projectId, unitId).enqueue(object : Callback<UnitDetailResponse> {
-            override fun onResponse(
-                call: Call<UnitDetailResponse>,
-                response: Response<UnitDetailResponse>
-            ) {
+        lifecycleScope.launch {
+            val response = withContext(Dispatchers.IO) {developerApi.getUnitDetail(projectId, unitId).execute()}
+
+            try {
                 if (response.isSuccessful) {
                     val data = response.body()?.data
                     if (data != null) {
@@ -196,7 +207,10 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
                                 "Tanah" -> formsFragment.add(1, UnitDataTanahFragment())
                                 "Villa" -> formsFragment.add(1, UnitDataVillaFragment())
                                 "Apartemen" -> formsFragment.add(1, UnitDataApartemenFragment())
-                                else -> Log.e("UnitFormActivity", "Invalid property type: ${data.propertyType}")
+                                else -> Log.e(
+                                    "UnitFormActivity",
+                                    "Invalid property type: ${data.propertyType}"
+                                )
                             }
                         }
                     } else {
@@ -205,15 +219,57 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
                 } else {
                     Log.e("UnitFormActivity", "onResponse: ${response.errorBody()}")
                 }
+
+            } catch (e: Exception) {
+                Log.e("UnitFormActivity", "onFailure: ${e.message}")
             }
 
-            override fun onFailure(call: Call<UnitDetailResponse>, t: Throwable) {
-                Log.e("UnitFormActivity", "onFailure: ${t.message}")
-            }
-        })
+        }
+
+
+
+//        developerApi.getUnitDetail(projectId, unitId).enqueue(object : Callback<UnitDetailResponse> {
+//            override fun onResponse(
+//                call: Call<UnitDetailResponse>,
+//                response: Response<UnitDetailResponse>
+//            ) {
+//                if (response.isSuccessful) {
+//                    val data = response.body()?.data
+//                    if (data != null) {
+//                        Log.d("UnitFormActivity", "onResponse: $data")
+//                        Log.d("UnitFormActivity", "onResponse: ${data.propertyType}")
+//                        lifecycleScope.launch {
+//                            loadDataToViewModel(data)
+//
+//                            when (data.propertyType) {
+//                                "Gudang" -> formsFragment.add(1, UnitDataGudangFragment())
+//                                "Kantor" -> formsFragment.add(1, UnitDataKantorFragment())
+//                                "Kondominium" -> formsFragment.add(1, UnitDataKondominiumFragment())
+//                                "Pabrik" -> formsFragment.add(1, UnitDataPabrikFragment())
+//                                "Ruang usaha" -> formsFragment.add(1, UnitDataRuangUsahaFragment())
+//                                "Ruko" -> formsFragment.add(1, UnitDataRukoFragment())
+//                                "Rumah" -> formsFragment.add(1, UnitDataRumahFragment())
+//                                "Tanah" -> formsFragment.add(1, UnitDataTanahFragment())
+//                                "Villa" -> formsFragment.add(1, UnitDataVillaFragment())
+//                                "Apartemen" -> formsFragment.add(1, UnitDataApartemenFragment())
+//                                else -> Log.e("UnitFormActivity", "Invalid property type: ${data.propertyType}")
+//                            }
+//                        }
+//                    } else {
+//                        Log.e("UnitFormActivity", "onResponse: data is null")
+//                    }
+//                } else {
+//                    Log.e("UnitFormActivity", "onResponse: ${response.errorBody()}")
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<UnitDetailResponse>, t: Throwable) {
+//                Log.e("UnitFormActivity", "onFailure: ${t.message}")
+//            }
+//        })
     }
 
-    private suspend fun loadDataToViewModel(data : UnitDetailResponse.Unit) {
+    private fun loadDataToViewModel(data : UnitDetailResponse.Unit) {
         unitFormViewModel.add(
             namaUnit = data.title.toString(),
             propertyType = data.propertyType.toString(),
@@ -234,20 +290,40 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
             unitId = data.id!!.toInt()
         )
 
+        val unitVirtualTour = data.unitVirtualTour
+        var virtualTourName : String? = null
+        var virtualTourLink : String? = null
+
+        if (unitVirtualTour is UnitDetailResponse.Unit.UnitVirtualTour) {
+            // unitVirtualTour is an object
+
+            virtualTourName = unitVirtualTour.name
+            virtualTourLink = unitVirtualTour.link
+
+        } else if (unitVirtualTour is Array<*> && unitVirtualTour.isArrayOf<UnitDetailResponse.Unit.UnitVirtualTour>()) {
+            // unitVirtualTour is an array
+            val unitVirtualTourArray = unitVirtualTour as Array<UnitDetailResponse.Unit.UnitVirtualTour>
+            if (unitVirtualTour.isNotEmpty()) {
+                virtualTourName = unitVirtualTourArray[0].name
+                virtualTourLink = unitVirtualTourArray[0].link
+            }
+
+        }
+
         unitMedia.add(
             unitPhoto = data.unitPhotos?.map {
                 LitePhotosModel(
                     id = it.id,
                     projectId = it.unitId,
                     filePath = it.filename,
-                    isCover = it.isCover!!.toInt() ?: 0,
+                    isCover = it.isCover!!.toInt(),
                     type = it.type,
                     caption = it.caption
                 )
             } ?: emptyList(),
             videoLink = data.unitVideo?.linkVideoURL,
-            virtualTourName = if (data.unitVirtualTour?.isNotEmpty() == true) data.unitVirtualTour?.get(0)?.name else null,
-            virtualTourLink = if (data.unitVirtualTour?.isNotEmpty() == true) data.unitVirtualTour?.get(0)?.link else null
+            virtualTourName = virtualTourName,
+            virtualTourLink = virtualTourLink
         )
 
         if (data.unitDocuments?.isNotEmpty() == true) {
