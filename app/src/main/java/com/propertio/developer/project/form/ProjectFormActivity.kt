@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.propertio.developer.PropertioDeveloperApplication
@@ -30,6 +31,7 @@ import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewM
 import com.propertio.developer.project.viewmodel.ProjectMediaViewModel
 import com.propertio.developer.project_management.ButtonNavigationProjectManagementClickListener
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -192,7 +194,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
                         isCover = it.isCover?.toInt() ?: 0,
                         caption = it.caption,
                     )
-                }?: emptyList(),
+                }?: emptyList<LitePhotosModel>().toMutableList(),
                 videoLink = data.projectVideos?.linkVideoURL,
                 virtualTourName = data.projectVirtualTours?.name,
                 virtualTourLink = data.projectVirtualTours?.linkVirtualTourURL,
