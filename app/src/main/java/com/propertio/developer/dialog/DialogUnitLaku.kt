@@ -1,6 +1,8 @@
 package com.propertio.developer.dialog
 
 import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
@@ -56,7 +58,7 @@ class DialogUnitLaku(
                     }
                 }
             }
-
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog
         } ?: throw IllegalStateException("Activity cannot be null")
     }
