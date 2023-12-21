@@ -280,6 +280,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:visibility="gone"
             android:id="@+id/input_note_pencarian_project"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

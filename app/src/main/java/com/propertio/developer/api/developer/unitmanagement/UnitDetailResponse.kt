@@ -1,5 +1,7 @@
 package com.propertio.developer.api.developer.unitmanagement
 
+import com.google.gson.Gson
+import com.google.gson.JsonElement
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.propertio.developer.api.models.DefaultResponse
@@ -29,16 +31,54 @@ class UnitDetailResponse : DefaultResponse() {
 
         @SerializedName("unitVirtualTour")
         @Expose
-        var unitVirtualTour: List<UnitVirtualTour>? = null
+        private var _unitVirtualTour: JsonElement? = null
+        //TODO: Aslinya tipe data objek bukan Array, nunggu fix dari backend
+        val unitVirtualTour: Any?
+            get() {
+                return when {
+                    _unitVirtualTour?.isJsonObject == true -> {
+                        val gson = Gson()
+                        gson.fromJson(_unitVirtualTour, UnitVirtualTour::class.java)
+                    }
+                    _unitVirtualTour?.isJsonArray == true -> {
+                        val gson = Gson()
+                        gson.fromJson(_unitVirtualTour, Array<UnitVirtualTour>::class.java)
+                    }
+                    else -> null
+                }
+            }
+
 
         @SerializedName("unitVideo")
         @Expose
-        var unitVideo: ProjectVideo? = null
+        var unitVideo: UnitVideo? = null
 
         @SerializedName("unitDocuments")
         @Expose
         var unitDocuments: List<UnitDocument>? = null
-        // TODO: Define type of unitDocuments
+
+        data class UnitVideo (
+            @SerializedName("id")
+            val id: Int,
+
+            @SerializedName("unit_id")
+            val unitId: String,
+
+            @SerializedName("vendor")
+            val vendor: String,
+
+            @SerializedName("link")
+            val link: String,
+
+            @SerializedName("thumbnail")
+            val thumbnail: String,
+
+            @SerializedName("created_at")
+            val createdAt: String,
+
+            @SerializedName("updated_at")
+            val updatedAt: String
+        )
 
 
         class UnitPhoto {

@@ -24,6 +24,7 @@ import com.propertio.developer.databinding.ActivityUnitDetailBinding
 import com.propertio.developer.project.ProjectDetailActivity
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_DETAIL_PID
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_DETAIL_UID
+import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_MAPS_LINK
 import com.propertio.developer.project.form.ProjectFormActivity
 import com.propertio.developer.unit.form.UnitFormActivity
 import kotlinx.coroutines.Dispatchers
@@ -69,6 +70,7 @@ class UnitDetailActivity : AppCompatActivity() {
         // Check if is it valid unit id
         unitId = intent.getIntExtra(PROJECT_DETAIL_UID, 0)
         projectId = intent.getIntExtra(PROJECT_DETAIL_PID, 0)
+        var mapsLink = intent.getStringExtra(PROJECT_MAPS_LINK)
 
         Log.d("UnitDetailActivity", "onCreate: unitId $unitId")
         Log.d("UnitDetailActivity", "onCreate projectId $projectId")
@@ -81,6 +83,11 @@ class UnitDetailActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             fecthData()
+        }
+
+        binding.buttonOpenMaps.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(mapsLink))
+            startActivity(intent)
         }
 
     }
@@ -135,8 +142,8 @@ class UnitDetailActivity : AppCompatActivity() {
             loadImage(data.unitPhotos)
         }
         withContext(Dispatchers.Main) {
-            Log.d("UnitDetailActivity", "loadVideo: ${data.unitVideo?.linkVideoURL}")
-            loadVideo(data.unitVideo?.linkVideoURL)
+            Log.d("UnitDetailActivity", "loadVideo: ${data.unitVideo?.link}")
+            loadVideo(data.unitVideo?.link)
         }
     }
 

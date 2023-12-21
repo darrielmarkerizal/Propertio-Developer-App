@@ -250,7 +250,6 @@ class UnitDataVillaFragment : Fragment() {
                 if (isAdded) {
                     if (response.isSuccessful) {
                         Log.d("UnitDataVillaFragment", "onResponse: ${response.body()}")
-                        Toast.makeText(requireContext(), "Unit berhasil diupdate", Toast.LENGTH_SHORT).show()
                         formActivity.onNextButtonUnitManagementClick()
                     } else {
                         Log.e("UnitDataVillaFragment", "onResponse: ${response.errorBody()}")

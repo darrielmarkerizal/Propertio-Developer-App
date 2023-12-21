@@ -66,7 +66,7 @@ abstract class UnitMinimum {
 
     @SerializedName("water_supply")
     @Expose
-    var waterSupply: String? = "0"
+    var waterSupply: String? = ""
 
     @SerializedName("water_type")
     @Expose

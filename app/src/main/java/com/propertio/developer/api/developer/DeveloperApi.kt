@@ -10,6 +10,7 @@ import com.propertio.developer.api.developer.type.GeneralTypeResponse
 import com.propertio.developer.api.developer.unitmanagement.PostStoreUnitPhotoResponse
 import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
+import com.propertio.developer.api.developer.unitmanagement.UnitOrderRequest
 import com.propertio.developer.api.developer.unitmanagement.UnitRequest
 import com.propertio.developer.api.developer.unitmanagement.UpdateUnitRequest
 import com.propertio.developer.model.Caption
@@ -121,7 +122,7 @@ interface DeveloperApi {
 
     @DELETE("v1/cms/project-management/{project-id}/unit-document/{document_id}")
     fun deleteUnitDocument(
-        @Path("project-id") projectId : String,
+        @Path("project-id") unitId : String,
         @Path("document_id") documentId : Int
     ) : Call<UpdateUnitResponse>
 
@@ -243,5 +244,11 @@ interface DeveloperApi {
     fun deleteUnit(
         @Path("projectId") projectId : Int,
         @Path("unitId") unitId : Int
+    ) : Call<UpdateUnitResponse>
+
+    @POST("v1/cms/project-management/{project_id}/unit-order?_method=PUT")
+    fun updateUnitOrder(
+        @Path("project_id") projectId : Int,
+        @Body unitOrder : UnitOrderRequest
     ) : Call<UpdateUnitResponse>
 }

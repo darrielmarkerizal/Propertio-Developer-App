@@ -184,7 +184,6 @@ class UnitDataKantorFragment : Fragment() {
                         //TODO: Tambahkan kode seperti ini untuk setiap tipe unit
                         formActivity.unitId = responseData.id
                         if (formActivity.unitId != null || formActivity.unitId != 0) {
-                            Toast.makeText(requireContext(), "Unit berhasil ditambahkan", Toast.LENGTH_SHORT).show()
                             formActivity.onNextButtonUnitManagementClick()
                         } else {
                             Log.e("UnitDataKantorFragment", "onResponse: Unit ID is null or 0")
@@ -248,7 +247,6 @@ class UnitDataKantorFragment : Fragment() {
                 if (isAdded) {
                     if (response.isSuccessful) {
                         Log.d("UnitDataKantorFragment", "onResponse: ${response.body()}")
-                        Toast.makeText(requireContext(), "Unit berhasil diupdate", Toast.LENGTH_SHORT).show()
                         formActivity.onNextButtonUnitManagementClick()
                     } else {
                         Log.e("UnitDataKantorFragment", "onResponse: ${response.errorBody()}")
