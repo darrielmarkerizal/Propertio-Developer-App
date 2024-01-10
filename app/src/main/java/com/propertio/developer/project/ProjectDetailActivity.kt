@@ -17,15 +17,12 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
-import com.google.android.material.switchmaterial.SwitchMaterial
 import com.propertio.developer.NumericalUnitConverter
 import com.propertio.developer.PropertioDeveloperApplication
 import com.propertio.developer.R
@@ -41,7 +38,6 @@ import com.propertio.developer.carousel.ImageData
 import com.propertio.developer.database.project.ProjectTable
 import com.propertio.developer.databinding.ActivityProjectDetailBinding
 import com.propertio.developer.dialog.DialogUnitLaku
-import com.propertio.developer.model.StatusProject
 import com.propertio.developer.project.form.ProjectFormActivity
 import com.propertio.developer.project.list.FileThumbnailAdapter
 import com.propertio.developer.unit.UnitDetailActivity
