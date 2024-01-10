@@ -1,24 +1,24 @@
 # PropertiO Developer Android App
 
-PropertiO Developer Android App is a property project management and information platform. This application is designed to assist property developers in managing and marketing their property projects to PropertiO users. The PropertiO Developer Android App offers a range of features and functions to help developers efficiently execute their projects. Its primary target audience is housing developers who want to sell units from their housing projects and provide development updates to PropertiO users.
+PropertiO Developer Android App is a comprehensive property project management and information platform tailored for property developers. This application aims to assist developers in efficiently managing and marketing their property projects to PropertiO users. The primary target audience for this app is housing developers looking to sell units from their housing projects and provide development updates to PropertiO users.
 
-This application is intended to be operated by developers or housing developers who wish to promote their products to PropertiO users. To use it, developers and PropertiO users must log in using their pre-registered accounts, which will automatically fill in their usernames and passwords. The system's user interface is tailored to housing developers. This application can run on any platform or operating system that supports Android-based applications. Developers can manage their projects and units through this app.
+Developers and PropertiO users can seamlessly access the application by logging in with their pre-registered accounts, streamlining the authentication process. The user interface is specifically designed for housing developers and is compatible with any platform or operating system that supports Android-based applications.
 
 ## Features
 
 ### Authentication
-- **Login**: Users can log in to the app with their registered accounts.
+- **Login**: Users can log in to the app with their pre-registered accounts.
 
 ### Developer Registration
 - **Register as a Developer**: Housing developers can sign up and create developer profiles.
 
 ### Dashboard
-- **Overview**: The dashboard provides an overview of the developer's projects and units.
+- **Overview**: The dashboard provides a comprehensive overview of the developer's projects and units.
 
 ### Profile
 - **Profile Details**: View and manage developer profile information.
-- **Edit Profile**: Developers can update their profile details.
-- **Change Password**: Change the login password.
+- **Edit Profile**: Developers can easily update their profile details.
+- **Change Password**: Conveniently change the login password.
 
 ### Messages
 - **Inbox**: View incoming messages from PropertiO users.
@@ -30,7 +30,7 @@ This application is intended to be operated by developers or housing developers 
 - **List Projects**: View a list of all registered projects.
 - **Change Project Status**: Update the status of a project.
 - **Project Details**: Get a detailed view of a project.
-- **Repost Project**: Repost an existing project for visibility.
+- **Repost Project**: Repost an existing project for increased visibility.
 
 ### Units
 - **Add Unit**: Add new units to projects.
@@ -39,7 +39,14 @@ This application is intended to be operated by developers or housing developers 
 - **Mark Unit as Sold**: Update the status of units when they are sold.
 - **Unit Details (Public)**: Provide public information about individual units.
 
-Please note that this application is currently in development, and additional features and improvements may be added in the future.
+This application is currently in development, and additional features and improvements may be added in the future.
+
+## Credits
+Special thanks to the following contributors for their valuable contributions to the development of PropertiO Developer Android App:
+
+- Afra Cendekia Putri Jallil [GitHub](https://github.com/afra2604)
+- Adiel Boanerge Gananputra [GitHub](https://github.com/ergegananputra)
+- Lutfi Lisana Shidqi [GitHub](https://github.com/xvqiuu)
 
 For any questions, concerns, or feedback, please contact our support team.
 
