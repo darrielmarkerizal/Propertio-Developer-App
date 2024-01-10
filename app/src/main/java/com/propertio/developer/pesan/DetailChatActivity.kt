@@ -63,11 +63,17 @@ class DetailChatActivity : AppCompatActivity() {
             }
 
             if (textView1Message.text.toString().contains("<p>")) {
-                button.visibility = View.VISIBLE
+                buttonLihatProyek.visibility = View.VISIBLE
                 textView2Message.visibility = View.VISIBLE
                 textFormatter(textView1Message.text.toString())
+
+                buttonLihatProyek.setOnClickListener {
+                    val intentToBrowser = Intent(Intent.ACTION_VIEW)
+                    intentToBrowser.data = Uri.parse(buttonLink)
+                    startActivity(intentToBrowser)
+                }
             } else {
-                button.visibility = View.GONE
+                buttonLihatProyek.visibility = View.GONE
                 textView2Message.visibility = View.GONE
             }
 
