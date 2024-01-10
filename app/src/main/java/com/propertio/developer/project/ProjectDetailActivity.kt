@@ -100,6 +100,7 @@ class ProjectDetailActivity : AppCompatActivity() {
                     intentToDetail.putExtra(PROJECT_DETAIL_UID, it.id)
                     intentToDetail.putExtra(PROJECT_DETAIL_PID, projectId)
                     intentToDetail.putExtra(PROJECT_MAPS_LINK, mapsLink)
+                    intentToDetail.putExtra(PROJECT_ADDRESS, binding.textViewAddress.text.toString())
                     launcherToDetailUnit.launch(intentToDetail)
                 } else {
                     Log.w("onClickUnitCard", "projectId is null")
@@ -807,6 +808,7 @@ class ProjectDetailActivity : AppCompatActivity() {
         const val PROJECT_DETAIL_UID = "project_detail_uid"
         const val PROJECT_DETAIL_PID = "project_detail_pid"
         const val PROJECT_MAPS_LINK = "project_maps_link"
+        const val PROJECT_ADDRESS = "project_address"
     }
 
     private fun deleteUnit(projectId: Int, unitId: Int) {
