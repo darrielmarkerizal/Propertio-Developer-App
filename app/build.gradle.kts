@@ -6,6 +6,7 @@ plugins {
 
     // Kapt
     id("kotlin-kapt")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 
 
 }
@@ -88,6 +89,7 @@ dependencies {
     // Room
     implementation("androidx.room:room-ktx:2.6.0")
     implementation("androidx.room:room-runtime:2.6.0")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
     ksp("androidx.room:room-compiler:2.6.0")
     testImplementation("androidx.room:room-testing:2.6.1")
 

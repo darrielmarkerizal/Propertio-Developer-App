@@ -1,7 +1,9 @@
 package com.propertio.developer.project.form
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -749,6 +751,14 @@ class CreateProjectLokasiFragment : Fragment() {
     }
 
 
+    private fun getMapsApiKey(context: Context): String {
+        try {
+            val applicationInfo = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+            return applicationInfo.metaData.getString("com.google.android.geo.API_KEY").toString()
+        } catch (e: PackageManager.NameNotFoundException) {
+            throw RuntimeException("Could not find API key in AndroidManifest.xml.", e)
+        }
+    }
 
     private suspend fun extractLatLongFromUrl(url: String): Pair<Double, Double>? {
         val latLongPattern = Regex("!3d([-0-9.]+).*!4d([-0-9.]+)")
@@ -756,14 +766,14 @@ class CreateProjectLokasiFragment : Fragment() {
         Log.d("CreateProjectLokasiFragment", "extractLatLongFromUrl: ${matchResult?.destructured}")
         if (matchResult == null) {
             Log.d("CreateProjectLokasiFragment", "extractLatLongFromUrl: null")
-            //TODO: Geocoding!! AIzaSyAN6a7kSklwRHnNojU72nDnCfhYGhrATh0
             val geoRetrofit = GoogleGeoCoding()
                 .getGeocodingInstance()
                 .create(GeocodingApi::class.java)
             val address = url.split("place/").last().split("/").first()
 
             try {
-                val response = geoRetrofit.geocodeCoordinate(address, "AIzaSyAN6a7kSklwRHnNojU72nDnCfhYGhrATh0")
+                val apiKey = getMapsApiKey(requireActivity())
+                val response = geoRetrofit.geocodeCoordinate(address, apiKey)
                 if (response.isSuccessful) {
                     val data = response.body()
                     if (data != null) {
