@@ -19,7 +19,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_input_layout_search_bar"
-        style="@style/Widget.Material3.TextInputLayout.FilledBox"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
         app:boxBackgroundColor="?android:attr/colorBackground"
@@ -45,9 +45,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
+            android:hint="Link Google Maps"
             android:textColor="@color/text_black"
             android:inputType="textUri"
-            android:hint="Link Google Maps"
             />
 
     </com.google.android.material.textfield.TextInputLayout>

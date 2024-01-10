@@ -1,7 +1,9 @@
 package com.propertio.developer.maps
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
@@ -11,6 +13,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.URLUtil.isValidUrl
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -40,6 +45,7 @@ class MapsFragment : Fragment() {
     private var latitude : Double? = null
     private var longitude : Double? = null
     private lateinit var googleMap: GoogleMap
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1
 
     private val binding by lazy { FragmentMapsBinding.inflate(layoutInflater) }
     private val formActivity by lazy { activity as ProjectFormActivity }
@@ -106,6 +112,8 @@ class MapsFragment : Fragment() {
         return binding.root
     }
 
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         hideNavigation()
@@ -113,7 +121,45 @@ class MapsFragment : Fragment() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
 
-        setupUI()
+        requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                setupUI()
+            } else {
+                Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        if (hasLocationPermission()) {
+            setupUI()
+        } else {
+            requestLocationPermission()
+        }
+    }
+
+    private fun hasLocationPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+
+    private fun requestLocationPermission() {
+        requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                setupUI()
+            } else {
+                Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun setupUI() {
@@ -208,9 +254,6 @@ class MapsFragment : Fragment() {
     }
 
 
-    /**
-     * Old
-     */
 
     private suspend fun getLongGMAPSURL(shortUrl: String) : String {
         // first. check if the url is already long

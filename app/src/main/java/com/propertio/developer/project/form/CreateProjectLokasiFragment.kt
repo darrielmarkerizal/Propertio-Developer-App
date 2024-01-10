@@ -141,13 +141,6 @@ class CreateProjectLokasiFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        projectInformationLocationViewModel.selectedLocation.postValue(
-            Pair(
-                projectInformationLocationViewModel.latitude ?: 0.0,
-                projectInformationLocationViewModel.longitude ?: 0.0
-            )
-        )
-
         return binding.root
     }
 
@@ -192,34 +185,6 @@ class CreateProjectLokasiFragment : Fragment() {
         }
 
         // Gmaps
-//        binding.buttonSearchMapsProject.setOnClickListener {
-//            val tempURL = binding.editTextLinkMapsProject.text.toString().trim()
-//
-//            if (tempURL == "" || tempURL.isEmpty()) {
-//                val intentToMaps = Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=${projectInformationLocationViewModel.latitude},${projectInformationLocationViewModel.longitude}"))
-//                startActivity(intentToMaps)
-//
-//                return@setOnClickListener
-//            }
-//            // check if the tempURL is valid URL
-//            if (!isValidUrl(tempURL)) {
-//                Toast.makeText(requireActivity(), "URL tidak valid", Toast.LENGTH_SHORT).show()
-//                return@setOnClickListener
-//            }
-//            lifecycleScope.launch {
-//                try {
-//                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getLongGMAPSURL(tempURL)))
-//                    startActivity(intent)
-//                } catch (
-//                    e: Exception
-//                ) {
-//                    Toast.makeText(requireActivity(), "URL yang diberikan tidak valid", Toast.LENGTH_SHORT).show()
-//                }
-//
-//            }
-//
-//
-//        }
         setupLokasi()
 
 
@@ -265,7 +230,7 @@ class CreateProjectLokasiFragment : Fragment() {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.frame_container_project_form, MapsFragment())
             transaction.addToBackStack(null)
-            transaction.commit() // TODO: Watch this
+            transaction.commit()
         }
 
         projectInformationLocationViewModel.selectedLocation.observe(viewLifecycleOwner) {
@@ -280,6 +245,7 @@ class CreateProjectLokasiFragment : Fragment() {
 
                 latitude = it.first
                 longitude = it.second
+                Log.d("CreateProjectLokasiFragment", "setupLokasi: $latitude $longitude")
 
                 try {
                     val response = withContext(Dispatchers.IO) {
@@ -321,7 +287,6 @@ class CreateProjectLokasiFragment : Fragment() {
         binding.editTextAddressProject.setText(projectInformationLocationViewModel.address)
         binding.editTextPosProject.setText(projectInformationLocationViewModel.postalCode)
         val siteplanImageURL = "https://www.google.com/maps/search/?api=1&query=${projectInformationLocationViewModel.latitude},${projectInformationLocationViewModel.longitude}"
-        binding.textViewLokasiTerpilih.text = siteplanImageURL
         binding.editTextLinkImmersiveProject.setText(projectInformationLocationViewModel.immersiveSiteplan)
         binding.editTextLinkImmersiveAppsProject.setText(projectInformationLocationViewModel.immersiveApps)
 
@@ -360,6 +325,7 @@ class CreateProjectLokasiFragment : Fragment() {
         val immersiveApps = binding.editTextLinkImmersiveAppsProject.text.toString()
 
         projectInformationLocationViewModel.printLog("when click next button $propertyTypeId.toString()")
+        Log.d("CreateProjectLokasiFragment", "updateProjectLocation: $longitude $latitude")
 
 
         // Image Request Body

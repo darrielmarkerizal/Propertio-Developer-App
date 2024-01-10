@@ -177,6 +177,14 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
                 status = data.status,
                 siteplanImageURL = data.siteplanImage,
             )
+            val lat = data.address?.latitude?.toDouble()
+            val long = data.address?.longitude?.toDouble()
+            if (lat != null && long != null) {
+                withContext(Dispatchers.Main) {
+                    Log.d("ProjectFormActivity", "loadDataToViewModel: $lat, $long")
+                    projectInformationLocationViewModel.selectedLocation.value = Pair(lat, long)
+                }
+            }
 
             setAddressList(data.address)
             projectMedia.add(
