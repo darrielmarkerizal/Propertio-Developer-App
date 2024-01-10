@@ -131,4 +131,9 @@ class CreateProjectTambahInfrastrukturFragment : Fragment() {
             floatingButtonBack.visibility = View.VISIBLE
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        showNavigation()
+    }
 }

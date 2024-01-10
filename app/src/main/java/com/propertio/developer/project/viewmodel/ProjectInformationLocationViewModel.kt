@@ -30,6 +30,8 @@ class ProjectInformationLocationViewModel : ViewModel() {
     var listingClass : String? = null
     var siteplanImageURL : String? = null
 
+    val selectedLocation : MutableLiveData<Pair<Double, Double>> = MutableLiveData()
+
 
     // NOTE : Jangan pakai selain untuk edit form
     var isAddressNotEdited : Boolean = false

@@ -8,7 +8,11 @@ import retrofit2.http.Query
 interface GeocodingApi {
     @GET("geocode/json")
     suspend fun geocodeCoordinate(
-        @Query("address") address: String,
-        @Query("key") apiKey: String
+        @Query("address") address: String
+    ) : Response<GeocodingResponse>
+
+    @GET("geocode/json")
+    suspend fun getLocationFromLatLong(
+        @Query("latlng") latlng: String
     ) : Response<GeocodingResponse>
 }
