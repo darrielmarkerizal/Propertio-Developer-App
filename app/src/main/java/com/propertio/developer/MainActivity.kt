@@ -1,6 +1,7 @@
 package com.propertio.developer
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -8,19 +9,29 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
+import com.propertio.developer.api.Retro
+import com.propertio.developer.api.developer.DeveloperApi
+import com.propertio.developer.api.developer.type.GeneralTypeResponse
+import com.propertio.developer.api.models.GeneralType
 import com.propertio.developer.databinding.ActivityMainBinding
 import com.propertio.developer.pesan.ChatViewModel
 import com.propertio.developer.pesan.ChatViewModelFactory
 import com.propertio.developer.project.ProjectViewModel
 import com.propertio.developer.project.ProjectViewModelFactory
+import com.propertio.developer.project.list.FacilityAndInfrastructureTypeViewModel
+import com.propertio.developer.project.viewmodel.FacilityViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     private var toastMessage : String? = null
 
     private lateinit var projectViewModel: ProjectViewModel
+    private lateinit var facilityAndInfrastructureTypeViewModel: FacilityAndInfrastructureTypeViewModel
     private lateinit var chatViewModel: ChatViewModel
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
@@ -33,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         val factory = ProjectViewModelFactory((application as PropertioDeveloperApplication).repository)
         projectViewModel = ViewModelProvider(this, factory)[ProjectViewModel::class.java]
         fetchProjectListData(TokenManager(this).token!!)
+        fetchInfrastructureTypeApi()
 
         var unreadChat : Int = 0
         val chatBadges = binding.bottomNavigation.getOrCreateBadge(R.id.chatFragment)
@@ -119,5 +131,58 @@ class MainActivity : AppCompatActivity() {
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.nav_host_fragment, fragment)
         fragmentTransaction.commit()
+    }
+
+    private fun fetchInfrastructureTypeApi() {
+        val retro = Retro(TokenManager(this).token)
+            .getRetroClientInstance()
+            .create(DeveloperApi::class.java)
+
+        retro.getInfrastructureType().enqueue(object : Callback<GeneralTypeResponse> {
+            override fun onResponse(
+                call: Call<GeneralTypeResponse>,
+                response: Response<GeneralTypeResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val data = response.body()?.data
+                    if (data != null) {
+                        submitToLocalInfrastructureDatabase(data)
+                        Log.d("InfrastructureTypeSheet", "onResponse: $data")
+                    } else {
+                        Log.d("InfrastructureTypeSheet", "onResponse: data is null")
+                    }
+
+                } else {
+                    Log.d("InfrastructureTypeSheet", "onResponse UnSuccessful: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<GeneralTypeResponse>, t: Throwable) {
+                Log.d("InfrastructureTypeSheet", "onFailure: ${t.message}")
+            }
+        })
+    }
+
+    private fun submitToLocalInfrastructureDatabase(data: List<GeneralType>) {
+        val factory = FacilityViewModelFactory((application as PropertioDeveloperApplication).repository)
+        facilityAndInfrastructureTypeViewModel = ViewModelProvider(this, factory)[FacilityAndInfrastructureTypeViewModel::class.java]
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            data.forEach {
+                try {
+                    this.launch(Dispatchers.IO) {
+                        facilityAndInfrastructureTypeViewModel.insertInfrastructure(
+                            id = it.id!!,
+                            name = it.name!!,
+                            icon = it.icon!!,
+                            description = it.category ?: ""
+                        )
+                    }
+                } catch (e: Exception) {
+                    Log.e("InfrastructureTypeSheet", "submitToLocalInfrastructureDatabase: ${e.message}")
+                }
+
+            }
+        }
     }
 }

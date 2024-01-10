@@ -5,6 +5,8 @@ import com.propertio.developer.database.chat.ChatTable
 import com.propertio.developer.database.chat.ChatTableDao
 import com.propertio.developer.database.facility.FacilityTable
 import com.propertio.developer.database.facility.FacilityTableDao
+import com.propertio.developer.database.infrastructure.InfrastructureTable
+import com.propertio.developer.database.infrastructure.InfrastructureTableDao
 import com.propertio.developer.database.project.ProjectTable
 import com.propertio.developer.database.project.ProjectTableDao
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +20,8 @@ import java.util.concurrent.Executors
 class PropertiORepository(
     private val projectTableDao: ProjectTableDao,
     private val chatTableDao: ChatTableDao,
-    private val facilityTableDao: FacilityTableDao
+    private val facilityTableDao: FacilityTableDao,
+    private val infrastructureTableDao: InfrastructureTableDao
 ) {
 
     val listProject :Flow<List<ProjectTable>> = projectTableDao.allProjects
@@ -221,6 +224,67 @@ class PropertiORepository(
     }
 
 
+    // Infrastructure
+
+    suspend fun getAllInfrastructure(): List<InfrastructureTable> {
+        return withContext(Dispatchers.IO) {
+            infrastructureTableDao.getAll()
+        }
+    }
+
+    suspend fun getAllInfrastructureByDescription(description: String): List<InfrastructureTable> {
+        return withContext(Dispatchers.IO) {
+            infrastructureTableDao.getAllByDescription(description)
+        }
+    }
+
+    suspend fun searchInfrastructure(search: String): List<InfrastructureTable> {
+        return withContext(Dispatchers.IO) {
+            infrastructureTableDao.search(search = "%$search%")
+        }
+    }
+
+    suspend fun getInfrastructureById(id: Int): InfrastructureTable? {
+        return withContext(Dispatchers.IO) {
+            infrastructureTableDao.getById(id)
+        }
+    }
+
+    suspend fun insertInfrastructure(infrastructureTables: List<InfrastructureTable>) {
+        withContext(Dispatchers.IO) {
+            infrastructureTableDao.insertAll(infrastructureTables)
+        }
+    }
+
+    suspend fun insertInfrastructure(
+        id: Int,
+        name: String,
+        description: String,
+        icon: String,
+    ) {
+        withContext(Dispatchers.IO) {
+            infrastructureTableDao.insert(
+                InfrastructureTable(
+                    id = id,
+                    name = name,
+                    description = description,
+                    icon = icon,
+                )
+            )
+        }
+    }
+
+    suspend fun updateSelectedInfrastructure(id: Int, isSelected: Boolean = false) {
+        return withContext(Dispatchers.IO) {
+            infrastructureTableDao.updateSelectedInfrastructure(id, isSelected)
+        }
+    }
+
+    suspend fun deleteAllInfrastructure() {
+        return withContext(Dispatchers.IO) {
+            infrastructureTableDao.deleteAll()
+        }
+    }
 
 
 
