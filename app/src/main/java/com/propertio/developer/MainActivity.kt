@@ -1,7 +1,6 @@
 package com.propertio.developer
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -9,14 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
-import com.propertio.developer.dasbor.DashboardFragment
 import com.propertio.developer.databinding.ActivityMainBinding
-import com.propertio.developer.pesan.ChatFragment
 import com.propertio.developer.pesan.ChatViewModel
 import com.propertio.developer.pesan.ChatViewModelFactory
-import com.propertio.developer.profile.ProfileFragment
-import com.propertio.developer.project.ProjectFragment
 import com.propertio.developer.project.ProjectViewModel
 import com.propertio.developer.project.ProjectViewModelFactory
 import kotlinx.coroutines.Dispatchers
@@ -34,16 +28,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        // Token
-        val sharedPreferences = getSharedPreferences("account_data", MODE_PRIVATE)
-        val token = sharedPreferences.getString("token", null)
-        Log.d("MainActivity", "Token from prefs: $token")
-
 
         // View Model
         val factory = ProjectViewModelFactory((application as PropertioDeveloperApplication).repository)
         projectViewModel = ViewModelProvider(this, factory)[ProjectViewModel::class.java]
-        fetchProjectListData(token!!)
+        fetchProjectListData(TokenManager(this).token!!)
 
         var unreadChat : Int = 0
         val chatBadges = binding.bottomNavigation.getOrCreateBadge(R.id.chatFragment)
@@ -51,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         chatViewModel = ViewModelProvider(this, chatFactory)[ChatViewModel::class.java]
 
         lifecycleScope.launch {
-            chatViewModel.fetchDataFromApi(token)
+            chatViewModel.fetchDataFromApi(TokenManager(this@MainActivity).token!!)
             unreadChat = withContext(Dispatchers.IO) {
                 chatViewModel.countUnread()
             }
@@ -120,6 +109,8 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show()
             toastMessage = null
         }
+
+        fetchProjectListData(TokenManager(this).token!!)
 
     }
 

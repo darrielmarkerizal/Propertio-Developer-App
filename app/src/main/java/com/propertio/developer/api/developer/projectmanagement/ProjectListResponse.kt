@@ -9,7 +9,13 @@ class ProjectListResponse : DefaultResponse() {
 
     @SerializedName("data")
     @Expose
-    var data: List<ProjectDeveloper>? = null
+    var data: Projects? = null
+
+    data class Projects(
+        @SerializedName("projects")
+        @Expose
+        var projects: List<ProjectDeveloper>? = null
+    )
 
     class ProjectDeveloper : ProjectMinimum() {
         @SerializedName("address")

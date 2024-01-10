@@ -100,8 +100,8 @@ class ProjectViewModel(
                         val projectListResponse  = response.body()
 
                         if (projectListResponse != null) {
-                            if (projectListResponse.data != null) {
-                                syncToLocalDatabase(projectListResponse.data!!)
+                            if (projectListResponse.data != null && projectListResponse.data!!.projects != null) {
+                                syncToLocalDatabase(projectListResponse.data!!.projects!!)
                             } else {
                                 Log.e("ApiCall ProjectViewModel", "onResponse: projectListResponse.data is null")
                             }
