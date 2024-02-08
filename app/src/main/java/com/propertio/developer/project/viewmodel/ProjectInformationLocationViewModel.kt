@@ -30,6 +30,8 @@ class ProjectInformationLocationViewModel : ViewModel() {
     var listingClass : String? = null
     var siteplanImageURL : String? = null
 
+    val selectedLocation : MutableLiveData<Pair<Double, Double>> = MutableLiveData()
+
 
     // NOTE : Jangan pakai selain untuk edit form
     var isAddressNotEdited : Boolean = false
@@ -49,7 +51,11 @@ class ProjectInformationLocationViewModel : ViewModel() {
                     "\n certificate  : $certificate " +
                     "\n province     : ${province?.provinceId} ${province?.provinceName} <- saved : $savedProvince" +
                     "\n city         : ${city?.citiesId} ${city?.citiesName} <- saved : $savedCity" +
-                    "\n district     : ${district?.districtsId} ${district?.districtsName} <- saved : $savedDistrict"
+                    "\n district     : ${district?.districtsId} ${district?.districtsName} <- saved : $savedDistrict" +
+                    "\n address      : $address " +
+                    "\n postal_code  : $postalCode " +
+                    "\n longitude    : $longitude " +
+                    "\n latitude     : $latitude "
         )
 
     }

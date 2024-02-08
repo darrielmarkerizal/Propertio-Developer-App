@@ -274,5 +274,8 @@
 
     <string name="hours">jam</string>
     <string name="tooltips_aksi_lainnya">Aksi Lainnya</string>
+    <string name="pilih_lokasi">Pilih lokasi</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
 
 </resources>

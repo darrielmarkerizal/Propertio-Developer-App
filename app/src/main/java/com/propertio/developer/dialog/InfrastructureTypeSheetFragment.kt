@@ -5,9 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.propertio.developer.PropertioDeveloperApplication
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
@@ -15,8 +18,12 @@ import com.propertio.developer.api.developer.type.GeneralTypeResponse
 import com.propertio.developer.api.models.GeneralType
 import com.propertio.developer.databinding.FragmentBottomRecyclerWithSearchBarSheetBinding
 import com.propertio.developer.dialog.adapter.InfrastructureTypeAdapter
-import com.propertio.developer.dialog.adapter.PropertyTypeAdapter
 import com.propertio.developer.dialog.viewmodel.InfrastructureTypeSpinnerViewModel
+import com.propertio.developer.project.list.FacilityAndInfrastructureTypeViewModel
+import com.propertio.developer.project.viewmodel.FacilityViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,12 +36,32 @@ class InfrastructureTypeSheetFragment : BottomSheetDialogFragment() {
 
     private lateinit var infrastructureTypeViewModel: InfrastructureTypeSpinnerViewModel
 
+    private lateinit var facilityAndInfrastructureTypeViewModel : FacilityAndInfrastructureTypeViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         return binding.root
+    }
+
+    private val infrastructureAdapter by lazy {
+        InfrastructureTypeAdapter(
+            context = requireContext(),
+            onClickItemListener = {
+                Log.d("PropertyTypeSheet", "setupRecyclerView: $it")
+                infrastructureTypeViewModel.infrastructureTypeData
+                    .postValue(
+                        GeneralType(
+                            id = it.id,
+                            name = it.name,
+                            icon = it.icon
+                        )
+                    )
+                dismiss()
+            }
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,7 +72,33 @@ class InfrastructureTypeSheetFragment : BottomSheetDialogFragment() {
 
         infrastructureTypeViewModel = ViewModelProvider(requireActivity())[InfrastructureTypeSpinnerViewModel::class.java]
 
+        val factory = FacilityViewModelFactory((requireActivity().applicationContext as PropertioDeveloperApplication).repository)
+        facilityAndInfrastructureTypeViewModel = ViewModelProvider(requireActivity(), factory)[FacilityAndInfrastructureTypeViewModel::class.java]
+
         fetchInfrastructureTypeApi()
+        setupRecyclerView()
+        setupSearchBar()
+    }
+
+    private fun setupSearchBar() {
+
+
+
+        binding.searchBarBottomSheet.doAfterTextChanged { query ->
+            Log.d("InfrastructureTypeSheet", "setupSearchBar: $query")
+            lifecycleScope.launch {
+                if (query != null) {
+                    val filteredList = withContext(Dispatchers.IO) {
+                        facilityAndInfrastructureTypeViewModel.searchInfrastructure(
+                            query.toString()
+                        )
+                    }
+
+                    infrastructureAdapter.submitList(filteredList)
+                }
+            }
+
+        }
     }
 
     private fun fetchInfrastructureTypeApi() {
@@ -62,7 +115,19 @@ class InfrastructureTypeSheetFragment : BottomSheetDialogFragment() {
                 if (response.isSuccessful) {
                     val data = response.body()?.data
                     if (data != null) {
-                        setupRecyclerView(data)
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            data.forEach {
+                                if (it.id != null && it.name != null && it.category != null && it.icon != null) {
+                                    facilityAndInfrastructureTypeViewModel.insertInfrastructure(
+                                        id = it.id!!,
+                                        name = it.name!!,
+                                        description = it.category!!,
+                                        icon = it.icon!!,
+                                    )
+                                }
+                            }
+                        }
+
                         Log.d("InfrastructureTypeSheet", "onResponse: $data")
                     } else {
                         Log.d("InfrastructureTypeSheet", "onResponse: data is null")
@@ -80,30 +145,18 @@ class InfrastructureTypeSheetFragment : BottomSheetDialogFragment() {
     }
 
 
-    private fun setupRecyclerView(typeList: List<GeneralType>) {
-        Log.d("PropertyTypeSheet", "setupRecyclerView: $typeList")
+    private fun setupRecyclerView() {
 
         with(binding) {
             recyclerViewSheet.apply {
-                adapter = InfrastructureTypeAdapter(
-                    context = requireContext(),
-                    propertyTypes = typeList,
-                    onClickItemListener = {
-                        Log.d("PropertyTypeSheet", "setupRecyclerView: $it")
-                        infrastructureTypeViewModel.infrastructureTypeData
-                            .postValue(
-                                GeneralType(
-                                    id = it.id,
-                                    name = it.name
-                                )
-                            )
-
-                        dismiss()
-                    }
-                )
-
+                adapter = infrastructureAdapter
                 layoutManager = LinearLayoutManager(requireContext())
             }
+        }
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val infrastructureList = facilityAndInfrastructureTypeViewModel.getAllInfrastructureType()
+            infrastructureAdapter.submitList(infrastructureList)
         }
 
     }

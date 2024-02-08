@@ -2,12 +2,12 @@ package com.propertio.developer.unit
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
 import android.webkit.WebView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
@@ -21,14 +21,11 @@ import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
 import com.propertio.developer.carousel.CarouselAdapter
 import com.propertio.developer.carousel.ImageData
 import com.propertio.developer.databinding.ActivityUnitDetailBinding
-import com.propertio.developer.project.ProjectDetailActivity
+import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_ADDRESS
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_DETAIL_PID
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_DETAIL_UID
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_MAPS_LINK
-import com.propertio.developer.project.form.ProjectFormActivity
-import com.propertio.developer.unit.form.UnitFormActivity
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.invoke
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -70,12 +67,15 @@ class UnitDetailActivity : AppCompatActivity() {
         // Check if is it valid unit id
         unitId = intent.getIntExtra(PROJECT_DETAIL_UID, 0)
         projectId = intent.getIntExtra(PROJECT_DETAIL_PID, 0)
-        var mapsLink = intent.getStringExtra(PROJECT_MAPS_LINK)
+        val mapsLink = intent.getStringExtra(PROJECT_MAPS_LINK)
+        val address = intent.getStringExtra(PROJECT_ADDRESS)
 
         Log.d("UnitDetailActivity", "onCreate: unitId $unitId")
         Log.d("UnitDetailActivity", "onCreate projectId $projectId")
         intent.removeExtra(PROJECT_DETAIL_UID)
         intent.removeExtra(PROJECT_DETAIL_PID)
+        intent.removeExtra(PROJECT_MAPS_LINK)
+        intent.removeExtra(PROJECT_ADDRESS)
         if (unitId == 0 && projectId == 0) {
             Log.w("UnitDetailActivity", "onCreate: unitId is 0")
             finish()
@@ -89,6 +89,8 @@ class UnitDetailActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(mapsLink))
             startActivity(intent)
         }
+
+        binding.textViewAddressUnit.text = address
 
     }
 

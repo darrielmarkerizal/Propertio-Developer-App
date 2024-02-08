@@ -4,37 +4,37 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.load
 import com.propertio.developer.R
 import com.propertio.developer.api.DomainURL.DOMAIN
-import com.propertio.developer.api.models.GeneralType
-import com.propertio.developer.databinding.ItemInfrastrukturBinding
+import com.propertio.developer.database.infrastructure.InfrastructureTable
 import com.propertio.developer.databinding.ItemTipeInfrastrukturBinding
 
-typealias onClickItemInfrastructureTypeListener = (GeneralType) -> Unit
+typealias onClickItemInfrastructureTypeListener = (InfrastructureTable) -> Unit
 class InfrastructureTypeAdapter(
     private val context : Context,
-    private val propertyTypes: List<GeneralType>,
     private val onClickItemListener: onClickItemInfrastructureTypeListener
-) : RecyclerView.Adapter<InfrastructureTypeAdapter.InfrastructureTypeViewHolder>() {
+) : ListAdapter<InfrastructureTable, InfrastructureTypeAdapter.InfrastructureTypeViewHolder>(InfrastructureTypeDiffUtil()) {
 
     inner class InfrastructureTypeViewHolder(
         private val binding : ItemTipeInfrastrukturBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(type: GeneralType) {
-            Log.d("InfrastructureTypeAdapter", "bind: ${type.toString()}")
+        fun bind(infrastructure: InfrastructureTable) {
+            Log.d("InfrastructureTypeAdapter", "bind: $infrastructure")
 
             with(binding) {
-                textViewSelectedOptionInfrastruktur.text = type.name
+                textViewSelectedOptionInfrastruktur.text = infrastructure.name
 
                 radiobuttonTipeInfrastruktur.setOnClickListener {
-                    onClickItemListener(type)
+                    onClickItemListener(infrastructure)
                 }
 
-                loadImage(type.icon)
+                loadImage(infrastructure.icon)
             }
         }
 
@@ -80,6 +80,17 @@ class InfrastructureTypeAdapter(
 
     }
 
+    class InfrastructureTypeDiffUtil : DiffUtil.ItemCallback<InfrastructureTable>() {
+        override fun areItemsTheSame(oldItem: InfrastructureTable, newItem: InfrastructureTable): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: InfrastructureTable, newItem: InfrastructureTable): Boolean {
+            return oldItem.toString() == newItem.toString()
+        }
+
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -93,10 +104,9 @@ class InfrastructureTypeAdapter(
         return InfrastructureTypeViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = propertyTypes.size
 
     override fun onBindViewHolder(holder: InfrastructureTypeViewHolder, position: Int) {
-        holder.bind(propertyTypes[position])
+        holder.bind(getItem(position))
     }
 
 }

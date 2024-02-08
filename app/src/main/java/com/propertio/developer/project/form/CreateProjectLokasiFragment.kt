@@ -33,14 +33,13 @@ import com.propertio.developer.dialog.model.ProvinceModel
 import com.propertio.developer.dialog.viewmodel.CitiesSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.DistrictsSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.ProvinceSpinnerViewModel
+import com.propertio.developer.maps.MapsFragment
 import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
@@ -186,34 +185,7 @@ class CreateProjectLokasiFragment : Fragment() {
         }
 
         // Gmaps
-        binding.buttonSearchMapsProject.setOnClickListener {
-            val tempURL = binding.editTextLinkMapsProject.text.toString().trim()
-
-            if (tempURL == "" || tempURL.isEmpty()) {
-                val intentToMaps = Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=${projectInformationLocationViewModel.latitude},${projectInformationLocationViewModel.longitude}"))
-                startActivity(intentToMaps)
-
-                return@setOnClickListener
-            }
-            // check if the tempURL is valid URL
-            if (!isValidUrl(tempURL)) {
-                Toast.makeText(requireActivity(), "URL tidak valid", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            lifecycleScope.launch {
-                try {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getLongGMAPSURL(tempURL)))
-                    startActivity(intent)
-                } catch (
-                    e: Exception
-                ) {
-                    Toast.makeText(requireActivity(), "URL yang diberikan tidak valid", Toast.LENGTH_SHORT).show()
-                }
-
-            }
-
-
-        }
+        setupLokasi()
 
 
         activityBinding.floatingButtonBack.setOnClickListener {
@@ -253,6 +225,53 @@ class CreateProjectLokasiFragment : Fragment() {
 
     }
 
+    private fun setupLokasi() {
+        binding.cardViewLokasi.setOnClickListener {
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.frame_container_project_form, MapsFragment())
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
+        projectInformationLocationViewModel.selectedLocation.observe(viewLifecycleOwner) {
+            lifecycleScope.launch(Dispatchers.Main) {
+                if (it == null) return@launch
+
+                val geoRetrofit = GoogleGeoCoding()
+                    .getGeocodingInstance()
+                    .create(GeocodingApi::class.java)
+
+                // Load the local.properties file
+
+                latitude = it.first
+                longitude = it.second
+                Log.d("CreateProjectLokasiFragment", "setupLokasi: $latitude $longitude")
+
+                try {
+                    val response = withContext(Dispatchers.IO) {
+                        geoRetrofit.getLocationFromLatLong(
+                            latlng = "${latitude},${longitude}"
+                        )
+                    }
+
+                    if (response.isSuccessful) {
+                        val data = response.body()?.results?.first()
+                        binding.textViewLokasiTerpilih.text = data?.formattedAddress
+                        binding.textViewLokasiTerpilih.error = null
+                    } else {
+                        Log.e("CreateProjectLokasiFragment", "setupLokasi: ${response.errorBody()?.string()}")
+                    }
+
+                } catch (e: Exception) {
+                    Log.e("CreateProjectLokasiFragment", "setupLokasi: ${e.message}")
+                }
+
+
+            }
+        }
+
+    }
+
 
     private fun openContactUs() {
         // intent to whatsapp
@@ -268,7 +287,6 @@ class CreateProjectLokasiFragment : Fragment() {
         binding.editTextAddressProject.setText(projectInformationLocationViewModel.address)
         binding.editTextPosProject.setText(projectInformationLocationViewModel.postalCode)
         val siteplanImageURL = "https://www.google.com/maps/search/?api=1&query=${projectInformationLocationViewModel.latitude},${projectInformationLocationViewModel.longitude}"
-        binding.editTextLinkMapsProject.setText(siteplanImageURL)
         binding.editTextLinkImmersiveProject.setText(projectInformationLocationViewModel.immersiveSiteplan)
         binding.editTextLinkImmersiveAppsProject.setText(projectInformationLocationViewModel.immersiveApps)
 
@@ -307,6 +325,7 @@ class CreateProjectLokasiFragment : Fragment() {
         val immersiveApps = binding.editTextLinkImmersiveAppsProject.text.toString()
 
         projectInformationLocationViewModel.printLog("when click next button $propertyTypeId.toString()")
+        Log.d("CreateProjectLokasiFragment", "updateProjectLocation: $longitude $latitude")
 
 
         // Image Request Body
@@ -724,89 +743,7 @@ class CreateProjectLokasiFragment : Fragment() {
 
 
 
-    private suspend fun getLongGMAPSURL(shortUrl: String) : String {
-        // first. check if the url is already long
-        if (shortUrl.contains("google.com/maps")) {
-            Log.d("CreateProjectLokasiFragment", "resolveShortUrlAndRetrieveDetails: $shortUrl")
-            return shortUrl
-        }
 
-        // Resolve Short URL
-        val resolvedUrl = resolveShortUrl(shortUrl) // Implement this function to handle the redirect and get the full URL
-        Log.d("CreateProjectLokasiFragment", "resolveShortUrlAndRetrieveDetails: $resolvedUrl")
-
-        // Get Lat Long
-        val latLong = extractLatLongFromUrl(resolvedUrl) // Implement this function to extract the lat long from the URL
-        if (latLong == null) {
-            Log.e("CreateProjectLokasiFragment", "resolveShortUrlAndRetrieveDetails: latLong is null")
-        }
-        Log.d("CreateProjectLokasiFragment", "lat long: $latLong")
-
-        latitude = latLong?.first ?: 0.0
-        longitude = latLong?.second ?: 0.0
-        Log.d("CreateProjectLokasiFragment","https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}")
-        return "https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}"
-    }
-
-
-
-    private suspend fun extractLatLongFromUrl(url: String): Pair<Double, Double>? {
-        val latLongPattern = Regex("!3d([-0-9.]+).*!4d([-0-9.]+)")
-        val matchResult = latLongPattern.find(url)
-        Log.d("CreateProjectLokasiFragment", "extractLatLongFromUrl: ${matchResult?.destructured}")
-        if (matchResult == null) {
-            Log.d("CreateProjectLokasiFragment", "extractLatLongFromUrl: null")
-            //TODO: Geocoding!! AIzaSyAN6a7kSklwRHnNojU72nDnCfhYGhrATh0
-            val geoRetrofit = GoogleGeoCoding()
-                .getGeocodingInstance()
-                .create(GeocodingApi::class.java)
-            val address = url.split("place/").last().split("/").first()
-
-            try {
-                val response = geoRetrofit.geocodeCoordinate(address, "AIzaSyAN6a7kSklwRHnNojU72nDnCfhYGhrATh0")
-                if (response.isSuccessful) {
-                    val data = response.body()
-                    if (data != null) {
-                        val location = data.results?.first()?.geometry?.location
-                        val lat = location?.lat
-                        val lng = location?.lng
-                        if (lat != null && lng != null) {
-                            return Pair(lat, lng)
-                        } else {
-                            Log.w("CreateProjectLokasiFragment", "extractLatLongFromUrl: location is null")
-                        }
-
-                    } else {
-                        Log.d("CreateProjectLokasiFragment", "extractLatLongFromUrl: data is null ${response.errorBody()?.string()}")
-
-                    }
-                } else {
-                    Log.e("CreateProjectLokasiFragment", "extractLatLongFromUrl: ${response.errorBody()?.string()}")
-                }
-            } catch (e: Exception) {
-                Log.e("CreateProjectLokasiFragment", "extractLatLongFromUrl: ${e.message}")
-            }
-
-
-
-        }
-        return matchResult?.let {
-            val (latitude, longitude) = it.destructured
-            Pair(latitude.toDouble(), longitude.toDouble())
-        }
-    }
-
-
-
-    private suspend fun resolveShortUrl(shortUrl: String): String {
-        return withContext(Dispatchers.IO) {
-            val client = OkHttpClient()
-            val request = Request.Builder().url(shortUrl).build()
-            client.newCall(request).execute().use { response ->
-                return@withContext response.request.url.toString() // This should be the full URL
-            }
-        }
-    }
 
 
 

@@ -6,11 +6,7 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.progressindicator.LinearProgressIndicator
-import com.propertio.developer.PropertioDeveloperApplication
 import com.propertio.developer.R
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
@@ -24,20 +20,17 @@ import com.propertio.developer.dialog.model.DistrictsModel
 import com.propertio.developer.dialog.model.ProvinceModel
 import com.propertio.developer.model.LitePhotosModel
 import com.propertio.developer.model.ProjectDocument
-import com.propertio.developer.project.ProjectViewModelFactory
-import com.propertio.developer.project.list.FacilityTypeViewModel
+import com.propertio.developer.project.list.FacilityAndInfrastructureTypeViewModel
 import com.propertio.developer.project.viewmodel.ProjectFacilityViewModel
 import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
 import com.propertio.developer.project.viewmodel.ProjectMediaViewModel
 import com.propertio.developer.project_management.ButtonNavigationProjectManagementClickListener
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.time.times
 
 class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManagementClickListener {
 
@@ -51,7 +44,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
     internal val projectFacility : ProjectFacilityViewModel by viewModels()
     internal var projectId: Int? = null
 
-    internal lateinit var facilityTypeViewModel : FacilityTypeViewModel
+    internal lateinit var facilityAndInfrastructureTypeViewModel : FacilityAndInfrastructureTypeViewModel
 
     internal val formsFragment = listOf(
         CreateProjectInformasiUmumFragment(),
@@ -184,6 +177,14 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
                 status = data.status,
                 siteplanImageURL = data.siteplanImage,
             )
+            val lat = data.address?.latitude?.toDouble()
+            val long = data.address?.longitude?.toDouble()
+            if (lat != null && long != null) {
+                withContext(Dispatchers.Main) {
+                    Log.d("ProjectFormActivity", "loadDataToViewModel: $lat, $long")
+                    projectInformationLocationViewModel.selectedLocation.value = Pair(lat, long)
+                }
+            }
 
             setAddressList(data.address)
             projectMedia.add(

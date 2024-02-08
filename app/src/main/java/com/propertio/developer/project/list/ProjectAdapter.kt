@@ -34,7 +34,7 @@ class ProjectAdapter(
         }
 
         override fun areContentsTheSame(oldItem: ProjectTable, newItem: ProjectTable): Boolean {
-            return oldItem == newItem
+            return oldItem.toString() == newItem.toString()
         }
     }
 

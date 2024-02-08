@@ -58,7 +58,9 @@ class CreateProjectInfrastrukturFragment : Fragment() {
             listInfrastructure = projectInfrastructureViewModel.projectInfrastructureList.value ?: listOf(),
             onItemDelete = {
                 deleteProjectInfrastucture(it.id)
-            }
+            },
+            scope = lifecycleScope,
+            viewModelStoreOwner = this
         )
         return binding.root
     }

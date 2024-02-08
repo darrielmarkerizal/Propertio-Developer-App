@@ -136,7 +136,7 @@
                 />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button"
+                android:id="@+id/button_lihat_proyek"
                 style="@style/button.primary.s"
                 android:layout_marginLeft="33dp"
                 android:layout_marginVertical="30dp"

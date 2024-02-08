@@ -43,6 +43,15 @@ class Retro(private val token : String?) {
             val newRequest = newRequestBuilder.build()
             chain.proceed(newRequest)
         }
+        .addInterceptor { chain ->
+            val originalRequest = chain.request()
+
+            val newRequestBuilder = originalRequest.newBuilder()
+            newRequestBuilder.header("Device", "mobile")
+
+            val newRequest = newRequestBuilder.build()
+            chain.proceed(newRequest)
+        }
         .build()
 
 

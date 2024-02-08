@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -24,10 +23,8 @@ import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResp
 import com.propertio.developer.api.developer.type.GeneralTypeResponse
 import com.propertio.developer.database.facility.FacilityTable
 import com.propertio.developer.databinding.FragmentCreateProjectFasilitasBinding
-import com.propertio.developer.pesan.ChatViewModel
-import com.propertio.developer.project.ProjectViewModelFactory
 import com.propertio.developer.project.list.FacilityTypeAdapter
-import com.propertio.developer.project.list.FacilityTypeViewModel
+import com.propertio.developer.project.list.FacilityAndInfrastructureTypeViewModel
 import com.propertio.developer.project.viewmodel.FacilityViewModelFactory
 import com.propertio.developer.project.viewmodel.ProjectFacilityViewModel
 import kotlinx.coroutines.Dispatchers
@@ -52,7 +49,7 @@ class CreateProjectFasilitasFragment : Fragment() {
             .create(DeveloperApi::class.java)
     }
 
-    private lateinit var facilityTypeViewModel: FacilityTypeViewModel
+    private lateinit var facilityAndInfrastructureTypeViewModel: FacilityAndInfrastructureTypeViewModel
     private val facilityTypeAdapter by lazy {
         FacilityTypeAdapter(
             context = requireContext(),
@@ -93,7 +90,7 @@ class CreateProjectFasilitasFragment : Fragment() {
 
 
         val factory = FacilityViewModelFactory((requireActivity().application as PropertioDeveloperApplication).repository)
-        facilityTypeViewModel = ViewModelProvider(requireActivity(), factory)[FacilityTypeViewModel::class.java]
+        facilityAndInfrastructureTypeViewModel = ViewModelProvider(requireActivity(), factory)[FacilityAndInfrastructureTypeViewModel::class.java]
 
 
         setRecyclerCategoryFacility()
@@ -105,7 +102,7 @@ class CreateProjectFasilitasFragment : Fragment() {
                     currentTab.value = 1
                 } else{
                     currentTab.value = 0
-                    updateRecyclerList(facilityTypeViewModel.getAllFacilityType())
+                    updateRecyclerList(facilityAndInfrastructureTypeViewModel.getAllFacilityType())
 
                 }
             }
@@ -118,7 +115,7 @@ class CreateProjectFasilitasFragment : Fragment() {
                     currentTab.value = 2
                 } else{
                     currentTab.value = 0
-                    updateRecyclerList(facilityTypeViewModel.getAllFacilityType())
+                    updateRecyclerList(facilityAndInfrastructureTypeViewModel.getAllFacilityType())
 
                 }
             }
@@ -130,7 +127,7 @@ class CreateProjectFasilitasFragment : Fragment() {
                     currentTab.value = 3
                 } else{
                     currentTab.value = 0
-                    updateRecyclerList(facilityTypeViewModel.getAllFacilityType())
+                    updateRecyclerList(facilityAndInfrastructureTypeViewModel.getAllFacilityType())
 
                 }
             }
@@ -185,14 +182,14 @@ class CreateProjectFasilitasFragment : Fragment() {
             if (query.isNotEmpty()) {
                 lifecycleScope.launch {
                     val facilityList = withContext(Dispatchers.IO) {
-                        facilityTypeViewModel.searchFacility(query)
+                        facilityAndInfrastructureTypeViewModel.searchFacility(query)
                     }
                     updateRecyclerList(facilityList)
                 }
             } else {
                 lifecycleScope.launch {
                     val facilityList = withContext(Dispatchers.IO) {
-                        facilityTypeViewModel.getAllFacilityType()
+                        facilityAndInfrastructureTypeViewModel.getAllFacilityType()
                     }
 
                     updateRecyclerList(facilityList)
@@ -274,7 +271,7 @@ class CreateProjectFasilitasFragment : Fragment() {
     private fun changeCategoryFacility(category: String) {
         lifecycleScope.launch {
             val facilityList = withContext(Dispatchers.IO) {
-                facilityTypeViewModel.getAllFacilityByCategory(category)
+                facilityAndInfrastructureTypeViewModel.getAllFacilityByCategory(category)
             }
 
             updateRecyclerList(facilityList)
@@ -296,14 +293,14 @@ class CreateProjectFasilitasFragment : Fragment() {
 
                             lifecycleScope.launch {
                                 facilities.forEach {
-                                    facilityTypeViewModel.insertFacility(
+                                    facilityAndInfrastructureTypeViewModel.insertFacility(
                                         id = it.id!!,
                                         name = it.name!!,
                                         category = it.category!!,
                                         icon = it.icon ?: "",
                                     )
                                 }
-                                updateRecyclerList(facilityTypeViewModel.getAllFacilityType())
+                                updateRecyclerList(facilityAndInfrastructureTypeViewModel.getAllFacilityType())
                             }
 
                             insertRecyclerList()

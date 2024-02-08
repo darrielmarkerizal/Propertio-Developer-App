@@ -402,7 +402,36 @@ class CreateProjectMediaFragment : Fragment() {
 
                 override fun onFailure(call: Call<UpdateProjectResponse>, t: Throwable) {
                     Log.e("CreateProjectMedia", "onFailure: ${t.message}")
-                    Toast.makeText(requireActivity(), "Gagal Menambahkan Media Proyek", Toast.LENGTH_SHORT).show()
+
+                    if (t.message?.contains("No such file or directory") == true) {
+                        developerApi.uploadAnotherProjectMedia(
+                            projectId = projectIdBody,
+                            videoLink = youtubeLinkBody,
+                            virtualTourName = virtualTourBody,
+                            virtualTourLink = virtualTourLinkBody,
+                        ).enqueue(object : Callback<UpdateProjectResponse> {
+                            override fun onResponse(
+                                call: Call<UpdateProjectResponse>,
+                                response: Response<UpdateProjectResponse>
+                            ) {
+                                if (response.isSuccessful) {
+                                    Log.d("CreateProjectMedia", "onResponse: ${response.body()}")
+                                } else {
+                                    Log.e("CreateProjectMedia", "onResponse: ${response.body()}")
+                                    Toast.makeText(requireActivity(), "Gagal Menambahkan Media Proyek", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+
+                            override fun onFailure(call: Call<UpdateProjectResponse>, t: Throwable) {
+                                Log.e("CreateProjectMedia", "onFailure: ${t.message}")
+                                Toast.makeText(requireActivity(), "Gagal Menambahkan Dokumen Proyek Properti", Toast.LENGTH_SHORT).show()
+
+                            }
+
+                        })
+                    } else {
+                        Toast.makeText(requireActivity(), "Gagal Menambahkan Media Proyek", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
             })
