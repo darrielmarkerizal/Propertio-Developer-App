@@ -26,7 +26,12 @@ class CitiesSheetFragment : BottomSheetDialogAbstract() {
     }
 
     private lateinit var citiesViewModel: CitiesSpinnerViewModel
+    private var call: Call<List<City>>? = null
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        call?.cancel()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,7 +58,8 @@ class CitiesSheetFragment : BottomSheetDialogAbstract() {
             .create(AddressApi::class.java)
 
         citiesViewModel.citiesData.value?.let {
-            retro.getCities(it.provinceId).enqueue(object : Callback<List<City>> {
+            call = retro.getCities(it.provinceId)
+            call?.enqueue(object : Callback<List<City>> {
                 override fun onResponse(
                     call: Call<List<City>>,
                     response: Response<List<City>>

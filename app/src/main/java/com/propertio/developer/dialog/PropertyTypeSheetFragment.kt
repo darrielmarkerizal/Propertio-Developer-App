@@ -21,11 +21,17 @@ import retrofit2.Response
 
 class PropertyTypeSheetFragment : BottomSheetDialogAbstract() {
 
+    private var call: Call<GeneralTypeResponse>? = null
     private val binding by lazy {
         FragmentBottomRecyclerWithSearchBarSheetBinding.inflate(layoutInflater)
     }
 
     private lateinit var propertyTypeViewModel: PropertyTypeSpinnerViewModel
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        call?.cancel()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,7 +58,8 @@ class PropertyTypeSheetFragment : BottomSheetDialogAbstract() {
             .getRetroClientInstance()
             .create(DeveloperApi::class.java)
 
-        retro.getPropertyType().enqueue(object : Callback<GeneralTypeResponse> {
+        call = retro.getPropertyType()
+        call?.enqueue(object : Callback<GeneralTypeResponse> {
             override fun onResponse(
                 call: Call<GeneralTypeResponse>,
                 response: Response<GeneralTypeResponse>

@@ -29,6 +29,7 @@ import retrofit2.Response
 
 class InfrastructureTypeSheetFragment : BottomSheetDialogAbstract() {
 
+    private var call: Call<GeneralTypeResponse>? = null
     private val binding by lazy {
         FragmentBottomRecyclerWithSearchBarSheetBinding.inflate(layoutInflater)
     }
@@ -36,6 +37,11 @@ class InfrastructureTypeSheetFragment : BottomSheetDialogAbstract() {
     private lateinit var infrastructureTypeViewModel: InfrastructureTypeSpinnerViewModel
 
     private lateinit var facilityAndInfrastructureTypeViewModel : FacilityAndInfrastructureTypeViewModel
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        call?.cancel()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -106,7 +112,8 @@ class InfrastructureTypeSheetFragment : BottomSheetDialogAbstract() {
             .getRetroClientInstance()
             .create(DeveloperApi::class.java)
 
-        retro.getInfrastructureType().enqueue(object : Callback<GeneralTypeResponse> {
+        call = retro.getInfrastructureType()
+        call?.enqueue(object : Callback<GeneralTypeResponse> {
             override fun onResponse(
                 call: Call<GeneralTypeResponse>,
                 response: Response<GeneralTypeResponse>
