@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.common.address.AddressApi
@@ -20,14 +19,19 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CitiesSheetFragment : BottomSheetDialogFragment() {
+class CitiesSheetFragment : BottomSheetDialogAbstract() {
 
     private val binding by lazy {
         FragmentBottomRecyclerWithSearchBarSheetBinding.inflate(layoutInflater)
     }
 
     private lateinit var citiesViewModel: CitiesSpinnerViewModel
+    private var call: Call<List<City>>? = null
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        call?.cancel()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,7 +58,8 @@ class CitiesSheetFragment : BottomSheetDialogFragment() {
             .create(AddressApi::class.java)
 
         citiesViewModel.citiesData.value?.let {
-            retro.getCities(it.provinceId).enqueue(object : Callback<List<City>> {
+            call = retro.getCities(it.provinceId)
+            call?.enqueue(object : Callback<List<City>> {
                 override fun onResponse(
                     call: Call<List<City>>,
                     response: Response<List<City>>

@@ -252,13 +252,19 @@ class RegisterActivity : AppCompatActivity() {
                 editTextNomorTelepon.requestFocus()
                 return
             }
-            if (editTextPassword.text.toString().isEmpty()) {
+            if (editTextPassword.text.toString().trim().isEmpty()) {
                 editTextPasswordLayout.isEndIconVisible = false
                 editTextPassword.error = "Password tidak boleh kosong"
                 editTextPassword.requestFocus()
                 return
             }
-            if (editTextPasswordConfirmation.text.toString() != editTextPassword.text.toString()) {
+            if (editTextPassword.text.toString().trim().length < 5) {
+                editTextPasswordLayout.isEndIconVisible = false
+                editTextPassword.error = "Password minimal 5 karakter"
+                editTextPassword.requestFocus()
+                return
+            }
+            if (editTextPasswordConfirmation.text.toString().trim() != editTextPassword.text.toString().trim()) {
                 editTextPasswordConfirmationLayout.isEndIconVisible = false
                 editTextPasswordConfirmation.error = "Password tidak sama"
                 editTextPasswordConfirmation.requestFocus()
@@ -289,8 +295,8 @@ class RegisterActivity : AppCompatActivity() {
 
             val userRequest = RegisterUserRequest(
                 email = editTextEmail.text.toString(),
-                password = editTextPassword.text.toString(),
-                passwordConfirmation = editTextPasswordConfirmation.text.toString(),
+                password = editTextPassword.text.toString().trim(),
+                passwordConfirmation = editTextPasswordConfirmation.text.toString().trim(),
                 firstName = editTextNamaDepan.text.toString(),
                 lastName = editTextNamaBelakang.text.toString(),
                 phoneNumber = "${textViewNomorTeleponPrefix.text.toString().removePrefix(" + ")}${editTextNomorTelepon.text}",

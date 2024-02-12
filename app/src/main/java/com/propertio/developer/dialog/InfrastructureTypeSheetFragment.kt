@@ -9,7 +9,6 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.propertio.developer.PropertioDeveloperApplication
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
@@ -28,8 +27,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class InfrastructureTypeSheetFragment : BottomSheetDialogFragment() {
+class InfrastructureTypeSheetFragment : BottomSheetDialogAbstract() {
 
+    private var call: Call<GeneralTypeResponse>? = null
     private val binding by lazy {
         FragmentBottomRecyclerWithSearchBarSheetBinding.inflate(layoutInflater)
     }
@@ -37,6 +37,11 @@ class InfrastructureTypeSheetFragment : BottomSheetDialogFragment() {
     private lateinit var infrastructureTypeViewModel: InfrastructureTypeSpinnerViewModel
 
     private lateinit var facilityAndInfrastructureTypeViewModel : FacilityAndInfrastructureTypeViewModel
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        call?.cancel()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -107,7 +112,8 @@ class InfrastructureTypeSheetFragment : BottomSheetDialogFragment() {
             .getRetroClientInstance()
             .create(DeveloperApi::class.java)
 
-        retro.getInfrastructureType().enqueue(object : Callback<GeneralTypeResponse> {
+        call = retro.getInfrastructureType()
+        call?.enqueue(object : Callback<GeneralTypeResponse> {
             override fun onResponse(
                 call: Call<GeneralTypeResponse>,
                 response: Response<GeneralTypeResponse>

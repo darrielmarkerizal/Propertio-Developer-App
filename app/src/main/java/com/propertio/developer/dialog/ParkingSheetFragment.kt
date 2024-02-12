@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.propertio.developer.database.MasterDataDeveloperPropertio
 import com.propertio.developer.databinding.FragmentBottomRecyclerWithSearchBarSheetBinding
 import com.propertio.developer.dialog.adapter.ParkingAdapter
 import com.propertio.developer.dialog.viewmodel.ParkingTypeSpinnerViewModel
 
-class ParkingSheetFragment : BottomSheetDialogFragment() {
+class ParkingSheetFragment : BottomSheetDialogAbstract() {
 
     private val binding by lazy {
         FragmentBottomRecyclerWithSearchBarSheetBinding.inflate(layoutInflater)
