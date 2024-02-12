@@ -7,13 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.common.address.AddressApi
 import com.propertio.developer.api.common.address.Province
-import com.propertio.developer.api.profile.ProfileApi
-import com.propertio.developer.api.profile.ProfileResponse
 import com.propertio.developer.databinding.FragmentBottomRecyclerWithSearchBarSheetBinding
 import com.propertio.developer.dialog.adapter.ProvinceAdapter
 import com.propertio.developer.dialog.model.ProvinceModel
@@ -22,14 +19,19 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ProvinceSheetFragment : BottomSheetDialogFragment() {
+class ProvinceSheetFragment : BottomSheetDialogAbstract() {
 
     private val binding by lazy {
         FragmentBottomRecyclerWithSearchBarSheetBinding.inflate(layoutInflater)
     }
 
     private lateinit var provinceViewModel: ProvinceSpinnerViewModel
+    private var call: Call<List<Province>>? = null
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        call?.cancel()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +49,12 @@ class ProvinceSheetFragment : BottomSheetDialogFragment() {
 
         provinceViewModel = ViewModelProvider(requireActivity())[ProvinceSpinnerViewModel::class.java]
 
-        fetchProvincesApi()
+        try {
+            fetchProvincesApi()
+        } catch (e: Exception) {
+            Log.e("ProvinceSheetFragment", "onViewCreated: ${e.message}", e)
+            dismissNow()
+        }
     }
 
     private fun fetchProvincesApi() {
@@ -55,7 +62,8 @@ class ProvinceSheetFragment : BottomSheetDialogFragment() {
             .getRetroClientInstance()
             .create(AddressApi::class.java)
 
-        retro.getProvinces().enqueue(object : Callback<List<Province>> {
+        call = retro.getProvinces()
+        call?.enqueue(object : Callback<List<Province>> {
             override fun onResponse(
                 call: Call<List<Province>>,
                 response: Response<List<Province>>

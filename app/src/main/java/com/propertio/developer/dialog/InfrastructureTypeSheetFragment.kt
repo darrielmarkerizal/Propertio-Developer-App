@@ -9,7 +9,6 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.propertio.developer.PropertioDeveloperApplication
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
@@ -28,7 +27,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class InfrastructureTypeSheetFragment : BottomSheetDialogFragment() {
+class InfrastructureTypeSheetFragment : BottomSheetDialogAbstract() {
 
     private val binding by lazy {
         FragmentBottomRecyclerWithSearchBarSheetBinding.inflate(layoutInflater)

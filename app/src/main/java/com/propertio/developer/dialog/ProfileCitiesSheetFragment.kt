@@ -7,12 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.common.address.City
 import com.propertio.developer.api.profile.ProfileApi
-import com.propertio.developer.api.profile.ProfileResponse
 import com.propertio.developer.databinding.FragmentBottomRecyclerWithSearchBarSheetBinding
 import com.propertio.developer.dialog.adapter.CitiesAdapter
 import com.propertio.developer.dialog.model.CitiesModel
@@ -21,7 +19,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ProfileCitiesSheetFragment(private val provinceId: String) : BottomSheetDialogFragment() {
+class ProfileCitiesSheetFragment(private val provinceId: String) : BottomSheetDialogAbstract() {
     private val binding by lazy {
         FragmentBottomRecyclerWithSearchBarSheetBinding.inflate(layoutInflater)
     }

@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.common.address.AddressApi
@@ -20,7 +19,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DistrictsSheetFragment : BottomSheetDialogFragment() {
+class DistrictsSheetFragment : BottomSheetDialogAbstract() {
 
     private val binding by lazy {
         FragmentBottomRecyclerWithSearchBarSheetBinding.inflate(layoutInflater)
