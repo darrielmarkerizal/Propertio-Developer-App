@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.propertio.developer.database.MasterData
 import com.propertio.developer.database.MasterDataDeveloperPropertio
-import com.propertio.developer.dialog.adapter.WaterAdapter
+import com.propertio.developer.dialog.adapter.SimpleMasterDataAdapter
 import com.propertio.developer.dialog.viewmodel.WaterTypeSpinnerViewModel
 
 class WaterSheetFragment : BottomSheetDialogAbstract() {
@@ -26,7 +26,7 @@ class WaterSheetFragment : BottomSheetDialogAbstract() {
         return binding.root
     }
 
-    private val adapter = WaterAdapter(
+    private val adapter = SimpleMasterDataAdapter(
         onClickItemListener = {
             Log.d("WaterSheet", "setupRecyclerView: $it")
             waterTypeViewModel.waterTypeData.postValue(it)

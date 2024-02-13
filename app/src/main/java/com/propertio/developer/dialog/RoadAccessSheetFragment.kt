@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.propertio.developer.database.MasterDataDeveloperPropertio
+import com.propertio.developer.dialog.adapter.SimpleMasterDataAdapter
 import com.propertio.developer.dialog.viewmodel.RoadAccessTypeSpinnerViewModel
 
 class RoadAccessSheetFragment : BottomSheetDialogAbstract() {

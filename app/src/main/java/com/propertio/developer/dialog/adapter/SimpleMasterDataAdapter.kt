@@ -1,4 +1,4 @@
-package com.propertio.developer.dialog
+package com.propertio.developer.dialog.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,7 +10,9 @@ import com.propertio.developer.databinding.ItemSimpleCardForRecyclerBinding
 
 class SimpleMasterDataAdapter(
     private val onClickItemListener: (MasterData) -> Unit
-) : ListAdapter<MasterData, SimpleMasterDataAdapter.SimpleMasterDataViewHolder>(MasterDiffUtilCallback()) {
+) : ListAdapter<MasterData, SimpleMasterDataAdapter.SimpleMasterDataViewHolder>(
+    MasterDiffUtilCallback()
+) {
     inner class SimpleMasterDataViewHolder(
         private val binding: ItemSimpleCardForRecyclerBinding
     ) : RecyclerView.ViewHolder(binding.root) {
