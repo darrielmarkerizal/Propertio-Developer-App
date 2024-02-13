@@ -1,6 +1,7 @@
 package com.propertio.developer.dialog
 
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +12,6 @@ import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.common.address.AddressApi
 import com.propertio.developer.api.common.address.District
-import com.propertio.developer.databinding.FragmentBottomRecyclerWithSearchBarSheetBinding
 import com.propertio.developer.dialog.adapter.DistrictAdapter
 import com.propertio.developer.dialog.model.DistrictsModel
 import com.propertio.developer.dialog.viewmodel.DistrictsSpinnerViewModel
@@ -22,9 +22,6 @@ import retrofit2.Response
 class DistrictsSheetFragment : BottomSheetDialogAbstract() {
 
     private var call: Call<List<District>>? = null
-    private val binding by lazy {
-        FragmentBottomRecyclerWithSearchBarSheetBinding.inflate(layoutInflater)
-    }
 
     private lateinit var districtsViewModel: DistrictsSpinnerViewModel
 
@@ -41,6 +38,34 @@ class DistrictsSheetFragment : BottomSheetDialogAbstract() {
         return binding.root
     }
 
+    private val districts = mutableListOf<District>()
+    private val districtAdapter = DistrictAdapter(
+        onClickItemListener = {
+            Log.d("DistrictsSheetFragment", "setupRecyclerView: $it")
+            districtsViewModel.districtsData
+                .postValue(
+                    DistrictsModel(
+                        districtsId = it.id,
+                        citiesId = it.cityId,
+                        districtsName = it.name
+                    )
+                )
+
+            dismiss()
+        }
+    )
+    override val onEmptySearchFilter: () -> Unit
+        get() = {
+            districtAdapter.submitList(districts)
+        }
+    override val onNotEmptySearchFilter: (Editable) -> Unit
+        get() = {
+            val filteredList = districts.filter {
+                it.name.contains(it.name, ignoreCase = true)
+            }
+            districtAdapter.submitList(filteredList)
+        }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -49,7 +74,9 @@ class DistrictsSheetFragment : BottomSheetDialogAbstract() {
 
         districtsViewModel = ViewModelProvider(requireActivity())[DistrictsSpinnerViewModel::class.java]
 
+        setupRecyclerView()
         fetchDistrictsApi()
+
     }
 
     private fun fetchDistrictsApi() {
@@ -67,13 +94,12 @@ class DistrictsSheetFragment : BottomSheetDialogAbstract() {
                 ) {
                     if (response.isSuccessful) {
                         Log.d("DistrictsSheetFragment", "onResponse: ${response.body()}")
-                        val districts = response.body()
+                        val districtsList = response.body()
 
-                        if (districts != null) {
-                            setupRecyclerView(districts)
-
-
-
+                        if (districtsList != null) {
+                            districts.clear()
+                            districts.addAll(districtsList)
+                            districtAdapter.submitList(districts)
                         }
                     }
                 }
@@ -85,28 +111,12 @@ class DistrictsSheetFragment : BottomSheetDialogAbstract() {
         }
     }
 
-    private fun setupRecyclerView(district: List<District>) {
-        Log.d("CitiesSheetFragment", "setupRecyclerView: $district")
+    private fun setupRecyclerView() {
+        Log.d("CitiesSheetFragment", "setupRecyclerView")
 
         with(binding) {
             recyclerViewSheet.apply {
-                adapter = DistrictAdapter(
-                    districts = district,
-                    onClickItemListener = {
-                        Log.d("DistrictsSheetFragment", "setupRecyclerView: $it")
-                        districtsViewModel.districtsData
-                            .postValue(
-                                DistrictsModel(
-                                    districtsId = it.id,
-                                    citiesId = it.cityId,
-                                    districtsName = it.name
-                                )
-                            )
-
-                        dismiss()
-                    }
-                )
-
+                adapter = districtAdapter
                 layoutManager = LinearLayoutManager(requireActivity())
             }
         }

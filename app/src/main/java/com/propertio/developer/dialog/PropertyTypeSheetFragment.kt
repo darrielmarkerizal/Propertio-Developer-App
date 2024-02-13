@@ -1,6 +1,7 @@
 package com.propertio.developer.dialog
 
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,6 @@ import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.type.GeneralTypeResponse
 import com.propertio.developer.api.models.GeneralType
-import com.propertio.developer.databinding.FragmentBottomRecyclerWithSearchBarSheetBinding
 import com.propertio.developer.dialog.adapter.PropertyTypeAdapter
 import com.propertio.developer.dialog.viewmodel.PropertyTypeSpinnerViewModel
 import retrofit2.Call
@@ -22,9 +22,7 @@ import retrofit2.Response
 class PropertyTypeSheetFragment : BottomSheetDialogAbstract() {
 
     private var call: Call<GeneralTypeResponse>? = null
-    private val binding by lazy {
-        FragmentBottomRecyclerWithSearchBarSheetBinding.inflate(layoutInflater)
-    }
+
 
     private lateinit var propertyTypeViewModel: PropertyTypeSpinnerViewModel
 
@@ -40,6 +38,11 @@ class PropertyTypeSheetFragment : BottomSheetDialogAbstract() {
     ): View {
         return binding.root
     }
+
+    override val onEmptySearchFilter: () -> Unit
+        get() = {/*NOTE: not implemented*/}
+    override val onNotEmptySearchFilter: (Editable) -> Unit
+        get() = {/*NOTE: not implemented*/}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

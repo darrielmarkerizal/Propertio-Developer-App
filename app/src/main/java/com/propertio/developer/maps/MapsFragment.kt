@@ -109,6 +109,7 @@ class MapsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+        hideNavigation()
         return binding.root
     }
 
@@ -116,7 +117,7 @@ class MapsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        hideNavigation()
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)

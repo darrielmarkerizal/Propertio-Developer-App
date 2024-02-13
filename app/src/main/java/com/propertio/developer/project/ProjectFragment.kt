@@ -123,8 +123,12 @@ class ProjectFragment : Fragment() {
     }
 
     private fun refreshRecyclerListAdapter() {
-        Log.d("ProjectFragment", "refreshRecyclerListAdapter: ")
-        projectViewModel.fetchLiteProject(TokenManager(requireContext()).token!!)
+        lifecycleScope.launch(Dispatchers.IO) {
+            Log.d("ProjectFragment", "refreshRecyclerListAdapter: ")
+            projectViewModel.fetchLiteProject(TokenManager(requireContext()).token!!)
+
+            loadProjects(true)
+        }
     }
 
     private val launcherToRincian = registerForActivityResult(
@@ -346,9 +350,8 @@ class ProjectFragment : Fragment() {
                 visibleThreshold = 5
                 setRecyclerListProject()
             } else {
-                val filter = binding.textEditSearchFilter.text.toString()
                 visibleThreshold = 5
-                setRecyclerListProject(filter)
+                loadProjects()
             }
         }
 
@@ -381,7 +384,7 @@ class ProjectFragment : Fragment() {
 
         lifecycleScope.launch {
             currentStatus = false
-            setRecyclerListProject()
+            loadProjects(true)
         }
     }
 
@@ -395,21 +398,17 @@ class ProjectFragment : Fragment() {
 
         lifecycleScope.launch {
             currentStatus = true
-            setRecyclerListProject()
+            loadProjects(true)
         }
     }
 
 
 
-    private fun setRecyclerListProject(filter : String = "") {
+    private fun setRecyclerListProject() {
 
         binding.recylerViewProjects.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = projectAdapter
-
-            lifecycleScope.launch {
-                loadProjects(filter)
-            }
 
         }
 
@@ -428,9 +427,8 @@ class ProjectFragment : Fragment() {
 
                         binding.progressBarProject.visibility = View.VISIBLE
 
-                        lifecycleScope.launch {
-                            loadProjects(filter)
-                        }
+                        loadProjects()
+
                     }
                 }
 
@@ -439,12 +437,15 @@ class ProjectFragment : Fragment() {
 
     }
 
+    private inline val searchFilter : String
+        get() = binding.textEditSearchFilter.text.toString().trim()
 
-    private suspend fun loadProjects(filter : String = "") {
-        withContext(Dispatchers.Main) {
+
+    private fun loadProjects(forceUpdate : Boolean = false) {
+        lifecycleScope.launch{
             Log.d("ProjectFragment", "loadProjects: visibleThreshold: $visibleThreshold")
             val projects = withContext(Dispatchers.IO) {
-                projectViewModel.allProjectsPaginated(visibleThreshold, 0, currentStatus, filter).asFlow().first()
+                projectViewModel.allProjectsPaginated(visibleThreshold, 0, currentStatus, searchFilter).asFlow().first()
             }
             if (projects.isEmpty()) {
                 binding.frameLayoutBelumAdaProyek.visibility = View.VISIBLE
@@ -452,6 +453,9 @@ class ProjectFragment : Fragment() {
                 binding.frameLayoutBelumAdaProyek.visibility = View.GONE
             }
 
+            if (forceUpdate) {
+                projectAdapter.submitList(emptyList())
+            }
 
             projectAdapter.submitList(projects)
 
@@ -459,7 +463,6 @@ class ProjectFragment : Fragment() {
             binding.progressBarProject.visibility = View.GONE
             Log.d("ProjectFragment", "loadProjects: ${projects.size} ${projectAdapter.currentList.size}")
         }
-
     }
 
 

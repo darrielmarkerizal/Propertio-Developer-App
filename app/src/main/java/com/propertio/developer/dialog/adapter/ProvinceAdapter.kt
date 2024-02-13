@@ -3,15 +3,16 @@ package com.propertio.developer.dialog.adapter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.propertio.developer.api.common.address.Province
 import com.propertio.developer.databinding.ItemSimpleCardForRecyclerBinding
 
 typealias onClickItemProvinceListener = (Province) -> Unit
 class ProvinceAdapter(
-    private val provinces: List<Province>,
     private val onClickItemListener: onClickItemProvinceListener
-) : RecyclerView.Adapter<ProvinceAdapter.ProvinceViewHolder>()
+) : ListAdapter<Province, ProvinceAdapter.ProvinceViewHolder>(ProvinceDiffCallback())
 {
     inner class ProvinceViewHolder (
         private val binding : ItemSimpleCardForRecyclerBinding
@@ -31,6 +32,17 @@ class ProvinceAdapter(
 
     }
 
+    class ProvinceDiffCallback : DiffUtil.ItemCallback<Province>() {
+        override fun areItemsTheSame(oldItem: Province, newItem: Province): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Province, newItem: Province): Boolean {
+            return oldItem.toString() == newItem.toString()
+        }
+
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProvinceViewHolder {
         val binding = ItemSimpleCardForRecyclerBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -40,10 +52,9 @@ class ProvinceAdapter(
         return ProvinceViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = provinces.size
 
     override fun onBindViewHolder(holder: ProvinceViewHolder, position: Int) {
-        holder.bind(provinces[position])
+        holder.bind(getItem(position))
     }
 
 }

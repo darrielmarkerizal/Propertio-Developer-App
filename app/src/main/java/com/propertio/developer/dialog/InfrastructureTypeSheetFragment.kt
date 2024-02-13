@@ -1,11 +1,11 @@
 package com.propertio.developer.dialog
 
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +15,6 @@ import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.type.GeneralTypeResponse
 import com.propertio.developer.api.models.GeneralType
-import com.propertio.developer.databinding.FragmentBottomRecyclerWithSearchBarSheetBinding
 import com.propertio.developer.dialog.adapter.InfrastructureTypeAdapter
 import com.propertio.developer.dialog.viewmodel.InfrastructureTypeSpinnerViewModel
 import com.propertio.developer.project.list.FacilityAndInfrastructureTypeViewModel
@@ -30,9 +29,7 @@ import retrofit2.Response
 class InfrastructureTypeSheetFragment : BottomSheetDialogAbstract() {
 
     private var call: Call<GeneralTypeResponse>? = null
-    private val binding by lazy {
-        FragmentBottomRecyclerWithSearchBarSheetBinding.inflate(layoutInflater)
-    }
+
 
     private lateinit var infrastructureTypeViewModel: InfrastructureTypeSpinnerViewModel
 
@@ -82,29 +79,35 @@ class InfrastructureTypeSheetFragment : BottomSheetDialogAbstract() {
 
         fetchInfrastructureTypeApi()
         setupRecyclerView()
-        setupSearchBar()
     }
 
-    private fun setupSearchBar() {
+    override val onEmptySearchFilter: () -> Unit
+        get() = {
+            Log.d("InfrastructureTypeSheet", "setupSearchBar: All Data")
+            lifecycleScope.launch {
+                val filteredList = withContext(Dispatchers.IO) {
+                    facilityAndInfrastructureTypeViewModel
+                        .searchInfrastructure("")
+                }
 
-
-
-        binding.searchBarBottomSheet.doAfterTextChanged { query ->
+                infrastructureAdapter.submitList(filteredList)
+            }
+        }
+    override val onNotEmptySearchFilter: (Editable) -> Unit
+        get() = { query ->
             Log.d("InfrastructureTypeSheet", "setupSearchBar: $query")
             lifecycleScope.launch {
-                if (query != null) {
-                    val filteredList = withContext(Dispatchers.IO) {
-                        facilityAndInfrastructureTypeViewModel.searchInfrastructure(
-                            query.toString()
-                        )
-                    }
-
-                    infrastructureAdapter.submitList(filteredList)
+                val filteredList = withContext(Dispatchers.IO) {
+                    facilityAndInfrastructureTypeViewModel.searchInfrastructure(
+                        query.toString()
+                    )
                 }
-            }
 
+                infrastructureAdapter.submitList(filteredList)
+            }
         }
-    }
+
+
 
     private fun fetchInfrastructureTypeApi() {
         Log.d("InfrastructureTypeSheet", "fetchInfrastructureTypeApi: ${infrastructureTypeViewModel.infrastructureTypeData.value}")

@@ -3,6 +3,8 @@ package com.propertio.developer.dialog.adapter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.propertio.developer.api.common.address.City
 import com.propertio.developer.databinding.ItemSimpleCardForRecyclerBinding
@@ -10,9 +12,8 @@ import com.propertio.developer.databinding.ItemSimpleCardForRecyclerBinding
 
 typealias onClickItemCitiesListener = (City) -> Unit
 class CitiesAdapter(
-    private val cities : List<City>,
     private val onClickItemListener: onClickItemCitiesListener
-) : RecyclerView.Adapter<CitiesAdapter.CitiesViewHolder>()
+) : ListAdapter<City, CitiesAdapter.CitiesViewHolder>(DiffUtilCallback())
 {
     inner class CitiesViewHolder(
         private val binding : ItemSimpleCardForRecyclerBinding
@@ -32,6 +33,17 @@ class CitiesAdapter(
 
     }
 
+    class DiffUtilCallback : DiffUtil.ItemCallback<City>() {
+        override fun areItemsTheSame(oldItem: City, newItem: City): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: City, newItem: City): Boolean {
+            return oldItem.toString() == newItem.toString()
+        }
+
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CitiesViewHolder {
         val binding = ItemSimpleCardForRecyclerBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -42,9 +54,8 @@ class CitiesAdapter(
         return CitiesViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = cities.size
 
     override fun onBindViewHolder(holder: CitiesViewHolder, position: Int) {
-        holder.bind(cities[position])
+        holder.bind(getItem(position))
     }
 }
