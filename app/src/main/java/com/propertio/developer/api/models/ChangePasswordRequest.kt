@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 class ChangePasswordRequest {
-    @SerializedName("current_password")
+    @SerializedName("old_password")
     @Expose
     var currentPassword: String? = null
 
