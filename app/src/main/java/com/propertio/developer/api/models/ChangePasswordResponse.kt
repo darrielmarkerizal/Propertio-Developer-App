@@ -11,4 +11,22 @@ class ChangePasswordResponse {
     @SerializedName("message")
     @Expose
     var message: String? = null
+
+    @SerializedName("data")
+    @Expose
+    var data: Data? = null
+
+    inner class Data (
+        @SerializedName("old_password")
+        @Expose
+        var currentPassword: List<String>? = null,
+
+        @SerializedName("password")
+        @Expose
+        var password: List<String>? = null,
+
+        @SerializedName("password_confirmation")
+        @Expose
+        var passwordConfirmation: List<String>? = null
+    )
 }
