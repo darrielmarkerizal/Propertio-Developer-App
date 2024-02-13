@@ -1,6 +1,7 @@
 package com.propertio.developer.dialog
 
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +12,6 @@ import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.common.address.AddressApi
 import com.propertio.developer.api.common.address.Province
-import com.propertio.developer.databinding.FragmentBottomRecyclerWithSearchBarSheetBinding
 import com.propertio.developer.dialog.adapter.ProvinceAdapter
 import com.propertio.developer.dialog.model.ProvinceModel
 import com.propertio.developer.dialog.viewmodel.ProvinceSpinnerViewModel
@@ -19,14 +19,25 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ProvinceSheetFragment : BottomSheetDialogAbstract() {
-
-    private val binding by lazy {
-        FragmentBottomRecyclerWithSearchBarSheetBinding.inflate(layoutInflater)
-    }
+class ProvinceSheetFragment: BottomSheetDialogAbstract() {
 
     private lateinit var provinceViewModel: ProvinceSpinnerViewModel
     private var call: Call<List<Province>>? = null
+
+    private val dataLists = mutableListOf<Province>()
+    private val provinceAdapter = ProvinceAdapter(
+        onClickItemListener = {
+            Log.d("ProvinceSheetFragment", "setupRecycler: $it")
+            provinceViewModel.provinceData
+                .postValue(
+                    ProvinceModel(
+                        it.id,
+                        it.name
+                    )
+                )
+            dismiss()
+        }
+    )
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -41,6 +52,16 @@ class ProvinceSheetFragment : BottomSheetDialogAbstract() {
         return binding.root
     }
 
+    override val onEmptySearchFilter: () -> Unit
+        get() = { provinceAdapter.submitList(dataLists) }
+    override val onNotEmptySearchFilter: (Editable) -> Unit
+        get() = { text ->
+                val filteredList = dataLists.filter {
+                    it.name.contains(text.toString(), ignoreCase = true)
+                }
+                provinceAdapter.submitList(filteredList)
+        }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -48,6 +69,7 @@ class ProvinceSheetFragment : BottomSheetDialogAbstract() {
         binding.searchBarBottomSheet.hint = "Cari Provinsi"
 
         provinceViewModel = ViewModelProvider(requireActivity())[ProvinceSpinnerViewModel::class.java]
+        setupRecycler()
 
         try {
             fetchProvincesApi()
@@ -55,7 +77,9 @@ class ProvinceSheetFragment : BottomSheetDialogAbstract() {
             Log.e("ProvinceSheetFragment", "onViewCreated: ${e.message}", e)
             dismissNow()
         }
+
     }
+
 
     private fun fetchProvincesApi() {
         val retro = Retro(TokenManager(requireContext()).token)
@@ -73,8 +97,10 @@ class ProvinceSheetFragment : BottomSheetDialogAbstract() {
                     val data = response.body()
 
                     if (data != null) {
-                        setupRecycler(data)
                         binding.progressIndicatorSheet.visibility = View.GONE
+                        dataLists.clear()
+                        dataLists.addAll(data)
+                        provinceAdapter.submitList(data)
                     } else {
                         Log.w("ProvinceSheetFragment", "onResponse: data is null")
                     }
@@ -92,27 +118,11 @@ class ProvinceSheetFragment : BottomSheetDialogAbstract() {
         })
     }
 
-    private fun setupRecycler(provinces : List<Province>) {
-        Log.d("ProvinceSheetFragment", "setupRecycler: $provinces")
+    private fun setupRecycler() {
 
         with(binding) {
             recyclerViewSheet.apply {
-                adapter = ProvinceAdapter(
-                    provinces = provinces,
-                    onClickItemListener = {
-                        Log.d("ProvinceSheetFragment", "setupRecycler: $it")
-                        provinceViewModel.provinceData
-                            .postValue(
-                                ProvinceModel(
-                                    it.id,
-                                    it.name
-                                )
-                            )
-
-                        dismiss()
-                    }
-                )
-
+                adapter = provinceAdapter
                 layoutManager = LinearLayoutManager(requireActivity())
             }
         }

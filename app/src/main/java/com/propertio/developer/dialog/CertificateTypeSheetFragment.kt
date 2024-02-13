@@ -1,6 +1,7 @@
 package com.propertio.developer.dialog
 
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,15 +9,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.propertio.developer.database.MasterDataDeveloperPropertio
-import com.propertio.developer.databinding.FragmentBottomRecyclerWithSearchBarSheetBinding
-import com.propertio.developer.dialog.adapter.CertificateTypeAdapter
 import com.propertio.developer.dialog.viewmodel.CertificateTypeSpinnerViewModel
 
 class CertificateTypeSheetFragment : BottomSheetDialogAbstract() {
 
-    private val binding by lazy {
-        FragmentBottomRecyclerWithSearchBarSheetBinding.inflate(layoutInflater)
-    }
 
     private lateinit var certificateTypeViewModel: CertificateTypeSpinnerViewModel
 
@@ -28,6 +24,26 @@ class CertificateTypeSheetFragment : BottomSheetDialogAbstract() {
         return binding.root
     }
 
+    private val certificateTypes = MasterDataDeveloperPropertio.certificate
+    private val simpleMasterDataAdapter = SimpleMasterDataAdapter(
+        onClickItemListener = {
+            Log.d("CertificateTypeSheet", "setupRecyclerView: $it")
+            certificateTypeViewModel.certificateTypeData.postValue(it)
+
+
+            dismiss()
+        }
+    )
+    override val onEmptySearchFilter: () -> Unit
+        get() = { loadData() }
+    override val onNotEmptySearchFilter: (Editable) -> Unit
+        get() = {
+            val filteredList = certificateTypes.filter {
+                it.toUser.contains(it.toUser, ignoreCase = true)
+            }
+            simpleMasterDataAdapter.submitList(filteredList)
+        }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -37,21 +53,17 @@ class CertificateTypeSheetFragment : BottomSheetDialogAbstract() {
         certificateTypeViewModel = ViewModelProvider(requireActivity())[CertificateTypeSpinnerViewModel::class.java]
 
         setupRecyclerView()
+        loadData()
+    }
+
+    private fun loadData() {
+        simpleMasterDataAdapter.submitList(certificateTypes)
     }
 
     private fun setupRecyclerView() {
         with(binding) {
             recyclerViewSheet.apply {
-                adapter = CertificateTypeAdapter(
-                    certificateTypes = MasterDataDeveloperPropertio.certificate,
-                    onClickItemListener = {
-                        Log.d("CertificateTypeSheet", "setupRecyclerView: $it")
-                        certificateTypeViewModel.certificateTypeData.postValue(it)
-
-
-                        dismiss()
-                    }
-                )
+                adapter = simpleMasterDataAdapter
                 layoutManager = LinearLayoutManager(requireContext())
             }
 
