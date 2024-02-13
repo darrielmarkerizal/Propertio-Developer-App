@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.propertio.developer.databinding.FragmentCountryPhoneCodeSheetBinding
 import com.propertio.developer.dialog.adapter.PhoneCodeAdapter
 import com.propertio.developer.dialog.viewmodel.PhoneCodeViewModel
 
 
-class CountryPhoneCodeSheetFragment : BottomSheetDialogFragment() {
+class CountryPhoneCodeSheetFragment : BottomSheetDialogAbstract() {
 
     private val binding by lazy { FragmentCountryPhoneCodeSheetBinding.inflate(layoutInflater) }
 
