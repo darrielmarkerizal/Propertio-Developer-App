@@ -1,7 +1,5 @@
 package com.propertio.developer.database
 
-import kotlin.text.Typography.amp
-
 
 data class MasterData(val toUser : String, val toDb : String)
 object MasterDataDeveloperPropertio {
@@ -75,7 +73,7 @@ object MasterDataDeveloperPropertio {
     val water = listOf(
         MasterData("PAM", "PAM"),
         MasterData("Sumur", "Sumur"),
-        MasterData("PAM dan Sumur", "PAM $amp Sumur"),
+        MasterData("PAM dan Sumur", "PAM & Sumur"),
         MasterData("Tidak ada", "Tidak ada")
     )
 

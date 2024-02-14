@@ -376,6 +376,67 @@
                 style="@style/button.add"
                 />
 
+            <LinearLayout
+                android:id="@+id/container_input_deskripsi_pengembang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:visibility="visible"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/deskripsi_pengembang"
+                    style="@style/paragraph"/>
+
+                <EditText
+                    android:id="@+id/edit_text_deskripsi_pengembang"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:minHeight="100dp"
+                    android:paddingHorizontal="14.5dp"
+                    android:paddingVertical="14dp"
+                    android:hint="@string/berikan_deskripsi_tentang_perusahaan_anda"
+                    android:textColorHint="@color/text_black_placeholder"
+                    android:textColor="@color/text_black"
+                    style="@style/paragraph"
+                    android:inputType="textMultiLine"
+                    android:layout_gravity="top"
+                    android:background="@drawable/edit_text_rounded_rectangle"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container_input_website"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:visibility="visible"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/website_pengembang"
+                    style="@style/paragraph"/>
+
+                <EditText
+                    android:id="@+id/edit_text_nama_website"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:paddingHorizontal="14.5dp"
+                    android:maxLines="1"
+                    android:hint="@string/www_example_com"
+                    android:textColorHint="@color/text_black_placeholder"
+                    android:textColor="@color/text_black"
+                    style="@style/paragraph"
+                    android:inputType="text"
+                    android:background="@drawable/edit_text_rounded_rectangle"/>
+
+            </LinearLayout>
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_registrasi"
                 android:layout_width="match_parent"

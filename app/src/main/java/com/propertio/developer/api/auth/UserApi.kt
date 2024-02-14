@@ -36,4 +36,9 @@ interface UserApi {
         @Part("address") address: RequestBody,
         @Part pictureProfileFile: MultipartBody.Part
     ) : Call<RegisterUserResponse>
+
+    @POST("v1/auth/register/developer")
+    fun registerDeveloper(
+        @Body request: RegisterDeveloperRequest
+    ): Call<RegisterDeveloperResponse>
 }

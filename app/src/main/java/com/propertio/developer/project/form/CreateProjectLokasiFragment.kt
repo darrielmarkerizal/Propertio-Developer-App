@@ -604,6 +604,7 @@ class CreateProjectLokasiFragment : Fragment() {
                     "\n\tCity : \t${city?.provinceId}\t${city?.citiesName}" +
                     "\n\tDisctrict :\t${district?.districtsId}\t${district?.districtsName}")
 
+            if (province == null) return@launch
 
             lifecycleScope.launch {
                 val isLoadingDone = MutableLiveData<Boolean>(false)
