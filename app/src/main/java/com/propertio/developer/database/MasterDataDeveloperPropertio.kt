@@ -73,7 +73,7 @@ object MasterDataDeveloperPropertio {
     val water = listOf(
         MasterData("PAM", "PAM"),
         MasterData("Sumur", "Sumur"),
-        MasterData("PAM dan Sumur", "PAM dan Sumur"),
+        MasterData("PAM dan Sumur", "PAM & Sumur"),
         MasterData("Tidak ada", "Tidak ada")
     )
 
