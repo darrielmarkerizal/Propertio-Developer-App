@@ -122,33 +122,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/container_forget_password"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="@+id/container_input_password"
-        app:layout_constraintStart_toStartOf="@+id/container_input_password"
-        app:layout_constraintTop_toBottomOf="@+id/container_input_password">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/paragraph.small"
-            android:layout_marginEnd="5dp"
-            android:text="@string/forget_password_caption" />
-
-        <TextView
-            android:id="@+id/link_to_forget_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/blue_600"
-            style="@style/paragraph.small"
-            android:text="@string/forget_password_link_text" />
-
-    </LinearLayout>
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_login"
         style="@style/button.primary.l"
@@ -163,7 +136,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/container_forget_password"
+        app:layout_constraintTop_toBottomOf="@+id/container_input_password"
         app:layout_constraintVertical_bias="0.22000003" />
 
     <LinearLayout
