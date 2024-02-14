@@ -2,13 +2,12 @@ package com.propertio.developer.unit.form.type
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
@@ -16,6 +15,8 @@ import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitRequest
 import com.propertio.developer.api.developer.unitmanagement.UpdateUnitRequest
+import com.propertio.developer.database.MasterDataDeveloperPropertio
+import com.propertio.developer.database.MasterDataDeveloperPropertio.searchByUser
 import com.propertio.developer.databinding.FragmentUnitDataKondominiumBinding
 import com.propertio.developer.dialog.ElectricitySheetFragment
 import com.propertio.developer.dialog.InteriorSheetFragment
@@ -103,11 +104,11 @@ class UnitDataKondominiumFragment : Fragment() {
             formActivity?.unitFormViewModel?.luasBangunan = luas_bangunan
             formActivity?.unitFormViewModel?.jumlahKamarTidur = kamar
             formActivity?.unitFormViewModel?.jumlahKamarMandi = kamar_mandi
-            formActivity?.unitFormViewModel?.jumlahParkir = parking_type
-            formActivity?.unitFormViewModel?.electricityType = electricity_type
-            formActivity?.unitFormViewModel?.waterType = water_type
-            formActivity?.unitFormViewModel?.interiorType = interior_type
-            formActivity?.unitFormViewModel?.roadAccessType = road_access_type
+            formActivity?.unitFormViewModel?.jumlahParkir = MasterDataDeveloperPropertio.parking.searchByUser(parking_type)
+            formActivity?.unitFormViewModel?.electricityType = MasterDataDeveloperPropertio.electricity.searchByUser(electricity_type)
+            formActivity?.unitFormViewModel?.waterType = MasterDataDeveloperPropertio.water.searchByUser(water_type)
+            formActivity?.unitFormViewModel?.interiorType = MasterDataDeveloperPropertio.interior.searchByUser(interior_type)
+            formActivity?.unitFormViewModel?.roadAccessType = MasterDataDeveloperPropertio.roadAccess.searchByUser(road_access_type)
 
 
             formActivity.onBackButtonUnitManagementClick()
@@ -129,12 +130,20 @@ class UnitDataKondominiumFragment : Fragment() {
 
     private fun updateViewModelFromForm() {
         formActivity.unitFormViewModel.apply {
+            val parking_type = if (binding.spinnerTempatParkirKondominium.text.toString().isEmpty()) "0" else binding.spinnerTempatParkirKondominium.text.toString()
+
             luasBangunan = if (binding.editLuasBangunanKondominium.text.toString().isEmpty()) "0" else binding.editLuasBangunanKondominium.text.toString()
-            jumlahParkir = if (binding.spinnerTempatParkirKondominium.text.toString().isEmpty()) "0" else binding.spinnerTempatParkirKondominium.text.toString()
-            electricityType = binding.spinnerDayaListrikKondominium.text.toString()
-            waterType = binding.spinnerJenisAirKondominium.text.toString()
-            interiorType = binding.spinnerInteriorKondominium.text.toString()
-            roadAccessType = binding.spinnerAksesJalanKondominium.text.toString()
+            jumlahParkir = MasterDataDeveloperPropertio.parking.searchByUser(parking_type)
+
+            val electricity_type = binding.spinnerDayaListrikKondominium.text.toString()
+            val water_type = binding.spinnerJenisAirKondominium.text.toString()
+            val interior_type = binding.spinnerInteriorKondominium.text.toString()
+            val road_access_type = binding.spinnerAksesJalanKondominium.text.toString()
+
+            electricityType = MasterDataDeveloperPropertio.electricity.searchByUser(electricity_type)
+            waterType = MasterDataDeveloperPropertio.water.searchByUser(water_type)
+            interiorType = MasterDataDeveloperPropertio.interior.searchByUser(interior_type)
+            roadAccessType = MasterDataDeveloperPropertio.roadAccess.searchByUser(road_access_type)
         }
     }
 
@@ -149,11 +158,11 @@ class UnitDataKondominiumFragment : Fragment() {
             floor = unitFormViewModel.jumlahLantai,
             bedroom = unitFormViewModel.jumlahKamarTidur,
             bathroom = unitFormViewModel.jumlahKamarMandi,
-            garage = unitFormViewModel.jumlahParkir,
-            powerSupply = unitFormViewModel.electricityType,
-            waterType = unitFormViewModel.waterType,
-            interior = unitFormViewModel.interiorType,
-            roadAccess = unitFormViewModel.roadAccessType,
+            garage = unitFormViewModel.jumlahParkir?.toDb,
+            powerSupply = unitFormViewModel.electricityType?.toDb,
+            waterType = unitFormViewModel.waterType?.toDb,
+            interior = unitFormViewModel.interiorType?.toDb,
+            roadAccess = unitFormViewModel.roadAccessType?.toDb,
             order = null
         )
     }
@@ -337,11 +346,11 @@ class UnitDataKondominiumFragment : Fragment() {
         binding.editLuasBangunanKondominium.setText(unitFormViewModel.luasBangunan)
         binding.edtJumlahKamarKondominium.setText(unitFormViewModel.jumlahKamarTidur)
         binding.edtJumlahKamarMandiKondominium.setText(unitFormViewModel.jumlahKamarMandi)
-        binding.spinnerTempatParkirKondominium.setText(unitFormViewModel.jumlahParkir)
-        binding.spinnerDayaListrikKondominium.setText(unitFormViewModel.electricityType)
-        binding.spinnerJenisAirKondominium.setText(unitFormViewModel.waterType)
-        binding.spinnerInteriorKondominium.setText(unitFormViewModel.interiorType)
-        binding.spinnerAksesJalanKondominium.setText(unitFormViewModel.roadAccessType)
+        binding.spinnerTempatParkirKondominium.setText(unitFormViewModel.jumlahParkir?.toUser)
+        binding.spinnerDayaListrikKondominium.setText(unitFormViewModel.electricityType?.toUser)
+        binding.spinnerJenisAirKondominium.setText(unitFormViewModel.waterType?.toUser)
+        binding.spinnerInteriorKondominium.setText(unitFormViewModel.interiorType?.toUser)
+        binding.spinnerAksesJalanKondominium.setText(unitFormViewModel.roadAccessType?.toUser)
     }
 
 }

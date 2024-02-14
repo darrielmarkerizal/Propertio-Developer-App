@@ -2,13 +2,12 @@ package com.propertio.developer.unit.form.type
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
@@ -16,6 +15,8 @@ import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitRequest
 import com.propertio.developer.api.developer.unitmanagement.UpdateUnitRequest
+import com.propertio.developer.database.MasterDataDeveloperPropertio
+import com.propertio.developer.database.MasterDataDeveloperPropertio.searchByUser
 import com.propertio.developer.databinding.FragmentUnitDataTanahBinding
 import com.propertio.developer.dialog.RoadAccessSheetFragment
 import com.propertio.developer.dialog.viewmodel.RoadAccessTypeSpinnerViewModel
@@ -72,7 +73,7 @@ class UnitDataTanahFragment : Fragment() {
             val road_access_type = binding.spinnerAksesJalanTanah.text.toString()
 
             formActivity.unitFormViewModel.luasTanah = luas_tanah
-            formActivity.unitFormViewModel.roadAccessType = road_access_type
+            formActivity.unitFormViewModel.roadAccessType = MasterDataDeveloperPropertio.roadAccess.searchByUser(road_access_type)
 
             formActivity.onBackButtonUnitManagementClick()
         }
@@ -94,7 +95,7 @@ class UnitDataTanahFragment : Fragment() {
     private fun updateViewModelFromForm() {
         formActivity.unitFormViewModel.apply {
             luasTanah = if (binding.editLuasTanahTanah.text.toString().isEmpty()) "0" else binding.editLuasTanahTanah.text.toString()
-            roadAccessType = binding.spinnerAksesJalanTanah.text.toString()
+            roadAccessType = MasterDataDeveloperPropertio.roadAccess.searchByUser(binding.spinnerAksesJalanTanah.text.toString())
         }
     }
 
@@ -109,11 +110,11 @@ class UnitDataTanahFragment : Fragment() {
             floor = unitFormViewModel.jumlahLantai,
             bedroom = unitFormViewModel.jumlahKamarTidur,
             bathroom = unitFormViewModel.jumlahKamarMandi,
-            garage = unitFormViewModel.jumlahParkir,
-            powerSupply = unitFormViewModel.electricityType,
-            waterType = unitFormViewModel.waterType,
-            interior = unitFormViewModel.interiorType,
-            roadAccess = unitFormViewModel.roadAccessType,
+            garage = unitFormViewModel.jumlahParkir?.toDb,
+            powerSupply = unitFormViewModel.electricityType?.toDb,
+            waterType = unitFormViewModel.waterType?.toDb,
+            interior = unitFormViewModel.interiorType?.toDb,
+            roadAccess = unitFormViewModel.roadAccessType?.toDb,
             order = null
         )
     }
@@ -235,7 +236,7 @@ class UnitDataTanahFragment : Fragment() {
     private fun loadTextData() {
         unitFormViewModel.printLog()
         binding.editLuasTanahTanah.setText(unitFormViewModel.luasTanah)
-        binding.spinnerAksesJalanTanah.setText(unitFormViewModel.roadAccessType)
+        binding.spinnerAksesJalanTanah.setText(unitFormViewModel.roadAccessType?.toUser)
     }
 
 }

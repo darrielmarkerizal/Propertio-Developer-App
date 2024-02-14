@@ -2,13 +2,12 @@ package com.propertio.developer.unit.form.type
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
@@ -16,6 +15,8 @@ import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitRequest
 import com.propertio.developer.api.developer.unitmanagement.UpdateUnitRequest
+import com.propertio.developer.database.MasterDataDeveloperPropertio
+import com.propertio.developer.database.MasterDataDeveloperPropertio.searchByUser
 import com.propertio.developer.databinding.FragmentUnitDataRuangUsahaBinding
 import com.propertio.developer.dialog.ElectricitySheetFragment
 import com.propertio.developer.dialog.InteriorSheetFragment
@@ -101,9 +102,11 @@ class UnitDataRuangUsahaFragment : Fragment() {
 
             formActivity.unitFormViewModel.luasBangunan = luas_bangunan
             formActivity.unitFormViewModel.jumlahKamarMandi = kamar_mandi
-            formActivity.unitFormViewModel.jumlahParkir = parking_type
-            formActivity.unitFormViewModel.electricityType = electricity_type
-            formActivity.unitFormViewModel.waterType = water_type
+            formActivity.unitFormViewModel.jumlahParkir = MasterDataDeveloperPropertio.parking.searchByUser(parking_type)
+            formActivity.unitFormViewModel.electricityType = MasterDataDeveloperPropertio.electricity.searchByUser(electricity_type)
+            formActivity.unitFormViewModel.waterType = MasterDataDeveloperPropertio.water.searchByUser(water_type)
+            formActivity.unitFormViewModel.interiorType = MasterDataDeveloperPropertio.interior.searchByUser(interior_type)
+            formActivity.unitFormViewModel.roadAccessType = MasterDataDeveloperPropertio.roadAccess.searchByUser(road_access_type)
 
             formActivity.onBackButtonUnitManagementClick()
         }
@@ -126,11 +129,18 @@ class UnitDataRuangUsahaFragment : Fragment() {
         formActivity.unitFormViewModel.apply {
             luasBangunan = if (binding.editLuasBangunanRuangUsaha.text.toString().isEmpty()) "0" else binding.editLuasBangunanRuangUsaha.text.toString()
             jumlahKamarMandi = if (binding.editKamarMandiRuangUsaha.text.toString().isEmpty()) "0" else binding.editKamarMandiRuangUsaha.text.toString()
-            jumlahParkir = binding.spinnerTempatParkirRuangUsaha.text.toString()
-            electricityType = binding.spinnerDayaListrikRuangUsaha.text.toString()
-            waterType = binding.spinnerJenisAirRuangUsaha.text.toString()
-            interiorType = binding.spinnerInteriorRuangUsaha.text.toString()
-            roadAccessType = binding.spinnerAksesJalanRuangUsaha.text.toString()
+
+            val parking_type = binding.spinnerTempatParkirRuangUsaha.text.toString()
+            val electricity_type = binding.spinnerDayaListrikRuangUsaha.text.toString()
+            val water_type = binding.spinnerJenisAirRuangUsaha.text.toString()
+            val interior_type = binding.spinnerInteriorRuangUsaha.text.toString()
+            val road_access_type = binding.spinnerAksesJalanRuangUsaha.text.toString()
+
+            jumlahParkir = MasterDataDeveloperPropertio.parking.searchByUser(parking_type)
+            electricityType = MasterDataDeveloperPropertio.electricity.searchByUser(electricity_type)
+            waterType = MasterDataDeveloperPropertio.water.searchByUser(water_type)
+            interiorType = MasterDataDeveloperPropertio.interior.searchByUser(interior_type)
+            roadAccessType = MasterDataDeveloperPropertio.roadAccess.searchByUser(road_access_type)
         }
     }
 
@@ -145,11 +155,11 @@ class UnitDataRuangUsahaFragment : Fragment() {
             floor = unitFormViewModel.jumlahLantai,
             bedroom = unitFormViewModel.jumlahKamarTidur,
             bathroom = unitFormViewModel.jumlahKamarMandi,
-            garage = unitFormViewModel.jumlahParkir,
-            powerSupply = unitFormViewModel.electricityType,
-            waterType = unitFormViewModel.waterType,
-            interior = unitFormViewModel.interiorType,
-            roadAccess = unitFormViewModel.roadAccessType,
+            garage = unitFormViewModel.jumlahParkir?.toDb,
+            powerSupply = unitFormViewModel.electricityType?.toDb,
+            waterType = unitFormViewModel.waterType?.toDb,
+            interior = unitFormViewModel.interiorType?.toDb,
+            roadAccess = unitFormViewModel.roadAccessType?.toDb,
             order = null
         )
     }
@@ -332,10 +342,10 @@ class UnitDataRuangUsahaFragment : Fragment() {
         UnitFormViewModel().printLog()
         binding.editLuasBangunanRuangUsaha.setText(unitFormViewModel.luasBangunan)
         binding.editKamarMandiRuangUsaha.setText(unitFormViewModel.jumlahKamarMandi)
-        binding.spinnerTempatParkirRuangUsaha.setText(unitFormViewModel.jumlahParkir)
-        binding.spinnerDayaListrikRuangUsaha.setText(unitFormViewModel.electricityType)
-        binding.spinnerJenisAirRuangUsaha.setText(unitFormViewModel.waterType)
-        binding.spinnerInteriorRuangUsaha.setText(unitFormViewModel.interiorType)
-        binding.spinnerAksesJalanRuangUsaha.setText(unitFormViewModel.roadAccessType)
+        binding.spinnerTempatParkirRuangUsaha.setText(unitFormViewModel.jumlahParkir?.toUser)
+        binding.spinnerDayaListrikRuangUsaha.setText(unitFormViewModel.electricityType?.toUser)
+        binding.spinnerJenisAirRuangUsaha.setText(unitFormViewModel.waterType?.toUser)
+        binding.spinnerInteriorRuangUsaha.setText(unitFormViewModel.interiorType?.toUser)
+        binding.spinnerAksesJalanRuangUsaha.setText(unitFormViewModel.roadAccessType?.toUser)
     }
 }

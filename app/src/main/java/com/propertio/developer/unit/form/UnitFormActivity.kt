@@ -1,11 +1,11 @@
 package com.propertio.developer.unit.form
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.propertio.developer.R
@@ -13,13 +13,14 @@ import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
+import com.propertio.developer.database.MasterDataDeveloperPropertio
+import com.propertio.developer.database.MasterDataDeveloperPropertio.searchByDb
 import com.propertio.developer.databinding.ActivityUnitFormBinding
 import com.propertio.developer.databinding.ToolbarBinding
 import com.propertio.developer.model.LitePhotosModel
 import com.propertio.developer.model.UnitDocument
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_ID
 import com.propertio.developer.unit.UnitMediaViewModel
-import com.propertio.developer.unit_management.ButtonNavigationUnitManagementClickListener
 import com.propertio.developer.unit.form.type.UnitDataApartemenFragment
 import com.propertio.developer.unit.form.type.UnitDataGudangFragment
 import com.propertio.developer.unit.form.type.UnitDataKantorFragment
@@ -30,6 +31,7 @@ import com.propertio.developer.unit.form.type.UnitDataRukoFragment
 import com.propertio.developer.unit.form.type.UnitDataRumahFragment
 import com.propertio.developer.unit.form.type.UnitDataTanahFragment
 import com.propertio.developer.unit.form.type.UnitDataVillaFragment
+import com.propertio.developer.unit_management.ButtonNavigationUnitManagementClickListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -185,7 +187,9 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
 
     private suspend fun fetchUnitDetail(projectId: Int, unitId: Int) {
         lifecycleScope.launch {
-            val response = withContext(Dispatchers.IO) {developerApi.getUnitDetail(projectId, unitId).execute()}
+            val response = withContext(Dispatchers.IO) {
+                developerApi.getUnitDetail(projectId, unitId).execute()
+            }
 
             try {
                 if (response.isSuccessful) {
@@ -239,11 +243,11 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
             jumlahKamar = data.bedroom.toString(),
             jumlahKamarMandi = data.bathroom.toString(),
             jumlahLantai = data.floor.toString(),
-            interiorType = data.interior.toString(),
-            roadAccessType = data.roadAccess.toString(),
-            parkingType = data.garage.toString(),
-            electricityType = data.powerSupply.toString(),
-            waterType = data.waterSupply.toString(),
+            interiorType = MasterDataDeveloperPropertio.interior.searchByDb(data.interior.toString()),
+            roadAccessType = MasterDataDeveloperPropertio.roadAccess.searchByDb(data.roadAccess.toString()),
+            parkingType = MasterDataDeveloperPropertio.parking.searchByDb(data.garage.toString()),
+            electricityType = MasterDataDeveloperPropertio.electricity.searchByDb(data.powerSupply.toString()),
+            waterType = MasterDataDeveloperPropertio.water.searchByDb(data.waterType.toString()),
             projectId = data.projectId!!.toInt(),
             unitId = data.id!!.toInt()
         )
