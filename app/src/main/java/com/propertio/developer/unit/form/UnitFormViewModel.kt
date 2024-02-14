@@ -1,10 +1,9 @@
 package com.propertio.developer.unit.form
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
+import com.propertio.developer.database.MasterData
 
 class UnitFormViewModel : ViewModel() {
 
@@ -22,11 +21,12 @@ class UnitFormViewModel : ViewModel() {
     var jumlahKamarTidur: String? = null
     var jumlahKamarMandi: String? = null
     var jumlahLantai: String? = null
-    var interiorType: String? = null
-    var roadAccessType: String? = null
-    var jumlahParkir: String? = null
-    var electricityType: String? = null
-    var waterType: String? = null
+
+    var interiorType: MasterData? = null
+    var roadAccessType: MasterData? = null
+    var jumlahParkir: MasterData? = null
+    var electricityType: MasterData? = null
+    var waterType: MasterData? = null
 
     fun printLog(msg : String = "") {
         Log.d( "ViewModel",
@@ -66,11 +66,12 @@ class UnitFormViewModel : ViewModel() {
         jumlahKamar: String?,
         jumlahKamarMandi: String?,
         jumlahLantai: String?,
-        interiorType: String?,
-        roadAccessType: String?,
-        parkingType: String?,
-        electricityType: String?,
-        waterType: String?
+
+        interiorType: MasterData?,
+        roadAccessType: MasterData?,
+        parkingType: MasterData?,
+        electricityType: MasterData?,
+        waterType: MasterData?
     ) {
         this.isAlreadyUploaded.postValue(isAlreadyUploaded)
         this.namaUnit = namaUnit

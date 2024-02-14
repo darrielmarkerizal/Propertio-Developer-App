@@ -73,7 +73,7 @@ object MasterDataDeveloperPropertio {
     val water = listOf(
         MasterData("PAM", "PAM"),
         MasterData("Sumur", "Sumur"),
-        MasterData("PAM dan Sumur", "PAM dan Sumur"),
+        MasterData("PAM dan Sumur", "PAM & Sumur"),
         MasterData("Tidak ada", "Tidak ada")
     )
 
@@ -94,6 +94,14 @@ object MasterDataDeveloperPropertio {
         MasterData("Jalan Nasional", "Jalan Nasional"),
         MasterData("Jalan Industri", "Jalan Industri")
     )
+
+    fun List<MasterData>.searchByUser(text: String) : MasterData? {
+        return this.find { it.toUser == text }
+    }
+
+    fun List<MasterData>.searchByDb(text: String) : MasterData? {
+        return this.find { it.toDb == text }
+    }
 
 
 }

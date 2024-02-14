@@ -50,7 +50,6 @@ class WaterSheetFragment : BottomSheetDialogAbstract() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.textViewSheetTitle.text = "Pilih Tipe Air"
-        binding.containerSearchBar.visibility = View.GONE
 
         waterTypeViewModel = ViewModelProvider(requireActivity())[WaterTypeSpinnerViewModel::class.java]
 
@@ -65,9 +64,10 @@ class WaterSheetFragment : BottomSheetDialogAbstract() {
     }
 
     private fun setupRecyclerView() {
+        Log.d("WaterSheet", "setupRecyclerView: \n\t initial : $waters")
         with(binding) {
             recyclerViewSheet.apply {
-                adapter = adapter
+                adapter = this@WaterSheetFragment.adapter
                 layoutManager = LinearLayoutManager(requireContext())
             }
 

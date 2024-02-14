@@ -277,5 +277,9 @@
     <string name="pilih_lokasi">Pilih lokasi</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
+    <string name="deskripsi_pengembang">Deskripsi pengembang</string>
+    <string name="website_pengembang">Website pengembang</string>
+    <string name="berikan_deskripsi_tentang_perusahaan_anda">Berikan deskripsi tentang perusahaan Anda</string>
+    <string name="www_example_com">www.example.com</string>
 
 </resources>

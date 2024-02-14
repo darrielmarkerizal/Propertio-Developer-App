@@ -2,13 +2,12 @@ package com.propertio.developer.unit.form.type
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
@@ -16,6 +15,8 @@ import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitRequest
 import com.propertio.developer.api.developer.unitmanagement.UpdateUnitRequest
+import com.propertio.developer.database.MasterDataDeveloperPropertio
+import com.propertio.developer.database.MasterDataDeveloperPropertio.searchByUser
 import com.propertio.developer.databinding.FragmentUnitDataGudangBinding
 import com.propertio.developer.dialog.ElectricitySheetFragment
 import com.propertio.developer.dialog.ParkingSheetFragment
@@ -85,9 +86,9 @@ class UnitDataGudangFragment : Fragment() {
 
             formActivity?.unitFormViewModel?.luasBangunan = luas_bangunan
             formActivity?.unitFormViewModel?.luasTanah = luas_tanah
-            formActivity?.unitFormViewModel?.jumlahParkir = parking_type
-            formActivity?.unitFormViewModel?.electricityType = electricity_type
-            formActivity?.unitFormViewModel?.roadAccessType = road_access_type
+            formActivity?.unitFormViewModel?.jumlahParkir = MasterDataDeveloperPropertio.parking.searchByUser(parking_type)
+            formActivity?.unitFormViewModel?.electricityType = MasterDataDeveloperPropertio.electricity.searchByUser(electricity_type)
+            formActivity?.unitFormViewModel?.roadAccessType = MasterDataDeveloperPropertio.roadAccess.searchByUser(road_access_type)
 
             formActivity.onBackButtonUnitManagementClick()
         }
@@ -110,9 +111,14 @@ class UnitDataGudangFragment : Fragment() {
         formActivity.unitFormViewModel.apply {
             luasTanah = if (binding.editLuasTanahGudang.text.toString().isEmpty()) "0" else binding.editLuasTanahGudang.text.toString()
             luasBangunan = if (binding.editLuasBangunanGudang.text.toString().isEmpty()) "0" else binding.editLuasBangunanGudang.text.toString()
-            jumlahParkir = binding.spinnerTempatParkirGudang.text.toString()
-            electricityType = binding.spinnerDayaListrikGudang.text.toString()
-            roadAccessType = binding.spinnerAksesJalanGudang.text.toString()
+
+            val parking_type = binding.spinnerTempatParkirGudang.text.toString()
+            val electricity_type = binding.spinnerDayaListrikGudang.text.toString()
+            val road_access_type = binding.spinnerAksesJalanGudang.text.toString()
+
+            jumlahParkir = MasterDataDeveloperPropertio.parking.searchByUser(parking_type)
+            electricityType = MasterDataDeveloperPropertio.electricity.searchByUser(electricity_type)
+            roadAccessType = MasterDataDeveloperPropertio.roadAccess.searchByUser(road_access_type)
         }
     }
 
@@ -127,11 +133,11 @@ class UnitDataGudangFragment : Fragment() {
             floor = unitFormViewModel.jumlahLantai,
             bedroom = unitFormViewModel.jumlahKamarTidur,
             bathroom = unitFormViewModel.jumlahKamarMandi,
-            garage = unitFormViewModel.jumlahParkir,
-            powerSupply = unitFormViewModel.electricityType,
-            waterType = unitFormViewModel.waterType,
-            interior = unitFormViewModel.interiorType,
-            roadAccess = unitFormViewModel.roadAccessType,
+            garage = unitFormViewModel.jumlahParkir?.toDb,
+            powerSupply = unitFormViewModel.electricityType?.toDb,
+            waterType = unitFormViewModel.waterType?.toDb,
+            interior = unitFormViewModel.interiorType?.toDb,
+            roadAccess = unitFormViewModel.roadAccessType?.toDb,
             order = null
         )
     }
@@ -284,8 +290,8 @@ class UnitDataGudangFragment : Fragment() {
         UnitFormViewModel().printLog()
         binding.editLuasBangunanGudang.setText(unitFormViewModel.luasBangunan)
         binding.editLuasTanahGudang.setText(unitFormViewModel.luasTanah)
-        binding.spinnerTempatParkirGudang.setText(unitFormViewModel.jumlahParkir)
-        binding.spinnerDayaListrikGudang.setText(unitFormViewModel.electricityType)
-        binding.spinnerAksesJalanGudang.setText(unitFormViewModel.roadAccessType)
+        binding.spinnerTempatParkirGudang.setText(unitFormViewModel.jumlahParkir?.toUser)
+        binding.spinnerDayaListrikGudang.setText(unitFormViewModel.electricityType?.toUser)
+        binding.spinnerAksesJalanGudang.setText(unitFormViewModel.roadAccessType?.toUser)
     }
 }

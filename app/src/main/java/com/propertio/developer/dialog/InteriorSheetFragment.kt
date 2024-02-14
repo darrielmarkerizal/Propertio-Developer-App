@@ -36,9 +36,9 @@ class InteriorSheetFragment : BottomSheetDialogAbstract() {
     override val onEmptySearchFilter: () -> Unit
         get() = { loadData() }
     override val onNotEmptySearchFilter: (Editable) -> Unit
-        get() = {
+        get() = { search ->
             val filteredList = interior.filter {
-                it.toUser.contains(it.toUser, ignoreCase = true)
+                it.toUser.contains(search.toString(), ignoreCase = true)
             }
             masterDataAdapter.submitList(filteredList)
         }
@@ -47,7 +47,6 @@ class InteriorSheetFragment : BottomSheetDialogAbstract() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.textViewSheetTitle.text = "Pilih Tipe Interior"
-        binding.containerSearchBar.visibility = View.GONE
 
         interiorTypeViewModel = ViewModelProvider(requireActivity())[InteriorTypeSpinnerViewModel::class.java]
 

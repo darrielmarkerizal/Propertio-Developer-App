@@ -3,6 +3,7 @@ package com.propertio.developer.project.form
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -25,7 +26,9 @@ import com.propertio.developer.project.viewmodel.ProjectFacilityViewModel
 import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
 import com.propertio.developer.project.viewmodel.ProjectMediaViewModel
 import com.propertio.developer.project_management.ButtonNavigationProjectManagementClickListener
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -130,7 +133,8 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
         }
     }
 
-    private suspend fun fetchDataProjectDetail(projectId: Int) {
+    private fun fetchDataProjectDetail(projectId: Int) {
+        showLoading()
         developerApi.getProjectDetail(projectId).enqueue(object : Callback<ProjectDetail> {
             override fun onResponse(call: Call<ProjectDetail>, response: Response<ProjectDetail>) {
                 if (response.isSuccessful) {
@@ -140,6 +144,8 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
                         Log.d("ProjectFormActivity", "onResponse: $data")
                         lifecycleScope.launch {
                             loadDataToViewModel(data)
+                            delay(1400)
+                            hideLoading()
                             setInitialFragment()
                         }
                     } else {
@@ -158,77 +164,94 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
         })
     }
 
-    private suspend fun loadDataToViewModel(data: ProjectDetail.ProjectDeveloper) {
-        withContext(Dispatchers.IO) {
-            projectInformationLocationViewModel.isAddressNotEdited = true
-            projectInformationLocationViewModel.add(
-                headline = data.headline,
-                title = data.title,
-                propertyTypeName = data.propertyType?.name,
-                description = data.description,
-                completedAt = data.completedAt,
-                certificate = data.certificate,
-                address = data.address?.address,
-                postalCode = data.address?.postalCode,
-                longitude = data.address?.longitude?.toDouble(),
-                latitude = data.address?.latitude?.toDouble(),
-                immersiveSiteplan = data.immersiveSiteplan,
-                immersiveApps = data.immersiveApps,
-                status = data.status,
-                siteplanImageURL = data.siteplanImage,
-            )
-            val lat = data.address?.latitude?.toDouble()
-            val long = data.address?.longitude?.toDouble()
-            if (lat != null && long != null) {
-                withContext(Dispatchers.Main) {
-                    Log.d("ProjectFormActivity", "loadDataToViewModel: $lat, $long")
-                    projectInformationLocationViewModel.selectedLocation.value = Pair(lat, long)
-                }
-            }
+    private fun showLoading() {
+        binding.projectFormFetchLoadingIndicator.visibility = View.VISIBLE
+    }
 
-            setAddressList(data.address)
-            projectMedia.add(
-                projectPhotos = data.projectPhotos?.map {
-                    LitePhotosModel(
-                        id = it.id,
-                        projectId = it.projectId,
-                        filePath = it.filename,
-                        isCover = it.isCover?.toInt() ?: 0,
-                        caption = it.caption,
-                    )
-                }?: emptyList<LitePhotosModel>().toMutableList(),
-                videoLink = data.projectVideos?.linkVideoURL,
-                virtualTourName = data.projectVirtualTours?.name,
-                virtualTourLink = data.projectVirtualTours?.linkVirtualTourURL,
-            )
-            if (data.projectDocuments?.isNotEmpty() == true) {
-                projectMedia.isDocumentNotEdited = true
-                projectMedia.addDocument(
-                    document = ProjectDocument(
-                        id = data.projectDocuments?.get(0)?.id,
-                        projectId = data.projectDocuments?.get(0)?.projectId,
-                        name = data.projectDocuments?.get(0)?.name,
-                        filename = data.projectDocuments?.get(0)?.filename,
-                        createdAt = data.projectDocuments?.get(0)?.createdAt,
-                        updatedAt = data.projectDocuments?.get(0)?.updatedAt,
-                    )
+    private fun hideLoading() {
+        binding.projectFormFetchLoadingIndicator.visibility = View.GONE
+    }
+
+    private fun loadDataToViewModel(data: ProjectDetail.ProjectDeveloper) {
+        CoroutineScope(Dispatchers.IO).launch {
+            this.launch {
+                projectInformationLocationViewModel.isAddressNotEdited = true
+            }
+            this.launch {
+                projectInformationLocationViewModel.add(
+                    headline = data.headline,
+                    title = data.title,
+                    propertyTypeName = data.propertyType?.name,
+                    description = data.description,
+                    completedAt = data.completedAt,
+                    certificate = data.certificate,
+                    address = data.address?.address,
+                    postalCode = data.address?.postalCode,
+                    longitude = data.address?.longitude?.toDouble(),
+                    latitude = data.address?.latitude?.toDouble(),
+                    immersiveSiteplan = data.immersiveSiteplan,
+                    immersiveApps = data.immersiveApps,
+                    status = data.status,
+                    siteplanImageURL = data.siteplanImage,
                 )
             }
-
-            data.projectFacilities?.forEach {
-                if (it.facilityTypeId != null) {
-                    projectFacility.addSelectedFacilities(it.facilityTypeId!!)
+            this.launch {
+                val lat = data.address?.latitude?.toDouble()
+                val long = data.address?.longitude?.toDouble()
+                if (lat != null && long != null) {
+                    withContext(Dispatchers.Main) {
+                        Log.d("ProjectFormActivity", "loadDataToViewModel: $lat, $long")
+                        projectInformationLocationViewModel.selectedLocation.value = Pair(lat, long)
+                    }
                 }
             }
-
-
-
+            this.launch {
+                setAddressList(data.address)
+            }
+            this.launch {
+                projectMedia.add(
+                    projectPhotos = data.projectPhotos?.map {
+                        LitePhotosModel(
+                            id = it.id,
+                            projectId = it.projectId,
+                            filePath = it.filename,
+                            isCover = it.isCover?.toInt() ?: 0,
+                            caption = it.caption,
+                        )
+                    }?: emptyList<LitePhotosModel>().toMutableList(),
+                    videoLink = data.projectVideos?.linkVideoURL,
+                    virtualTourName = data.projectVirtualTours?.name,
+                    virtualTourLink = data.projectVirtualTours?.linkVirtualTourURL,
+                )
+            }
+            this.launch {
+                if (data.projectDocuments?.isNotEmpty() == true) {
+                    projectMedia.isDocumentNotEdited = true
+                    projectMedia.addDocument(
+                        document = ProjectDocument(
+                            id = data.projectDocuments?.get(0)?.id,
+                            projectId = data.projectDocuments?.get(0)?.projectId,
+                            name = data.projectDocuments?.get(0)?.name,
+                            filename = data.projectDocuments?.get(0)?.filename,
+                            createdAt = data.projectDocuments?.get(0)?.createdAt,
+                            updatedAt = data.projectDocuments?.get(0)?.updatedAt,
+                        )
+                    )
+                }
+            }
+            this.launch {
+                data.projectFacilities?.forEach {
+                    if (it.facilityTypeId != null) {
+                        projectFacility.addSelectedFacilities(it.facilityTypeId!!)
+                    }
+                }
+            }
         }
     }
 
     private suspend fun setAddressList(address: ProjectDetail.ProjectDeveloper.ProjectAddress?) {
         projectInformationLocationViewModel.printLog("before add address")
-        lifecycleScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
             val provinceName = address?.province
             val provinceId = withContext(Dispatchers.IO) {getProvinceId(provinceName) }
             if (provinceId == null) {
@@ -269,7 +292,6 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
             )
             projectInformationLocationViewModel.printLog("after add address")
         }
-
 
     }
 

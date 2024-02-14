@@ -20,6 +20,9 @@ import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
 import com.propertio.developer.carousel.CarouselAdapter
 import com.propertio.developer.carousel.ImageData
+import com.propertio.developer.database.MasterData
+import com.propertio.developer.database.MasterDataDeveloperPropertio
+import com.propertio.developer.database.MasterDataDeveloperPropertio.searchByDb
 import com.propertio.developer.databinding.ActivityUnitDetailBinding
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_ADDRESS
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_DETAIL_PID
@@ -243,17 +246,21 @@ class UnitDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun String.getUserText(data : List<MasterData>) : String {
+        return data.searchByDb(this)?.toUser ?: "Tidak Ada Informasi"
+    }
+
     private fun loadTextBased(data: UnitDetailResponse.Unit) {
         with(binding) {
             val buildingArea = data.buildingArea
             val surfaceArea = data.surfaceArea
-            val garage = data.garage
-            val powerSupply = data.powerSupply
-            val interior = data.interior
-            val roadAccess = data.roadAccess
             val price = data.price
             val floor = data.floor
-            val water = data.waterSupply
+            val interior = data.interior?.getUserText(MasterDataDeveloperPropertio.interior)
+            val powerSupply = data.powerSupply?.getUserText(MasterDataDeveloperPropertio.electricity)
+            val garage = data.garage?.getUserText(MasterDataDeveloperPropertio.parking)
+            val roadAccess = data.roadAccess?.getUserText(MasterDataDeveloperPropertio.roadAccess)
+            val water = data.waterType?.getUserText(MasterDataDeveloperPropertio.water)
 
             textViewUnitCode.text = data.unitCode ?: "Tidak Ada Informasi"
             textViewTitleUnitDetail.text = data.title ?: "Tidak Ada Informasi"

@@ -13,6 +13,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import coil.load
@@ -24,7 +26,6 @@ import com.propertio.developer.api.developer.projectmanagement.PostStoreProjectL
 import com.propertio.developer.api.services.GeocodingApi
 import com.propertio.developer.api.services.GoogleGeoCoding
 import com.propertio.developer.databinding.FragmentCreateProjectLokasiBinding
-import com.propertio.developer.dialog.BottomSheetDialogAbstract
 import com.propertio.developer.dialog.CitiesSheetFragment
 import com.propertio.developer.dialog.DistrictsSheetFragment
 import com.propertio.developer.dialog.ProvinceSheetFragment
@@ -144,7 +145,6 @@ class CreateProjectLokasiFragment : Fragment() {
     ): View {
         return binding.root
     }
-
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -589,55 +589,91 @@ class CreateProjectLokasiFragment : Fragment() {
                 binding.spinnerProvinceProject.text = projectInformationLocationViewModel.savedProvince?.provinceName
                 binding.spinnerCityProject.text = projectInformationLocationViewModel.savedCity?.citiesName
                 binding.spinnerDistrictProject.text = projectInformationLocationViewModel.savedDistrict?.districtsName
-                return@launch
+
+                province = projectInformationLocationViewModel.savedProvince?.copy()
+                city = projectInformationLocationViewModel.savedCity?.copy()
+                district = projectInformationLocationViewModel.savedDistrict?.copy()
             } else {
                 province = projectInformationLocationViewModel.province?.copy()
                 city = projectInformationLocationViewModel.city?.copy()
                 district = projectInformationLocationViewModel.district?.copy()
             }
 
-            Log.d("CreateProjectLokasiFragment", "checkSpinnerData: ${province?.provinceId} ${province?.provinceName}")
-            Log.d("CreateProjectLokasiFragment", "checkSpinnerData: ${city?.provinceId} ${city?.citiesName}")
-            Log.d("CreateProjectLokasiFragment", "checkSpinnerData: ${district?.districtsId} ${district?.districtsName}")
+            Log.d("CreateProjectLokasiFragment", "checkSpinnerData: " +
+                    "\n\tProvince :\t${province?.provinceId}\t${province?.provinceName}" +
+                    "\n\tCity : \t${city?.provinceId}\t${city?.citiesName}" +
+                    "\n\tDisctrict :\t${district?.districtsId}\t${district?.districtsName}")
 
+            if (province == null) return@launch
 
-            if (province != null) {
-                for (i in 0 .. 3) {
-                    provinceViewModel.provinceData.value = province
-                    isProvinceSelected = true
-                    binding.spinnerProvinceProject.text = province.provinceName
+            lifecycleScope.launch {
+                val isLoadingDone = MutableLiveData<Boolean>(false)
 
-                    if (provinceViewModel.getProvinceData().provinceId == province.provinceId) {
-                        break
+                val loadObsProvince = Observer<ProvinceModel> { value ->
+                    Log.v("CreateProjectLokasiFragment", "checkSpinnerData: loadObsProvince $value")
+                    if (value.provinceId == province?.provinceId) {
+                        binding.spinnerProvinceProject.text = value.provinceName
+                        binding.spinnerProvinceProject.error = null
+                        isProvinceSelected = true
+
+                        // Load City
+                        cityViewModel.citiesData.value = city
                     }
                 }
-                for (i in 0 .. 3) {
-                    if (city == null) {
-                        break
+
+                val loadObsCity = Observer<CitiesModel> { value ->
+                    Log.v("CreateProjectLokasiFragment", "checkSpinnerData: loadObsCity $value")
+                    if (value.citiesId == city?.citiesId) {
+                        binding.spinnerCityProject.text = value.citiesName
+                        binding.spinnerCityProject.error = null
+                        isCitySelected = true
+
+                        // Load District
+                        districtViewModel.districtsData.value = district
                     }
+                    else if (city != null) {
+                        binding.spinnerCityProject.text = city.citiesName
+                        binding.spinnerCityProject.error = null
+                        isCitySelected = true
 
-                    cityViewModel.citiesData.value = city
-                    isCitySelected = true
-                    binding.spinnerCityProject.text = city.citiesName
-
-                    if (cityViewModel.getCitiesData().citiesId == city.citiesId) {
-                        break
-                    }
-                }
-                for (i in 0 .. 3) {
-                    if (district == null) {
-                        break
-                    }
-
-                    districtViewModel.districtsData.value = district
-                    isDistrictSelected = true
-                    binding.spinnerDistrictProject.text = district.districtsName
-
-                    if (districtViewModel.getDistrictsData().districtsId == district.districtsId) {
-                        break
+                        cityViewModel.citiesData.value = city
                     }
                 }
+                val loadObsDisctrict = Observer<DistrictsModel> { value ->
+                    Log.v("CreateProjectLokasiFragment", "checkSpinnerData: loadObsDisctrict $value")
+                    if (value.districtsId == district?.districtsId) {
+                        binding.spinnerDistrictProject.text = value.districtsName
+                        binding.spinnerDistrictProject.error = null
+                        isDistrictSelected = true
+
+                        isLoadingDone.value = true
+                    }
+                    else if (district != null) {
+                        binding.spinnerDistrictProject.text = district.districtsName
+                        binding.spinnerDistrictProject.error = null
+                        isDistrictSelected = true
+
+                        districtViewModel.districtsData.value = district
+                    }
+                }
+
+                provinceViewModel.provinceData.observe(viewLifecycleOwner, loadObsProvince)
+                cityViewModel.citiesData.observe(viewLifecycleOwner, loadObsCity)
+                districtViewModel.districtsData.observe(viewLifecycleOwner, loadObsDisctrict)
+
+                // start
+                provinceViewModel.provinceData.value = province
+
+                isLoadingDone.observe(viewLifecycleOwner) {
+                    if (it) {
+                        provinceViewModel.provinceData.removeObserver(loadObsProvince)
+                        cityViewModel.citiesData.removeObserver(loadObsCity)
+                        districtViewModel.districtsData.removeObserver(loadObsDisctrict)
+                    }
+                }
+
             }
+
         }
 
 
@@ -646,7 +682,6 @@ class CreateProjectLokasiFragment : Fragment() {
 
 
     private fun districtSpinner() {
-//        districtViewModel = ViewModelProvider(this)[DistrictsSpinnerViewModel::class.java]
 
         binding.spinnerDistrictProject.setOnClickListener {
             if (isCitySelected && isProvinceSelected) {
@@ -693,13 +728,13 @@ class CreateProjectLokasiFragment : Fragment() {
             isDistrictSelected = false
 
             districtViewModel.districtsData
-                .postValue(
+                .value =
                     DistrictsModel(
                         districtsId = "",
                         citiesId = it.citiesId,
                         districtsName = "Pilih Kecamatan"
                     )
-                )
+
 
             projectInformationLocationViewModel.city = it
         }
@@ -708,7 +743,6 @@ class CreateProjectLokasiFragment : Fragment() {
 
 
     private fun provinceSpinner() {
-//        provinceViewModel = ViewModelProvider(this)[ProvinceSpinnerViewModel::class.java]
 
         binding.spinnerProvinceProject.setOnClickListener {
             ProvinceSheetFragment().show(parentFragmentManager, "ProvinceSheetFragment")
@@ -728,13 +762,13 @@ class CreateProjectLokasiFragment : Fragment() {
 
 
             cityViewModel.citiesData
-                .postValue(
+                .value =
                     CitiesModel(
                         citiesId = "",
                         provinceId = it.provinceId,
                         citiesName = "Pilih Kota"
                     )
-                )
+
 
             projectInformationLocationViewModel.province = it
         }

@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
@@ -16,6 +15,8 @@ import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitRequest
 import com.propertio.developer.api.developer.unitmanagement.UpdateUnitRequest
+import com.propertio.developer.database.MasterDataDeveloperPropertio
+import com.propertio.developer.database.MasterDataDeveloperPropertio.searchByUser
 import com.propertio.developer.databinding.FragmentUnitDataRumahBinding
 import com.propertio.developer.dialog.ElectricitySheetFragment
 import com.propertio.developer.dialog.InteriorSheetFragment
@@ -27,7 +28,6 @@ import com.propertio.developer.dialog.viewmodel.InteriorTypeSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.ParkingTypeSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.RoadAccessTypeSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.WaterTypeSpinnerViewModel
-import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
 import com.propertio.developer.unit.form.UnitFormActivity
 import com.propertio.developer.unit.form.UnitFormViewModel
 import com.propertio.developer.unit_management.UpdateUnitResponse
@@ -93,6 +93,7 @@ class UnitDataRumahFragment : Fragment() {
             val jumlah_lantai = binding.editJumlahLantaiRumah.text.toString()
             val jumlah_kamar_tidur = binding.editKamarMandiRumah.text.toString()
             val jumlah_kamar_mandi = binding.editKamarMandiRumah.text.toString()
+
             val parking_type = binding.spinnerTempatParkirRumah.text.toString()
             val electricity_type = binding.spinnerDayaListrikRumah.text.toString()
             val water_type = binding.spinnerJenisAirRumah.text.toString()
@@ -105,10 +106,10 @@ class UnitDataRumahFragment : Fragment() {
             formActivity.unitFormViewModel.jumlahKamarTidur = jumlah_kamar_tidur
             formActivity.unitFormViewModel.jumlahKamarMandi = jumlah_kamar_mandi
             formActivity.unitFormViewModel.jumlahKamarTidur = parking_type
-            formActivity.unitFormViewModel.electricityType = electricity_type
-            formActivity.unitFormViewModel.waterType = water_type
-            formActivity.unitFormViewModel.interiorType = interior_type
-            formActivity.unitFormViewModel.roadAccessType = road_access_type
+            formActivity.unitFormViewModel.electricityType = MasterDataDeveloperPropertio.electricity.searchByUser(electricity_type)
+            formActivity.unitFormViewModel.waterType = MasterDataDeveloperPropertio.water.searchByUser(water_type)
+            formActivity.unitFormViewModel.interiorType = MasterDataDeveloperPropertio.interior.searchByUser(interior_type)
+            formActivity.unitFormViewModel.roadAccessType = MasterDataDeveloperPropertio.roadAccess.searchByUser(road_access_type)
 
             formActivity.onBackButtonUnitManagementClick()
         }
@@ -134,11 +135,18 @@ class UnitDataRumahFragment : Fragment() {
             jumlahLantai = if (binding.editJumlahLantaiRumah.text.toString().isEmpty()) "0" else binding.editJumlahLantaiRumah.text.toString()
             jumlahKamarTidur = if (binding.editKamarMandiRumah.text.toString().isEmpty()) "0" else binding.editKamarMandiRumah.text.toString()
             jumlahKamarMandi = if (binding.editKamarMandiRumah.text.toString().isEmpty()) "0" else binding.editKamarMandiRumah.text.toString()
-            jumlahParkir = binding.spinnerTempatParkirRumah.text.toString()
-            electricityType = binding.spinnerDayaListrikRumah.text.toString()
-            waterType = binding.spinnerJenisAirRumah.text.toString()
-            interiorType = binding.spinnerInteriorRumah.text.toString()
-            roadAccessType = binding.spinnerAksesJalanRumah.text.toString()
+
+            val parking_type = binding.spinnerTempatParkirRumah.text.toString()
+            val electricity_type = binding.spinnerDayaListrikRumah.text.toString()
+            val water_type = binding.spinnerJenisAirRumah.text.toString()
+            val interior_type = binding.spinnerInteriorRumah.text.toString()
+            val road_access_type = binding.spinnerAksesJalanRumah.text.toString()
+
+            jumlahParkir = MasterDataDeveloperPropertio.parking.searchByUser(parking_type)
+            electricityType = MasterDataDeveloperPropertio.electricity.searchByUser(electricity_type)
+            waterType = MasterDataDeveloperPropertio.water.searchByUser(water_type)
+            interiorType = MasterDataDeveloperPropertio.interior.searchByUser(interior_type)
+            roadAccessType = MasterDataDeveloperPropertio.roadAccess.searchByUser(road_access_type)
         }
     }
 
@@ -153,11 +161,11 @@ class UnitDataRumahFragment : Fragment() {
             floor = unitFormViewModel.jumlahLantai,
             bedroom = unitFormViewModel.jumlahKamarTidur,
             bathroom = unitFormViewModel.jumlahKamarMandi,
-            garage = unitFormViewModel.jumlahParkir,
-            powerSupply = unitFormViewModel.electricityType,
-            waterType = unitFormViewModel.waterType,
-            interior = unitFormViewModel.interiorType,
-            roadAccess = unitFormViewModel.roadAccessType,
+            garage = unitFormViewModel.jumlahParkir?.toDb,
+            powerSupply = unitFormViewModel.electricityType?.toDb,
+            waterType = unitFormViewModel.waterType?.toDb,
+            interior = unitFormViewModel.interiorType?.toDb,
+            roadAccess = unitFormViewModel.roadAccessType?.toDb,
             order = null
         )
     }
@@ -343,11 +351,11 @@ class UnitDataRumahFragment : Fragment() {
         binding.editJumlahLantaiRumah.setText(unitFormViewModel.jumlahLantai)
         binding.editKamarRumah.setText(unitFormViewModel.jumlahKamarTidur)
         binding.editKamarMandiRumah.setText(unitFormViewModel.jumlahKamarMandi)
-        binding.spinnerTempatParkirRumah.setText(unitFormViewModel.jumlahParkir)
-        binding.spinnerDayaListrikRumah.setText(unitFormViewModel.electricityType)
-        binding.spinnerJenisAirRumah.setText(unitFormViewModel.waterType)
-        binding.spinnerInteriorRumah.setText(unitFormViewModel.interiorType)
-        binding.spinnerAksesJalanRumah.setText(unitFormViewModel.roadAccessType)
+        binding.spinnerTempatParkirRumah.setText(unitFormViewModel.jumlahParkir?.toUser)
+        binding.spinnerDayaListrikRumah.setText(unitFormViewModel.electricityType?.toUser)
+        binding.spinnerJenisAirRumah.setText(unitFormViewModel.waterType?.toUser)
+        binding.spinnerInteriorRumah.setText(unitFormViewModel.interiorType?.toUser)
+        binding.spinnerAksesJalanRumah.setText(unitFormViewModel.roadAccessType?.toUser)
     }
 
 }

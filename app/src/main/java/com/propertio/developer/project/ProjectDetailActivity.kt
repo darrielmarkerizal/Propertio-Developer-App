@@ -422,6 +422,7 @@ class ProjectDetailActivity : AppCompatActivity() {
                             dots = ArrayList<TextView>()
                             setIndicator()
 
+                            updateUnit()
                         }
 
                     } else {

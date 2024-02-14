@@ -12,6 +12,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.api.Retro
+import com.propertio.developer.api.auth.RegisterDeveloperRequest
+import com.propertio.developer.api.auth.RegisterDeveloperResponse
 import com.propertio.developer.api.auth.RegisterUserRequest
 import com.propertio.developer.api.auth.RegisterUserResponse
 import com.propertio.developer.api.auth.UserApi
@@ -182,6 +184,9 @@ class RegisterActivity : AppCompatActivity() {
             file.asRequestBody("image/*".toMediaTypeOrNull())
         )
 
+        val developerDescription = binding.editTextDeskripsiPengembang.text.toString().trim()
+        val developerWebsite = binding.editTextNamaWebsite.text.toString().trim()
+
         Log.d("RegisterActivity", "Register. pictureProfileFile is success")
 
         retro.registerUserForm(
@@ -208,7 +213,54 @@ class RegisterActivity : AppCompatActivity() {
                             "status: ${response.body()?.status}" +
                             "message: ${response.body()?.message}")
                     Toast.makeText(this@RegisterActivity, "Registrasi Berhasil", Toast.LENGTH_SHORT).show()
-                    goToLoginActivity()
+
+                    val userId = response.body()?.data?.user?.id
+
+                    if (userId != null) {
+                        val developerRequest = RegisterDeveloperRequest(
+                            userId = userId,
+                            description = developerDescription,
+                            website = developerWebsite
+                        )
+                        retro.registerDeveloper(developerRequest).enqueue(object : Callback<RegisterDeveloperResponse> {
+                            override fun onResponse(
+                                call: Call<RegisterDeveloperResponse>,
+                                response: Response<RegisterDeveloperResponse>,
+                            ) {
+                                if (response.isSuccessful) {
+                                    Log.d(
+                                        "RegisterActivity", "Register. onResponse Success: " +
+                                                "status: ${response.body()?.status}" +
+                                                "message: ${response.body()?.message}"
+                                    )
+                                    goToLoginActivity()
+                                } else {
+                                    Log.e(
+                                        "RegisterActivity",
+                                        "Register. onResponse not Successful: " +
+                                                "status: ${response.body()?.status}" +
+                                                "message: ${response.body()?.message}"
+                                    )
+
+                                    Toast.makeText(this@RegisterActivity, "Registrasi Gagal", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+
+                            override fun onFailure(
+                                call: Call<RegisterDeveloperResponse>,
+                                t: Throwable,
+                            ) {
+                                Log.e("RegisterActivity", "Register. onFailure: ${t.message}")
+                            }
+                        })
+                    } else {
+                        Log.e("RegisterActivity", "Register. onResponse not Successful: " +
+                                "status: ${response.body()?.status}" +
+                                "message: ${response.body()?.message}")
+
+                        Toast.makeText(this@RegisterActivity, "Registrasi Gagal", Toast.LENGTH_SHORT).show()
+                    }
+
 
                 }
                 else if (response.code() == 422) {

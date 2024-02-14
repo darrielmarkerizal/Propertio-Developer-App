@@ -2,13 +2,12 @@ package com.propertio.developer.unit.form.type
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
@@ -16,6 +15,8 @@ import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitRequest
 import com.propertio.developer.api.developer.unitmanagement.UpdateUnitRequest
+import com.propertio.developer.database.MasterDataDeveloperPropertio
+import com.propertio.developer.database.MasterDataDeveloperPropertio.searchByUser
 import com.propertio.developer.databinding.FragmentUnitDataVillaBinding
 import com.propertio.developer.dialog.ElectricitySheetFragment
 import com.propertio.developer.dialog.InteriorSheetFragment
@@ -66,7 +67,7 @@ class UnitDataVillaFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -96,6 +97,7 @@ class UnitDataVillaFragment : Fragment() {
             val jumlah_lantai = binding.editJumlahLantaiVilla.text.toString()
             val jumlah_kamar_tidur = binding.editKamarVilla.text.toString()
             val jumlah_kamar_mandi = binding.editKamarMandiVilla.text.toString()
+
             val parking_type = binding.spinnerTempatParkirVilla.text.toString()
             val electricity_type = binding.spinnerDayaListrikVilla.text.toString()
             val water_type = binding.spinnerJenisAirVilla.text.toString()
@@ -107,11 +109,12 @@ class UnitDataVillaFragment : Fragment() {
             formActivity?.unitFormViewModel?.jumlahLantai = jumlah_lantai
             formActivity?.unitFormViewModel?.jumlahKamarTidur = jumlah_kamar_tidur
             formActivity?.unitFormViewModel?.jumlahKamarMandi = jumlah_kamar_mandi
-            formActivity?.unitFormViewModel?.jumlahParkir = parking_type
-            formActivity?.unitFormViewModel?.electricityType = electricity_type
-            formActivity?.unitFormViewModel?.waterType = water_type
-            formActivity?.unitFormViewModel?.interiorType = interior_type
-            formActivity?.unitFormViewModel?.roadAccessType = road_access_type
+
+            formActivity?.unitFormViewModel?.jumlahParkir = MasterDataDeveloperPropertio.parking.searchByUser(parking_type)
+            formActivity?.unitFormViewModel?.electricityType = MasterDataDeveloperPropertio.electricity.searchByUser(electricity_type)
+            formActivity?.unitFormViewModel?.waterType = MasterDataDeveloperPropertio.water.searchByUser(water_type)
+            formActivity?.unitFormViewModel?.interiorType = MasterDataDeveloperPropertio.interior.searchByUser(interior_type)
+            formActivity?.unitFormViewModel?.roadAccessType = MasterDataDeveloperPropertio.roadAccess.searchByUser(road_access_type)
 
             formActivity.onBackButtonUnitManagementClick()
         }
@@ -137,11 +140,18 @@ class UnitDataVillaFragment : Fragment() {
             jumlahLantai = if (binding.editJumlahLantaiVilla.text.toString().isEmpty()) "0" else binding.editJumlahLantaiVilla.text.toString()
             jumlahKamarTidur = if (binding.editKamarVilla.text.toString().isEmpty()) "0" else binding.editKamarVilla.text.toString()
             jumlahKamarMandi = if (binding.editKamarMandiVilla.text.toString().isEmpty()) "0" else binding.editKamarMandiVilla.text.toString()
-            jumlahParkir = binding.spinnerTempatParkirVilla.text.toString()
-            electricityType = binding.spinnerDayaListrikVilla.text.toString()
-            waterType = binding.spinnerJenisAirVilla.text.toString()
-            interiorType = binding.spinnerInteriorVilla.text.toString()
-            roadAccessType = binding.spinnerAksesJalanVilla.text.toString()
+
+            val parking_type = binding.spinnerTempatParkirVilla.text.toString()
+            val electricity_type = binding.spinnerDayaListrikVilla.text.toString()
+            val water_type = binding.spinnerJenisAirVilla.text.toString()
+            val interior_type = binding.spinnerInteriorVilla.text.toString()
+            val road_access_type = binding.spinnerAksesJalanVilla.text.toString()
+
+            jumlahParkir = MasterDataDeveloperPropertio.parking.searchByUser(parking_type)
+            electricityType = MasterDataDeveloperPropertio.electricity.searchByUser(electricity_type)
+            waterType = MasterDataDeveloperPropertio.water.searchByUser(water_type)
+            interiorType = MasterDataDeveloperPropertio.interior.searchByUser(interior_type)
+            roadAccessType = MasterDataDeveloperPropertio.roadAccess.searchByUser(road_access_type)
         }
     }
 
@@ -156,11 +166,11 @@ class UnitDataVillaFragment : Fragment() {
             floor = unitFormViewModel.jumlahLantai,
             bedroom = unitFormViewModel.jumlahKamarTidur,
             bathroom = unitFormViewModel.jumlahKamarMandi,
-            garage = unitFormViewModel.jumlahParkir,
-            powerSupply = unitFormViewModel.electricityType,
-            waterType = unitFormViewModel.waterType,
-            interior = unitFormViewModel.interiorType,
-            roadAccess = unitFormViewModel.roadAccessType,
+            garage = unitFormViewModel.jumlahParkir?.toDb,
+            powerSupply = unitFormViewModel.electricityType?.toDb,
+            waterType = unitFormViewModel.waterType?.toDb,
+            interior = unitFormViewModel.interiorType?.toDb,
+            roadAccess = unitFormViewModel.roadAccessType?.toDb,
             order = null
         )
     }
@@ -347,10 +357,10 @@ class UnitDataVillaFragment : Fragment() {
         binding.editJumlahLantaiVilla.setText(unitFormViewModel.jumlahLantai)
         binding.editKamarVilla.setText(unitFormViewModel.jumlahKamarTidur)
         binding.editKamarMandiVilla.setText(unitFormViewModel.jumlahKamarMandi)
-        binding.spinnerTempatParkirVilla.setText(unitFormViewModel.jumlahParkir)
-        binding.spinnerDayaListrikVilla.setText(unitFormViewModel.electricityType)
-        binding.spinnerJenisAirVilla.setText(unitFormViewModel.waterType)
-        binding.spinnerInteriorVilla.setText(unitFormViewModel.interiorType)
-        binding.spinnerAksesJalanVilla.setText(unitFormViewModel.roadAccessType)
+        binding.spinnerTempatParkirVilla.setText(unitFormViewModel.jumlahParkir?.toUser)
+        binding.spinnerDayaListrikVilla.setText(unitFormViewModel.electricityType?.toUser)
+        binding.spinnerJenisAirVilla.setText(unitFormViewModel.waterType?.toUser)
+        binding.spinnerInteriorVilla.setText(unitFormViewModel.interiorType?.toUser)
+        binding.spinnerAksesJalanVilla.setText(unitFormViewModel.roadAccessType?.toUser)
     }
 }
