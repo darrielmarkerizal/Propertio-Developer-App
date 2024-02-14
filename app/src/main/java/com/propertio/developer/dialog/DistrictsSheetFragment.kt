@@ -59,9 +59,9 @@ class DistrictsSheetFragment : BottomSheetDialogAbstract() {
             districtAdapter.submitList(districts)
         }
     override val onNotEmptySearchFilter: (Editable) -> Unit
-        get() = {
+        get() = { search ->
             val filteredList = districts.filter {
-                it.name.contains(it.name, ignoreCase = true)
+                it.name.contains(search.toString(), ignoreCase = true)
             }
             districtAdapter.submitList(filteredList)
         }

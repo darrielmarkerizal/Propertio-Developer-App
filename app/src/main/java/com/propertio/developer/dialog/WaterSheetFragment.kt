@@ -50,7 +50,6 @@ class WaterSheetFragment : BottomSheetDialogAbstract() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.textViewSheetTitle.text = "Pilih Tipe Air"
-        binding.containerSearchBar.visibility = View.GONE
 
         waterTypeViewModel = ViewModelProvider(requireActivity())[WaterTypeSpinnerViewModel::class.java]
 

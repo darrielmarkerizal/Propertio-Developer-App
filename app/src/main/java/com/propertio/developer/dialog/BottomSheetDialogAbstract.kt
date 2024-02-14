@@ -19,14 +19,28 @@ abstract class BottomSheetDialogAbstract : BottomSheetDialogFragment() {
     }
 
     private fun setupSearchBar() {
+        binding.searchBarBottomSheet.visibility = View.VISIBLE
         binding.searchBarBottomSheet.doAfterTextChanged { text ->
             if (text.isNullOrEmpty()) {
+                showLoading()
                 onEmptySearchFilter()
+                hideLoading()
                 return@doAfterTextChanged
             } else {
+                showLoading()
                 onNotEmptySearchFilter(text)
+                hideLoading()
+
             }
         }
+    }
+
+    private fun showLoading() {
+        binding.progressIndicatorSheet.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        binding.progressIndicatorSheet.visibility = View.GONE
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -40,19 +40,43 @@ class PropertyTypeSheetFragment : BottomSheetDialogAbstract() {
     }
 
     override val onEmptySearchFilter: () -> Unit
-        get() = {/*NOTE: not implemented*/}
+        get() = {
+            propertyAdapter.submitList(generalLists)
+        }
     override val onNotEmptySearchFilter: (Editable) -> Unit
-        get() = {/*NOTE: not implemented*/}
+        get() = { search ->
+            val filteredList = generalLists.filter {
+                it.name?.contains(search.toString(), ignoreCase = true) ?: false
+            }
+            propertyAdapter.submitList(filteredList)
+        }
+
+    private val generalLists = mutableListOf<GeneralType>()
+
+    private val propertyAdapter = PropertyTypeAdapter(
+        onClickItemListener = {
+            Log.d("PropertyTypeSheet", "setupRecyclerView: $it")
+            propertyTypeViewModel.propertyTypeData
+                .postValue(
+                    GeneralType(
+                        id = it.id,
+                        name = it.name
+                    )
+                )
+
+            dismiss()
+        }
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.textViewSheetTitle.text = "Pilih Tipe Properti"
-        binding.containerSearchBar.visibility = View.GONE
 
         propertyTypeViewModel = ViewModelProvider(requireActivity())[PropertyTypeSpinnerViewModel::class.java]
 
         fetchPropertyTypeApi()
+        setupRecyclerView()
     }
 
     private fun fetchPropertyTypeApi() {
@@ -70,7 +94,9 @@ class PropertyTypeSheetFragment : BottomSheetDialogAbstract() {
                 if (response.isSuccessful) {
                     val typeList = response.body()?.data
                     if (typeList != null) {
-                        setupRecyclerView(typeList)
+                        generalLists.clear()
+                        generalLists.addAll(typeList)
+                        propertyAdapter.submitList(generalLists)
                         Log.d("PropertyTypeSheet", "onResponse: $typeList")
                     } else {
                         Log.e("PropertyTypeSheet", "onResponse: ${response.message()}")
@@ -87,27 +113,12 @@ class PropertyTypeSheetFragment : BottomSheetDialogAbstract() {
         })
     }
 
-    private fun setupRecyclerView(typeList: List<GeneralType>) {
-        Log.d("PropertyTypeSheet", "setupRecyclerView: $typeList")
+    private fun setupRecyclerView() {
+        Log.d("PropertyTypeSheet", "setupRecyclerView")
 
         with(binding) {
             recyclerViewSheet.apply {
-                adapter = PropertyTypeAdapter(
-                    propertyTypes = typeList,
-                    onClickItemListener = {
-                        Log.d("PropertyTypeSheet", "setupRecyclerView: $it")
-                        propertyTypeViewModel.propertyTypeData
-                            .postValue(
-                                GeneralType(
-                                    id = it.id,
-                                    name = it.name
-                                )
-                            )
-
-                        dismiss()
-                    }
-                )
-
+                adapter = propertyAdapter
                 layoutManager = LinearLayoutManager(requireContext())
             }
         }

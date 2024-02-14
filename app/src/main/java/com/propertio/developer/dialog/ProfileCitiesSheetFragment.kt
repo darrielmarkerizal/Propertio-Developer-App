@@ -57,9 +57,9 @@ class ProfileCitiesSheetFragment(private val provinceId: String) : BottomSheetDi
             citiesAdapter.submitList(dataList)
         }
     override val onNotEmptySearchFilter: (Editable) -> Unit
-        get() = {
+        get() = { search ->
             val filteredList = dataList.filter {
-                it.name.contains(it.name, ignoreCase = true)
+                it.name.contains(search.toString(), ignoreCase = true)
             }
             citiesAdapter.submitList(filteredList)
         }

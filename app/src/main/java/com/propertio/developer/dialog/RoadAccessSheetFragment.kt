@@ -36,9 +36,9 @@ class RoadAccessSheetFragment : BottomSheetDialogAbstract() {
     override val onEmptySearchFilter: () -> Unit
         get() = { loadData() }
     override val onNotEmptySearchFilter: (Editable) -> Unit
-        get() = {
+        get() = { search ->
             val filteredList = roadAccessTypes.filter {
-                it.toUser.contains(it.toUser, ignoreCase = true)
+                it.toUser.contains(search.toString(), ignoreCase = true)
             }
             masterDataAdapter.submitList(filteredList)
         }
@@ -47,7 +47,6 @@ class RoadAccessSheetFragment : BottomSheetDialogAbstract() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.textViewSheetTitle.text = "Pilih Tipe Akses Jalan"
-        binding.containerSearchBar.visibility = View.GONE
 
         roadAccessTypeViewModel = ViewModelProvider(requireActivity())[RoadAccessTypeSpinnerViewModel::class.java]
 

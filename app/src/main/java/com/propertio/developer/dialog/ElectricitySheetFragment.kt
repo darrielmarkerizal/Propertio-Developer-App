@@ -38,9 +38,9 @@ class ElectricitySheetFragment : BottomSheetDialogAbstract() {
     override val onEmptySearchFilter: () -> Unit
         get() = { loadData() }
     override val onNotEmptySearchFilter: (Editable) -> Unit
-        get() = {
+        get() = { search ->
             val filteredList = electricity.filter {
-                it.toUser.contains(it.toUser, ignoreCase = true)
+                it.toUser.contains(search.toString(), ignoreCase = true)
             }
             masterDataAdapter.submitList(filteredList)
         }
@@ -49,7 +49,6 @@ class ElectricitySheetFragment : BottomSheetDialogAbstract() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.textViewSheetTitle.text = "Pilih Tipe Listrik"
-        binding.containerSearchBar.visibility = View.GONE
 
         electricityTypeViewModel = ViewModelProvider(requireActivity())[ElectricityTypeSpinnerViewModel::class.java]
 

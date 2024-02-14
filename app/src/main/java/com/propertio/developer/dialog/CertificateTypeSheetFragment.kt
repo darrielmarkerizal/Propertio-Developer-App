@@ -38,9 +38,9 @@ class CertificateTypeSheetFragment : BottomSheetDialogAbstract() {
     override val onEmptySearchFilter: () -> Unit
         get() = { loadData() }
     override val onNotEmptySearchFilter: (Editable) -> Unit
-        get() = {
+        get() = { search ->
             val filteredList = certificateTypes.filter {
-                it.toUser.contains(it.toUser, ignoreCase = true)
+                it.toUser.contains(search.toString(), ignoreCase = true)
             }
             simpleMasterDataAdapter.submitList(filteredList)
         }
@@ -48,8 +48,7 @@ class CertificateTypeSheetFragment : BottomSheetDialogAbstract() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.textViewSheetTitle.text = "Pilih Tipe Properti"
-        binding.containerSearchBar.visibility = View.GONE
+        binding.textViewSheetTitle.text = "Pilih Tipe Seritifikat"
 
         certificateTypeViewModel = ViewModelProvider(requireActivity())[CertificateTypeSpinnerViewModel::class.java]
 

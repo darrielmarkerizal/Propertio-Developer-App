@@ -39,9 +39,9 @@ class ParkingSheetFragment : BottomSheetDialogAbstract() {
             loadData()
         }
     override val onNotEmptySearchFilter: (Editable) -> Unit
-        get() = {
+        get() = { search ->
             val filteredList = parkingTypes.filter {
-                it.toUser.contains(it.toUser, ignoreCase = true)
+                it.toUser.contains(search.toString(), ignoreCase = true)
             }
             masterDataAdapter.submitList(filteredList)
         }
@@ -50,7 +50,6 @@ class ParkingSheetFragment : BottomSheetDialogAbstract() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.textViewSheetTitle.text = "Pilih Tipe Parkir"
-        binding.containerSearchBar.visibility = View.GONE
 
         parkingTypeViewModel = ViewModelProvider(requireActivity())[ParkingTypeSpinnerViewModel::class.java]
 
