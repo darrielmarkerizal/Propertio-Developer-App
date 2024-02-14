@@ -64,9 +64,10 @@ class WaterSheetFragment : BottomSheetDialogAbstract() {
     }
 
     private fun setupRecyclerView() {
+        Log.d("WaterSheet", "setupRecyclerView: \n\t initial : $waters")
         with(binding) {
             recyclerViewSheet.apply {
-                adapter = adapter
+                adapter = this@WaterSheetFragment.adapter
                 layoutManager = LinearLayoutManager(requireContext())
             }
 
