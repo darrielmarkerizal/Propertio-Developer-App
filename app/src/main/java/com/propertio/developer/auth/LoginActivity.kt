@@ -71,8 +71,6 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(intentToRegisterActivity)
             }
 
-
-
         }
     }
 
