@@ -23,6 +23,7 @@ import com.propertio.developer.dialog.model.CitiesModel
 import com.propertio.developer.dialog.viewmodel.CitiesSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.PhoneCodeViewModel
 import com.propertio.developer.dialog.viewmodel.ProvinceSpinnerViewModel
+import com.propertio.developer.permissions.NetworkAccess
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -140,6 +141,11 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun register(userRequest: RegisterUserRequest) {
+        if (NetworkAccess.isNetworkAvailable(this@RegisterActivity).not()) run {
+            NetworkAccess.buildNoConnectionToast(this@RegisterActivity).show()
+            return
+        }
+
         val retro = Retro(null)
             .getRetroClientInstance()
             .create(UserApi::class.java)
