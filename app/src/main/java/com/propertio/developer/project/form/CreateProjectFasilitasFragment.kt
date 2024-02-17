@@ -23,8 +23,8 @@ import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResp
 import com.propertio.developer.api.developer.type.GeneralTypeResponse
 import com.propertio.developer.database.facility.FacilityTable
 import com.propertio.developer.databinding.FragmentCreateProjectFasilitasBinding
-import com.propertio.developer.project.list.FacilityTypeAdapter
 import com.propertio.developer.project.list.FacilityAndInfrastructureTypeViewModel
+import com.propertio.developer.project.list.FacilityTypeAdapter
 import com.propertio.developer.project.viewmodel.FacilityViewModelFactory
 import com.propertio.developer.project.viewmodel.ProjectFacilityViewModel
 import kotlinx.coroutines.Dispatchers
@@ -194,6 +194,9 @@ class CreateProjectFasilitasFragment : Fragment() {
 
                     updateRecyclerList(facilityList)
                 }
+
+                binding.containerButtonCategory.visibility = View.VISIBLE
+                currentTab.value = 0
             }
         }
 

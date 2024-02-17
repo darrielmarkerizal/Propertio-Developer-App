@@ -2,12 +2,12 @@ package com.propertio.developer.auth
 
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.propertio.developer.MainActivity
 import com.propertio.developer.TokenManager
 import com.propertio.developer.api.Retro
@@ -15,6 +15,7 @@ import com.propertio.developer.api.auth.UserApi
 import com.propertio.developer.api.auth.UserRequest
 import com.propertio.developer.api.auth.UserResponse
 import com.propertio.developer.databinding.ActivityLoginBinding
+import com.propertio.developer.permissions.NetworkAccess
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,7 +31,12 @@ class LoginActivity : AppCompatActivity() {
         tokenManager = TokenManager(this@LoginActivity)
 
         if (tokenManager.token != null) {
-            goToMainActivity()
+            if (NetworkAccess.isNetworkAvailable(this@LoginActivity).not()) run {
+                NetworkAccess.buildNoConnectionToast(this@LoginActivity).show()
+            } else {
+                goToMainActivity()
+            }
+
         }
 
         with(binding) {
@@ -65,19 +71,6 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(intentToRegisterActivity)
             }
 
-            linkToForgetPassword.setOnClickListener {
-                Toast.makeText(this@LoginActivity, "Fitur Lupa Kata Sandi masih dalam tahap pengembangan", Toast.LENGTH_SHORT).show()
-
-                //TODO: "Membuat Forget Password"
-            }
-
-
-
-            //TODO: Hapus kode developer dibawah ini ketika selesai
-            developerSkipButton.setOnClickListener {
-                loginPassDeveloperTesting()
-            }
-
         }
     }
 
@@ -88,13 +81,13 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun loginPassDeveloperTesting() {
-        //TODO: Hapus kode developer  ini ketika selesai
-        login("developer@mail.com", "11111111")
-    }
-
 
     private fun login(email: String? = null, password: String? = null) {
+        if (NetworkAccess.isNetworkAvailable(this@LoginActivity).not()) run {
+            NetworkAccess.buildNoConnectionToast(this@LoginActivity).show()
+            return
+        }
+
         val request = UserRequest()
         request.email = email ?: binding.editTextEmail.text.toString()
         request.password = password ?: binding.editTextPassword.text.toString()
