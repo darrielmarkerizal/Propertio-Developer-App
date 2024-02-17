@@ -22,6 +22,6 @@ object NetworkAccess{
         }
     }
 
-    fun buildNoConnectionToast(context: Context) = Toast.makeText(context, "Tidak ada koneksi internet", Toast.LENGTH_SHORT)
+    fun buildNoConnectionToast(context: Context) = Toast.makeText(context, "Tidak ada koneksi internet", Toast.LENGTH_LONG)
 
 }

@@ -71,11 +71,6 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(intentToRegisterActivity)
             }
 
-            linkToForgetPassword.setOnClickListener {
-                Toast.makeText(this@LoginActivity, "Fitur Lupa Kata Sandi masih dalam tahap pengembangan", Toast.LENGTH_SHORT).show()
-
-            }
-
 
 
         }
