@@ -37,6 +37,7 @@ import com.propertio.developer.dialog.model.CitiesModel
 import com.propertio.developer.dialog.model.ProvinceModel
 import com.propertio.developer.dialog.viewmodel.CitiesSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.ProvinceSpinnerViewModel
+import com.propertio.developer.permissions.NetworkAccess
 import com.propertio.developer.project.ProjectViewModel
 import com.propertio.developer.project.ProjectViewModelFactory
 import kotlinx.coroutines.Dispatchers
@@ -101,6 +102,11 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (NetworkAccess.isNetworkAvailable(requireActivity()).not()) run {
+            NetworkAccess.buildNoConnectionToast(requireActivity()).show()
+            return
+        }
 
         // Room
         val databaseRoom = ProfileDatabase.getDatabase(requireActivity())
