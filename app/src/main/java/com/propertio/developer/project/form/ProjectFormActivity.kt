@@ -21,6 +21,7 @@ import com.propertio.developer.dialog.model.DistrictsModel
 import com.propertio.developer.dialog.model.ProvinceModel
 import com.propertio.developer.model.LitePhotosModel
 import com.propertio.developer.model.ProjectDocument
+import com.propertio.developer.permissions.NetworkAccess
 import com.propertio.developer.project.list.FacilityAndInfrastructureTypeViewModel
 import com.propertio.developer.project.viewmodel.ProjectFacilityViewModel
 import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
@@ -94,6 +95,10 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
 
 
         if (idFromIntent != 0) {
+            if (NetworkAccess.isNetworkAvailable(this).not()) run {
+                NetworkAccess.buildNoConnectionToast(this).show()
+                finish()
+            }
             lifecycleScope.launch {
                 Log.d("ViewModel", "onCreate: $idFromIntent")
                 projectId = idFromIntent
@@ -107,6 +112,9 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
         setToolbarToCreate(bindingToolbar)
 
 
+        if (NetworkAccess.isNetworkAvailable(this).not()) run {
+            NetworkAccess.buildNoConnectionToast(this).show()
+        }
 
     }
 
@@ -385,6 +393,11 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
 
 
     override fun onNextButtonProjectManagementClick() {
+        if (NetworkAccess.isNetworkAvailable(this).not()) run {
+            NetworkAccess.buildNoConnectionToast(this).show()
+            return
+        }
+
         if (currentFragmentIndex == formsFragment.size - 1) {
             binding.progressIndicatorProjectForm.setProgressCompat(100, true)
             val intent = Intent(this, CreateProjectSuccessActivity::class.java)

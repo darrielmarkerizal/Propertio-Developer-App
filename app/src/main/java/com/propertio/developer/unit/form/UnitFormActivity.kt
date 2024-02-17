@@ -19,6 +19,7 @@ import com.propertio.developer.databinding.ActivityUnitFormBinding
 import com.propertio.developer.databinding.ToolbarBinding
 import com.propertio.developer.model.LitePhotosModel
 import com.propertio.developer.model.UnitDocument
+import com.propertio.developer.permissions.NetworkAccess
 import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_ID
 import com.propertio.developer.unit.UnitMediaViewModel
 import com.propertio.developer.unit.form.type.UnitDataApartemenFragment
@@ -92,6 +93,10 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
         val projectIdFromIntent = intent.getIntExtra(PROJECT_DETAIL_PID, 0)
 
         if (unitIdFromIntent != 0) {
+            if (NetworkAccess.isNetworkAvailable(this).not()) run {
+                NetworkAccess.buildNoConnectionToast(this).show()
+                finish()
+            }
             lifecycleScope.launch {
                 Log.d("UnitFormActivity", "onCreate Fetch Edit: $unitIdFromIntent")
                 unitId = unitIdFromIntent
@@ -122,6 +127,10 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
 
         setToolbarToCreate(binding.toolbarContainerUnitForm)
 
+        if (NetworkAccess.isNetworkAvailable(this).not()) run {
+            NetworkAccess.buildNoConnectionToast(this).show()
+        }
+
     }
 
     private fun startUnitForm() {
@@ -140,6 +149,11 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
     }
 
     override fun onNextButtonUnitManagementClick() {
+        if (NetworkAccess.isNetworkAvailable(this).not()) run {
+            NetworkAccess.buildNoConnectionToast(this).show()
+            return
+        }
+
         if (currentFragmentIndex == formsFragment.size - 1) {
             binding.progressIndicatorUnitForm.setProgressCompat(100, true)
             val intentToSuccess = Intent(this, CreateUnitSuccessActivity::class.java)

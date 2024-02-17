@@ -1,5 +1,6 @@
 package com.propertio.developer
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -13,7 +14,9 @@ import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.type.GeneralTypeResponse
 import com.propertio.developer.api.models.GeneralType
+import com.propertio.developer.auth.LoginActivity
 import com.propertio.developer.databinding.ActivityMainBinding
+import com.propertio.developer.permissions.NetworkAccess
 import com.propertio.developer.pesan.ChatViewModel
 import com.propertio.developer.pesan.ChatViewModelFactory
 import com.propertio.developer.project.ProjectViewModel
@@ -80,6 +83,14 @@ class MainActivity : AppCompatActivity() {
             val navController = navHostFragment.navController
 
             bottomNavigation.setOnItemSelectedListener {
+                if (NetworkAccess.isNetworkAvailable(this@MainActivity).not()) run {
+                    NetworkAccess.buildNoConnectionToast(this@MainActivity).show()
+                    finish()
+
+                    val intentToLoginActivity = Intent(this@MainActivity, LoginActivity::class.java)
+                    startActivity(intentToLoginActivity)
+                }
+
                 when(it.itemId) {
                     R.id.dashboardFragment -> {
                         navController.navigate(R.id.dashboardFragment)
