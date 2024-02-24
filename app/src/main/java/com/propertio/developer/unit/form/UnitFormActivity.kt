@@ -84,10 +84,10 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
 
         if (projectId != 0) {
             unitFormViewModel.projectId = projectId
-            finish()
             Log.d("UnitFormActivity", "onCreate: projectId: $projectId")
         } else {
             Log.e("UnitFormActivity", "onCreate: projectId is null")
+            finish()
         }
 
         unitId = intent.getIntExtra(PROJECT_DETAIL_UID, 0)
