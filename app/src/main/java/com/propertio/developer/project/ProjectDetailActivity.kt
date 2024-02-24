@@ -23,6 +23,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.propertio.developer.NumericalUnitConverter
 import com.propertio.developer.PropertioDeveloperApplication
 import com.propertio.developer.R
@@ -92,6 +93,20 @@ class ProjectDetailActivity : AppCompatActivity() {
     private lateinit var projectViewModel: ProjectViewModel
     private var mapsLink: String = ""
 
+    private fun createDeleteConfirmationDialog(
+        projectId: Int,
+        unitId: Int
+    ) = MaterialAlertDialogBuilder(this, R.style.CustomAlertDialog)
+        .setTitle("Hapus Unit")
+        .setMessage("Apakah Anda yakin ingin menghapus unit ini?")
+        .setPositiveButton("Ya") { dialog, _ ->
+            deleteUnit(projectId, unitId)
+            dialog.dismiss()
+        }
+        .setNegativeButton("Tidak") { dialog, _ ->
+            dialog.dismiss()
+        }
+
     private val unitAdapter by lazy {
         UnitAdapter(
             onClickUnit = {
@@ -113,7 +128,7 @@ class ProjectDetailActivity : AppCompatActivity() {
             },
             onDelete = { data ->
                 Log.d("onClickDelete", "Delete clicked: ${data.id}")
-                deleteUnit(projectId!!, data.id!!)
+                createDeleteConfirmationDialog(projectId!!, data.id!!).show()
             },
             onClickUnitLaku = { data ->
                 Log.d("onClickUnitLaku", "Unit Laku clicked: ${data.id}")
@@ -670,8 +685,9 @@ class ProjectDetailActivity : AppCompatActivity() {
 
         buttonDelete.setOnClickListener {
             Log.d(TAG, "horizontalMoreButtonPopUp: buttonDelete ${data.title}")
-            deleteUnit(projectId!!, data.id!!)
             popupWindow.dismiss()
+
+            createDeleteConfirmationDialog(projectId!!, data.id!!).show()
         }
 
         val isiUnitLaku = popupView.findViewById<TextView>(R.id.button_isi_unit_laku_pop_up)
