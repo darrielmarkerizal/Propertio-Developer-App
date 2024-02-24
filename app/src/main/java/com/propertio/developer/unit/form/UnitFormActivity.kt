@@ -20,6 +20,8 @@ import com.propertio.developer.databinding.ToolbarBinding
 import com.propertio.developer.model.LitePhotosModel
 import com.propertio.developer.model.UnitDocument
 import com.propertio.developer.permissions.NetworkAccess
+import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_DETAIL_PID
+import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_DETAIL_UID
 import com.propertio.developer.unit.UnitMediaViewModel
 import com.propertio.developer.unit.form.type.UnitDataApartemenFragment
 import com.propertio.developer.unit.form.type.UnitDataGudangFragment
@@ -191,11 +193,6 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
         supportFragmentManager.beginTransaction()
             .replace(R.id.frame_container_unit_form, fragment)
             .commit()
-    }
-
-    companion object {
-        const val PROJECT_DETAIL_UID = "project_detail_uid"
-        const val PROJECT_DETAIL_PID = "project_detail_pid"
     }
 
     private suspend fun fetchUnitDetail(projectId: Int, unitId: Int) {

@@ -326,97 +326,110 @@ class CreateUnitMediaFragment : Fragment() {
         }
 
         activityBinding.floatingButtonNext.setOnClickListener {
-            val retro = Retro(TokenManager(requireContext()).token)
-                .getRetroClientInstance()
-                .create(DeveloperApi::class.java)
+            lifecycleScope.launch {
 
-            val projectId = formActivity.unitFormViewModel.projectId.toString()
-            val unitId = formActivity.unitId ?: 0
-            val youtubeLink = binding.editTextLinkYoutubeMediaUnit.text.toString()
-            val virtualTour = binding.editLinkVirtualTourUnit.text.toString()
-            val virtualTourLink = binding.editLinkVirtualTourUnit.text.toString()
-            val modelLink = binding.editLinkModelUnit.text.toString()
-
-            var unitIdBody = unitId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-            var youtubeLinkBody = youtubeLink.toRequestBody("text/plain".toMediaTypeOrNull())
-            var virtualTourBody = virtualTour.toRequestBody("text/plain".toMediaTypeOrNull())
-            var virtualTourLinkBody = virtualTourLink.toRequestBody("text/plain".toMediaTypeOrNull())
-            var modelLinkBody = modelLink.toRequestBody("text/plain".toMediaTypeOrNull())
-
-
-            var documentBody : MultipartBody.Part? = null
-
-            if (documentUri != null) {
-                Log.d("CreateUnitMediaFragment", "onViewCreated: $documentUri")
-                val fileDir = requireContext().applicationContext.filesDir
-                val file = File(fileDir, "unit_document.pdf")
-                val fileInputStream = requireContext().contentResolver.openInputStream(documentUri!!)
-                val fileOutputStream = FileOutputStream(file)
-                fileInputStream!!.copyTo(fileOutputStream)
-                fileInputStream.close()
-                fileOutputStream.close()
-
-                val fileSizeInBytes = file.length()
-                val fileSizeInKB = fileSizeInBytes / 1024
-                val fileSizeInMB = fileSizeInKB / 1024
-
-                val maxFileSizeInMB = 4
-
-                if (fileSizeInMB > maxFileSizeInMB) {
-                    Toast.makeText(requireContext(), "File terlalu besar", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
+                if (unitMediaViewModdel.isUnitPhotosEmpty()) {
+                    Toast.makeText(requireContext(), "Foto unit tidak boleh kosong", Toast.LENGTH_LONG).show()
+                    return@launch
                 }
 
-                documentBody = MultipartBody.Part.createFormData(
-                    "document_file",
-                    file.name,
-                    file.asRequestBody("application/pdf".toMediaTypeOrNull())
-                )
-            } else {
-                Log.d("CreateUnitMediaFragment", "onViewCreated: documentUri is null")
-                val file = File(requireContext().applicationContext.filesDir, "unit_document.pdf")
+                if (unitMediaViewModdel.isUnitDenahEmpty()) {
+                    Toast.makeText(requireContext(), "Denah unit tidak boleh kosong", Toast.LENGTH_LONG).show()
+                    return@launch
+                }
 
-                documentBody = MultipartBody.Part.createFormData(
-                    "document_file",
-                    file.name,
-                    file.asRequestBody("application/pdf".toMediaTypeOrNull())
-                )
-            }
+                val retro = Retro(TokenManager(requireContext()).token)
+                    .getRetroClientInstance()
+                    .create(DeveloperApi::class.java)
 
-            retro.uploadAnotherUnitMedia(
-                projectId = projectId,
-                unitId = unitIdBody,
-                videoLink = youtubeLinkBody,
-                virtualTourName = virtualTourBody,
-                virtualTourLink = virtualTourLinkBody,
-                document_file = documentBody,
-                modelLink = modelLinkBody
-            ).enqueue(object : Callback<UpdateUnitResponse> {
-                override fun onResponse(
-                    call: Call<UpdateUnitResponse>,
-                    response: Response<UpdateUnitResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        Log.d("CreateUnitMediaFragment", "onResponse: ${response.body()}")
-                    } else {
-                        Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse: ${response.body()}")
-                        Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 2: ${response.errorBody()?.string()}")
-                        Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 3: ${response.message()}")
-                        Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 4: ${response.raw()}")
-                        Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 5: ${response.code()}")
-                        Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 6: ${response.headers()}")
+                val projectId = formActivity.unitFormViewModel.projectId.toString()
+                val unitId = formActivity.unitId ?: 0
+                val youtubeLink = binding.editTextLinkYoutubeMediaUnit.text.toString()
+                val virtualTour = binding.editLinkVirtualTourUnit.text.toString()
+                val virtualTourLink = binding.editLinkVirtualTourUnit.text.toString()
+                val modelLink = binding.editLinkModelUnit.text.toString()
 
-                        Toast.makeText(requireActivity(), "Gagal menambahkan mediaunit", Toast.LENGTH_SHORT).show()
+                var unitIdBody = unitId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                var youtubeLinkBody = youtubeLink.toRequestBody("text/plain".toMediaTypeOrNull())
+                var virtualTourBody = virtualTour.toRequestBody("text/plain".toMediaTypeOrNull())
+                var virtualTourLinkBody = virtualTourLink.toRequestBody("text/plain".toMediaTypeOrNull())
+                var modelLinkBody = modelLink.toRequestBody("text/plain".toMediaTypeOrNull())
+
+
+                var documentBody : MultipartBody.Part? = null
+
+                if (documentUri != null) {
+                    Log.d("CreateUnitMediaFragment", "onViewCreated: $documentUri")
+                    val fileDir = requireContext().applicationContext.filesDir
+                    val file = File(fileDir, "unit_document.pdf")
+                    val fileInputStream = requireContext().contentResolver.openInputStream(documentUri!!)
+                    val fileOutputStream = FileOutputStream(file)
+                    fileInputStream!!.copyTo(fileOutputStream)
+                    fileInputStream.close()
+                    fileOutputStream.close()
+
+                    val fileSizeInBytes = file.length()
+                    val fileSizeInKB = fileSizeInBytes / 1024
+                    val fileSizeInMB = fileSizeInKB / 1024
+
+                    val maxFileSizeInMB = 4
+
+                    if (fileSizeInMB > maxFileSizeInMB) {
+                        Toast.makeText(requireContext(), "File terlalu besar", Toast.LENGTH_SHORT).show()
+                        return@launch
                     }
+
+                    documentBody = MultipartBody.Part.createFormData(
+                        "document_file",
+                        file.name,
+                        file.asRequestBody("application/pdf".toMediaTypeOrNull())
+                    )
+                } else {
+                    Log.d("CreateUnitMediaFragment", "onViewCreated: documentUri is null")
+                    val file = File(requireContext().applicationContext.filesDir, "unit_document.pdf")
+
+                    documentBody = MultipartBody.Part.createFormData(
+                        "document_file",
+                        file.name,
+                        file.asRequestBody("application/pdf".toMediaTypeOrNull())
+                    )
                 }
 
-                override fun onFailure(call: Call<UpdateUnitResponse>, t: Throwable) {
-                    Log.e("CreateUnitMediaFragment", "onFailure: ${t.message}")
-                    Toast.makeText(requireActivity(), "Gagal menambahkan media unit", Toast.LENGTH_SHORT).show()
-                }
-            })
+                retro.uploadAnotherUnitMedia(
+                    projectId = projectId,
+                    unitId = unitIdBody,
+                    videoLink = youtubeLinkBody,
+                    virtualTourName = virtualTourBody,
+                    virtualTourLink = virtualTourLinkBody,
+                    document_file = documentBody,
+                    modelLink = modelLinkBody
+                ).enqueue(object : Callback<UpdateUnitResponse> {
+                    override fun onResponse(
+                        call: Call<UpdateUnitResponse>,
+                        response: Response<UpdateUnitResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.d("CreateUnitMediaFragment", "onResponse: ${response.body()}")
+                        } else {
+                            Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse: ${response.body()}")
+                            Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 2: ${response.errorBody()?.string()}")
+                            Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 3: ${response.message()}")
+                            Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 4: ${response.raw()}")
+                            Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 5: ${response.code()}")
+                            Log.e("CreateUnitMediaFragment", "Error nya ada di onResponse 6: ${response.headers()}")
 
-            formActivity?.onNextButtonUnitManagementClick()
+                            Toast.makeText(requireActivity(), "Gagal menambahkan mediaunit", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UpdateUnitResponse>, t: Throwable) {
+                        Log.e("CreateUnitMediaFragment", "onFailure: ${t.message}")
+                        Toast.makeText(requireActivity(), "Gagal menambahkan media unit", Toast.LENGTH_SHORT).show()
+                    }
+                })
+
+                formActivity?.onNextButtonUnitManagementClick()
+            }
 
         }
     }
@@ -769,11 +782,16 @@ class CreateUnitMediaFragment : Fragment() {
 
 
     private fun pickDocument() {
-        val documentStoreIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = "application/pdf"
-            addCategory(Intent.CATEGORY_OPENABLE)
+        try {
+            val documentStoreIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = "application/pdf"
+                addCategory(Intent.CATEGORY_OPENABLE)
+            }
+            documentLauncher.launch(documentStoreIntent)
+        } catch (e: Exception) {
+            Log.e("CreateUnitMediaFragment", "pickDocument: ${e.message}")
         }
-        documentLauncher.launch(documentStoreIntent)
+
     }
 
     private fun validateYoutubeLinkObserver() {

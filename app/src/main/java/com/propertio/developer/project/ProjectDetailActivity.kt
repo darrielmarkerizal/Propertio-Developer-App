@@ -194,7 +194,7 @@ class ProjectDetailActivity : AppCompatActivity() {
         binding.buttonAddUnit.setOnClickListener {
             if (projectId != null && projectId != 0) {
                 val intentToUnitForm = Intent(this, UnitFormActivity::class.java)
-                intentToUnitForm.putExtra(PROJECT_ID, projectId)
+                intentToUnitForm.putExtra(PROJECT_DETAIL_PID, projectId)
                 intentToUnitForm.putExtra("Property Type", propertyType)
                 launcherToCreateUnit.launch(intentToUnitForm)
             } else {
@@ -654,11 +654,14 @@ class ProjectDetailActivity : AppCompatActivity() {
         val buttonEdit = popupView.findViewById<AppCompatButton>(R.id.button_edit_unit_pop_up)
 
         buttonEdit.setOnClickListener {
-            Log.d(TAG, "horizontalMoreButtonPopUp: buttonEdit ${data.title}")
+            Log.d(TAG, "horizontalMoreButtonPopUp: " +
+                    "\nbuttonEdit ${data.title}, " +
+                    "\nuid ${data.id}, " +
+                    "\npid $projectId")
 
             val intentToEdit = Intent(this, UnitFormActivity::class.java)
-            intentToEdit.putExtra(UnitFormActivity.PROJECT_DETAIL_UID, data.id)
-            intentToEdit.putExtra(UnitFormActivity.PROJECT_DETAIL_PID, projectId)
+            intentToEdit.putExtra(PROJECT_DETAIL_UID, data.id)
+            intentToEdit.putExtra(PROJECT_DETAIL_PID, projectId)
             launcherToEditUnit.launch(intentToEdit)
             popupWindow.dismiss()
         }
