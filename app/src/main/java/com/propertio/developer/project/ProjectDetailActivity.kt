@@ -32,6 +32,7 @@ import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
 import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResponse
+import com.propertio.developer.api.developer.unitmanagement.UnitListResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitOrderRequest
 import com.propertio.developer.carousel.CarouselAdapter
 import com.propertio.developer.carousel.ImageData
@@ -153,6 +154,7 @@ class ProjectDetailActivity : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
+            updateUnit()
             Log.d("ProjectDetailActivity", "Unit created successfully")
         }
     }
@@ -278,14 +280,14 @@ class ProjectDetailActivity : AppCompatActivity() {
     }
 
     private fun updateUnit() {
-        developerApi.getProjectDetail(projectId!!).enqueue(object: Callback<ProjectDetail> {
-            override fun onResponse(call: Call<ProjectDetail>, response: Response<ProjectDetail>) {
+        developerApi.getUnitsList(projectId!!).enqueue(object: Callback<UnitListResponse> {
+            override fun onResponse(call: Call<UnitListResponse>, response: Response<UnitListResponse>) {
 
                 if (response.isSuccessful) {
-                    val project = response.body()?.data
-                    if (project != null) {
-                        unitAdapter.submitList(project.units)
-                        Log.i("ProjectDetailActivity", "Success adding unit. Units is not null ${project.units?.size} ${project.units?.size}")
+                    val unitList = response.body()?.data
+                    if (unitList != null) {
+                        unitAdapter.submitList(unitList)
+                        Log.i("ProjectDetailActivity", "Success adding unit. Units is not null ${unitList.size} ${unitList.size}")
                     }
                     else {
                         Log.w("ProjectDetailActivity", "project is null")
@@ -298,7 +300,7 @@ class ProjectDetailActivity : AppCompatActivity() {
 
             }
 
-            override fun onFailure(call: Call<ProjectDetail>, t: Throwable) {
+            override fun onFailure(call: Call<UnitListResponse>, t: Throwable) {
                 // TODO: Handle Failure
                 Log.e("ProjectDetailActivity", "onFailure: $t")
 
@@ -322,7 +324,6 @@ class ProjectDetailActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val project = response.body()?.data
                     if (project != null) {
-                        unitAdapter.submitList(project.units)
                         setUnitRecycler()
                         Log.i("ProjectDetailActivity", "Success adding unit. Units is not null")
                     }

@@ -1,8 +1,7 @@
 package com.propertio.developer.unit.form
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.propertio.developer.R
+import androidx.appcompat.app.AppCompatActivity
 import com.propertio.developer.databinding.ActivityUnitSuccessBinding
 
 class CreateUnitSuccessActivity : AppCompatActivity() {
@@ -11,15 +10,10 @@ class CreateUnitSuccessActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        with(binding) {
-            buttonKembaliKeDetailProyek.setOnClickListener {
-                finish()
-            }
-
         binding.buttonKembaliKeDetailProyek.setOnClickListener {
             setResult(RESULT_OK)
             finish()
 
         }
-    }}
+    }
 }

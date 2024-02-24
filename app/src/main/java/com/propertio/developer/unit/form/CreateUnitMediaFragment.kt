@@ -1,21 +1,19 @@
 package com.propertio.developer.unit.form
 
-import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.propertio.developer.TokenManager
@@ -745,17 +743,27 @@ class CreateUnitMediaFragment : Fragment() {
     }
 
     private fun pickPhoto() {
-        val imageStoreIntent = Intent(Intent.ACTION_PICK).apply {
-            setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+        try {
+            val imageStoreIntent = Intent(Intent.ACTION_PICK).apply {
+                setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+            }
+            imageLauncher.launch(imageStoreIntent)
+        } catch (e: Exception) {
+            Log.e("CreateUnitMediaFragment", "pickPhoto: ${e.message}")
         }
-        imageLauncher.launch(imageStoreIntent)
+
     }
 
     private fun pickDenah() {
-        val imageStoreIntent = Intent(Intent.ACTION_PICK).apply {
-            setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+        try {
+            val imageStoreIntent = Intent(Intent.ACTION_PICK).apply {
+                setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+            }
+            denahLauncher.launch(imageStoreIntent)
+        } catch (e: Exception) {
+            Log.e("CreateUnitMediaFragment", "pickDenah: ${e.message}")
         }
-        denahLauncher.launch(imageStoreIntent)
+
     }
 
 
