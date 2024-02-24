@@ -1,25 +1,20 @@
 package com.propertio.developer.pesan
 
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.common.message.MessageApi
 import com.propertio.developer.api.common.message.MessageResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
-import com.propertio.developer.TokenManager
 import com.propertio.developer.database.PropertiORepository
 import com.propertio.developer.database.chat.ChatTable
-import com.propertio.developer.model.Chat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class ChatViewModel(
@@ -84,8 +79,14 @@ class ChatViewModel(
     }
 
 
-    suspend fun fetchDataFromApi(token : String) {
+    suspend fun fetchDataFromApi(token : String, forceUpdate: Boolean = false) {
         val retro = Retro(token).getRetroClientInstance().create(MessageApi::class.java)
+        viewModelScope.launch(Dispatchers.IO) {
+            if (forceUpdate) {
+                deleteAll()
+                Log.w("ChatViewModel", "fetchDataFromApi: forceUpdate")
+            }
+        }
 
         retro.getAllMessage().enqueue(object : Callback<MessageResponse> {
             override fun onResponse(

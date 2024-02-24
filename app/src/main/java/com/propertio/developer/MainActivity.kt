@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         chatViewModel = ViewModelProvider(this, chatFactory)[ChatViewModel::class.java]
 
         lifecycleScope.launch {
-            chatViewModel.fetchDataFromApi(TokenManager(this@MainActivity).token!!)
+            chatViewModel.fetchDataFromApi(TokenManager(this@MainActivity).token!!, true)
             unreadChat = withContext(Dispatchers.IO) {
                 chatViewModel.countUnread()
             }
@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun fetchProjectListData(token: String) {
-        projectViewModel.fetchLiteProject(token)
+        projectViewModel.fetchLiteProject(token, true)
     }
 
     override fun onResume() {
