@@ -14,7 +14,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.propertio.developer.TokenManager
@@ -31,7 +30,6 @@ import com.propertio.developer.model.LitePhotosModel
 import com.propertio.developer.project.list.UnggahFotoAdapter
 import com.propertio.developer.project.viewmodel.ProjectMediaViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -297,6 +295,9 @@ class CreateProjectMediaFragment : Fragment() {
             pickDocument()
         }
 
+        // Delete document
+        setupDeleteDocumentButton()
+
         // Document Card
         binding.cardDocumentProyekPropertyThumbnail.cardFileThumbnail.setOnClickListener {
             // oppen document
@@ -313,6 +314,8 @@ class CreateProjectMediaFragment : Fragment() {
                 }
             }
         }
+
+        setupSupportMarquee()
 
         // Load Data
         loadViewModelData()
@@ -443,6 +446,26 @@ class CreateProjectMediaFragment : Fragment() {
 
 
 
+    }
+
+    private fun setupSupportMarquee() {
+        binding.cardDocumentProyekPropertyThumbnail.apply {
+            textViewFilename.isSelected = true
+            textViewDescriptionDocument.isSelected = true
+        }
+    }
+
+    private fun setupDeleteDocumentButton() {
+        binding.cardDocumentProyekPropertyThumbnail.cardFileThumbnailButtonDelete.visibility = View.VISIBLE
+        binding.cardDocumentProyekPropertyThumbnail.cardFileThumbnailButtonDelete.setOnClickListener {
+            binding.cardDocumentProyekPropertyThumbnail.root.visibility = View.GONE
+            documentUri = null
+            projectMediaViewModel.isDocumentNotEdited = false
+
+            if (projectMediaViewModel.document?.id != null) {
+                deletePreviousDocument()
+            }
+        }
     }
 
     private fun uploadPhotos(uri: Uri) {
@@ -587,18 +610,28 @@ class CreateProjectMediaFragment : Fragment() {
 
 
     private fun pickPhoto() {
-        val imageStoreIntent = Intent(Intent.ACTION_PICK).apply {
-            setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+        try {
+            val imageStoreIntent = Intent(Intent.ACTION_PICK).apply {
+                setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+            }
+            imageLauncher.launch(imageStoreIntent)
+        } catch (e: Exception) {
+            Log.e("CreateProjectMedia", "pickPhoto: ${e.message}")
         }
-        imageLauncher.launch(imageStoreIntent)
+
     }
 
     private fun pickDocument() {
-        val documentStoreIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = "application/pdf"
-            addCategory(Intent.CATEGORY_OPENABLE)
+        try {
+            val documentStoreIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = "application/pdf"
+                addCategory(Intent.CATEGORY_OPENABLE)
+            }
+            documentLauncher.launch(documentStoreIntent)
+        } catch (e: Exception) {
+            Log.e("CreateProjectMedia", "pickDocument: ${e.message}")
         }
-        documentLauncher.launch(documentStoreIntent)
+
     }
 
     private fun openContactUs() {
