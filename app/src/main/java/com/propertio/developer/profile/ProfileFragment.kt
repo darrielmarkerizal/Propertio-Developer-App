@@ -38,6 +38,7 @@ import com.propertio.developer.dialog.model.ProvinceModel
 import com.propertio.developer.dialog.viewmodel.CitiesSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.ProvinceSpinnerViewModel
 import com.propertio.developer.permissions.NetworkAccess
+import com.propertio.developer.pesan.ChatViewModel
 import com.propertio.developer.project.ProjectViewModel
 import com.propertio.developer.project.ProjectViewModelFactory
 import kotlinx.coroutines.Dispatchers
@@ -63,6 +64,8 @@ class ProfileFragment : Fragment() {
     private lateinit var profileDao : ProfileTableDao
 
     private lateinit var projectViewModel: ProjectViewModel
+
+    private lateinit var chatViewModel : ChatViewModel
 
 
     // Spinner
@@ -116,6 +119,7 @@ class ProfileFragment : Fragment() {
             (requireActivity().application as PropertioDeveloperApplication).repository
         )
         projectViewModel = ViewModelProvider(requireActivity(), factory)[ProjectViewModel::class.java]
+        chatViewModel = ViewModelProvider(requireActivity(), factory)[ChatViewModel::class.java]
 
 
         // Layout
@@ -169,6 +173,7 @@ class ProfileFragment : Fragment() {
                         withContext(Dispatchers.IO) {
                             profileDao.deleteAll()
                             projectViewModel.deleteAllLocalProjects()
+                            chatViewModel.deleteAll()
                         }
                     }
 

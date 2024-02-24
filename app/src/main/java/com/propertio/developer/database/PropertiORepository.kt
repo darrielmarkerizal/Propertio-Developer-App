@@ -139,6 +139,7 @@ class PropertiORepository(
         read: String,
         createAt: String,
     ) {
+        Log.i("Repository", "insertChat: $id")
         return withContext(Dispatchers.IO) {
             chatTableDao.insert(
                 ChatTable(
