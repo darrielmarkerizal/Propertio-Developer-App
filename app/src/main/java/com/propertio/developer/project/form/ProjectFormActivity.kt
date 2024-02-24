@@ -41,6 +41,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
     val binding by lazy {
         ActivityProjectFormBinding.inflate(layoutInflater)
     }
+    private var isCreateNew : Boolean = true
 
     // ViewModels
     internal val projectInformationLocationViewModel : ProjectInformationLocationViewModel by viewModels()
@@ -136,8 +137,10 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
         Log.d("ProjectFormActivity", "setToolbarToCreate: $projectId")
         if (projectId != null) {
             bindingToolbar.textViewTitle.text = "Edit Proyek"
+            isCreateNew = false
         } else {
             bindingToolbar.textViewTitle.text = "Tambah Proyek"
+            isCreateNew = true
         }
     }
 
@@ -400,8 +403,9 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
 
         if (currentFragmentIndex == formsFragment.size - 1) {
             binding.progressIndicatorProjectForm.setProgressCompat(100, true)
-            val intent = Intent(this, CreateProjectSuccessActivity::class.java)
-            startActivity(intent)
+            val intentToSuccess = Intent(this, CreateProjectSuccessActivity::class.java)
+            intentToSuccess.putExtra(IS_CREATE_NEW, isCreateNew)
+            startActivity(intentToSuccess)
             finish()
             return
         }
@@ -426,6 +430,8 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
     }
 
 
-
+    companion object {
+        const val IS_CREATE_NEW = "ProjectFormActivityIsCreateNew"
+    }
 
 }
