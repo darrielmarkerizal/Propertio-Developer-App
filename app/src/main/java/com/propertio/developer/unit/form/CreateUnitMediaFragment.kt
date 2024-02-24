@@ -319,6 +319,8 @@ class CreateUnitMediaFragment : Fragment() {
             pickDocument()
         }
 
+        setupDeleteDocumentButton()
+
         loadViewModelData()
 
         activityBinding.floatingButtonBack.setOnClickListener {
@@ -431,6 +433,19 @@ class CreateUnitMediaFragment : Fragment() {
                 formActivity?.onNextButtonUnitManagementClick()
             }
 
+        }
+    }
+
+    private fun setupDeleteDocumentButton() {
+        binding.cardDocumentUnitPropertyThumbnail.cardFileThumbnailButtonDelete.visibility = View.VISIBLE
+        binding.cardDocumentUnitPropertyThumbnail.cardFileThumbnailButtonDelete.setOnClickListener {
+            binding.cardDocumentUnitPropertyThumbnail.root.visibility = View.GONE
+            documentUri = null
+            unitMediaViewModdel.isDocumentNotEdited = false
+
+            if (unitMediaViewModdel.document != null) {
+                deletePreviousDocument()
+            }
         }
     }
 
