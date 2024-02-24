@@ -20,7 +20,6 @@ import com.propertio.developer.databinding.ToolbarBinding
 import com.propertio.developer.model.LitePhotosModel
 import com.propertio.developer.model.UnitDocument
 import com.propertio.developer.permissions.NetworkAccess
-import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_ID
 import com.propertio.developer.unit.UnitMediaViewModel
 import com.propertio.developer.unit.form.type.UnitDataApartemenFragment
 import com.propertio.developer.unit.form.type.UnitDataGudangFragment
@@ -80,27 +79,27 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
         binding.toolbarContainerUnitForm.textViewTitle.text = "Unit"
 
         val propertyType = intent.getStringExtra("Property Type")
-        val projectId = intent.getIntExtra(PROJECT_ID, 0)
+        projectId = intent.getIntExtra(PROJECT_DETAIL_PID, 0)
+
 
         if (projectId != 0) {
             unitFormViewModel.projectId = projectId
+            finish()
             Log.d("UnitFormActivity", "onCreate: projectId: $projectId")
         } else {
             Log.e("UnitFormActivity", "onCreate: projectId is null")
         }
 
-        val unitIdFromIntent = intent.getIntExtra(PROJECT_DETAIL_UID, 0)
-        val projectIdFromIntent = intent.getIntExtra(PROJECT_DETAIL_PID, 0)
+        unitId = intent.getIntExtra(PROJECT_DETAIL_UID, 0)
 
-        if (unitIdFromIntent != 0) {
+        if (unitId != 0) {
             if (NetworkAccess.isNetworkAvailable(this).not()) run {
                 NetworkAccess.buildNoConnectionToast(this).show()
                 finish()
             }
             lifecycleScope.launch {
-                Log.d("UnitFormActivity", "onCreate Fetch Edit: $unitIdFromIntent")
-                unitId = unitIdFromIntent
-                fetchUnitDetail(projectIdFromIntent, unitId!!)
+                Log.d("UnitFormActivity", "onCreate Fetch Edit: $unitId")
+                fetchUnitDetail(projectId!!, unitId!!)
                 startUnitForm()
             }
         } else {
