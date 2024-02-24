@@ -71,6 +71,7 @@
                 style="@style/DesignSystem.TextInputEditText"
                 android:layout_width="match_parent"
                 android:hint="Masukkan Headline Proyek"
+                android:maxLength="70"
                 android:layout_height="50dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -115,6 +116,7 @@
                 android:hint="Masukkan Judul Proyek"
                 android:layout_marginTop="8dp"
                 android:maxLines="1"
+                android:maxLength="70"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txt_judul_project"
                 />
@@ -183,6 +185,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:nextFocusLeft="@id/txt_headline_project"
+                android:text="*"
+                android:textColor="@color/red_badges"
+                app:layout_constraintStart_toEndOf="@+id/txt_deskripsi_project"
+                app:layout_constraintTop_toTopOf="@+id/txt_deskripsi_project" />
 
             <EditText
                 android:id="@+id/edit_deskripsi_project"
