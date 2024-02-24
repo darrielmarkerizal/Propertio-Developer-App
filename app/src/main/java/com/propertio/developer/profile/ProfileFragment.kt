@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -183,19 +184,75 @@ class ProfileFragment : Fragment() {
                 .show()
         }
 
-
+        setFullNameTextField()
+        setPhoneTextField()
+        setDescriptionTextField()
 
     }
 
+    private fun setDescriptionTextField() {
+        binding.edtAlamatProfil.doAfterTextChanged {
+            if (binding.edtAlamatProfil.error != null) {
+                if (it?.length!! > 0) {
+                    binding.edtAlamatProfil.error = null
+                }
+            }
+        }
+    }
+
+    private fun setPhoneTextField() {
+        binding.edtNomorTeleponProfil.doAfterTextChanged {
+            if (binding.edtNomorTeleponProfil.error != null) {
+                if (it?.length!! > 0 && it.startsWith("0").not()) {
+                    binding.edtNomorTeleponProfil.error = null
+                }
+            } else if (it != null) {
+                if (it.startsWith("0")) {
+                    binding.edtNomorTeleponProfil.error = "Nomor telepon tidak boleh diawali dengan 0"
+                }
+            }
+        }
+    }
+
+    private fun setFullNameTextField() {
+        binding.edtNamaLengkapProfil.doAfterTextChanged {
+            if (binding.edtNamaLengkapProfil.error != null) {
+                if (it?.length!! > 0) {
+                    binding.edtNamaLengkapProfil.error = null
+                }
+            }
+        }
+    }
+
     private fun updateProfile() {
-        // get Text
+        // get Text and validate
         val userID = binding.txtIdProfile.text.toString()
         val email = binding.txtEmailProfile.text.toString()
-        val fullName = binding.edtNamaLengkapProfil.text.toString()
-        val phone = binding.edtNomorTeleponProfil.text.toString()
+        val fullName = binding.edtNamaLengkapProfil.text.toString().trim().also {
+            if (it.isEmpty()) {
+                binding.edtNamaLengkapProfil.error = "Nama lengkap tidak boleh kosong"
+                return
+            }
+        }
+        val phone = binding.edtNomorTeleponProfil.text.toString().trim().also {
+            if (it.isEmpty()) {
+                binding.edtNomorTeleponProfil.error = "Nomor telepon tidak boleh kosong"
+                return
+            }
+
+            if (it.startsWith("0")) {
+                binding.edtNomorTeleponProfil.error = "Nomor telepon tidak boleh diawali dengan 0"
+                return
+            }
+        }
         val province = binding.buttonProvincesSelectionProfile.text.toString()
         val city = binding.spinnerCityProfile.text.toString()
-        val address = binding.edtAlamatProfil.text.toString()
+        val address = binding.edtAlamatProfil.text.toString().trim().also {
+            if (it.isEmpty()) {
+                binding.edtAlamatProfil.error = "Alamat tidak boleh kosong"
+                return
+            }
+        }
 
         // Form Request
         val fullNameBody = fullName.toRequestBody("text/plain".toMediaTypeOrNull())
