@@ -55,13 +55,22 @@ class LoginActivity : AppCompatActivity() {
             buttonLogin.setOnClickListener {
                 if (editTextEmail.text.toString().isEmpty()) {
                     editTextEmail.error = "Mohon isi email"
+                    editTextEmail.requestFocus()
+                    return@setOnClickListener
+                } else editTextEmail.clearFocus()
+
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(editTextEmail.text.toString()).matches()) {
+                    editTextEmail.error = "Email tidak valid"
+                    editTextEmail.requestFocus()
                     return@setOnClickListener
                 }
+
                 if (editTextPassword.text.toString().isEmpty()) {
                     editTextPasswordLayout.isEndIconVisible = false
                     editTextPassword.error = "Mohon isi password"
+                    editTextEmail.requestFocus()
                     return@setOnClickListener
-                }
+                } else editTextPassword.clearFocus()
 
                 login()
             }
