@@ -261,7 +261,7 @@
             android:background="@drawable/button_tertiary_rounded_rectangle"
             android:backgroundTint="#FF920A"
             android:paddingHorizontal="20dp"
-            android:text="Contoh 3D Model Siteplan"
+            android:text="Contoh 3D Model Unit"
             android:textAppearance="@style/text.medium.size14"
             android:textColor="@color/white"
             app:layout_constraintStart_toEndOf="@+id/button_hubungi_kami_media_unit2"
@@ -272,7 +272,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Link 3D Model"
+            android:text="Link 3D Model Unit"
             android:textAppearance="@style/text.regular.size16"
             app:layout_constraintStart_toStartOf="@+id/text_title_unit_media"
             app:layout_constraintTop_toBottomOf="@+id/button_hubungi_kami_media_unit2" />
