@@ -13,7 +13,6 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,17 +22,13 @@ import com.propertio.developer.api.Retro
 import com.propertio.developer.api.common.message.MessageApi
 import com.propertio.developer.api.common.message.MessageDetailResponse
 import com.propertio.developer.databinding.FragmentChatBinding
-import com.propertio.developer.model.Chat
-import com.propertio.developer.project.ProjectViewModel
 import com.propertio.developer.project.ProjectViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.coroutines.withTimeout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.create
 
 class ChatFragment : Fragment() {
     private val binding by lazy { FragmentChatBinding.inflate(layoutInflater) }
@@ -73,6 +68,7 @@ class ChatFragment : Fragment() {
                                 lifecycleScope.launch {
                                     withContext(Dispatchers.IO) {
                                         chatViewModel.updateRead(it.id)
+                                        chatViewModel.unreadChatCount.postValue(chatViewModel.countUnread())
                                     }
                                     withContext(Dispatchers.Main) {
                                         itemBinding.visibility = View.GONE

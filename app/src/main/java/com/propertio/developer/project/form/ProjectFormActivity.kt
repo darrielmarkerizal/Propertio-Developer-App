@@ -22,6 +22,7 @@ import com.propertio.developer.dialog.model.ProvinceModel
 import com.propertio.developer.model.LitePhotosModel
 import com.propertio.developer.model.ProjectDocument
 import com.propertio.developer.permissions.NetworkAccess
+import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_ID
 import com.propertio.developer.project.list.FacilityAndInfrastructureTypeViewModel
 import com.propertio.developer.project.viewmodel.ProjectFacilityViewModel
 import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
@@ -41,6 +42,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
     val binding by lazy {
         ActivityProjectFormBinding.inflate(layoutInflater)
     }
+    private var isCreateNew : Boolean = true
 
     // ViewModels
     internal val projectInformationLocationViewModel : ProjectInformationLocationViewModel by viewModels()
@@ -136,8 +138,10 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
         Log.d("ProjectFormActivity", "setToolbarToCreate: $projectId")
         if (projectId != null) {
             bindingToolbar.textViewTitle.text = "Edit Proyek"
+            isCreateNew = false
         } else {
             bindingToolbar.textViewTitle.text = "Tambah Proyek"
+            isCreateNew = true
         }
     }
 
@@ -400,8 +404,11 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
 
         if (currentFragmentIndex == formsFragment.size - 1) {
             binding.progressIndicatorProjectForm.setProgressCompat(100, true)
-            val intent = Intent(this, CreateProjectSuccessActivity::class.java)
-            startActivity(intent)
+            val intentToSuccess = Intent(this, CreateProjectSuccessActivity::class.java)
+            intentToSuccess.putExtra(IS_CREATE_NEW, isCreateNew)
+            intentToSuccess.putExtra(PROJECT_ID, projectId)
+            intentToSuccess.putExtra("Property Type", projectInformationLocationViewModel.propertyTypeName)
+            startActivity(intentToSuccess)
             finish()
             return
         }
@@ -426,6 +433,8 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
     }
 
 
-
+    companion object {
+        const val IS_CREATE_NEW = "ProjectFormActivityIsCreateNew"
+    }
 
 }

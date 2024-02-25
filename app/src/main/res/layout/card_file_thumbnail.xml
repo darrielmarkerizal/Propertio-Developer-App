@@ -34,10 +34,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:ellipsize="end"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:maxLines="1"
             android:text="filename"
             android:textAppearance="@style/text.regular.size14"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/card_file_thumbnail_button_delete"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/image_view_thumbnail"
             app:layout_constraintTop_toTopOf="parent" />
@@ -48,9 +51,25 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="PDF"
+            android:maxLines="1"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
             android:textAppearance="@style/text.regular.size11"
             app:layout_constraintStart_toEndOf="@+id/image_view_thumbnail"
             app:layout_constraintTop_toBottomOf="@+id/text_view_filename" />
+
+        <com.google.android.material.button.MaterialButton
+            android:visibility="gone"
+            android:id="@+id/card_file_thumbnail_button_delete"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/outline_delete_24"
+            app:iconTint="@color/red_badges"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

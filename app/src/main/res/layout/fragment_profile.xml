@@ -42,12 +42,13 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintGuide_percent="0.13"/>
+
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guide_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.15"/>
+                    app:layout_constraintGuide_begin="190dp" />
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="0px"
@@ -150,54 +151,74 @@
                                 android:textColor="@color/red_badges"
                                 android:text="*"/>
                         </LinearLayout>
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            style="@style/DesignSystem.TextInputEditText"
-                            android:layout_marginBottom="20dp">
 
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:id="@+id/spinner_country_code"
-                                android:layout_width="wrap_content"
-                                android:layout_height="0dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="4dp"
-                                android:src="@drawable/baseline_arrow_drop_down_24"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                style="@style/DesignSystem.TextInputEditText"
+                                >
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:id="@+id/spinner_country_code"
+                                    android:visibility="gone"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="0dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="4dp"
+                                    android:src="@drawable/baseline_arrow_drop_down_24"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/txt_country_code_profile"
+                                    style="@style/text.regular.size16"
+                                    android:visibility="gone"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="4dp"
+                                    android:minEms="2"
+                                    android:text="+62"
+                                    app:layout_constraintBottom_toBottomOf="@+id/spinner_country_code"
+                                    app:layout_constraintStart_toEndOf="@+id/spinner_country_code"
+                                    app:layout_constraintTop_toTopOf="@+id/spinner_country_code" />
+
+                                <EditText
+                                    android:id="@+id/edt_nomor_telepon_profil"
+                                    style="@style/text.regular.size16"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="4dp"
+                                    android:layout_marginEnd="4dp"
+                                    android:layout_weight="3"
+                                    android:background="@color/white"
+                                    android:textSize="15sp"
+                                    android:inputType="phone"
+                                    app:layout_constraintBottom_toBottomOf="@+id/txt_country_code_profile"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/txt_country_code_profile"
+                                    app:layout_constraintTop_toTopOf="@+id/txt_country_code_profile" />
+
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
 
                             <TextView
-                                android:id="@+id/txt_country_code_profile"
-                                style="@style/text.regular.size16"
-                                android:layout_width="wrap_content"
+                                style="@style/text.regular.size12"
+                                android:textColor="?attr/colorOutline"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="4dp"
-                                android:minEms="2"
-                                android:text="+62"
-                                app:layout_constraintBottom_toBottomOf="@+id/spinner_country_code"
-                                app:layout_constraintStart_toEndOf="@+id/spinner_country_code"
-                                app:layout_constraintTop_toTopOf="@+id/spinner_country_code" />
+                                android:text="Contoh : 62812345679"
+                                android:paddingHorizontal="16dp"
+                                android:layout_marginBottom="20dp"/>
 
-                            <EditText
-                                android:id="@+id/edt_nomor_telepon_profil"
-                                style="@style/text.regular.size16"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="4dp"
-                                android:layout_marginEnd="4dp"
-                                android:layout_weight="3"
-                                android:background="@color/white"
-                                android:hint="81234567890"
-                                android:paddingHorizontal="15dp"
-                                android:textSize="15sp"
-                                app:layout_constraintBottom_toBottomOf="@+id/txt_country_code_profile"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/txt_country_code_profile"
-                                app:layout_constraintTop_toTopOf="@+id/txt_country_code_profile" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        </LinearLayout>
 
 
                         <LinearLayout

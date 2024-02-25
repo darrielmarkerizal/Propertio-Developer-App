@@ -14,7 +14,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.propertio.developer.TokenManager
@@ -31,7 +30,6 @@ import com.propertio.developer.model.LitePhotosModel
 import com.propertio.developer.project.list.UnggahFotoAdapter
 import com.propertio.developer.project.viewmodel.ProjectMediaViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -62,7 +60,6 @@ class CreateProjectMediaFragment : Fragment() {
 
     private val photosAdapter by lazy {
         UnggahFotoAdapter(
-            photosList = emptyList<LitePhotosModel>().toMutableList(),
             onClickButtonCover = {
                 if (it.id != null) {
                     updateCoverPhoto(it.id)
@@ -297,6 +294,9 @@ class CreateProjectMediaFragment : Fragment() {
             pickDocument()
         }
 
+        // Delete document
+        setupDeleteDocumentButton()
+
         // Document Card
         binding.cardDocumentProyekPropertyThumbnail.cardFileThumbnail.setOnClickListener {
             // oppen document
@@ -314,6 +314,8 @@ class CreateProjectMediaFragment : Fragment() {
             }
         }
 
+        setupSupportMarquee()
+
         // Load Data
         loadViewModelData()
 
@@ -329,120 +331,150 @@ class CreateProjectMediaFragment : Fragment() {
 
         activityBinding?.floatingButtonNext?.setOnClickListener {
 
-            val projectId = formActivity?.projectId
-            val youtubeLink = binding.editTextLinkYoutubeMediaProject.text.toString()
-            val virtualTour = binding.editTextNamaVirtualTour.text.toString()
-            val virtualTourLink = binding.editTextLinkVirtualTourProject.text.toString()
-
-
-            val projectIdBody = projectId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-            val youtubeLinkBody = youtubeLink.toRequestBody("text/plain".toMediaTypeOrNull())
-            val virtualTourBody = virtualTour.toRequestBody("text/plain".toMediaTypeOrNull())
-            val virtualTourLinkBody = virtualTourLink.toRequestBody("text/plain".toMediaTypeOrNull())
-
-            var documentBody : MultipartBody.Part? = null
-
-            if (documentUri != null) {
-                Log.d("CreateProjectMedia", "onViewCreated: $documentUri")
-                val fileDir = requireContext().applicationContext.filesDir
-                val file = File(fileDir, "project_document.pdf")
-                val fileInputStream = requireContext().contentResolver.openInputStream(documentUri!!)
-                val fileOutputStream = FileOutputStream(file)
-                fileInputStream!!.copyTo(fileOutputStream)
-                fileInputStream.close()
-                fileOutputStream.close()
-
-                val fileSizeInBytes = file.length()
-                val fileSizeInKB = fileSizeInBytes / 1024
-                val fileSizeInMB = fileSizeInKB / 1024
-
-                val maxFileSizeInMB = 4 // MB
-
-                if (fileSizeInMB > maxFileSizeInMB) {
-                    Toast.makeText(requireContext(), "Ukuran file terlalu besar", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
+            lifecycleScope.launch {
+                if (withContext(Dispatchers.IO) { projectMediaViewModel.isProjectPhotosEmpty() }) {
+                    Toast.makeText(requireContext(), "Harap unggah foto proyek", Toast.LENGTH_LONG).show()
+                    return@launch
                 }
 
-                documentBody = MultipartBody.Part.createFormData(
-                    "document_file",
-                    file.name,
-                    file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-                )
+                val projectId = formActivity?.projectId
+                val youtubeLink = binding.editTextLinkYoutubeMediaProject.text.toString()
+                val virtualTour = binding.editTextNamaVirtualTour.text.toString()
+                val virtualTourLink = binding.editTextLinkVirtualTourProject.text.toString()
 
-            } else {
-                Log.d("CreateProjectMedia", "onViewCreated: documentUri is null")
-                val file = File(requireContext().applicationContext.filesDir, "project_document.pdf")
 
-                documentBody = MultipartBody.Part.createFormData(
-                    "document_file",
-                    file.name,
-                    file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-                )
+                val projectIdBody = projectId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                val youtubeLinkBody = youtubeLink.toRequestBody("text/plain".toMediaTypeOrNull())
+                val virtualTourBody = virtualTour.toRequestBody("text/plain".toMediaTypeOrNull())
+                val virtualTourLinkBody = virtualTourLink.toRequestBody("text/plain".toMediaTypeOrNull())
+
+                var documentBody : MultipartBody.Part? = null
+
+                if (documentUri != null) {
+                    Log.d("CreateProjectMedia", "onViewCreated: $documentUri")
+                    val fileDir = requireContext().applicationContext.filesDir
+                    val file = File(fileDir, "project_document.pdf")
+                    val fileInputStream = requireContext().contentResolver.openInputStream(documentUri!!)
+                    val fileOutputStream = FileOutputStream(file)
+                    fileInputStream!!.copyTo(fileOutputStream)
+                    fileInputStream.close()
+                    fileOutputStream.close()
+
+                    val fileSizeInBytes = file.length()
+                    val fileSizeInKB = fileSizeInBytes / 1024
+                    val fileSizeInMB = fileSizeInKB / 1024
+
+                    val maxFileSizeInMB = 4 // MB
+
+                    if (fileSizeInMB > maxFileSizeInMB) {
+                        Toast.makeText(requireContext(), "Ukuran file terlalu besar", Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
+
+                    documentBody = MultipartBody.Part.createFormData(
+                        "document_file",
+                        file.name,
+                        file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                    )
+
+                } else {
+                    Log.d("CreateProjectMedia", "onViewCreated: documentUri is null")
+                    val file = File(requireContext().applicationContext.filesDir, "project_document.pdf")
+
+                    documentBody = MultipartBody.Part.createFormData(
+                        "document_file",
+                        file.name,
+                        file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                    )
+                }
+
+
+                developerApi.uploadAnotherProjectMedia(
+                    projectId = projectIdBody,
+                    videoLink = youtubeLinkBody,
+                    virtualTourName = virtualTourBody,
+                    virtualTourLink = virtualTourLinkBody,
+                    document_file = documentBody
+                ).enqueue(object : Callback<UpdateProjectResponse> {
+                    override fun onResponse(
+                        call: Call<UpdateProjectResponse>,
+                        response: Response<UpdateProjectResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.d("CreateProjectMedia", "onResponse: ${response.body()}")
+                        } else {
+                            Log.e("CreateProjectMedia", "onResponse: ${response.body()}")
+                            Toast.makeText(requireActivity(), "Gagal Menambahkan Media Proyek", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UpdateProjectResponse>, t: Throwable) {
+                        Log.e("CreateProjectMedia", "onFailure: ${t.message}")
+
+                        if (t.message?.contains("No such file or directory") == true) {
+                            developerApi.uploadAnotherProjectMedia(
+                                projectId = projectIdBody,
+                                videoLink = youtubeLinkBody,
+                                virtualTourName = virtualTourBody,
+                                virtualTourLink = virtualTourLinkBody,
+                            ).enqueue(object : Callback<UpdateProjectResponse> {
+                                override fun onResponse(
+                                    call: Call<UpdateProjectResponse>,
+                                    response: Response<UpdateProjectResponse>
+                                ) {
+                                    if (response.isSuccessful) {
+                                        Log.d("CreateProjectMedia", "onResponse: ${response.body()}")
+                                    } else {
+                                        Log.e("CreateProjectMedia", "onResponse: ${response.body()}")
+                                        Toast.makeText(requireActivity(), "Gagal Menambahkan Media Proyek", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+
+                                override fun onFailure(call: Call<UpdateProjectResponse>, t: Throwable) {
+                                    Log.e("CreateProjectMedia", "onFailure: ${t.message}")
+                                    Toast.makeText(requireActivity(), "Gagal Menambahkan Dokumen Proyek Properti", Toast.LENGTH_SHORT).show()
+
+                                }
+
+                            })
+                        } else {
+                            Toast.makeText(requireActivity(), "Gagal Menambahkan Media Proyek", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                })
+
+
+
+                formActivity?.onNextButtonProjectManagementClick()
+
+
             }
 
-
-            developerApi.uploadAnotherProjectMedia(
-                projectId = projectIdBody,
-                videoLink = youtubeLinkBody,
-                virtualTourName = virtualTourBody,
-                virtualTourLink = virtualTourLinkBody,
-                document_file = documentBody
-            ).enqueue(object : Callback<UpdateProjectResponse> {
-                override fun onResponse(
-                    call: Call<UpdateProjectResponse>,
-                    response: Response<UpdateProjectResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        Log.d("CreateProjectMedia", "onResponse: ${response.body()}")
-                    } else {
-                        Log.e("CreateProjectMedia", "onResponse: ${response.body()}")
-                        Toast.makeText(requireActivity(), "Gagal Menambahkan Media Proyek", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<UpdateProjectResponse>, t: Throwable) {
-                    Log.e("CreateProjectMedia", "onFailure: ${t.message}")
-
-                    if (t.message?.contains("No such file or directory") == true) {
-                        developerApi.uploadAnotherProjectMedia(
-                            projectId = projectIdBody,
-                            videoLink = youtubeLinkBody,
-                            virtualTourName = virtualTourBody,
-                            virtualTourLink = virtualTourLinkBody,
-                        ).enqueue(object : Callback<UpdateProjectResponse> {
-                            override fun onResponse(
-                                call: Call<UpdateProjectResponse>,
-                                response: Response<UpdateProjectResponse>
-                            ) {
-                                if (response.isSuccessful) {
-                                    Log.d("CreateProjectMedia", "onResponse: ${response.body()}")
-                                } else {
-                                    Log.e("CreateProjectMedia", "onResponse: ${response.body()}")
-                                    Toast.makeText(requireActivity(), "Gagal Menambahkan Media Proyek", Toast.LENGTH_SHORT).show()
-                                }
-                            }
-
-                            override fun onFailure(call: Call<UpdateProjectResponse>, t: Throwable) {
-                                Log.e("CreateProjectMedia", "onFailure: ${t.message}")
-                                Toast.makeText(requireActivity(), "Gagal Menambahkan Dokumen Proyek Properti", Toast.LENGTH_SHORT).show()
-
-                            }
-
-                        })
-                    } else {
-                        Toast.makeText(requireActivity(), "Gagal Menambahkan Media Proyek", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-            })
-
-
-
-            formActivity?.onNextButtonProjectManagementClick()
         }
 
 
 
+    }
+
+    private fun setupSupportMarquee() {
+        binding.cardDocumentProyekPropertyThumbnail.apply {
+            textViewFilename.isSelected = true
+            textViewDescriptionDocument.isSelected = true
+        }
+    }
+
+    private fun setupDeleteDocumentButton() {
+        binding.cardDocumentProyekPropertyThumbnail.cardFileThumbnailButtonDelete.visibility = View.VISIBLE
+        binding.cardDocumentProyekPropertyThumbnail.cardFileThumbnailButtonDelete.setOnClickListener {
+            binding.cardDocumentProyekPropertyThumbnail.root.visibility = View.GONE
+            documentUri = null
+            projectMediaViewModel.isDocumentNotEdited = false
+
+            if (projectMediaViewModel.document?.id != null) {
+                deletePreviousDocument()
+            }
+        }
     }
 
     private fun uploadPhotos(uri: Uri) {
@@ -587,18 +619,28 @@ class CreateProjectMediaFragment : Fragment() {
 
 
     private fun pickPhoto() {
-        val imageStoreIntent = Intent(Intent.ACTION_PICK).apply {
-            setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+        try {
+            val imageStoreIntent = Intent(Intent.ACTION_PICK).apply {
+                setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+            }
+            imageLauncher.launch(imageStoreIntent)
+        } catch (e: Exception) {
+            Log.e("CreateProjectMedia", "pickPhoto: ${e.message}")
         }
-        imageLauncher.launch(imageStoreIntent)
+
     }
 
     private fun pickDocument() {
-        val documentStoreIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = "application/pdf"
-            addCategory(Intent.CATEGORY_OPENABLE)
+        try {
+            val documentStoreIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = "application/pdf"
+                addCategory(Intent.CATEGORY_OPENABLE)
+            }
+            documentLauncher.launch(documentStoreIntent)
+        } catch (e: Exception) {
+            Log.e("CreateProjectMedia", "pickDocument: ${e.message}")
         }
-        documentLauncher.launch(documentStoreIntent)
+
     }
 
     private fun openContactUs() {
