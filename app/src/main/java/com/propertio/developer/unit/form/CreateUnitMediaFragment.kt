@@ -358,8 +358,8 @@ class CreateUnitMediaFragment : Fragment() {
 
                 var documentBody : MultipartBody.Part? = null
 
-                if (documentUri != null) {
-                    Log.d("CreateUnitMediaFragment", "onViewCreated: $documentUri")
+                if (documentUri != null && unitMediaViewModdel.isDocumentNotEdited.not()) {
+                    Log.i("CreateUnitMediaFragment", "upload: $documentUri and isDocNotEdited: ${unitMediaViewModdel.isDocumentNotEdited}")
                     val fileDir = requireContext().applicationContext.filesDir
                     val file = File(fileDir, "unit_document.pdf")
                     val fileInputStream = requireContext().contentResolver.openInputStream(documentUri!!)
@@ -386,13 +386,6 @@ class CreateUnitMediaFragment : Fragment() {
                     )
                 } else {
                     Log.d("CreateUnitMediaFragment", "onViewCreated: documentUri is null")
-                    val file = File(requireContext().applicationContext.filesDir, "unit_document.pdf")
-
-                    documentBody = MultipartBody.Part.createFormData(
-                        "document_file",
-                        file.name,
-                        file.asRequestBody("application/pdf".toMediaTypeOrNull())
-                    )
                 }
 
                 retro.uploadAnotherUnitMedia(

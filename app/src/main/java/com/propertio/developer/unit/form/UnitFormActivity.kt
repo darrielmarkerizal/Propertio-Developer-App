@@ -101,7 +101,7 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
             }
             lifecycleScope.launch {
                 Log.d("UnitFormActivity", "onCreate Fetch Edit: $unitId")
-                fetchUnitDetail(projectId!!, unitId!!)
+                withContext(Dispatchers.IO) { fetchUnitDetail(projectId!!, unitId!!) }
                 startUnitForm()
             }
         } else {
