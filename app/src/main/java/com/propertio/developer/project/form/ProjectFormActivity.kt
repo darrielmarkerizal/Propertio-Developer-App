@@ -22,6 +22,7 @@ import com.propertio.developer.dialog.model.ProvinceModel
 import com.propertio.developer.model.LitePhotosModel
 import com.propertio.developer.model.ProjectDocument
 import com.propertio.developer.permissions.NetworkAccess
+import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_ID
 import com.propertio.developer.project.list.FacilityAndInfrastructureTypeViewModel
 import com.propertio.developer.project.viewmodel.ProjectFacilityViewModel
 import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
@@ -405,6 +406,8 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
             binding.progressIndicatorProjectForm.setProgressCompat(100, true)
             val intentToSuccess = Intent(this, CreateProjectSuccessActivity::class.java)
             intentToSuccess.putExtra(IS_CREATE_NEW, isCreateNew)
+            intentToSuccess.putExtra(PROJECT_ID, projectId)
+            intentToSuccess.putExtra("Property Type", projectInformationLocationViewModel.propertyTypeName)
             startActivity(intentToSuccess)
             finish()
             return

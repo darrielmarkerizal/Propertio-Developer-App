@@ -285,5 +285,7 @@
     <string name="project_success_edit_project">\"Proyek Anda berhasil diperbarui\"</string>
     <string name="unit_anda_berhasil_ditambahkan">Unit Anda berhasil ditambahkan</string>
     <string name="unit_anda_berhasil_diperbarui">Unit Anda berhasil diperbaharui</string>
+    <string name="kembali_ke_halaman_proyek">Kembali ke Halaman Proyek</string>
+    <string name="lihat_rincian_proyek">kunjungi proyek</string>
 
 </resources>
