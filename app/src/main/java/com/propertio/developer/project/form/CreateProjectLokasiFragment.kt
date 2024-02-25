@@ -199,13 +199,31 @@ class CreateProjectLokasiFragment : Fragment() {
         activityBinding.floatingButtonNext.setOnClickListener {
             projectInformationLocationViewModel.printLog()
 
-            if (!isProvinceSelected && !isCitySelected && !isDistrictSelected && !projectInformationLocationViewModel.isAddressNotEdited) {
+            Log.i(
+                "SpinnerCheck","Spinner Status:" +
+                        "\n\tProvince: $isProvinceSelected, " +
+                        "\n\tCity: $isCitySelected, " +
+                        "\n\tDistrict: $isDistrictSelected"
+            )
+
+
+            if (isProvinceSelected.not()) {
                 binding.spinnerProvinceProject.error = "Wajib diisi"
-                binding.spinnerCityProject.error = "Wajib diisi"
-                binding.spinnerDistrictProject.error = "Wajib diisi"
-                Toast.makeText(requireActivity(), "Mohon pilih lokasi terlebih dahulu *", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireActivity(), "Mohon pilih provinsi terlebih dahulu", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            if (isCitySelected.not()) {
+                binding.spinnerCityProject.error = "Wajib diisi"
+                Toast.makeText(requireActivity(), "Mohon pilih kota terlebih dahulu", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (isDistrictSelected.not()) {
+                binding.spinnerDistrictProject.error = "Wajib diisi"
+                Toast.makeText(requireActivity(), "Mohon pilih kecamatan terlebih dahulu", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+
 
             projectInformationLocationViewModel.printLog("when click next button")
 
@@ -698,7 +716,7 @@ class CreateProjectLokasiFragment : Fragment() {
 
             projectInformationLocationViewModel.isAddressNotEdited = false
 
-            isDistrictSelected = true
+            isDistrictSelected = (it.districtsId != "")
 
             projectInformationLocationViewModel.district = it
         }
@@ -724,7 +742,7 @@ class CreateProjectLokasiFragment : Fragment() {
 
             projectInformationLocationViewModel.isAddressNotEdited = false
 
-            isCitySelected = true
+            isCitySelected = (it.citiesId != "")
             isDistrictSelected = false
 
             districtViewModel.districtsData
