@@ -28,17 +28,7 @@ class TutorialYoutubeDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        loadVideo()
     }
-
-
-//    private fun loadVideo() {
-//        val webView: WebView = binding.webViewVideoTutor
-//        webView.settings.javaScriptEnabled = true
-//        webView.loadUrl("https://www.youtube.com/embed/u9BpBBl-Hyg")
-//
-//
-//    }
 
 
 }
