@@ -60,7 +60,6 @@ class CreateProjectMediaFragment : Fragment() {
 
     private val photosAdapter by lazy {
         UnggahFotoAdapter(
-            photosList = emptyList<LitePhotosModel>().toMutableList(),
             onClickButtonCover = {
                 if (it.id != null) {
                     updateCoverPhoto(it.id)
