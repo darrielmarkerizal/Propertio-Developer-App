@@ -283,5 +283,7 @@
     <string name="www_example_com">www.example.com</string>
     <string name="project_success_create_new_project">Proyek Anda berhasil ditambahkan</string>
     <string name="project_success_edit_project">\"Proyek Anda berhasil diperbarui\"</string>
+    <string name="unit_anda_berhasil_ditambahkan">Unit Anda berhasil ditambahkan</string>
+    <string name="unit_anda_berhasil_diperbarui">Unit Anda berhasil diperbaharui</string>
 
 </resources>

@@ -802,7 +802,7 @@ class CreateUnitMediaFragment : Fragment() {
 
     private fun validateYoutubeLinkObserver() {
         binding.editTextLinkYoutubeMediaUnit.doAfterTextChanged { inputUrl ->
-            if (inputUrl != null) {
+            if (inputUrl?.isNotEmpty()!!) {
                 if (inputUrl.contains("youtube.com") || inputUrl.contains("youtu.be")) {
                     binding.editTextLinkYoutubeMediaUnit.error = null
                 } else {

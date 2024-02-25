@@ -72,6 +72,7 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
     private var currentFragmentIndex = 0
     internal var unitId : Int? = null
     internal var projectId : Int? = null
+    var isCreateNewUnit = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -144,8 +145,10 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
         Log.d("UnittFormActivity", "setToolbarToCreate: $unitId")
         if (unitId != 0) {
             bindingToolbar.textViewTitle.text = "Edit Unit"
+            isCreateNewUnit = false
         } else {
             bindingToolbar.textViewTitle.text = "Tambah Unit"
+            isCreateNewUnit = true
         }
     }
 
@@ -158,6 +161,7 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
         if (currentFragmentIndex == formsFragment.size - 1) {
             binding.progressIndicatorUnitForm.setProgressCompat(100, true)
             val intentToSuccess = Intent(this, CreateUnitSuccessActivity::class.java)
+            intentToSuccess.putExtra(IS_CREATE_NEW_UNIT, isCreateNewUnit)
             launcherToSuccess.launch(intentToSuccess)
             return
         }
@@ -315,6 +319,15 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
                     updatedAt = data.unitDocuments?.get(0)?.updatedAt,
                 )
             )
+        }
+    }
+
+    companion object {
+        const val IS_CREATE_NEW_UNIT = "IS_CREATE_NEW_UNIT"
+        fun String.validateIsNotNull() : String? {
+            return if (this.isNotEmpty()) {
+                if (this != "null") this else null
+            } else null
         }
     }
 }

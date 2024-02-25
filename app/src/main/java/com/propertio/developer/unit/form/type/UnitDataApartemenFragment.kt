@@ -29,6 +29,7 @@ import com.propertio.developer.dialog.viewmodel.ParkingTypeSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.RoadAccessTypeSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.WaterTypeSpinnerViewModel
 import com.propertio.developer.unit.form.UnitFormActivity
+import com.propertio.developer.unit.form.UnitFormActivity.Companion.validateIsNotNull
 import com.propertio.developer.unit.form.UnitFormViewModel
 import com.propertio.developer.unit_management.UpdateUnitResponse
 import retrofit2.Call
@@ -145,20 +146,20 @@ class UnitDataApartemenFragment : Fragment() {
     
     private fun createUnitRequest() : UnitRequest {
         return UnitRequest(
-            title = unitFormViewModel.namaUnit ?: "",
-            price = unitFormViewModel.hargaUnit ?: "",
-            description = unitFormViewModel.deskripsiUnit ?: "",
-            stock = unitFormViewModel.stokUnit ?: "",
+            title = unitFormViewModel.namaUnit?.validateIsNotNull() ?: "",
+            price = unitFormViewModel.hargaUnit?.validateIsNotNull() ?: "",
+            description = unitFormViewModel.deskripsiUnit?.validateIsNotNull(),
+            stock = unitFormViewModel.stokUnit?.validateIsNotNull(),
             surfaceArea = null,
-            buildingArea = unitFormViewModel.luasBangunan ?: "",
+            buildingArea = unitFormViewModel.luasBangunan?.validateIsNotNull(),
             floor = null,
-            bedroom = unitFormViewModel.jumlahKamarTidur ?: "",
-            bathroom = unitFormViewModel.jumlahKamarMandi ?: "",
-            garage = unitFormViewModel.jumlahParkir?.toUser ?: "",
-            powerSupply = unitFormViewModel.electricityType?.toUser ?: "",
-            waterType = unitFormViewModel.waterType?.toUser ?: "",
-            interior = unitFormViewModel.interiorType?.toUser ?: "",
-            roadAccess = unitFormViewModel.roadAccessType?.toUser ?: "",
+            bedroom = unitFormViewModel.jumlahKamarTidur?.validateIsNotNull(),
+            bathroom = unitFormViewModel.jumlahKamarMandi?.validateIsNotNull(),
+            garage = unitFormViewModel.jumlahParkir?.toUser?.validateIsNotNull(),
+            powerSupply = unitFormViewModel.electricityType?.toUser?.validateIsNotNull(),
+            waterType = unitFormViewModel.waterType?.toUser?.validateIsNotNull(),
+            interior = unitFormViewModel.interiorType?.toUser?.validateIsNotNull(),
+            roadAccess = unitFormViewModel.roadAccessType?.toUser?.validateIsNotNull(),
             order = null
         )
     }
