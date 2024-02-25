@@ -260,22 +260,19 @@
                 app:layout_constraintStart_toStartOf="@+id/card_view_address_unit"
                 app:layout_constraintTop_toBottomOf="@+id/button_open_maps" />
 
-            <FrameLayout
-                android:id="@+id/video_frame_container"
+
+            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                android:id="@+id/unit_detail_youtube_player"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                app:layout_constraintDimensionRatio=""
+
+                android:visibility="visible"
+
+                app:autoPlay="false"
                 app:layout_constraintEnd_toEndOf="@+id/card_view_address_unit"
                 app:layout_constraintStart_toStartOf="@+id/text_view_video_label"
-                app:layout_constraintTop_toBottomOf="@+id/text_view_video_label">
-
-                <WebView
-                    android:id="@+id/web_view_video"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </FrameLayout>
+                app:layout_constraintTop_toBottomOf="@+id/text_view_video_label" />
 
             <TextView
                 android:id="@+id/text_view_fasilitas_label"
@@ -285,7 +282,7 @@
                 android:text="Fasilitas"
                 android:textAppearance="@style/text.medium.size14"
                 app:layout_constraintStart_toStartOf="@+id/text_view_video_label"
-                app:layout_constraintTop_toBottomOf="@+id/video_frame_container" />
+                app:layout_constraintTop_toBottomOf="@+id/unit_detail_youtube_player" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_facilities_unit"

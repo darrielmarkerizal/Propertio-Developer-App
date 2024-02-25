@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewTreeObserver
-import android.webkit.WebView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -24,6 +23,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.propertio.developer.NumericalUnitConverter
 import com.propertio.developer.PropertioDeveloperApplication
 import com.propertio.developer.R
@@ -52,7 +54,6 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.regex.Pattern
 
 class ProjectDetailActivity : AppCompatActivity() {
     private var projectId: Int? = null
@@ -401,7 +402,7 @@ class ProjectDetailActivity : AppCompatActivity() {
 
                         loadTextBasedData(project)
                         loadTagsData(project)
-                        loadVideo(project.projectVideos?.linkVideoURL)
+                        setupYoutubePlayerVideo(project.projectVideos?.linkVideoURL)
                         loadImage(project.projectPhotos)
                         loadDocument(project.projectDocuments)
 
@@ -528,42 +529,72 @@ class ProjectDetailActivity : AppCompatActivity() {
 
     }
 
+    private fun setupYoutubePlayerVideo(videoUrl: String?) {
+        val youtubePlayer = binding.projectDetailYoutubePlayer
 
-    private fun loadVideo(videoUrl: String?) {
-        Log.d("ProjectDetailActivity", "loadVideo: $videoUrl")
-        if (videoUrl != null) {
-            Log.d("ProjectDetailActivity", "video: ${videoUrl}")
+        youtubePlayer.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+            override fun onReady(youTubePlayer: YouTubePlayer) {
+                Log.i("setupYoutubePlayerVideo", "YoutubePlayer ready : $videoUrl")
+                val videoId = videoUrl?.extractVideoIdFromUrl()
 
-            val webView: WebView = binding.webViewVideo
+                if (videoId == null) {
+                    Log.w("setupYoutubePlayerVideo", "videoId is null")
+                    youtubePlayer.visibility = View.GONE
+                    return
+                } else {
+                    youtubePlayer.visibility = View.VISIBLE
+                }
 
-            val videoId = extractVideoIdFromUrl(videoUrl)
-            if (videoId == "") {
-                Log.w("ProjectDetailActivity", "videoId is empty")
-                return@loadVideo
+
+
+                youtubePlayer.visibility = View.VISIBLE
+                youTubePlayer.loadVideo(videoId, 0f)
             }
-            webView.settings.javaScriptEnabled = true
-            webView.loadUrl("https://www.youtube.com/embed/$videoId")
 
-            binding.groupVideoDetailProject.visibility = TextView.VISIBLE
-
-        } else {
-            Log.w("ProjectDetailActivity", "videos is null")
-            binding.groupVideoDetailProject.visibility = TextView.GONE
-        }
-
+            override fun onError(youTubePlayer: YouTubePlayer, error: PlayerConstants.PlayerError) {
+                super.onError(youTubePlayer, error)
+                Log.e("ArtikelFragment", "YoutubePlayer error: $error")
+                youtubePlayer.visibility = View.GONE
+            }
+        })
     }
 
-    private fun extractVideoIdFromUrl(url: String): String {
-        val pattern = "(?<=watch\\?v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|\\/e\\/|watch\\?v%3D|watch\\?feature=player_embedded&v=|%2Fvideos%2F|embed%\u200C\u200B2F|youtu.be%2F|%2Fv%2F)[^#\\&\\?\\n]*"
-        val compiledPattern = Pattern.compile(pattern)
-        val matcher = compiledPattern.matcher(url)
 
-        return if (matcher.find()) {
-            matcher.group()
-        } else {
-            Log.w("ProjectDetailActivity", "No video id found")
-            ""
+    private fun String.extractVideoIdFromUrl(): String? {
+        if (this.isEmpty()) return null
+
+        // Youtube Filter
+        val youtubeVideoID = if (this.contains("v=") && this.contains("youtube.com")) {
+            val c1 = this.split("v=")[1]
+
+            if (c1.contains("&")) {
+                c1.split("&")[0]
+            } else {
+                c1
+            }
+
+        } else if(this.contains("youtube.com/embed")) {
+            val c1 = this.split("youtube.com/embed/")[1]
+
+            if (c1.contains("?")) {
+                c1.split("?")[0]
+            } else {
+                c1
+            }
+        } else if (this.contains("youtu.be")){
+            val c1 = this.split("youtu.be/")[1]
+
+            if (c1.contains("?")) {
+                c1.split("?")[0]
+            } else {
+                c1
+            }
+        }  else {
+            null
         }
+
+
+        return youtubeVideoID
     }
 
     private fun loadTagsData(project: ProjectDetail.ProjectDeveloper) {
