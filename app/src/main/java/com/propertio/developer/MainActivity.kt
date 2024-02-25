@@ -25,7 +25,6 @@ import com.propertio.developer.project.list.FacilityAndInfrastructureTypeViewMod
 import com.propertio.developer.project.viewmodel.FacilityViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -46,19 +45,16 @@ class MainActivity : AppCompatActivity() {
         // View Model
         val factory = ProjectViewModelFactory((application as PropertioDeveloperApplication).repository)
         projectViewModel = ViewModelProvider(this, factory)[ProjectViewModel::class.java]
-        fetchProjectListData(TokenManager(this).token!!)
+        fetchProjectListData(TokenManager(this).token!!, true)
         fetchInfrastructureTypeApi()
 
-        var unreadChat : Int = 0
+
         val chatBadges = binding.bottomNavigation.getOrCreateBadge(R.id.chatFragment)
         val chatFactory = ChatViewModelFactory((application as PropertioDeveloperApplication).repository)
         chatViewModel = ViewModelProvider(this, chatFactory)[ChatViewModel::class.java]
 
         lifecycleScope.launch {
             chatViewModel.fetchDataFromApi(TokenManager(this@MainActivity).token!!, true)
-            unreadChat = withContext(Dispatchers.IO) {
-                chatViewModel.countUnread()
-            }
 
             chatViewModel.unreadChatCount.observe(this@MainActivity) { count ->
                 chatBadges.isVisible = count > 0
@@ -121,8 +117,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun fetchProjectListData(token: String) {
-        projectViewModel.fetchLiteProject(token, true)
+    private fun fetchProjectListData(token: String, forceUpdate: Boolean = false) {
+        projectViewModel.fetchLiteProject(token, forceUpdate)
     }
 
     override fun onResume() {
