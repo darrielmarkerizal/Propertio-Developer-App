@@ -67,18 +67,6 @@
         app:layout_constraintStart_toStartOf="@+id/container_image_view_item_unggah_photo"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_caption_photo_card" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:visibility="gone"
-        android:id="@+id/is_cover_photo_card"
-        style="@style/button.secondary.s.rounded.disabled"
-        android:layout_width="0dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="8dp"
-        android:text="Terpilih"
-        app:layout_constraintEnd_toEndOf="@+id/container_image_view_item_unggah_photo"
-        app:layout_constraintStart_toStartOf="@+id/container_image_view_item_unggah_photo"
-        app:layout_constraintTop_toBottomOf="@+id/button_cover_photo_card" />
-
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/button_delete_photo_card"
         android:layout_width="24dp"

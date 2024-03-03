@@ -130,13 +130,13 @@ class UnitDataGudangFragment : Fragment() {
             stock = unitFormViewModel.stokUnit ?: "",
             surfaceArea = unitFormViewModel.luasTanah,
             buildingArea = unitFormViewModel.luasBangunan,
-            floor = unitFormViewModel.jumlahLantai,
-            bedroom = unitFormViewModel.jumlahKamarTidur,
-            bathroom = unitFormViewModel.jumlahKamarMandi,
+            floor = null,
+            bedroom = null,
+            bathroom = null,
             garage = unitFormViewModel.jumlahParkir?.toDb,
             powerSupply = unitFormViewModel.electricityType?.toDb,
-            waterType = unitFormViewModel.waterType?.toDb,
-            interior = unitFormViewModel.interiorType?.toDb,
+            waterType = null,
+            interior = null,
             roadAccess = unitFormViewModel.roadAccessType?.toDb,
             order = null
         )
@@ -274,7 +274,7 @@ class UnitDataGudangFragment : Fragment() {
     private fun roadAccessTypeSpinner() {
         binding.spinnerAksesJalanGudang.setOnClickListener {
             binding.spinnerAksesJalanGudang.isEnabled = true
-            RoadAccessSheetFragment().show(childFragmentManager, "InteriorSheetFragment")
+            RoadAccessSheetFragment().show(childFragmentManager, "RoadSheetFragment")
             Log.d("UnitDataApartemenFragment", "roadAccessTypeSpinner: clicked")
         }
 

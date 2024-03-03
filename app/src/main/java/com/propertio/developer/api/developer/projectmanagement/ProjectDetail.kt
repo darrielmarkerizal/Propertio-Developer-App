@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.propertio.developer.api.models.DefaultResponse
 import com.propertio.developer.api.models.ProjectMinimum
-import java.io.Serial
 
 class ProjectDetail : DefaultResponse() {
 
@@ -76,6 +75,42 @@ class ProjectDetail : DefaultResponse() {
         @SerializedName("project_infrastructures")
         @Expose
         var projectInfrastructures: List<ProjectInfrastructure>? = null
+
+        val pagination: ProjectPagination? = null
+
+        class ProjectPagination {
+            @SerializedName("current_page")
+            @Expose
+            var currentPage: Int? = null
+
+            @SerializedName("total")
+            @Expose
+            var total: Int? = null
+
+            @SerializedName("per_page")
+            @Expose
+            var perPage: Int? = null
+
+            @SerializedName("last_page")
+            @Expose
+            var lastPage: Int? = null
+
+            @SerializedName("next_page_url")
+            @Expose
+            var nextPageURL: String? = null
+
+            @SerializedName("prev_page_url")
+            @Expose
+            var prevPageURL: String? = null
+
+            @SerializedName("first_page_url")
+            @Expose
+            var firstPageURL: String? = null
+
+            @SerializedName("last_page_url")
+            @Expose
+            var lastPageURL: String? = null
+        }
 
         class ProjectInfrastructure {
             @SerializedName("id")
@@ -279,7 +314,6 @@ class ProjectDetail : DefaultResponse() {
             @SerializedName("stock")
             @Expose
             var stock: String? = null
-
         }
 
         class  ProjectAddress {

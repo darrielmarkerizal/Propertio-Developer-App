@@ -10,6 +10,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import com.propertio.developer.api.Retro
 import com.propertio.developer.api.auth.RegisterDeveloperRequest
@@ -87,6 +88,9 @@ class RegisterActivity : AppCompatActivity() {
         provinceSpinner()
         citySpinner()
 
+        firstNameObserver()
+        lastNameObserver()
+        deskripsiPengembangObserver()
 
         passwordUIErrorListener()
 
@@ -107,6 +111,44 @@ class RegisterActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    private fun deskripsiPengembangObserver() {
+        binding.editTextDeskripsiPengembang.doAfterTextChanged {
+            val text = it.toString().trim()
+
+            if (text.isNotEmpty()) {
+                binding.editTextDeskripsiPengembang.error = null
+            }
+        }
+    }
+
+    private fun lastNameObserver() {
+        val maxTextLength = "Batas Karakter 100"
+
+        binding.editTextNamaBelakang.doAfterTextChanged {
+            val text = it.toString().trim()
+
+            if (text.length >= 100) {
+                binding.editTextNamaBelakang.error = maxTextLength
+            } else {
+                binding.editTextNamaBelakang.error = null
+            }
+        }
+    }
+
+    private fun firstNameObserver() {
+        val maxTextLength = "Batas Karakter 100"
+
+        binding.editTextNamaDepan.doAfterTextChanged {
+            val text = it.toString().trim()
+
+            if (text.length >= 100) {
+                binding.editTextNamaDepan.error = maxTextLength
+            } else {
+                binding.editTextNamaDepan.error = null
+            }
+        }
     }
 
     private fun pickPhoto() {
@@ -347,6 +389,12 @@ class RegisterActivity : AppCompatActivity() {
             }
             if (imageUri == null) {
                 Toast.makeText(this@RegisterActivity, "Pilih Foto terlebih dahulu", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            if (editTextDeskripsiPengembang.text.toString().trim().isEmpty()) {
+                editTextDeskripsiPengembang.error = "Deskripsi Pengembang tidak boleh kosong"
+                editTextDeskripsiPengembang.requestFocus()
                 return
             }
 

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.WorkerThread
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,24 +12,24 @@ import coil.load
 import com.propertio.developer.NumericalUnitConverter
 import com.propertio.developer.R
 import com.propertio.developer.api.DomainURL.DOMAIN
-import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
+import com.propertio.developer.api.developer.unitmanagement.UnitByProjectResponse
 import com.propertio.developer.databinding.TemplateCardUnitBinding
 
 class UnitAdapter(
-    private val onClickUnit: (ProjectDetail.ProjectDeveloper.ProjectUnit) -> Unit,
-    private val onClickMore: (ProjectDetail.ProjectDeveloper.ProjectUnit, View) -> Unit,
-    private val onDelete: (ProjectDetail.ProjectDeveloper.ProjectUnit) -> Unit,
-    private val onClickUnitLaku : (ProjectDetail.ProjectDeveloper.ProjectUnit) -> Unit
-) : ListAdapter<ProjectDetail.ProjectDeveloper.ProjectUnit  , UnitAdapter.ItemUnitViewHolder>(UserDiffUtil()){
+    private val onClickUnit: (UnitByProjectResponse.Unit) -> Unit,
+    private val onClickMore: (UnitByProjectResponse.Unit, View) -> Unit,
+    private val onDelete: (UnitByProjectResponse.Unit) -> Unit,
+    private val onClickUnitLaku : (UnitByProjectResponse.Unit) -> Unit
+) : ListAdapter<UnitByProjectResponse.Unit, UnitAdapter.ItemUnitViewHolder>(UserDiffUtil()){
 
-    class UserDiffUtil : DiffUtil.ItemCallback<ProjectDetail.ProjectDeveloper.ProjectUnit>() {
-        override fun areItemsTheSame(oldItem: ProjectDetail.ProjectDeveloper.ProjectUnit, newItem: ProjectDetail.ProjectDeveloper.ProjectUnit): Boolean {
+    class UserDiffUtil : DiffUtil.ItemCallback<UnitByProjectResponse.Unit>() {
+        override fun areItemsTheSame(oldItem: UnitByProjectResponse.Unit, newItem: UnitByProjectResponse.Unit): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: ProjectDetail.ProjectDeveloper.ProjectUnit,
-            newItem: ProjectDetail.ProjectDeveloper.ProjectUnit
+            oldItem: UnitByProjectResponse.Unit,
+            newItem: UnitByProjectResponse.Unit
         ): Boolean {
             return (
                     oldItem.id == newItem.id &&
@@ -41,7 +40,7 @@ class UnitAdapter(
                     oldItem.surfaceArea == newItem.surfaceArea &&
                     oldItem.buildingArea == newItem.buildingArea &&
                     oldItem.stock == newItem.stock &&
-                    oldItem.photoURL == newItem.photoURL
+                    oldItem.unitPhotos.toString() == newItem.unitPhotos.toString()
                     )
         }
 
@@ -50,7 +49,7 @@ class UnitAdapter(
     inner class ItemUnitViewHolder(
         private val binding : TemplateCardUnitBinding,
     ) : RecyclerView.ViewHolder(binding.root){
-        fun bind(unit: ProjectDetail.ProjectDeveloper.ProjectUnit) {
+        fun bind(unit: UnitByProjectResponse.Unit) {
             with(binding) {
                 textViewProjectTitle.text = unit.title
                 textViewPrice.text = NumericalUnitConverter.unitFormatter(unit.price ?: "0", true)
@@ -59,11 +58,11 @@ class UnitAdapter(
                 textViewSurfaceAreaAndBuildingArea.text = "${NumericalUnitConverter.meterSquareFormatter(unit.surfaceArea ?: "0")} / ${NumericalUnitConverter.meterSquareFormatter(unit.buildingArea ?: "0")}"
                 textViewStock.text = unit.stock.toString()
 
-                buttonDelete.setOnClickListener(View.OnClickListener {
+                buttonDelete.setOnClickListener {
                     onDelete(unit)
-                })
+                }
 
-                loadImage(unit.photoURL)
+                loadImage(unit.unitPhotos?.find { it.isCover == "1" && it.type == "photo"}?.filename )
 
                 cardViewUnit.setOnClickListener {
                     Log.d("onClickUnitCard", "Unit is clicked: ${unit.id}")

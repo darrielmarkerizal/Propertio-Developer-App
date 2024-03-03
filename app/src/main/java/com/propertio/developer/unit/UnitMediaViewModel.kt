@@ -23,6 +23,11 @@ class UnitMediaViewModel : ViewModel() {
         return photos.isEmpty()
     }
 
+    suspend fun isUnitDenahEmpty() : Boolean {
+        val denah = unitDenah.asFlow().first()
+        return denah.isEmpty()
+    }
+
     suspend fun getCoverPhoto() : Pair<LitePhotosModel?, Int?> {
         val photos = unitPhoto.asFlow().first()
         val index = photos.indexOfFirst { it.isCover == 1 }

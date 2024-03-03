@@ -1,7 +1,7 @@
 package com.propertio.developer.unit.form
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.propertio.developer.R
 import com.propertio.developer.databinding.ActivityUnitSuccessBinding
 
@@ -11,15 +11,13 @@ class CreateUnitSuccessActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        with(binding) {
-            buttonKembaliKeDetailProyek.setOnClickListener {
-                finish()
-            }
+        val isCreateNew = intent.getBooleanExtra(UnitFormActivity.IS_CREATE_NEW_UNIT, true)
+        binding.nextTxtUnitSuccess.text = if (isCreateNew) getString(R.string.unit_anda_berhasil_ditambahkan) else getString(R.string.unit_anda_berhasil_diperbarui)
 
         binding.buttonKembaliKeDetailProyek.setOnClickListener {
             setResult(RESULT_OK)
             finish()
 
         }
-    }}
+    }
 }

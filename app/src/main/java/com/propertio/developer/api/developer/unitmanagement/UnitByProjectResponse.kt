@@ -10,5 +10,10 @@ class UnitByProjectResponse : DefaultResponse() {
     @Expose
     var data: List<Unit>? = null
 
-    class Unit : UnitMinimum() {}
+    class Unit : UnitMinimum() {
+        @SerializedName("unitPhotos")
+        @Expose
+        var unitPhotos: List<UnitDetailResponse.Unit.UnitPhoto>? = null
+
+    }
 }
