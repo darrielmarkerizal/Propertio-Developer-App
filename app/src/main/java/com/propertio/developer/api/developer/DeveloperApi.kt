@@ -9,8 +9,8 @@ import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResp
 import com.propertio.developer.api.developer.type.GeneralTypeResponse
 import com.propertio.developer.api.developer.unitmanagement.PostStoreUnitPhotoResponse
 import com.propertio.developer.api.developer.unitmanagement.PostUnitResponse
+import com.propertio.developer.api.developer.unitmanagement.UnitByProjectResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitDetailResponse
-import com.propertio.developer.api.developer.unitmanagement.UnitListResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitOrderRequest
 import com.propertio.developer.api.developer.unitmanagement.UnitRequest
 import com.propertio.developer.api.developer.unitmanagement.UpdateUnitRequest
@@ -41,7 +41,7 @@ interface DeveloperApi {
     fun getProjectDetail(@Path("id") id : Int) : Call<ProjectDetail>
 
     @GET("v1/cms/project-management/{projectId}/unit")
-    fun getUnitsList(@Path("projectId") projectId : Int) : Call<UnitListResponse>
+    fun getUnitsList(@Path("projectId") projectId : Int) : Call<UnitByProjectResponse>
 
 
     @GET("v1/cms/facility-type")

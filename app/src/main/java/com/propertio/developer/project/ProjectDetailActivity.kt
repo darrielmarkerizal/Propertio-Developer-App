@@ -35,7 +35,7 @@ import com.propertio.developer.api.Retro
 import com.propertio.developer.api.developer.DeveloperApi
 import com.propertio.developer.api.developer.projectmanagement.ProjectDetail
 import com.propertio.developer.api.developer.projectmanagement.UpdateProjectResponse
-import com.propertio.developer.api.developer.unitmanagement.UnitListResponse
+import com.propertio.developer.api.developer.unitmanagement.UnitByProjectResponse
 import com.propertio.developer.api.developer.unitmanagement.UnitOrderRequest
 import com.propertio.developer.carousel.CarouselAdapter
 import com.propertio.developer.carousel.ImageData
@@ -296,8 +296,8 @@ class ProjectDetailActivity : AppCompatActivity() {
     }
 
     private fun updateUnit() {
-        developerApi.getUnitsList(projectId!!).enqueue(object: Callback<UnitListResponse> {
-            override fun onResponse(call: Call<UnitListResponse>, response: Response<UnitListResponse>) {
+        developerApi.getUnitsList(projectId!!).enqueue(object: Callback<UnitByProjectResponse> {
+            override fun onResponse(call: Call<UnitByProjectResponse>, response: Response<UnitByProjectResponse>) {
 
                 if (response.isSuccessful) {
                     val unitList = response.body()?.data
@@ -316,7 +316,7 @@ class ProjectDetailActivity : AppCompatActivity() {
 
             }
 
-            override fun onFailure(call: Call<UnitListResponse>, t: Throwable) {
+            override fun onFailure(call: Call<UnitByProjectResponse>, t: Throwable) {
                 // TODO: Handle Failure
                 Log.e("ProjectDetailActivity", "onFailure: $t")
 
@@ -405,6 +405,7 @@ class ProjectDetailActivity : AppCompatActivity() {
                         setupYoutubePlayerVideo(project.projectVideos?.linkVideoURL)
                         loadImage(project.projectPhotos)
                         loadDocument(project.projectDocuments)
+                        loadPratinjau(project.pagination?.firstPageURL)
 
                         updateTable(project)
 
@@ -457,6 +458,22 @@ class ProjectDetailActivity : AppCompatActivity() {
                 Log.e("ProjectDetailActivity", "onFailure: $t")
             }
         })
+    }
+
+    private fun loadPratinjau(firstPageURL: String?) {
+//        firstPageURL ?: run {
+//            binding.floatingButtonPratinjau.visibility = View.GONE
+//        }
+
+        // TODO: Link belum tersedia dari backend
+        binding.floatingButtonPratinjau.visibility = View.GONE
+
+//        binding.floatingButtonPratinjau.setOnClickListener {
+//            val intent = Intent(Intent.ACTION_VIEW)
+//            intent.data = Uri.parse(firstPageURL)
+//            startActivity(intent)
+//        }
+
     }
 
     private fun loadDocument(projectDocuments: List<ProjectDetail.ProjectDeveloper.ProjectDocument>?) {
@@ -685,7 +702,7 @@ class ProjectDetailActivity : AppCompatActivity() {
     }
 
 
-    private fun horizontalMoreButtonPopUp(data: ProjectDetail.ProjectDeveloper.ProjectUnit, button: View, dpValue : Int = 111, TAG : String = "PopUpMoreButton") {
+    private fun horizontalMoreButtonPopUp(data: UnitByProjectResponse.Unit, button: View, dpValue : Int = 111, TAG : String = "PopUpMoreButton") {
         val popupInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = popupInflater.inflate(R.layout.dialog_pop_up_unit, null)
 
