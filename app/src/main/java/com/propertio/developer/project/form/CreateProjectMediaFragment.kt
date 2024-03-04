@@ -497,7 +497,9 @@ class CreateProjectMediaFragment : Fragment() {
                 val maxFileSizeInMB = 5 // MB
 
                 if (fileSizeInMB > maxFileSizeInMB) {
-                    Toast.makeText(requireContext(), "Ukuran gambar terlalu besar", Toast.LENGTH_SHORT).show()
+                    launch(Dispatchers.Main) {
+                        Toast.makeText(requireActivity(), "Ukuran gambar terlalu besar", Toast.LENGTH_SHORT).show()
+                    }
                     return@withContext
                 }
 
