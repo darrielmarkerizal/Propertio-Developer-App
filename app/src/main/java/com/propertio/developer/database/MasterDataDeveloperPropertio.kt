@@ -6,7 +6,7 @@ object MasterDataDeveloperPropertio {
 
     val certificate = listOf(
         MasterData("Hak Milik", "SHM"),
-        MasterData("Hak Guna Bangunan", "HGB"),
+        MasterData("Hak Guna Bangunan", "SHGB"),
         MasterData("Girik / Petok D", "Girik"),
         MasterData("Letter C", "Letter C"),
         MasterData("Lainnya", "Lainnya"),

@@ -94,6 +94,7 @@ class ProjectInformationLocationViewModel : ViewModel() {
         isAlreadyUploaded : Boolean= true,
         headline : String?,
         title : String?,
+        propertyTypeId: Int?,
         propertyTypeName : String?,
         description : String?,
         completedAt : String?,
@@ -110,6 +111,7 @@ class ProjectInformationLocationViewModel : ViewModel() {
         this.isAlreadyUploaded.postValue(isAlreadyUploaded)
         this.headline = headline
         this.title = title
+        this.propertyTypeId = propertyTypeId
         this.propertyTypeName = propertyTypeName
         this.description = description
         this.completedAt = completedAt

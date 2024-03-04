@@ -8,10 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import com.propertio.developer.TokenManager
-import com.propertio.developer.api.Retro
-import com.propertio.developer.api.developer.DeveloperApi
-import com.propertio.developer.api.developer.type.GeneralTypeResponse
 import com.propertio.developer.api.models.GeneralType
 import com.propertio.developer.database.MasterDataDeveloperPropertio
 import com.propertio.developer.databinding.FragmentCreateProjectInformasiUmumBinding
@@ -20,9 +16,6 @@ import com.propertio.developer.dialog.PropertyTypeSheetFragment
 import com.propertio.developer.dialog.viewmodel.CertificateTypeSpinnerViewModel
 import com.propertio.developer.dialog.viewmodel.PropertyTypeSpinnerViewModel
 import com.propertio.developer.project.viewmodel.ProjectInformationLocationViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 class CreateProjectInformasiUmumFragment : Fragment() {
@@ -119,7 +112,12 @@ class CreateProjectInformasiUmumFragment : Fragment() {
         binding.editDeskripsiProject.setText(projectInformationLocationViewModel.description)
         binding.editTahunProject.setText(projectInformationLocationViewModel.completedAt)
         if (projectInformationLocationViewModel.propertyTypeName != null) {
-            getPropertyTypeId(projectInformationLocationViewModel.propertyTypeName!!)
+            propertyTypeViewModel.propertyTypeData.postValue(
+                GeneralType(
+                    id = projectInformationLocationViewModel.propertyTypeId!!,
+                    name = projectInformationLocationViewModel.propertyTypeName!!
+                )
+            )
         }
         if (projectInformationLocationViewModel.certificate != null) {
             val listCertificate = MasterDataDeveloperPropertio.certificate
@@ -128,39 +126,7 @@ class CreateProjectInformasiUmumFragment : Fragment() {
         }
     }
 
-    private fun getPropertyTypeId(name: String) {
-        val retro = Retro(TokenManager(requireContext()).token)
-            .getRetroClientInstance()
-            .create(DeveloperApi::class.java)
 
-        retro.getPropertyType().enqueue(object : Callback<GeneralTypeResponse> {
-            override fun onResponse(
-                call: Call<GeneralTypeResponse>,
-                response: Response<GeneralTypeResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val typeList = response.body()?.data
-                    if (typeList != null) {
-                        val id = typeList.find { it.name == name }?.id
-                        if (id != null) {
-                            propertyTypeViewModel.propertyTypeData.postValue(
-                                GeneralType(
-                                    id = id,
-                                    name = name
-                                )
-                            )
-                        }
-
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<GeneralTypeResponse>, t: Throwable) {
-
-            }
-
-        })
-    }
 
 
 

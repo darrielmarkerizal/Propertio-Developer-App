@@ -119,6 +119,7 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
                 "Tanah" -> formsFragment.add(1, UnitDataTanahFragment())
                 "Villa" -> formsFragment.add(1, UnitDataVillaFragment())
                 "Apartemen" -> formsFragment.add(1, UnitDataApartemenFragment())
+                // TODO: HOTEL?
                 else -> Log.e("UnitFormActivity", "Invalid property type: $propertyType")
             }
 

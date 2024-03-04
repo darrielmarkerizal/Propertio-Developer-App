@@ -193,6 +193,7 @@ class ProjectFormActivity : AppCompatActivity(), ButtonNavigationProjectManageme
                 projectInformationLocationViewModel.add(
                     headline = data.headline,
                     title = data.title,
+                    propertyTypeId = data.propertyType?.id,
                     propertyTypeName = data.propertyType?.name,
                     description = data.description,
                     completedAt = data.completedAt,
