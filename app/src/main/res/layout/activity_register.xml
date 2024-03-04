@@ -64,18 +64,28 @@
                     android:text="@string/first_name"
                     style="@style/paragraph"/>
 
-                <EditText
-                    android:id="@+id/edit_text_nama_depan"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:paddingHorizontal="14.5dp"
-                    android:maxLines="1"
-                    android:hint="@string/first_name_hint"
-                    android:textColorHint="@color/text_black_placeholder"
-                    android:textColor="@color/text_black"
-                    style="@style/paragraph"
-                    android:inputType="textPersonName"
-                    android:background="@drawable/edit_text_rounded_rectangle"/>
+                    android:layout_height="wrap_content"
+                    app:hintEnabled="false"
+                    >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_text_nama_depan"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:paddingHorizontal="14.5dp"
+                        android:paddingVertical="8dp"
+                        android:maxLines="1"
+                        android:maxLength="100"
+                        android:hint="@string/first_name_hint"
+                        android:textColorHint="@color/text_black_placeholder"
+                        android:textColor="@color/text_black"
+                        style="@style/paragraph"
+                        android:inputType="textPersonName"
+                        android:background="@drawable/edit_text_rounded_rectangle"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -93,18 +103,27 @@
                     android:text="@string/last_name"
                     style="@style/paragraph"/>
 
-                <EditText
-                    android:id="@+id/edit_text_nama_belakang"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:paddingHorizontal="14.5dp"
-                    android:maxLines="1"
-                    android:hint="@string/last_name_hint"
-                    android:textColorHint="@color/text_black_placeholder"
-                    android:textColor="@color/text_black"
-                    style="@style/paragraph"
-                    android:inputType="textPersonName"
-                    android:background="@drawable/edit_text_rounded_rectangle"/>
+                    android:layout_height="wrap_content"
+                    app:hintEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_text_nama_belakang"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:paddingHorizontal="14.5dp"
+                        android:paddingVertical="8dp"
+                        android:maxLines="1"
+                        android:maxLength="100"
+                        android:hint="@string/last_name_hint"
+                        android:textColorHint="@color/text_black_placeholder"
+                        android:textColor="@color/text_black"
+                        style="@style/paragraph"
+                        android:inputType="textPersonName"
+                        android:background="@drawable/edit_text_rounded_rectangle"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 

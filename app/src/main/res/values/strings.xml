@@ -281,5 +281,11 @@
     <string name="website_pengembang">Website pengembang</string>
     <string name="berikan_deskripsi_tentang_perusahaan_anda">Berikan deskripsi tentang perusahaan Anda</string>
     <string name="www_example_com">www.example.com</string>
+    <string name="project_success_create_new_project">Proyek Anda berhasil ditambahkan</string>
+    <string name="project_success_edit_project">\"Proyek Anda berhasil diperbarui\"</string>
+    <string name="unit_anda_berhasil_ditambahkan">Unit Anda berhasil ditambahkan</string>
+    <string name="unit_anda_berhasil_diperbarui">Unit Anda berhasil diperbaharui</string>
+    <string name="kembali_ke_halaman_proyek">Kembali ke Halaman Proyek</string>
+    <string name="lihat_rincian_proyek">kunjungi proyek</string>
 
 </resources>

@@ -315,12 +315,6 @@
                     app:layout_constraintStart_toStartOf="@+id/card_view_address"
                     app:layout_constraintTop_toBottomOf="@+id/container_card_file_thumbnail" />
 
-                <androidx.constraintlayout.widget.Group
-                    android:id="@+id/group_video_detailProject"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="visible"
-                    app:constraint_referenced_ids="text_view_video_label,video_frame_container" />
 
                 <TextView
                     android:id="@+id/text_view_video_label"
@@ -332,21 +326,21 @@
                     app:layout_constraintStart_toStartOf="@+id/card_view_address"
                     app:layout_constraintTop_toBottomOf="@+id/button_open_maps" />
 
-                <FrameLayout
-                    android:id="@+id/video_frame_container"
+
+
+                <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                    android:id="@+id/project_detail_youtube_player"
                     android:layout_width="0dp"
-                    android:layout_height="200dp"
-                    app:layout_constraintDimensionRatio=""
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="16dp"
+
+                    android:visibility="visible"
+
+                    app:autoPlay="false"
                     app:layout_constraintEnd_toEndOf="@+id/card_view_address"
                     app:layout_constraintStart_toStartOf="@+id/card_view_address"
-                    app:layout_constraintTop_toBottomOf="@+id/text_view_video_label">
-
-                    <WebView
-                        android:id="@+id/web_view_video"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                </FrameLayout>
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_video_label" />
 
                 <TextView
                     android:id="@+id/text_view_unit_label"
@@ -356,7 +350,7 @@
                     android:layout_marginTop="20dp"
                     android:text="Daftar Unit"
                     app:layout_constraintStart_toStartOf="@+id/card_view_address"
-                    app:layout_constraintTop_toBottomOf="@+id/video_frame_container" />
+                    app:layout_constraintTop_toBottomOf="@+id/project_detail_youtube_player" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/button_add_unit"

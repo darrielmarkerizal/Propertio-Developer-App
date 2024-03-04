@@ -86,8 +86,12 @@ class ProjectViewModel(
     }
 
     @WorkerThread
-    fun fetchLiteProject(token: String) {
+    fun fetchLiteProject(token: String, forceUpdate : Boolean = false) {
         viewModelScope.launch(Dispatchers.IO) {
+            if (forceUpdate) {
+                deleteAllLocalProjects()
+                Log.w("ProjectViewModel", "fetchLiteProject: forceUpdate")
+            }
             Log.d("ProjectViewModel ApiCall", "fetchAllProjects")
             val retro = Retro(token).getRetroClientInstance().create(DeveloperApi::class.java)
 

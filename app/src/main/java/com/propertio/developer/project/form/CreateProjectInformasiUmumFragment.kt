@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -76,10 +75,12 @@ class CreateProjectInformasiUmumFragment : Fragment() {
         activityBinding.floatingButtonNext.setOnClickListener {
             if (binding.editHeadlineProject.text.toString().isEmpty()) {
                 binding.editHeadlineProject.error = "Harap isi Headline Project"
+                binding.editHeadlineProject.requestFocus()
                 return@setOnClickListener
             }
             if (binding.editJudulProject.text.toString().isEmpty()) {
                 binding.editJudulProject.error = "Harap isi Deskripsi Project"
+                binding.editJudulProject.requestFocus()
                 return@setOnClickListener
             }
             if (propertyTypeViewModel.propertyTypeData.value?.id == null) {
@@ -90,12 +91,17 @@ class CreateProjectInformasiUmumFragment : Fragment() {
                 binding.spinnerSertifikatProject.error = "Harap isi Luas Tanah"
                 return@setOnClickListener
             }
+            if (binding.editDeskripsiProject.text.toString().isEmpty()) {
+                binding.editDeskripsiProject.error = "Harap isi Deskripsi Project"
+                binding.editDeskripsiProject.requestFocus()
+                return@setOnClickListener
+            }
 
             // save data in viewModel
-            projectInformationLocationViewModel.headline = binding.editHeadlineProject.text.toString()
-            projectInformationLocationViewModel.title = binding.editJudulProject.text.toString()
+            projectInformationLocationViewModel.headline = binding.editHeadlineProject.text.toString().trim()
+            projectInformationLocationViewModel.title = binding.editJudulProject.text.toString().trim()
             projectInformationLocationViewModel.propertyTypeId = propertyTypeViewModel.propertyTypeData.value?.id!!
-            projectInformationLocationViewModel.description = binding.editDeskripsiProject.text.toString()
+            projectInformationLocationViewModel.description = binding.editDeskripsiProject.text.toString().trim()
             projectInformationLocationViewModel.completedAt = binding.editTahunProject.text.toString()
             projectInformationLocationViewModel.certificate = certificateTypeViewModel.certificateTypeData.value?.toDb!!
 

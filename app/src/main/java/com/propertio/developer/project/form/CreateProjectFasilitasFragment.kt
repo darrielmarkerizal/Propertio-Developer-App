@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -150,6 +151,11 @@ class CreateProjectFasilitasFragment : Fragment() {
             projectFacilityViewModel.selectedFacilities.forEachIndexed { index, facility ->
                 Log.d("CreateProjectFasilitasFragment", "now: $index $facility")
                 facilitiesMap["facilities[$index]"] = facility
+            }
+
+            if (facilitiesMap.isEmpty()) {
+                Toast.makeText(requireContext(), "Harap pilih fasilitas", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
 
             developerApi.sendFacilities(formActivity.projectId.toString(), facilitiesMap).enqueue(object : Callback<UpdateProjectResponse> {

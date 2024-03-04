@@ -20,7 +20,8 @@ import com.propertio.developer.databinding.ToolbarBinding
 import com.propertio.developer.model.LitePhotosModel
 import com.propertio.developer.model.UnitDocument
 import com.propertio.developer.permissions.NetworkAccess
-import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_ID
+import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_DETAIL_PID
+import com.propertio.developer.project.ProjectDetailActivity.Companion.PROJECT_DETAIL_UID
 import com.propertio.developer.unit.UnitMediaViewModel
 import com.propertio.developer.unit.form.type.UnitDataApartemenFragment
 import com.propertio.developer.unit.form.type.UnitDataGudangFragment
@@ -71,6 +72,7 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
     private var currentFragmentIndex = 0
     internal var unitId : Int? = null
     internal var projectId : Int? = null
+    var isCreateNewUnit = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,27 +82,27 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
         binding.toolbarContainerUnitForm.textViewTitle.text = "Unit"
 
         val propertyType = intent.getStringExtra("Property Type")
-        val projectId = intent.getIntExtra(PROJECT_ID, 0)
+        projectId = intent.getIntExtra(PROJECT_DETAIL_PID, 0)
+
 
         if (projectId != 0) {
             unitFormViewModel.projectId = projectId
             Log.d("UnitFormActivity", "onCreate: projectId: $projectId")
         } else {
             Log.e("UnitFormActivity", "onCreate: projectId is null")
+            finish()
         }
 
-        val unitIdFromIntent = intent.getIntExtra(PROJECT_DETAIL_UID, 0)
-        val projectIdFromIntent = intent.getIntExtra(PROJECT_DETAIL_PID, 0)
+        unitId = intent.getIntExtra(PROJECT_DETAIL_UID, 0)
 
-        if (unitIdFromIntent != 0) {
+        if (unitId != 0) {
             if (NetworkAccess.isNetworkAvailable(this).not()) run {
                 NetworkAccess.buildNoConnectionToast(this).show()
                 finish()
             }
             lifecycleScope.launch {
-                Log.d("UnitFormActivity", "onCreate Fetch Edit: $unitIdFromIntent")
-                unitId = unitIdFromIntent
-                fetchUnitDetail(projectIdFromIntent, unitId!!)
+                Log.d("UnitFormActivity", "onCreate Fetch Edit: $unitId")
+                withContext(Dispatchers.IO) { fetchUnitDetail(projectId!!, unitId!!) }
                 startUnitForm()
             }
         } else {
@@ -143,8 +145,10 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
         Log.d("UnittFormActivity", "setToolbarToCreate: $unitId")
         if (unitId != 0) {
             bindingToolbar.textViewTitle.text = "Edit Unit"
+            isCreateNewUnit = false
         } else {
             bindingToolbar.textViewTitle.text = "Tambah Unit"
+            isCreateNewUnit = true
         }
     }
 
@@ -157,6 +161,7 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
         if (currentFragmentIndex == formsFragment.size - 1) {
             binding.progressIndicatorUnitForm.setProgressCompat(100, true)
             val intentToSuccess = Intent(this, CreateUnitSuccessActivity::class.java)
+            intentToSuccess.putExtra(IS_CREATE_NEW_UNIT, isCreateNewUnit)
             launcherToSuccess.launch(intentToSuccess)
             return
         }
@@ -192,11 +197,6 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
         supportFragmentManager.beginTransaction()
             .replace(R.id.frame_container_unit_form, fragment)
             .commit()
-    }
-
-    companion object {
-        const val PROJECT_DETAIL_UID = "project_detail_uid"
-        const val PROJECT_DETAIL_PID = "project_detail_pid"
     }
 
     private suspend fun fetchUnitDetail(projectId: Int, unitId: Int) {
@@ -319,6 +319,15 @@ class UnitFormActivity : AppCompatActivity(), ButtonNavigationUnitManagementClic
                     updatedAt = data.unitDocuments?.get(0)?.updatedAt,
                 )
             )
+        }
+    }
+
+    companion object {
+        const val IS_CREATE_NEW_UNIT = "IS_CREATE_NEW_UNIT"
+        fun String.validateIsNotNull() : String? {
+            return if (this.isNotEmpty()) {
+                if (this != "null") this else null
+            } else null
         }
     }
 }

@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:text="Unit anda berhasil ditambahkan"
+        android:text="@string/unit_anda_berhasil_ditambahkan"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/picture_unit_success"
